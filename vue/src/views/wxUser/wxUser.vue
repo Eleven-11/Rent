@@ -125,7 +125,7 @@
           updateTime:''
         },
         input:'',
-        daterange: '',
+        daterange:[],
         startTime:'',
         endTime:''
       }
@@ -142,13 +142,13 @@
       ])
     },
     methods: {
-      getWxUserList($input){
+      getWxUserList(){
         console.log("1111")
         this.listQuery.nickname = this.nickname
-        this.startTime=this.listQuery.daterange[0]
+        this.startTime=this.formatter(this.daterange[0],'yyyy-MM-dd hh:mm:ss')
+        this.endTime =this.formatter(this.daterange[1],'yyyy-MM-dd hh:mm:ss')
 
-
-        console.log(typeof this.startTime)
+        console.log(this.endTime)
         console.log("222")
         this.api({
           url:"/wxuser/list",
@@ -157,7 +157,7 @@
         }).then(data=> {
           this.listLoading = false;
           this.list = data.list;
-          console.log(this.listQuery.daterange[0])
+          /*console.log(this.listQuery.daterange[0])*/
         })
       },
 
@@ -270,6 +270,27 @@
           })
         })
       },
+      formatter (thistime, fmt) {
+        let $this = new Date(thistime)
+        let o = {
+          'M+': $this.getMonth() + 1,
+          'd+': $this.getDate(),
+          'h+': $this.getHours(),
+          'm+': $this.getMinutes(),
+          's+': $this.getSeconds(),
+          'q+': Math.floor(($this.getMonth() + 3) / 3),
+          'S': $this.getMilliseconds()
+        }
+        if (/(y+)/.test(fmt)) {
+          fmt = fmt.replace(RegExp.$1, ($this.getFullYear() + '').substr(4 - RegExp.$1.length))
+        }
+        for (var k in o) {
+          if (new RegExp('(' + k + ')').test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+          }
+        }
+        return fmt
+      }
     }
   }
 </script>
