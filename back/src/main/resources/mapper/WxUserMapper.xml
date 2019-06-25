@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.WxUserDao">
+    <select id="countWxUser" resultType="Integer">
+        SELECT count(0)
+        FROM t_wx_user
+        <where>
+		<if test="nickname != null and nickname != ''">
+			t_wx_user.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
+		</if>
+        </where>
+    </select>
+
+    <select id="getWxUserList" resultType="com.alibaba.fastjson.JSONObject">
+    SELECT
+	t_wx_user.USER_ID userId,
+	t_wx_user.WX_NICK_NAME nickname,
+	t_wx_user.WX_GENDER gender,
+	CONCAT(
+		t_wx_user.WX_PROVINCE,
+		' ',
+		t_wx_user.WX_CITY
+	) AS region,
+	DATE_FORMAT(t_wx_user.CREATE_TIME, '%Y.%m.%d %T') createTime,
+	DATE_FORMAT(t_wx_user.UPDATE_TIME, '%Y.%m.%d %T') updateTime
+FROM
+	t_wx_user
+            <if test="nickname != null and nickname != ''">
+            WHERE t_wx_user.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
+        </if>
+
+
+    </select>
+
+</mapper>
