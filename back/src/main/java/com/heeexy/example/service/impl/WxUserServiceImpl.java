@@ -12,18 +12,24 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.List;
 
+
 @Service
 public class WxUserServiceImpl implements WxUserService {
     @Autowired
     private WxUserDao wxUserDao;
 
-
+    /*
+     *功能描述:获取用户列表
+     */
     @Override
     public JSONObject getWxUserList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
-        System.out.println(jsonObject.toJSONString());
         int count = wxUserDao.countWxUser(jsonObject);
         List<JSONObject> list = wxUserDao.getWxUserList(jsonObject);
         return CommonUtil.successPage(jsonObject, list, count);
     }
+
+
+
+
 }

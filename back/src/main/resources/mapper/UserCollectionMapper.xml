@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.UserCollectionDao">
+    <select id="countCollection" resultType="Integer">
+    SELECT COUNT(1)
+     FROM
+		(SELECT
+				m.POST_ID postId,
+				w.WX_NICK_NAME poster,
+				u.CONTENT content,
+				p.IMG_URL image,
+				DATE_FORMAT(m.CREATE_TIME,'%Y.%m.%d %T') collTime
+			FROM
+				t_wx_user w,
+				t_post_base u,
+				t_user_collection m,
+				t_post_picture p
+			WHERE
+				m.USER_ID = #{wxUserId,jdbcType = VARCHAR}
+			AND u.ID = m.POST_ID
+			AND w.USER_ID = u.USER_ID
+			AND m.POST_ID = p.POST_ID
+			ORDER BY
+				m.SORT_TIME
+		) g
+
+    </select>
+    <select id="getUserCollList" resultType="com.alibaba.fastjson.JSONObject">
+    SELECT
+        m.POST_ID postId,
+        w.WX_NICK_NAME poster,
+        u.CONTENT content,
+        p.IMG_URL image,
+        DATE_FORMAT(m.CREATE_TIME, '%Y.%m.%d %T') collTime,
+        DATE_FORMAT(m.SORT_TIME, '%Y.%m.%d %T') sortTime
+    FROM
+        t_wx_user w,
+        t_post_base u,
+        t_user_collection m,
+        t_post_picture p
+    WHERE
+        m.USER_ID = #{wxUserId,jdbcType = VARCHAR}
+    AND u.ID = m.POST_ID
+    AND w.USER_ID = u.USER_ID
+    AND m.POST_ID = p.POST_ID
+    order by m.SORT_TIME
+    </select>
+
+    <update id="updateUserColl">
+    START TRANSACTION;
+    UPDATE t_user_collection SET t_user_collection.sort_time =#{laterSortTime,jdbcType = DATE} WHERE t_user_collection.post_id = #{formerPostId,jdbcType = VARCHAR};
+    UPDATE t_user_collection SET t_user_collection.sort_time =#{formerSortTime,jdbcType = DATE} WHERE t_user_collection.post_id = #{laterPostId,jdbcType = VARCHAR};
+    COMMIT;
+</update>
+
+</mapper>

@@ -6,7 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Array;
 
 public interface WxUserService {
-    /*微信用户列表*/
+    /**
+     *@description:获取全部用户列表
+     */
     JSONObject getWxUserList(JSONObject jsonObject);
+
+
+
 
 }

@@ -17,4 +17,5 @@ public interface WxUserDao {
      */
     List<JSONObject> getWxUserList(JSONObject jsonObject);
 
+
 }

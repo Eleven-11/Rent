@@ -37,7 +37,14 @@ service.interceptors.response.use(
         }
       });
       return Promise.reject("未登录")
-    } else {
+    } else if (res.code == "101") {
+      Message({
+        message: res.msg,
+        type: 'success',
+        duration: 3 * 1000
+      })
+      return Promise.reject(res)
+    }else {
       Message({
         message: res.msg,
         type: 'error',

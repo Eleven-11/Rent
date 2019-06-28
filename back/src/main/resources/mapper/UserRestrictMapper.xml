@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.UserRestrictDao">
+    <update id="updateWxUserRes">
+    UPDATE t_user_operation_restrict u
+    SET u.RESTRICT_STATE = 1 and u.RESTRICT_END_TIME = DATE_FORMAT(#{resEndTime},'%Y.%m.%d %T')#{resEndTime}
+    WHERE
+        u.USER_ID = #{wxUserId,jdbcType=VARCHAR}
+    </update>
+</mapper>

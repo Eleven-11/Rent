@@ -35,6 +35,17 @@ public class CommonUtil {
 	}
 
 	/**
+	 * 返回一个返回码为100的json
+	 */
+	public static JSONObject successJson(String msg) {
+		JSONObject resultJson = new JSONObject();
+		resultJson.put("code", Constants.SUCCESS_MSG_CODE);
+		resultJson.put("msg", msg);
+		resultJson.put("info", new JSONObject());
+		return resultJson;
+	}
+
+	/**
 	 * 返回错误信息JSON
 	 */
 	public static JSONObject errorJson(ErrorEnum errorEnum) {
@@ -63,6 +74,17 @@ public class CommonUtil {
 		result.put("info", info);
 		return result;
 	}
+/*	public static JSONObject finalPage(final JSONObject requestJson, List<JSONObject> list, int totalColl) {
+		int pageRow = requestJson.getIntValue("pageRow");
+		int totalPage = getPageCounts(pageRow, totalColl);
+		JSONObject result = successJson();
+		JSONObject info = new JSONObject();
+		info.put("list", list);
+		info.put("totalColl", totalColl);
+		info.put("totalPage", totalPage);
+		result.put("info", info);
+		return result;
+	}*/
 
 	/**
 	 * 查询分页结果后的封装工具方法

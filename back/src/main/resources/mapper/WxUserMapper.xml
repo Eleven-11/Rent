@@ -6,30 +6,32 @@
         SELECT count(0)
         FROM t_wx_user
         <where>
-		<if test="nickname != null and nickname != ''">
-			t_wx_user.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
+            <if test="nickname != null and nickname != ''">
+            t_wx_user.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
 		</if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime !=''" >
+			and date(t_wx_user.UPDATE_TIME) BETWEEN startTime and endTime
+			</if>
         </where>
     </select>
 
     <select id="getWxUserList" resultType="com.alibaba.fastjson.JSONObject">
-    SELECT
-	t_wx_user.USER_ID userId,
-	t_wx_user.WX_NICK_NAME nickname,
-	t_wx_user.WX_GENDER gender,
-	CONCAT(
-		t_wx_user.WX_PROVINCE,
-		' ',
-		t_wx_user.WX_CITY
-	) AS region,
-	DATE_FORMAT(t_wx_user.CREATE_TIME, '%Y.%m.%d %T') createTime,
-	DATE_FORMAT(t_wx_user.UPDATE_TIME, '%Y.%m.%d %T') updateTime
-FROM
-	t_wx_user
-            <if test="nickname != null and nickname != ''">
+        SELECT
+        t_wx_user.USER_ID wxUserId,
+        t_wx_user.WX_NICK_NAME nickname,
+        t_wx_user.WX_GENDER gender,
+        CONCAT(
+        t_wx_user.WX_PROVINCE,
+        ' ',
+        t_wx_user.WX_CITY
+        ) AS region,
+        DATE_FORMAT(t_wx_user.CREATE_TIME, '%Y.%m.%d %T') createTime,
+        DATE_FORMAT(t_wx_user.UPDATE_TIME, '%Y.%m.%d %T') updateTime
+        FROM
+        t_wx_user
+        <if test="nickname != null and nickname != ''">
             WHERE t_wx_user.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
         </if>
-
 
     </select>
 

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.UserFollowDao">
+    <select id="countUserFollow" resultType="Integer">
+        SELECT COUNT(1) totalFollow
+     FROM
+		(SELECT
+            m.WX_NICK_NAME follows
+        FROM
+            t_wx_user m,
+            t_user_follow u
+        WHERE
+            u.FAN_ID = #{wxUserId,jdbcType = VARCHAR} AND u.FOLLOW_ID = m.USER_ID
+		) g
+    </select>
+    <select id="countUserFans" resultType="Integer">
+        SELECT COUNT(1) totalFans
+     FROM
+		(SELECT
+            m.WX_NICK_NAME fans
+        FROM
+            t_wx_user m,
+            t_user_follow u
+        WHERE
+            u.FOLLOW_ID = #{wxUserId,jdbcType = VARCHAR} AND u.FAN_ID = m.USER_ID
+		) g
+    </select>
+    <select id="getUserFollowList" resultType="com.alibaba.fastjson.JSONObject">
+    SELECT
+        m.WX_NICK_NAME follows
+    FROM
+        t_wx_user m,
+        t_user_follow u
+    WHERE
+        u.FAN_ID = #{wxUserId,jdbcType = VARCHAR} AND u.FOLLOW_ID = m.USER_ID
+    </select>
+
+    <select id="getUserFansList" resultType="com.alibaba.fastjson.JSONObject">
+    SELECT
+        m.WX_NICK_NAME fans
+    FROM
+        t_wx_user m,
+        t_user_follow u
+    WHERE
+        u.FOLLOW_ID = #{wxUserId,jdbcType = VARCHAR} AND u.FAN_ID = m.USER_ID
+    </select>
+</mapper>

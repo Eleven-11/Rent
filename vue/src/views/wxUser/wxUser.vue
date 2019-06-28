@@ -4,7 +4,8 @@
       <el-form>
         <el-form-item>
           <div class="demo-input-suffix" style="float: left">
-            昵称：<el-input  placeholder="请输入内容" style="width: 400px;"  v-model="nickname"></el-input>
+            昵称：
+            <el-input placeholder="请输入内容" style="width: 400px;" v-model="nickname"></el-input>
             最近活跃时间：
           </div>
           <div class="block" style="float: left">
@@ -30,22 +31,70 @@
       <el-table-column align="center" label="微信昵称" prop="nickname" style="width: 20px;"></el-table-column>
       <el-table-column align="center" label="性别" prop="gender" style="width: 20px;"></el-table-column>
       <el-table-column align="center" label="地区" prop="region" style="width: 20px;"></el-table-column>
-      <!--<el-table-column align="center" label="关注者" prop="followers" style="width: 20px;"></el-table-column>
-      <el-table-column align="center" label="粉丝数量" prop="fans" style="width: 20px;"></el-table-column>-->
-      <!--<el-table-column align="center" label="微信角色" width="100">
-        <template slot-scope="scope">
-          <el-tag type="success" v-text="scope.row.roleName" v-if="scope.row.roleId===1"></el-tag>
-          <el-tag type="primary" v-text="scope.row.roleName" v-else></el-tag>
-        </template>
-      </el-table-column>-->
       <el-table-column align="center" label="注册时间" prop="createTime" width="170"></el-table-column>
       <el-table-column align="center" label="最近活跃时间" prop="updateTime" width="170"></el-table-column>
-      <el-table-column align="center" label="管理" width="220" v-if="hasPerm('wxuser:check')">
+      <el-table-column align="center" label="用户ID" prop="wxUserId" style="width: 20px;" v-if="false"></el-table-column>
+      <el-table-column align="center" label="管理" width="220" >
         <template slot-scope="scope">
-          <el-button type="primary" icon="detail">详情</el-button>
-          <!--<el-button type="danger" icon="delete" v-if="scope.row.userId!=userId "
-                     @click="removeUser(scope.$index)">删除
-          </el-button>-->
+          <el-popover
+            placement="right"
+            width="730"
+            trigger="click">
+            <el-table :data="gridData">
+              <el-table-column width="80" property="poster" label="发帖人"></el-table-column>
+              <el-table-column width="100" property="content" label="帖子内容"></el-table-column>
+              <el-table-column width="100" property="image" label="图片"></el-table-column>
+              <el-table-column width="150" property="collTime" label="收藏时间"></el-table-column>
+              <el-table-column width="150" property="sortTime" label="排序时间" v-if="false"></el-table-column>
+              <el-table-column align="center" label="帖子ID" prop="postId" style="width: 20px;"v-if="false"></el-table-column>
+              <el-table-column align="center" label="管理" width="270" >
+                <template slot-scope="scope">
+                  <el-button type="primary" icon="detail" @click="showUpdate(scope.$index)" size="mini">详情</el-button>
+                  <el-button type="primary" icon="up" @click="updateUserColl(scope.$index-1,scope.$index)" size="mini" v-if="(scope.$index)!=0">上移</el-button>
+                  <el-button type="primary" icon="down" @click="updateUserColl(scope.$index,scope.$index+1)"size="mini"v-if="(scope.$index)!=gridData.length-1">下移</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="gridData.pageNum"
+              :page-size="gridData.pageRow"
+              :total="totalCount"
+              :page-sizes="[10, 20, 50, 100]"
+              layout="total, sizes, prev, pager, next, jumper">
+            </el-pagination>
+
+          <el-button type="primary" v-if="scope.row.wxUserId!=wxUserId" @click="getUserCollList(scope.$index)" slot="reference" size="mini" round plain>收藏帖子</el-button>
+          </el-popover>
+          <el-popover
+            placement="right"
+              width="300"
+              trigger="click">
+              <el-table :data="gridData">
+                <el-table-column width="150" property="follows" label="关注者"></el-table-column>
+                <el-table-column width="150" property="fans" label="粉丝"></el-table-column>
+              </el-table>
+
+          <el-button type="primary" v-if="scope.row.wxUserId!=wxUserId "@click="getFoAndFan(scope.$index)" slot="reference" size="mini" round plain>粉丝&关注</el-button>
+          </el-popover>
+          <el-popover
+            placement="top"
+            width="300"
+            v-model="fvisible">
+            <p style="font-min-size: xx-small">限制用户后该用户将不能使用（发布、评论、私信、点赞功能），但可以浏览帖子和关注其他用户，您确定要限制该用户么？</p>
+            <div style="text-align: right; margin: 0">
+              <el-date-picker
+                v-model="resEndTime"
+                type="datetime"
+                placeholder="选择禁言时间">
+              </el-date-picker>
+              <el-button size="mini" type="primary" @click="fvisible=false">取消</el-button>
+              <el-button type="primary" size="mini" @click="updateWxUserRes(scope.$index)">确定</el-button>
+            </div>
+            <el-button type="primary" @click="fvisible = true" v-if="scope.row.wxUserId!=wxUserId" slot="reference" size="mini" round plain>限制用户</el-button>
+          </el-popover>
+
         </template>
       </el-table-column>
     </el-table>
@@ -58,42 +107,7 @@
       :page-sizes="[10, 20, 50, 100]"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
-    <!--<el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" :model="tempUser" label-position="left" label-width="80px"
-               style='width: 300px; margin-left:50px;'>
-        <el-form-item label="用户名" required v-if="dialogStatus=='create'">
-          <el-input type="text" v-model="tempUser.username">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="密码" v-if="dialogStatus=='create'" required>
-          <el-input type="password" v-model="tempUser.password">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="新密码" v-else>
-          <el-input type="password" v-model="tempUser.password" placeholder="不填则表示不修改">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="角色" required>
-          <el-select v-model="tempUser.roleId" placeholder="请选择">
-            <el-option
-              v-for="item in roles"
-              :key="item.roleId"
-              :label="item.roleName"
-              :value="item.roleId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="昵称" required>
-          <el-input type="text" v-model="tempUser.nickname">
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="success" @click="createUser">创 建</el-button>
-        <el-button type="primary" v-else @click="updateUser">修 改</el-button>
-      </div>
-    </el-dialog>-->
+
   </div>
 </template>
 <script>
@@ -102,32 +116,46 @@
   export default {
     data() {
       return {
-        nickname:'',
+        nickname: '',
+        lists: '',
         totalCount: 0, //分页组件--数据总条数
         list: [],//表格的数据
         listLoading: false,//数据加载等待动画
         listQuery: {
-          nickname:this.nickname,
+          nickname: this.nickname,
           pageNum: 1,//页码
           pageRow: 50,//每页条数
-          startTime:''
         },
         /*        roles: [],//角色列表*/
         dialogStatus: 'create',
         dialogFormVisible: false,
         tempWxUser: {
+          wxUserId: '',
           nickname: '',
           gender: '',
           region: '',
-          followers: '',
-          fans: '',
-          createTime:'',
-          updateTime:''
+          createTime: '',
+          updateTime: ''
         },
-        input:'',
-        daterange:[],
-        startTime:'',
-        endTime:''
+        gridData: [{
+          totalColl: 0,//分页组件--数据总条数
+          pageNum: 1,//页码
+          pageRow: 50,//每页条数
+          poster: '',
+          content: '',
+          image: '',
+          collTime: '',
+          sortTime:'',
+          follows: '',
+          fans: '',
+          postId:''
+        }],
+        input: '',
+        fvisible:false,
+        daterange: [],
+        resEndTime:'',
+        startTime: '',
+        endTime: '',
       }
     },
     created() {
@@ -138,34 +166,17 @@
     },
     computed: {
       ...mapGetters([
-        'wxuserId'
+        'wxUserId'
       ])
     },
     methods: {
-      getWxUserList(){
-        console.log("1111")
+      /*获取用户列表*/
+      getWxUserList() {
         this.listQuery.nickname = this.nickname
-        this.startTime=this.formatter(this.daterange[0],'yyyy-MM-dd hh:mm:ss')
-        this.endTime =this.formatter(this.daterange[1],'yyyy-MM-dd hh:mm:ss')
-
-        console.log(this.endTime)
-        console.log("222")
+        this.startTime = this.formatter(this.daterange[0], 'yyyy-MM-dd hh:mm:ss')
+        this.endTime = this.formatter(this.daterange[1], 'yyyy-MM-dd hh:mm:ss')
         this.api({
-          url:"/wxuser/list",
-          method:"get",
-          params:this.listQuery
-        }).then(data=> {
-          this.listLoading = false;
-          this.list = data.list;
-          /*console.log(this.listQuery.daterange[0])*/
-        })
-      },
-
-      /*getList() {
-        //查询列表
-        this.listLoading = true;
-        this.api({
-          url: "/wxuser/list",
+          url: "/wxuser/getWxUserlist",
           method: "get",
           params: this.listQuery
         }).then(data => {
@@ -173,6 +184,154 @@
           this.list = data.list;
           this.totalCount = data.totalCount;
         })
+      },
+
+      /*获取用户收藏帖子列表*/
+      getUserCollList($index) {
+
+        let user = this.list[$index];
+
+        this.api({
+          url: "/userCollection/getUserCollList",
+          method: "get",
+          params: {
+            pageNum: this.gridData.pageNum,
+            pageRow: this.gridData.pageRow,
+            wxUserId: user.wxUserId
+          }
+        }).then(data => {
+          console.log(user.wxUserId)
+          this.listLoading = false;
+          this.gridData = data.list;
+          this.totalCount = data.totalCount
+          console.log(this.gridData)
+
+        })
+      },
+      /*用户收藏帖子上移下移*/
+      updateUserColl($formerIndex,$laterIndex){
+        let formerPost = this.gridData[$formerIndex];
+        let laterPost = this.gridData[$laterIndex];
+        console.log(formerPost.postId),
+          console.log(laterPost.postId),
+          console.log(formerPost.sortTime),
+          console.log(laterPost.sortTime)
+        this.api({
+          url: "/userCollection/updateUserColl",
+          method: "get",
+          params: {
+            formerPostId:formerPost.postId,
+            laterPostId:laterPost.postId,
+            formerSortTime: this.formatter(formerPost.sortTime, 'yyyy-MM-dd hh:mm:ss'),
+            laterSortTime: this.formatter(laterPost.sortTime, 'yyyy-MM-dd hh:mm:ss')
+          }
+        }).then(()=>{
+          console.log("hello")
+
+        })
+
+
+      },
+      /*获取用户关注和粉丝列表*/
+      getFoAndFan($index) {
+        let user = this.list[$index];
+        var p1 = new Promise((resolve, reject) => {
+          getFollows($index);
+        });
+        var p2 = new Promise((resolve, reject) => {
+          getFans($index);
+        });
+
+        Promise.all([p1, p2]).then(data => {
+          console.log(data)
+          this.gridData = data.list;
+        })
+        getFollows($index)
+        {
+          this.api({
+            url: "/userFollow/getUserFollowList",
+            method: "get",
+            params: {
+              pageNum: this.listQuery.pageNum,
+              pageRow: this.listQuery.pageRow,
+              wxUserId: user.wxUserId
+            }
+          }).then(data => {
+
+            this.gridData = data.list;
+
+          })
+        }
+        getFans($index)
+        {
+          this.api({
+            url: "/userfollow/getUserFansList",
+            method: "get",
+            params: {
+              pageNum: this.listQuery.pageNum,
+              pageRow: this.listQuery.pageRow,
+              wxUserId: user.wxUserId
+            }
+          }).then(data => {
+            this.gridData = data.list;
+          })
+        }
+      },
+      /*用户权限限制*/
+      updateWxUserRes($index)
+      {
+        let user = this.list[$index];
+        this.api({
+          url: "/userRes/updateWxUserRes",
+          method: "post",
+          params:{
+            wxUserId:user.wxUserId,
+            resEndTime:this.formatter(this.resEndTime, 'yyyy-MM-dd hh:mm:ss')
+          }
+
+        }).then(() => {
+
+          visible= false;
+          console.log("hello")
+
+        })
+      },
+
+
+
+
+       /* getFollows($index)
+        {
+          this.api({
+            url: "/wxuser/getUserFollowList",
+            method: "get",
+            params: {
+              pageNum: this.listQuery.pageNum,
+              pageRow: this.listQuery.pageRow,
+              wxUserId: this.wxUserId
+            }
+          }).then(data => {
+            console.log(this.listQuery.wxUserId)
+            this.gridData = data.list;
+
+          })
+        },*/
+        /*getFans($index){
+        this.api({
+            url: "/wxuser/getUserFansList",
+            method: "get",
+            params: {
+              pageNum: this.listQuery.pageNum,
+              pageRow: this.listQuery.pageRow,
+              wxUserId: user.wxUserId
+            }
+          }).then(data => {
+          console.log(this.listQuery.wxUserId)
+          let promises = []
+
+            this.gridData = data.list;
+          this.listLoading = false;
+          })
       },*/
       handleSizeChange(val) {
         //改变每页数量
@@ -206,13 +365,12 @@
       showUpdate($index) {
         /*表格数据填充*/
         let wxUser = this.list[$index];
+        this.tempWxUser.wxUserId = wxUser.wxUserId;
         this.tempWxUser.nickname = wxUser.username;
         this.tempWxUser.gender = wxUser.nickname;
         this.tempWxUser.region = wxUser.roleId;
         this.tempWxUser.createTime = wxUser.createTime;
         this.tempWxUser.updateTime = wxUser.updateTime;
-       /* this.tempWxUser.followers = tempWxUser.followers;
-        this.tempWxUser.fans = tempWxUser.fans;*/
         this.dialogStatus = "update"
         this.dialogFormVisible = true
       },
@@ -270,7 +428,7 @@
           })
         })
       },
-      formatter (thistime, fmt) {
+      formatter(thistime, fmt) {
         let $this = new Date(thistime)
         let o = {
           'M+': $this.getMonth() + 1,
@@ -291,6 +449,6 @@
         }
         return fmt
       }
-    }
+    },
   }
-</script>
+  </script>
