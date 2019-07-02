@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.PostTypeDao">
+    <insert id="insertPostType" parameterType="com.alibaba.fastjson.JSONObject">
+    INSERT t_post_type (
+        TYPE_IMTG_URL,
+        TYPE_NAME,
+        CREATE_TIME
+    )
+    VALUES(
+        #{postTypeImg},
+        #{postTypeName},
+        #{postTypeCreateTime}
+		)
+    </insert>
+    <update id = "UpdatePostTypeById">
+        UPDATE t_post_type a
+        SET a.IS_DEL = '0'
+        <if test ="postTypeName != null and postTypeName != ''">
+            ,a.TYPE_NAME = #{postTypeName}
+        </if>
+        <if test="postTypeImg !=null and postTypeImg !=''">
+            ,a.TYPE_IMTG_URL = #{postTypeImg}
+        </if>
+        <if test="postTypeCreateTime !=null and postTypeCreateTime !='' ">
+            ,a.CREATE_TIME = DATE_FORMAT(#{postTypeCreateTime},'%Y.%m.%d %T')
+        </if>
+        WHERE
+        a.ID = #{postTypeId}
+    </update>
+    <update id="DeletePostTypeById">
+    UPDATE t_post_type a
+    SET a.IS_DEL = 1
+    WHERE
+        a.ID = #{postTypeId}
+    </update>
+
+</mapper>

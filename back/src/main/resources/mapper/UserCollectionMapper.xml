@@ -52,6 +52,6 @@
     UPDATE t_user_collection SET t_user_collection.sort_time =#{laterSortTime,jdbcType = DATE} WHERE t_user_collection.post_id = #{formerPostId,jdbcType = VARCHAR};
     UPDATE t_user_collection SET t_user_collection.sort_time =#{formerSortTime,jdbcType = DATE} WHERE t_user_collection.post_id = #{laterPostId,jdbcType = VARCHAR};
     COMMIT;
-</update>
+  </update>
 
 </mapper>
