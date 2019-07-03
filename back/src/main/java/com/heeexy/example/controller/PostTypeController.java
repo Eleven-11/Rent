@@ -28,7 +28,7 @@ public class PostTypeController {
      *@return com.alibaba.fastjson.JSONObject
      */
     @PostMapping("/insertPostType")
-    public JSONObject insertType(HttpServletRequest request) {
+    public JSONObject insertPostType(HttpServletRequest request) {
         return postTypeService.insertPostType(CommonUtil.request2Json(request));
     }
     /**

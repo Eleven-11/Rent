@@ -75,5 +75,24 @@ export const asyncRouterMap = [
       }
     ]
   },
+  {
+    path: '/platformManage',
+    component: Layout,
+    redirect: '/platformManage/',
+    name: '',
+    meta: {title: '平台管理', icon: 'table'},
+    children: [
+      {
+        path: '', name: '帖子类别', component: _import('platformManage/postLable'), meta: {title: '帖子类别', icon: 'mng'}, menu: 'platform'
+      },
+      {
+        path: '',
+        name: '帖子标签',
+        component: _import('platformManage/postType'),
+        meta: {title: '帖子标签', icon: 'list'},
+        menu: 'platform'
+      },
+    ]
+  },
   {path: '*', redirect: '/404', hidden: true}
 ]

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.PostLabelDao">
+    <insert id="insertPostLabel">
+        INSERT INTO t_post_label (parent_id, content)
+        <foreach collection="list" item="item" index="index" separator=",">
+        VALUES
+        (
+            (SELECT
+                m.ID
+            FROM
+                (
+                    SELECT
+                        t_post_label.ID
+                    FROM
+                        t_post_label
+                    WHERE
+                        t_post_label.CONTENT = #{item.parentContent}
+                ) m),
+                #{item.content}
+        )
+        </foreach>
+    </insert>
+    <update id="updatePostLabel">
+        UPDATE t_post_label a
+        SET a.CONTENT = #{content}
+        WHERE a.ID = #{postLabelId}
+    </update>
+    <delete id="deletePostLabel">
+        DELETE from t_post_label
+        WHERE ID = #{postLabelId}
+    </delete>
+
+</mapper>
