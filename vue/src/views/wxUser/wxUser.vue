@@ -212,10 +212,6 @@
       updateUserColl($formerIndex,$laterIndex){
         let formerPost = this.gridData[$formerIndex];
         let laterPost = this.gridData[$laterIndex];
-        console.log(formerPost.postId),
-          console.log(laterPost.postId),
-          console.log(formerPost.sortTime),
-          console.log(laterPost.sortTime)
         this.api({
           url: "/userCollection/updateUserColl",
           method: "get",

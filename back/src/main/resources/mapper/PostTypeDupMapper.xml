@@ -2,6 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.PostTypeDao">
+    <select id="countPostType" resultType="Integer">
+    select count(1) totalCount from (
+    SELECT
+        a.ID postTypeId,
+        a.TYPE_IMTG_URL postTypeImg,
+        a.TYPE_NAME postTypeName
+    FROM
+	  t_post_type a
+    WHERE
+      a.IS_DEL=0
+        ) g
+
+    </select>
+    <select id="getPostTypeList" resultType="com.alibaba.fastjson.JSONObject">
+    SELECT
+        a.ID postTypeId,
+        a.TYPE_IMTG_URL postTypeImg,
+        a.TYPE_NAME postTypeName
+    FROM
+	  t_post_type a
+    WHERE
+      a.IS_DEL=0
+    </select>
     <insert id="insertPostType" parameterType="com.alibaba.fastjson.JSONObject">
     INSERT t_post_type (
         TYPE_IMTG_URL,

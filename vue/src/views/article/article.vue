@@ -81,11 +81,11 @@
     },
     methods: {
       getList() {
-        //查询列表
-        if (!this.hasPerm('article:list')) {
-          return
-        }
-        this.listLoading = true;
+          //查询列表
+          if (!this.hasPerm('article:list')) {
+            return
+          }
+          this.listLoading = true;
         this.api({
           url: "/article/listArticle",
           method: "get",

@@ -83,13 +83,13 @@ export const asyncRouterMap = [
     meta: {title: '平台管理', icon: 'table'},
     children: [
       {
-        path: '', name: '帖子类别', component: _import('platformManage/postLable'), meta: {title: '帖子类别', icon: 'mng'}, menu: 'platform'
+        path: 'postLabel', name: '帖子标签', component: _import('platformManage/postLabel'), meta: {title: '帖子标签', icon: 'mng'}, menu: 'platform'
       },
       {
-        path: '',
-        name: '帖子标签',
+        path: 'postType',
+        name: '帖子类别',
         component: _import('platformManage/postType'),
-        meta: {title: '帖子标签', icon: 'list'},
+        meta: {title: '帖子类别', icon: 'list'},
         menu: 'platform'
       },
     ]

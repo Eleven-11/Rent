@@ -4,11 +4,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostTypeService;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Lingling
@@ -20,8 +27,46 @@ import javax.servlet.http.HttpServletRequest;
 public class PostTypeController {
     @Autowired
     private PostTypeService postTypeService;
+    String string =  new String("");
 
+    /**
+     *@description:帖子类型图片上传
+     */
+    @RequestMapping(value = "/upload")
+    public String imgUpload(HttpServletRequest req, MultipartHttpServletRequest multiReq) throws IOException {
+        Map<String,Object> map = new HashMap<>();
+        MultipartFile file = multiReq.getFile("file");
+        String originalFilename = file.getOriginalFilename();
+        String desFilePath =
+                "D:" + File.separator+"Ionia"
+                        + File.separator+"SpringBoot-Shiro-Vue"
+                        + File.separator+"vue"
+                        + File.separator+"src"
+                        + File.separator+"assets"
+                        + File.separator+"static"
+                        + "/" + originalFilename;
+        File localFile  = new File(desFilePath);
+        String srcUrl = "http://localhost:9520/static/img/"+originalFilename;
+        string=srcUrl;
+        if (!localFile.exists()) {
+            localFile.createNewFile();
+            file.transferTo(localFile);
+        }
+        /*map.put("code", 0);
+        map.put("msg", "上传成功");
+        map.put("url", srcUrl);*/
+        return srcUrl;
+    }
+    /**
+     *@description:获取帖子类别列表
+     *@param request
+     *@return com.alibaba.fastjson.JSONObject
+     */
+    @GetMapping("/getPostTypelist")
+    public JSONObject getWxUserList(HttpServletRequest request) {
+        return postTypeService.getPostTypeList(CommonUtil.request2Json(request));
 
+    }
     /**
      *@description:添加帖子类型信息
      *@param request(帖子类型名称postTypeName,帖子类型图标postTypeImg,帖子类型创建时间postTypeCreateTime)
