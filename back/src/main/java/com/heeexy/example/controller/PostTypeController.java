@@ -33,7 +33,7 @@ public class PostTypeController {
      *@description:帖子类型图片上传
      */
     @RequestMapping(value = "/upload")
-    public String imgUpload(HttpServletRequest req, MultipartHttpServletRequest multiReq) throws IOException {
+    public Map<String, Object> imgUpload(HttpServletRequest req, MultipartHttpServletRequest multiReq) throws IOException {
         Map<String,Object> map = new HashMap<>();
         MultipartFile file = multiReq.getFile("file");
         String originalFilename = file.getOriginalFilename();
@@ -46,19 +46,20 @@ public class PostTypeController {
                         + File.separator+"static"
                         + "/" + originalFilename;
         File localFile  = new File(desFilePath);
-        String srcUrl = "http://localhost:9520/static/img/"+originalFilename;
+        String srcUrl = "http://localhost:9520/static/"+originalFilename;
         string=srcUrl;
         if (!localFile.exists()) {
             localFile.createNewFile();
             file.transferTo(localFile);
         }
-        /*map.put("code", 0);
+        map.put("code", 0);
         map.put("msg", "上传成功");
-        map.put("url", srcUrl);*/
-        return srcUrl;
+        map.put("url", srcUrl);
+        System.out.println(srcUrl);
+        return map;
     }
     /**
-     *@description:获取帖子类别列表
+     *@description:获取帖子类型列表
      *@param request
      *@return com.alibaba.fastjson.JSONObject
      */

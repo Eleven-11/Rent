@@ -20,7 +20,7 @@ public class PostTypeServiceImpl implements PostTypeService {
     private PostTypeDao postTypeDao;
 
     /**
-     *@description:获取帖子类别列表，已被逻辑删除的则
+     *@description:获取帖子类别列表，已被逻辑删除的则不显示
      */
     @Override
     public JSONObject getPostTypeList(JSONObject jsonObject) {
