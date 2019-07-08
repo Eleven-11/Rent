@@ -8,26 +8,26 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
-              highlight-current-row>
-      <el-table-column align="center" label="序号" width="80">
-        <template slot-scope="scope">
-          <span v-text="getIndex(scope.$index)"> </span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="id" prop="postTypeId" v-if="false" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="名称" prop="postTypeName" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="图标" prop="postTypeImg" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="管理" width="220">
-        <template slot-scope="scope">
-          <el-button type="primary" icon="edit" @click="updatePostType(scope.$index)">修改</el-button>
-          <el-button type="danger" icon="delete" v-if="scope.row.postTypeId!=postTypeId "
-                     @click="deletePostType(scope.$index)">删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
+    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
+      <el-menu-item index="1">家用设备</el-menu-item>
+      <el-submenu index="2">
+        <template slot="title">热门商圈</template>
+        <el-menu-item index="2-1">集美区</el-menu-item>
+        <el-menu-item index="2-2">思明区</el-menu-item>
+        <el-menu-item index="2-3">湖里区</el-menu-item>
+        <el-menu-item index="2-4">海沧区</el-menu-item>
+        <el-menu-item index="2-5">翔安区</el-menu-item>
+        <el-menu-item index="2-6">同安区</el-menu-item>
+      </el-submenu>
+      <el-submenu index="3">
+        <template slot="title">地铁周边</template>
+        <el-menu-item index="3-1">地铁1号线</el-menu-item>
+        <el-menu-item index="3-2">地铁2号线</el-menu-item>
+        <el-menu-item index="3-3">地铁3号线</el-menu-item>
+      </el-submenu>
+    </el-menu>
+    <div class="line"></div>
+    <!--<el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="listQuery.pageNum"
@@ -71,6 +71,21 @@
         <el-button v-if="dialogStatus=='create'" type="success" @click="createUser">创 建</el-button>
         <el-button type="primary" v-else @click="updateUser">修 改</el-button>
       </div>
-    </el-dialog>
+    </el-dialog>-->
   </div>
 </template>
+<script>
+  export default {
+    data() {
+      return {
+        activeIndex: '1',
+        activeIndex2: '1'
+      };
+    },
+    methods: {
+      handleSelect(key, keyPath) {
+        console.log(key, keyPath);
+      }
+    }
+  }
+</script>
