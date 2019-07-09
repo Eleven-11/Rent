@@ -60,7 +60,7 @@
         <el-form-item label="类型图标" required v-if="dialogStatus=='create'">
         <el-upload
           class="avatar-uploader"
-          action="/api/file/upload"
+          action="http://localhost:8080/images/"
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
@@ -137,8 +137,18 @@
         })
       },
       handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
-        console.log(typeof this.imageUrl)
+        let avater = new File(URL.createObjectURL(file.raw));
+        this.api({
+          url: "/file/upload",
+          method: "post",
+          params: avater
+        }).then(data => {
+          this.dialogFormVisible.imageUrl = data;
+          console(this.dialogFormVisible.imageUrl)
+        })
+
+        //this.imageUrl = URL.createObjectURL(file.raw);
+        //console.log(this.imageUrl)
         // this.tempUser.categoriesImg = this.imageUrl;
         // alert(this.tempUser.categoriesImg);
       },

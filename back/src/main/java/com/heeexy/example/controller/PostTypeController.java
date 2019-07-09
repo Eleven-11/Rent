@@ -27,37 +27,7 @@ import java.util.Map;
 public class PostTypeController {
     @Autowired
     private PostTypeService postTypeService;
-    String string =  new String("");
 
-    /**
-     *@description:帖子类型图片上传
-     */
-    @RequestMapping(value = "/upload")
-    public Map<String, Object> imgUpload(HttpServletRequest req, MultipartHttpServletRequest multiReq) throws IOException {
-        Map<String,Object> map = new HashMap<>();
-        MultipartFile file = multiReq.getFile("file");
-        String originalFilename = file.getOriginalFilename();
-        String desFilePath =
-                "D:" + File.separator+"Ionia"
-                        + File.separator+"SpringBoot-Shiro-Vue"
-                        + File.separator+"vue"
-                        + File.separator+"src"
-                        + File.separator+"assets"
-                        + File.separator+"static"
-                        + "/" + originalFilename;
-        File localFile  = new File(desFilePath);
-        String srcUrl = "http://localhost:9520/static/"+originalFilename;
-        string=srcUrl;
-        if (!localFile.exists()) {
-            localFile.createNewFile();
-            file.transferTo(localFile);
-        }
-        map.put("code", 0);
-        map.put("msg", "上传成功");
-        map.put("url", srcUrl);
-        System.out.println(srcUrl);
-        return map;
-    }
     /**
      *@description:获取帖子类型列表
      *@param request
@@ -68,6 +38,7 @@ public class PostTypeController {
         return postTypeService.getPostTypeList(CommonUtil.request2Json(request));
 
     }
+
     /**
      *@description:添加帖子类型信息
      *@param request(帖子类型名称postTypeName,帖子类型图标postTypeImg,帖子类型创建时间postTypeCreateTime)
@@ -77,6 +48,7 @@ public class PostTypeController {
     public JSONObject insertPostType(HttpServletRequest request) {
         return postTypeService.insertPostType(CommonUtil.request2Json(request));
     }
+
     /**
      *@description:根据帖子类型id更新帖子类型相关信息
      *@param request(帖子类型id--postTypeId,帖子类型名称postTypeName,帖子类型图标postTypeImg,帖子类型创建时间postTypeCreateTime)
@@ -86,6 +58,7 @@ public class PostTypeController {
     public JSONObject updatePostTypeById(HttpServletRequest request) {
         return postTypeService.updatePostTypeById(CommonUtil.request2Json(request));
     }
+
     /**
      *@description:根据帖子类型id删除对应帖子类型信息
      *@param request(帖子类型id--postTypeId)

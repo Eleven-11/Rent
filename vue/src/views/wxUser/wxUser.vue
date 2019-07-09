@@ -16,7 +16,7 @@
               end-placeholder="结束日期"
               :default-time="['00:00:00', '23:59:59']">
             </el-date-picker>
-            <el-button type="primary" icon="plus" v-if="hasPerm('wxuser:list')" @click="getWxUserList">查询</el-button>
+            <el-button type="primary" icon="plus" v-if="hasPerm('wxUser:list')" @click="getWxUserList">查询</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -160,7 +160,7 @@
     },
     created() {
       this.getWxUserList();
-      if (this.hasPerm('wxuser:add') || this.hasPerm('wxuser:update')) {
+      if (this.hasPerm('wxUser:add') || this.hasPerm('wxUser:update')) {
         this.getWxUserList();
       }
     },
@@ -176,7 +176,7 @@
         this.startTime = this.formatter(this.daterange[0], 'yyyy-MM-dd hh:mm:ss')
         this.endTime = this.formatter(this.daterange[1], 'yyyy-MM-dd hh:mm:ss')
         this.api({
-          url: "/wxuser/getWxUserlist",
+          url: "/wxUser/getWxUserlist",
           method: "get",
           params: this.listQuery
         }).then(data => {
@@ -299,7 +299,7 @@
        /* getFollows($index)
         {
           this.api({
-            url: "/wxuser/getUserFollowList",
+            url: "/wxUser/getUserFollowList",
             method: "get",
             params: {
               pageNum: this.listQuery.pageNum,
@@ -314,7 +314,7 @@
         },*/
         /*getFans($index){
         this.api({
-            url: "/wxuser/getUserFansList",
+            url: "/wxUser/getUserFansList",
             method: "get",
             params: {
               pageNum: this.listQuery.pageNum,
@@ -387,7 +387,7 @@
         this.api({
           url: "/user/updateUser",
           method: "post",
-          data: this.wxuser
+          data: this.wxUser
         }).then(() => {
           let msg = "修改成功";
           this.dialogFormVisible = false

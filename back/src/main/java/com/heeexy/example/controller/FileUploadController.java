@@ -33,15 +33,12 @@ public class FileUploadController {
 
     @RequestMapping(value = "/upload")
     public String imgUpload(HttpServletRequest req, MultipartHttpServletRequest multiReq) throws IOException {
+
         MultipartFile file = multiReq.getFile("file");
         String originalFileName = file.getOriginalFilename();
         String desFilePath =
-                "D:" + File.separator+"Ionia"
+                "D:" + File.separator+"Image"
                         + File.separator+"SpringBoot-Shiro-Vue"
-                        + File.separator+"vue"
-                        + File.separator+"src"
-                        + File.separator+"assets"
-                        + File.separator+"static"
                         + "/" + originalFileName;
         File localFile  = new File(desFilePath);
         if (!localFile.exists()) {
@@ -49,7 +46,7 @@ public class FileUploadController {
             file.transferTo(localFile);
         }
         String newFileName = FileUtil.renameToUUID(originalFileName);
-        String srcUrl ="http://localhost:8080/static/"+newFileName;
+        String srcUrl ="http://localhost:8080/images/"+newFileName;
         File newFile = new File(srcUrl);
         if (!newFile.exists()) {
             newFile.createNewFile();

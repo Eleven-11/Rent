@@ -24,6 +24,7 @@
 	  t_post_type a
     WHERE
       a.IS_DEL=0
+    LIMIT 8
     </select>
     <insert id="insertPostType" parameterType="com.alibaba.fastjson.JSONObject">
     INSERT t_post_type (

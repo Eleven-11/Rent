@@ -19,7 +19,6 @@ public class UserRestrictServiceImpl implements UserRestrictService {
 
     @Override
     public JSONObject updateWxUserRes(JSONObject jsonObject) {
-        System.out.println(jsonObject.toJSONString());
         userRestrictDao.updateWxUserRes(jsonObject);
         return CommonUtil.successJson("操作成功！");
     }

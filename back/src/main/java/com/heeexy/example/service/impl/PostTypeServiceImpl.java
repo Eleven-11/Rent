@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.PostTypeDao;
 import com.heeexy.example.service.PostTypeService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +37,14 @@ public class PostTypeServiceImpl implements PostTypeService {
     @Override
     public JSONObject insertPostType(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
-        System.out.println(jsonObject.toJSONString());
-        postTypeDao.insertPostType(jsonObject);
-        return CommonUtil.successJson("操作成功！请刷新后查看");
+        int count = postTypeDao.countPostType(jsonObject);
+        if(count==8) {
+            return CommonUtil.errorJson(ErrorEnum.E_30001);
+        }
+        else {
+            postTypeDao.insertPostType(jsonObject);
+            return CommonUtil.successJson("操作成功！请刷新后查看");
+        }
     }
 
 
