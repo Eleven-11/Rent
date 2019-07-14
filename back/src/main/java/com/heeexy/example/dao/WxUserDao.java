@@ -17,9 +17,4 @@ public interface WxUserDao {
      */
     List<JSONObject> getWxUserList(JSONObject jsonObject);
 
-    /**
-     *@description:添加游客信息
-     */
-    String insertVisitor(JSONObject jsonObject);
-
 }

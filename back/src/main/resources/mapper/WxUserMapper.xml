@@ -14,11 +14,6 @@
 			</if>
         </where>
     </select>
-    <insert id="insertVisitor" parameterType="com.alibaba.fastjson.JSONObject">
-        INSERT into t_visitor(USER_ID,CREATE_TIME)
-        VALUES(#(visitorId),#(DATE_FORMAT(createTime, '%Y.%m.%d %T')))
-    </insert>
-
     <select id="getWxUserList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
         t_wx_user.USER_ID wxUserId,
