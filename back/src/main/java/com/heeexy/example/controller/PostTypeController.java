@@ -65,7 +65,7 @@ public class PostTypeController {
      *@return com.alibaba.fastjson.JSONObject
      */
     @PostMapping("/deletePostType")
-    public JSONObject deletePostTypeById(HttpServletRequest request) {
+    public JSONObject updateDelPostTypeById(HttpServletRequest request) {
         return postTypeService.deletePostTypeById(CommonUtil.request2Json(request));
     }
 

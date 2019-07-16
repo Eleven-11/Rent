@@ -25,7 +25,7 @@ public class PostLabelController {
     /**
      *@description:新增帖子标签，支持批量添加
      *@param request(上级菜单parentContent,子类菜单contents,其中子类菜单为列表形式传入
-     * 如编辑地铁1号线站点信息,parentContent为地铁一号线,contents为具体站点名称)
+     *         如编辑地铁1号线站点信息,parentContent为地铁一号线,contents为具体站点名称)
      *@return com.alibaba.fastjson.JSONObject
      */
     @PostMapping("/insertPostLabel")

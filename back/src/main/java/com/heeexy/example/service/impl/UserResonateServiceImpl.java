@@ -1,13 +1,14 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.heeexy.example.dao.UserCollectionDao;
 import com.heeexy.example.dao.UserResonateDao;
 import com.heeexy.example.service.UserResonateService;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,14 +26,25 @@ public class UserResonateServiceImpl implements UserResonateService {
     @Override
     public JSONObject getPostLikeList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
-        int count = userResonateDao.countPostList(jsonObject);
-        List<JSONObject> list = userResonateDao.getPostLikeList(jsonObject);
-        return CommonUtil.successPage(jsonObject, list, count);
+        if (jsonObject.get("limit")!=null &&jsonObject.get("limit")!=""){
+            List<JSONObject> list = userResonateDao.getPostLikeList(jsonObject);
+            return CommonUtil.successPage(jsonObject, list, (Integer) jsonObject.get("limit"));
+        }
+        else {
+            int count = userResonateDao.countPostList(jsonObject);
+            List<JSONObject> list = userResonateDao.getPostLikeList(jsonObject);
+            return CommonUtil.successPage(jsonObject, list, count);
+        }
     }
 
     /*添加帖子点赞信息*/
     @Override
     public JSONObject insertPostLike(JSONObject jsonObject) {
+        /*获取用户首次点赞帖子信息的时间*/
+        Date postLikeCreateTime = new Date();
+        SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(dateFormat.format(postLikeCreateTime));
+        jsonObject.put("postLikeCreateTime",postLikeCreateTime);
         userResonateDao.insertPostLike(jsonObject);
         return CommonUtil.successJson();
     }

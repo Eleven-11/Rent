@@ -22,7 +22,7 @@
         AND a.IS_DEL = '0'
         ORDER BY a.CREATE_TIME DESC) g
     </select>
-    <select id="getCommentList">
+    <select id="getPostCommentList">
         SELECT
             a.CONTENT content,
             a.CREATE_TIME createTime,
@@ -41,9 +41,9 @@
         AND a.IS_DEL = '0'
         ORDER BY a.CREATE_TIME DESC
     </select>
-    <insert id="insertComment" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertComment" useGeneratedKeys="true" keyProperty="commentId">
         INSERT INTO t_comment(POST_ID,START_ID,RECEIVE_ID,CONTENT,CREATE_TIME)
-        VALUES(#{postId},#{startId},#{receiveId},#{content},DATE_FORMAT(#{commentCeateTime},'%Y.%m.%d %T'))
+        VALUES(#{postId},#{startId},#{receiveId},#{content},DATE_FORMAT(#{commentCreateTime},'%Y.%m.%d %T'))
     </insert>
     <select id="getCommentStatus" resultType="java.lang.Integer">
         SELECT

@@ -16,7 +16,7 @@ public interface UserResonateDao {
     /**
      * @description 添加点赞信息并返回主键
      **/
-    int insertPostLike(JSONObject jsonObject);
+    void insertPostLike(JSONObject jsonObject);
     /**
      * @description 取消点赞
      **/

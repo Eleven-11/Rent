@@ -15,7 +15,7 @@ public interface PostCommentService {
     int insertComment(JSONObject jsonObject);
 
     /**
-     * @description 逻辑删除评论
+     * @description 根据评论id逻辑删除评论
      **/
     JSONObject updateDelCommentById(JSONObject jsonObject);
 }

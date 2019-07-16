@@ -8,7 +8,7 @@ public interface PostCommentDao {
     /**
      * @description 获取帖子评论列表
      **/
-    List<JSONObject> getCommentList(JSONObject jsonObject);
+    List<JSONObject> getPostCommentList(JSONObject jsonObject);
 
     /**
      * @description 计算评论条数用于分页

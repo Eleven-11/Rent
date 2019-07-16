@@ -38,7 +38,7 @@ public class  WxUserServiceImpl implements WxUserService {
     @Override
     public String insertVisitor(JSONObject jsonObject) {
         Date createTime = new Date();
-        SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd :HH:mm:ss");
+        SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         jsonObject.put("createTime",dateFormat.format(createTime));
         String visitorId =UUID.randomUUID().toString();
         jsonObject.put("visitorId",visitorId);
