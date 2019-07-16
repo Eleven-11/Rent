@@ -3,11 +3,42 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.PostBaseDao">
     <select id="countPost" resultType="java.lang.Integer">
+        select count(0) from (SELECT
+        u.WX_NICK_NAME poster,
+        u.WX_AVATAR_URL posterAvatar,
+        m.ID postId,
+        m.CREATE_TIME createTime,
+        m.ADDRESS address,
+        m.CONTENT content,
+        m.MIN_PRICE minPrice,
+        m.MAX_PRICE maxPrice,
+        m.PHONE phone,
+        m.TOTAL_BROWSE browse,
+        m.TOTAL_COMMENTS comments,
+        m.TOTAL_RESONATE likes,
+        m.FEE fee,
+        m.ACTIVE_TIME activeTime
+        FROM
+        t_wx_user u,
+        t_post_base m
+        WHERE
+        m.IS_LOWER_SHELF = '0'
+        AND m.IS_DEL = '0'
+        <if test="nickName != null and nickName != ''">
+            AND u.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
+        </if>
+        <if test="keyword !=null and keyword !=''">
+            AND (m.CONTENT LIKE CONCAT(CONCAT('%',#{keyword}),'%') OR m.ADDRESS LIKE CONCAT(CONCAT('%',#{keyword}),'%'))
+        </if>
+        AND m.USER_ID = u.USER_ID
+        ORDER BY
+        ACTIVE_TIME DESC) g
     </select>
     <select id="getPostBaseList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             u.WX_NICK_NAME poster,
             u.WX_AVATAR_URL posterAvatar,
+            m.ID postId,
             m.CREATE_TIME createTime,
             m.ADDRESS address,
             m.CONTENT content,
@@ -30,9 +61,9 @@
         </if>
         <if test="keyword !=null and keyword !=''">
         AND (m.CONTENT LIKE CONCAT(CONCAT('%',#{keyword}),'%') OR m.ADDRESS LIKE CONCAT(CONCAT('%',#{keyword}),'%'))
+        </if>
         AND m.USER_ID = u.USER_ID
         ORDER BY
             ACTIVE_TIME DESC
-        </if>
     </select>
 </mapper>

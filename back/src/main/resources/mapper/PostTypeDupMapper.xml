@@ -38,7 +38,7 @@
         #{postTypeCreateTime}
 		)
     </insert>
-    <update id = "UpdatePostTypeById">
+    <update id = "updatePostTypeById">
         UPDATE t_post_type a
         SET a.IS_DEL = '0'
         <if test ="postTypeName != null and postTypeName != ''">

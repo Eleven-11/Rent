@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.PostCommentDao">
+    <select id="countComments" resultType="java.lang.Integer">
+        select count(0) from
+        (SELECT
+            a.CONTENT content,
+            a.CREATE_TIME createTime,
+            u1.WX_NICK_NAME startNickname,
+            u1.WX_GENDER startGender,
+            u1.WX_AVATAR_URL startImg,
+            u2.WX_NICK_NAME receiveNickname,
+            u2.WX_AVATAR_URL receiveImg,
+            u2.WX_GENDER receiveGender
+        FROM
+            t_comment a
+        LEFT JOIN t_wx_user u1 ON a.START_ID = u1.USER_ID
+        LEFT JOIN t_wx_user u2 ON a.RECEIVE_ID = u2.USER_ID
+        WHERE
+            a.POST_ID = #{postId}
+        AND a.IS_DEL = '0'
+        ORDER BY a.CREATE_TIME DESC) g
+    </select>
+    <select id="getCommentList">
+        SELECT
+            a.CONTENT content,
+            a.CREATE_TIME createTime,
+            u1.WX_NICK_NAME startNickname,
+            u1.WX_GENDER startGender,
+            u1.WX_AVATAR_URL startImg,
+            u2.WX_NICK_NAME receiveNickname,
+            u2.WX_AVATAR_URL receiveImg,
+            u2.WX_GENDER receiveGender
+        FROM
+            t_comment a
+        LEFT JOIN t_wx_user u1 ON a.START_ID = u1.USER_ID
+        LEFT JOIN t_wx_user u2 ON a.RECEIVE_ID = u2.USER_ID
+        WHERE
+            a.POST_ID = #{postId}
+        AND a.IS_DEL = '0'
+        ORDER BY a.CREATE_TIME DESC
+    </select>
+    <insert id="insertComment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_comment(POST_ID,START_ID,RECEIVE_ID,CONTENT,CREATE_TIME)
+        VALUES(#{postId},#{startId},#{receiveId},#{content},DATE_FORMAT(#{commentCeateTime},'%Y.%m.%d %T'))
+    </insert>
+    <select id="getCommentStatus" resultType="java.lang.Integer">
+        SELECT
+            IS_DEL deleteStatus
+        FROM
+            t_comment
+        WHERE
+            ID = #{commentId}
+    </select>
+    <update id="updateDelCommentById">
+        UPDATE t_comment
+        SET IS_DEL = '1'
+        WHERE
+            ID = #{commentId}
+    </update>
+</mapper>

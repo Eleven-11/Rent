@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.UserResonateDao">
+    <select id="getPostLikeList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            u.WX_AVATAR_URL likeImg,
+            u.WX_NICK_NAME likeNickname
+        FROM
+            t_wx_user u,
+            t_user_resonate a
+        WHERE
+            a.TYPE ='1' AND a.TARGET_ID = #{postId}
+        AND u.USER_ID = a.USER_ID
+        <if test="limit !=null and limit !=''">
+            limit #{limit}
+        </if>
+    </select>
+
+    <select id="countPostList" resultType="java.lang.Integer">
+        SELECT count(0) from
+        (
+        SELECT
+        u.WX_AVATAR_URL likeImg,
+        u.WX_NICK_NAME likeNickname
+        FROM
+        t_wx_user u,
+        t_user_resonate a
+        WHERE
+        a.TYPE ='1' AND a.TARGET_ID = #{postId}
+        AND u.USER_ID = a.USER_ID
+        <if test="limit !=null and limit !=''">
+            limit #{limit}
+        </if>
+        ) g
+    </select>
+
+    <insert id="insertPostLike" useGeneratedKeys="true" keyProperty="likeId">
+        INSERT INTO t_user_resonate (
+            TYPE,
+            TARGET_ID,
+            USER_ID,
+            CREATE_TIME
+        )
+        VALUES
+            (
+                '1',
+                #{postId},
+                #{userId},
+                DATE_FORMAT(#{postLikeCreateTime},'%Y.%m.%d %T')
+            )
+    </insert>
+
+    <update id="updateDelPostLike">
+        UPDATE t_user_resonate
+        SET IS_DEL =
+        IF (
+            t_user_resonate.IS_DEL = '1',
+            '0',
+            '1'
+        )
+        WHERE
+            t_user_resonate.USER_ID =#{userId} AND t_user_resonate.TARGET_ID=#{postId}
+    </update>
+</mapper>

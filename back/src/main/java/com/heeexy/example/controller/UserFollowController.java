@@ -26,7 +26,6 @@ public class UserFollowController {
      *@param jsonObject(用户id--wxUserId)
      *@return 用户关注的所有关注者昵称列表（nickname）
      */
-    @RequiresPermissions("wxuser:followList")
     @GetMapping("/getUserFollowList")
     public JSONObject getUserFollowList(HttpServletRequest request) {
         return userFollowService.getUserFollowList(CommonUtil.request2Json(request));
@@ -37,7 +36,6 @@ public class UserFollowController {
      *@param jsonObject(用户id--wxUserId)
      *@return 关注指定用户的所有粉丝昵称列表（nickname）
      */
-    @RequiresPermissions("wxuser:fansList")
     @GetMapping("/getUserFansList")
     public JSONObject getUserFansList(HttpServletRequest request) {
         return userFollowService.getUserFansList(CommonUtil.request2Json(request));
