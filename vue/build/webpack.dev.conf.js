@@ -27,6 +27,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   devServer: {
     clientLogLevel: 'warning',
     historyApiFallback: true,
+
     hot: true,
     compress: true,
     host: HOST || config.dev.host,
@@ -40,7 +41,8 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     quiet: true, // necessary for FriendlyErrorsPlugin
     watchOptions: {
       poll: config.dev.poll,
-    }
+    },
+    disableHostCheck: true
   },
   plugins: [
     new webpack.DefinePlugin({
