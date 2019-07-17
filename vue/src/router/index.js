@@ -42,6 +42,54 @@ export const asyncRouterMap = [
       },
     ]
   },
+  //用户管理
+  {
+    path: '/wxUser',
+    component: Layout,
+    redirect: '/wxUser/',
+    name: '',
+    meta: {title: '微信管理', icon: 'wx'},
+    children: [
+      {
+        path: 'wxUser',
+        name: '用户管理',
+        component: _import('wxUser/wxUser'),
+        meta: {title: '用户管理', icon: 'user1'},
+        menu: 'user1'
+      },
+      {
+        path: 'wxLogin',
+        name: '登录管理',
+        component: _import('wxUser/wxLogin'),
+        meta: {title: '登录管理', icon: 'user1'},
+        menu: 'wxLogin'
+      },
+    ]
+  },
+  //帖子管理
+  {
+    path: '/Post',
+    component: Layout,
+    redirect: '/Post/',
+    name: '',
+    meta: {title: '帖子管理', icon: 'Post'},
+    children: [
+      {
+        path: 'Post',
+        name: '帖子管理',
+        component: _import('Post/Post'),
+        meta: {title: '帖子管理', icon: 'Post'},
+        menu: 'user1'
+      },
+      {
+        path: '',
+        name: '标签管理',
+        component: _import('Post/Post'),
+        meta: {title: '标签管理', icon: 'Post'},
+        menu: 'user1'
+      }
+    ]
+  },
   {
     path: '/user',
     component: Layout,
@@ -61,20 +109,8 @@ export const asyncRouterMap = [
       },
     ]
   },
-  //用户管理
 
-  {
-    path: '/wxUser',
-    component: Layout,
-    redirect: '/wxUser/',
-    name: '',
-    meta: {title: '微信用户', icon: 'table'},
-    children: [
-      {
-        path: '', name: '微信用户', component: _import('wxUser/wxUser'), meta: {title: '微信用户', icon: 'user'}, menu: 'user'
-      }
-    ]
-  },
+
   {
     path: '/platformManage',
     component: Layout,
@@ -83,7 +119,11 @@ export const asyncRouterMap = [
     meta: {title: '平台管理', icon: 'table'},
     children: [
       {
-        path: 'postLabel', name: '帖子标签', component: _import('platformManage/postLabel'), meta: {title: '帖子标签', icon: 'mng'}, menu: 'platform'
+        path: 'postLabel',
+        name: '帖子标签',
+        component: _import('platformManage/postLabel'),
+        meta: {title: '帖子标签', icon: 'mng'},
+        menu: 'platform'
       },
       {
         path: 'postType',
