@@ -87,7 +87,14 @@ export const asyncRouterMap = [
         component: _import('Post/Post'),
         meta: {title: '标签管理', icon: 'Post'},
         menu: 'user1'
-      }
+      },
+      {
+        path: 'postType',
+        name: '帖子类别',
+        component: _import('Post/postType'),
+        meta: {title: '帖子类别', icon: 'list'},
+        menu: 'platform'
+      },
     ]
   },
   {
@@ -125,13 +132,7 @@ export const asyncRouterMap = [
         meta: {title: '帖子标签', icon: 'mng'},
         menu: 'platform'
       },
-      {
-        path: 'postType',
-        name: '帖子类别',
-        component: _import('platformManage/postType'),
-        meta: {title: '帖子类别', icon: 'list'},
-        menu: 'platform'
-      },
+
     ]
   },
   {path: '*', redirect: '/404', hidden: true}

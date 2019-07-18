@@ -15,17 +15,21 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="昵称" prop="nickname" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="用户名" prop="username" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="角色" width="100">
-        <template slot-scope="scope">
-          <el-tag type="success" v-text="scope.row.roleName" v-if="scope.row.roleId===1"></el-tag>
-          <el-tag type="primary" v-text="scope.row.roleName" v-else></el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="创建时间" prop="createTime" width="170"></el-table-column>
-      <el-table-column align="center" label="最近修改时间" prop="updateTime" width="170"></el-table-column>
-      <el-table-column align="center" label="管理" width="220" v-if="hasPerm('user:update')">
+      <el-table-column align="center" label="发帖人" prop="poster" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="发帖人头像" prop="posterAvatar" style="width: 100px;"></el-table-column>
+      <el-table-column align="center" label="帖子Id" prop="postId" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="帖子创建时间" prop="createTime" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="地址" prop="address" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="帖子内容" prop="content" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="最低价" prop="minPrice" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="最高价" prop="maxPrice" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="联系方式" prop="phone" style="width: 120px;"></el-table-column>
+      <el-table-column align="center" label="浏览量" prop="browse" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="评论数量" prop="comments" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="帖子点赞数量" prop="likes" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="中介费" prop="fee" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="近期活跃时间" prop="activeTime" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="管理" width="220">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
           <el-button type="danger" icon="delete" v-if="scope.row.userId!=userId "
@@ -44,34 +48,29 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" :model="tempUser" label-position="left" label-width="80px"
+      <el-form class="small-space" :model="tempPost" label-position="left" label-width="80px"
                style='width: 300px; margin-left:50px;'>
-        <el-form-item label="用户名" required v-if="dialogStatus=='create'">
-          <el-input type="text" v-model="tempUser.username">
+        <el-form-item label="帖子内容">
+          <el-input type="text" v-model="tempPost.content" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
-        <el-form-item label="密码" v-if="dialogStatus=='create'" required>
-          <el-input type="password" v-model="tempUser.password">
+        <el-form-item label="联系方式">
+          <el-input type="text" v-model="tempPost.phone" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
-        <el-form-item label="新密码" v-else>
-          <el-input type="password" v-model="tempUser.password" placeholder="不填则表示不修改">
+        <el-form-item label="浏览量" >
+          <el-input type="text" v-model="tempPost.browse" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
-        <el-form-item label="角色" required>
-          <el-select v-model="tempUser.roleId" placeholder="请选择">
-            <el-option
-              v-for="item in roles"
-              :key="item.roleId"
-              :label="item.roleName"
-              :value="item.roleId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="昵称" required>
-          <el-input type="text" v-model="tempUser.nickname">
+        <el-form-item label="点赞量" >
+          <el-input type="text" v-model="tempPost.likes" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
+        <el-form-item label="地址" >
+          <el-input type="text" v-model="tempPost.address" placeholder="不填则表示不修改">
+          </el-input>
+        </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -101,12 +100,12 @@
           update: '编辑',
           create: '新建用户'
         },
-        tempUser: {
-          username: '',
-          password: '',
-          nickname: '',
-          roleId: '',
-          userId: ''
+        tempPost: {
+          content: '',
+          phone: '',
+          browse: '',
+          likes: '',
+          address: ''
         }
       }
     },
@@ -138,9 +137,10 @@
           method: "get",
           params: this.listQuery
         }).then(data => {
-          console.log( data)
           this.listLoading = false;
           this.list = data.list;
+          console.log( this.list)
+
           this.totalCount = data.totalCount;
         })
       },
@@ -165,31 +165,32 @@
       },
       showCreate() {
         //显示新增对话框
-        this.tempUser.username = "";
-        this.tempUser.password = "";
-        this.tempUser.nickname = "";
-        this.tempUser.roleId = "";
-        this.tempUser.userId = "";
+        this.tempPost.content = "";
+        this.tempPost.phone = "";
+        this.tempPost.browse = "";
+        this.tempPost.likes = "";
+        this.tempPost.address = "";
         this.dialogStatus = "create"
         this.dialogFormVisible = true
       },
       showUpdate($index) {
         let user = this.list[$index];
-        this.tempUser.username = user.username;
-        this.tempUser.nickname = user.nickname;
-        this.tempUser.roleId = user.roleId;
-        this.tempUser.userId = user.userId;
-        this.tempUser.deleteStatus = '1';
-        this.tempUser.password = '';
+        this.tempPost.content = user.content;
+        this.tempPost.phone = user.phone;
+        this.tempPost.browse = user.browse;
+        this.tempPost.likes = user.likes;
+        this.tempPost.address = user.address;
+        this.tempPost.deleteStatus = '1';
         this.dialogStatus = "update"
         this.dialogFormVisible = true
+        console.log( this.tempPost)
       },
       createUser() {
         //添加新用户
         this.api({
           url: "/user/addUser",
           method: "post",
-          data: this.tempUser
+          data: this.tempPost
         }).then(() => {
           this.getList();
           this.dialogFormVisible = false
@@ -201,11 +202,11 @@
         this.api({
           url: "/user/updateUser",
           method: "post",
-          data: this.tempUser
+          data: this.tempPost
         }).then(() => {
           let msg = "修改成功";
           this.dialogFormVisible = false
-          if (this.userId === this.tempUser.userId) {
+          if (this.userId === this.tempPost.userId) {
             msg = '修改成功,部分信息重新登录后生效'
           }
           this.$message({
