@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.PostImgDao">
-    <select id="getPostImgList">
+    <select id="getPostImgList" resultType="com.alibaba.fastjson.JSONObject">
         select a.IMG_URL img from t_post_picture a where a.POST_ID =#{postId}
     </select>
 </mapper>

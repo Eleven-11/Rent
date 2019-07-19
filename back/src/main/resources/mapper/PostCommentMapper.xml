@@ -22,7 +22,7 @@
         AND a.IS_DEL = '0'
         ORDER BY a.CREATE_TIME DESC) g
     </select>
-    <select id="getPostCommentList">
+    <select id="getPostCommentList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             a.CONTENT content,
             a.CREATE_TIME createTime,

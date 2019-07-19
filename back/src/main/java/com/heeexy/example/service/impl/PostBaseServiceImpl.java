@@ -22,7 +22,7 @@ public class PostBaseServiceImpl implements PostBaseService {
     private PostBaseDao postBaseDao;
 
     @Override
-    public JSONObject getPoseBaseList(JSONObject jsonObject) {
+    public JSONObject getPostBaseList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
         int count = postBaseDao.countPost(jsonObject);
         List<com.alibaba.fastjson.JSONObject> list = postBaseDao.getPostBaseList(jsonObject);

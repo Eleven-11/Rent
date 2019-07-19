@@ -50,7 +50,6 @@ public class PostBaseController {
      **/
     @GetMapping("/getPostBaseList")
     public JSONObject getPostBaseList(HttpServletRequest request) {
-        System.out.println("hello");
         return postBaseService.getPoseBaseList(CommonUtil.request2Json(request));
     }
     @PostMapping("/updatePostBase")

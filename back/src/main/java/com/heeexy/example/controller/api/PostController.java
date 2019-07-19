@@ -1,15 +1,15 @@
 package com.heeexy.example.controller.api;
 
-import com.alibaba.fastjson.JSONObject;
-import com.heeexy.example.service.PostBaseService;
-import com.heeexy.example.service.PostCommentService;
-import com.heeexy.example.service.PostImgService;
+import com.heeexy.example.service.PostForMiniPrgService;
+import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.model.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @ClassName PostController
@@ -22,17 +22,11 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/miniPrgPost")
 public class PostController {
     @Autowired
-    private PostBaseService postBaseService;
-
-    @Autowired
-    private PostCommentService postCommentService;
-
-    @Autowired
-    private PostImgService postImgService;
+    private PostForMiniPrgService postForMiniPrgService;
 
     @GetMapping("/getPostInfo")
-    public JSONObject getPostBaseList(HttpServletRequest request) {
-        return null;
+    public List<PostDto> getPostList(HttpServletRequest request) {
+        return postForMiniPrgService.getPostInfo(CommonUtil.request2Json(request));
 
     }
 
