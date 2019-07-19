@@ -10,25 +10,29 @@
     </div>
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
               highlight-current-row>
-      <el-table-column align="center" label="序号" width="80">
+      <el-table-column align="center" label="序号" width="60">
         <template slot-scope="scope">
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="发帖人" prop="poster" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="发帖人头像" prop="posterAvatar" style="width: 100px;"></el-table-column>
-      <el-table-column align="center" label="帖子Id" prop="postId" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="帖子创建时间" prop="createTime" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="地址" prop="address" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="帖子内容" prop="content" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="最低价" prop="minPrice" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="最高价" prop="maxPrice" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="联系方式" prop="phone" style="width: 120px;"></el-table-column>
-      <el-table-column align="center" label="浏览量" prop="browse" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="评论数量" prop="comments" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="帖子点赞数量" prop="likes" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="中介费" prop="fee" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="近期活跃时间" prop="activeTime" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" label="发帖人" prop="poster" width="100"></el-table-column>
+      <el-table-column align="center" label="发帖人头像" prop="posterAvatar"  width="100">
+        <template slot-scope="scope">
+          <img :src="scope.row.posterAvatar" style="width: 60px; height: 60px;"/>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="帖子Id" prop="postId" width="90"></el-table-column>
+      <el-table-column align="center" label="帖子创建时间" prop="createTime" width="220"></el-table-column>
+      <el-table-column align="center" label="地址" prop="address"  width="120"></el-table-column>
+      <el-table-column align="center" label="帖子内容" prop="content" width="200" ></el-table-column>
+      <el-table-column align="center" label="最低价" prop="minPrice" ></el-table-column>
+      <el-table-column align="center" label="最高价" prop="maxPrice" ></el-table-column>
+      <el-table-column align="center" label="联系方式" prop="phone" width="160"></el-table-column>
+      <el-table-column align="center" label="浏览量" prop="browse" ></el-table-column>
+      <el-table-column align="center" label="评论数量" prop="comments" ></el-table-column>
+      <el-table-column align="center" label="点赞数量" prop="likes" ></el-table-column>
+      <el-table-column align="center" label="中介费" prop="fee" ></el-table-column>
+      <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220" ></el-table-column>
       <el-table-column align="center" label="管理" width="220">
         <template slot-scope="scope">
           <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
@@ -121,6 +125,30 @@
       ])
     },
     methods: {
+      //时间搓转化
+      formatter(thistime, fmt) {
+        let $this = new Date(thistime)
+        let o = {
+          'M+': $this.getMonth() + 1,
+          'd+': $this.getDate(),
+          'h+': $this.getHours(),
+          'm+': $this.getMinutes(),
+          's+': $this.getSeconds(),
+          'q+': Math.floor(($this.getMonth() + 3) / 3),
+          'S': $this.getMilliseconds()
+        }
+        if (/(y+)/.test(fmt)) {
+          fmt = fmt.replace(RegExp.$1, ($this.getFullYear() + '').substr(4 - RegExp.$1.length))
+        }
+        for (var k in o) {
+          if (new RegExp('(' + k + ')').test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+          }
+        }
+        return fmt
+      },
+
+
       getAllRoles() {
         this.api({
           url: "/user/getAllRoles",
@@ -139,8 +167,21 @@
         }).then(data => {
           this.listLoading = false;
           this.list = data.list;
-          console.log( this.list)
-
+          for (var i =0 ;i<this.list.length; i++){
+            if (this.list[i].minPrice == '' || this.list[i].minPrice == 'null' ||this.list[i].minPrice == 0) {
+              this.list[i].minPrice = '无最低价'
+            }
+            if(this.list[i].maxPrice == ''|| this.list[i].maxPrice == 'null' ||this.list[i].maxPrice == 0){
+              this.list[i].maxPrice = '无最高价'
+            }
+            if (this.list[i].fee == '0') {
+              this.list[i].fee = '无中介费'
+            }else{
+              this.list[i].fee = '有中介费'
+            }
+            this.list[i].createTime = this.formatter(this.list[i].createTime,'yyyy-MM-dd hh:mm:ss')
+            this.list[i].activeTime = this.formatter(this.list[i].activeTime,'yyyy-MM-dd hh:mm:ss')
+          }
           this.totalCount = data.totalCount;
         })
       },
@@ -239,6 +280,7 @@
           })
         })
       },
+
     }
   }
 </script>
