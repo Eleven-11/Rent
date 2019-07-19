@@ -6,7 +6,7 @@ public interface PostBaseService {
     /**
      * @description 获取帖子列表(基本信息)
      **/
-    JSONObject getPoseBaseList(JSONObject jsonObject);
+    JSONObject getPostBaseList(JSONObject jsonObject);
     /**
      * @description 更改帖子浏览量、点赞量
      **/

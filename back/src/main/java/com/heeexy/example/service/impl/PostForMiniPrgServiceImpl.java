@@ -42,14 +42,16 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
         for (int i=0;i<postBaseList.size();i++)
         {
             PostDto postDto = new PostDto();
+            System.out.println(postBaseList.get(i).toString());
             List<JSONObject> postCommentList = postCommentDao.getPostCommentList(postBaseList.get(i));
+            System.out.println(postCommentList);
             List<JSONObject> postImgList = postImgDao.getPostImgList(postBaseList.get(i));
             List<JSONObject> postLikeList = userResonateDao.getPostLikeList(postBaseList.get(i));
 
 
             postDto.setActiveTime((Date) postBaseList.get(i).get("activeTime"));
             postDto.setBrowse((Integer) postBaseList.get(i).get("browse"));
-            postDto.setCollections((Integer) postBaseList.get(i).get("collections"));
+            postDto.setCollections((Integer) postBaseList.get(i).get("collection"));
             postDto.setContent((String) postBaseList.get(i).get("content"));
             postDto.setCreateTime((Date) postBaseList.get(i).get("createTime"));
             int browse = (int)postBaseList.get(i).get("browse")+ (int)postBaseList.get(i).get("devBrowse");
@@ -60,7 +62,7 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             postDto.setMaxPrice((String) postBaseList.get(i).get("maxPrice"));
             postDto.setFee((Integer) postBaseList.get(i).get("fee"));
             postDto.setPhone((String) postBaseList.get(i).get("phone"));
-            postDto.setPostId((String) postBaseList.get(i).get("postId"));
+            postDto.setPostId((Integer) postBaseList.get(i).get("postId"));
             postDto.setPoster((String) postBaseList.get(i).get("poster"));
             postDto.setPostLabels((String) postBaseList.get(i).get("postLabels"));
             postDto.setPostGender((String) postBaseList.get(i).get("postGender"));
@@ -70,7 +72,7 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             postDto.setLikeList(postLikeList);
             postDto.setPostImgs(postImgList);
 
-            list.set(i,postDto);
+            list.add(postDto);
         }
        return list;
     }

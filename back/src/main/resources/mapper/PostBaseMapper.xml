@@ -11,7 +11,7 @@
         m.ID postId,
         m.CREATE_TIME createTime,
         m.ADDRESS address,
-        m.POST_LABELS postLabels,
+        m.LABELS postLabels,
         m.CONTENT content,
         m.MIN_PRICE minPrice,
         m.MAX_PRICE maxPrice,
@@ -19,9 +19,9 @@
         m.TOTAL_BROWSE browse,
         m.TOTAL_COMMENTS comments,
         m.TOTAL_RESONATE likes,
-        m.DEV_BROWSE devBrowse，
-        m.DEV_RESONATE devLike，
-        m.TOTAL_COLLECTION collection，
+        m.DEV_BROWSE devBrowse,
+        m.DEV_RESONATE devLike,
+        m.TOTAL_COLLECTION collection,
         m.FEE fee,
         m.ACTIVE_TIME activeTime,
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
@@ -52,7 +52,7 @@
         m.ID postId,
         m.CREATE_TIME createTime,
         m.ADDRESS address,
-        m.POST_LABELS postLabels,
+        m.LABELS postLabels,
         m.CONTENT content,
         m.MIN_PRICE minPrice,
         m.MAX_PRICE maxPrice,
@@ -60,9 +60,9 @@
         m.TOTAL_BROWSE browse,
         m.TOTAL_COMMENTS comments,
         m.TOTAL_RESONATE likes,
-        m.DEV_BROWSE devBrowse，
-        m.DEV_RESONATE devLike，
-        m.TOTAL_COLLECTION collection，
+        m.DEV_BROWSE devBrowse,
+        m.DEV_RESONATE devLike,
+        m.TOTAL_COLLECTION collection,
         m.FEE fee,
         m.ACTIVE_TIME activeTime,
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
