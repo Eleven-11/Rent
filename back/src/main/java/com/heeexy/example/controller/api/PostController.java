@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * @ClassName PostController
- * @Description 帖子信息接口（小程序）
+ * @Description 帖子信息接口（小程序专用）
  * @Author Lingling00
  * @DATE 7/18/2019 15:52
  * @VERSION 1.0

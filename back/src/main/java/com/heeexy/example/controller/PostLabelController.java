@@ -3,7 +3,6 @@ package com.heeexy.example.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostLabelService;
 import com.heeexy.example.util.CommonUtil;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +28,12 @@ public class PostLabelController {
      *@return com.alibaba.fastjson.JSONObject
      */
     @PostMapping("/insertPostLabel")
-    public JSONObject insertPostType(HttpServletRequest request) {
+    public JSONObject insertPostLabel(HttpServletRequest request) {
         return postLabelService.insertPostLabel(CommonUtil.request2Json(request));
+    }
+    @GetMapping("/getPostLabel")
+    public JSONObject getPostLabel(HttpServletRequest request){
+        return null;
     }
     /**
      *@description:根据id更新帖子标签详情信息
@@ -38,7 +41,7 @@ public class PostLabelController {
      *@return com.alibaba.fastjson.JSONObject
      */
     @PostMapping("/updatePostLabel")
-    public JSONObject updatePostType(HttpServletRequest request) {
+    public JSONObject updatePostLabel(HttpServletRequest request) {
         return postLabelService.updatePostLabel(CommonUtil.request2Json(request));
     }
     /**
@@ -47,7 +50,7 @@ public class PostLabelController {
      *@return com.alibaba.fastjson.JSONObject
      */
     @PostMapping("/deletePostLabel")
-    public JSONObject deletePostType(HttpServletRequest request) {
+    public JSONObject deletePostLabel(HttpServletRequest request) {
         return postLabelService.deletePostLabel(CommonUtil.request2Json(request));
     }
 

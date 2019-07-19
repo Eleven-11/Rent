@@ -8,14 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Lingling
@@ -34,7 +28,7 @@ public class PostTypeController {
      *@return com.alibaba.fastjson.JSONObject
      */
     @GetMapping("/getPostTypelist")
-    public JSONObject getWxUserList(HttpServletRequest request) {
+    public JSONObject getPostTypeList(HttpServletRequest request) {
         return postTypeService.getPostTypeList(CommonUtil.request2Json(request));
 
     }
