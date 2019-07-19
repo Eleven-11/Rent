@@ -16,4 +16,9 @@ public interface PostBaseDao {
      * @description 计算获取帖子列表的总条数（用于前端分页）
      **/
     int countPost(JSONObject jsonObject);
+
+    /**
+     * @description 更改帖子的点赞数量及浏览量
+     **/
+    void updatePostBase(JSONObject jsonObject);
 }

@@ -5,10 +5,13 @@
     <select id="countPost" resultType="java.lang.Integer">
         select count(0) from (SELECT
         u.WX_NICK_NAME poster,
+        u.WX_GENDER posterGender,
         u.WX_AVATAR_URL posterAvatar,
+        f.TYPE_NAME typeName,
         m.ID postId,
         m.CREATE_TIME createTime,
         m.ADDRESS address,
+        m.POST_LABELS postLabels,
         m.CONTENT content,
         m.MIN_PRICE minPrice,
         m.MAX_PRICE maxPrice,
@@ -16,13 +19,19 @@
         m.TOTAL_BROWSE browse,
         m.TOTAL_COMMENTS comments,
         m.TOTAL_RESONATE likes,
+        m.DEV_BROWSE devBrowse，
+        m.DEV_RESONATE devLike，
+        m.TOTAL_COLLECTION collection，
         m.FEE fee,
-        m.ACTIVE_TIME activeTime
+        m.ACTIVE_TIME activeTime,
+        (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
         FROM
         t_wx_user u,
-        t_post_base m
+        t_post_base m,
+        t_post_type f
         WHERE
-        m.IS_LOWER_SHELF = '0'
+        m.TYPE_ID = f.ID
+        AND m.IS_LOWER_SHELF = '0'
         AND m.IS_DEL = '0'
         AND u.USER_ID = m.USER_ID
         <if test="nickName != null and nickName != ''">
@@ -31,31 +40,39 @@
         <if test="keyword !=null and keyword !=''">
             AND (m.CONTENT LIKE CONCAT(CONCAT('%',#{keyword}),'%') OR m.ADDRESS LIKE CONCAT(CONCAT('%',#{keyword}),'%'))
         </if>
-        AND m.USER_ID = u.USER_ID
         ORDER BY
         ACTIVE_TIME DESC) g
     </select>
     <select id="getPostBaseList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
-            u.WX_NICK_NAME poster,
-            u.WX_AVATAR_URL posterAvatar,
-            m.ID postId,
-            m.CREATE_TIME createTime,
-            m.ADDRESS address,
-            m.CONTENT content,
-            m.MIN_PRICE minPrice,
-            m.MAX_PRICE maxPrice,
-            m.PHONE phone,
-            m.TOTAL_BROWSE browse,
-            m.TOTAL_COMMENTS comments,
-            m.TOTAL_RESONATE likes,
-            m.FEE fee,
-            m.ACTIVE_TIME activeTime
+        u.WX_NICK_NAME poster,
+        u.WX_GENDER posterGender,
+        u.WX_AVATAR_URL posterAvatar,
+        f.TYPE_NAME typeName,
+        m.ID postId,
+        m.CREATE_TIME createTime,
+        m.ADDRESS address,
+        m.POST_LABELS postLabels,
+        m.CONTENT content,
+        m.MIN_PRICE minPrice,
+        m.MAX_PRICE maxPrice,
+        m.PHONE phone,
+        m.TOTAL_BROWSE browse,
+        m.TOTAL_COMMENTS comments,
+        m.TOTAL_RESONATE likes,
+        m.DEV_BROWSE devBrowse，
+        m.DEV_RESONATE devLike，
+        m.TOTAL_COLLECTION collection，
+        m.FEE fee,
+        m.ACTIVE_TIME activeTime,
+        (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
         FROM
-            t_wx_user u,
-            t_post_base m
+        t_wx_user u,
+        t_post_base m,
+        t_post_type f
         WHERE
-            m.IS_LOWER_SHELF = '0'
+        m.TYPE_ID = f.ID
+        AND m.IS_LOWER_SHELF = '0'
         AND m.IS_DEL = '0'
         AND u.USER_ID = m.USER_ID
         <if test="nickName != null and nickName != ''">
@@ -64,8 +81,12 @@
         <if test="keyword !=null and keyword !=''">
         AND (m.CONTENT LIKE CONCAT(CONCAT('%',#{keyword}),'%') OR m.ADDRESS LIKE CONCAT(CONCAT('%',#{keyword}),'%'))
         </if>
-        AND m.USER_ID = u.USER_ID
         ORDER BY
             ACTIVE_TIME DESC
     </select>
+    <update id="updatePostBase">
+        UPDATE t_post_base
+        SET DEV_BROWSE = #{devBrowse},DEV_RESONATE =#{devLike}
+        WHERE ID = #{postId}
+    </update>
 </mapper>

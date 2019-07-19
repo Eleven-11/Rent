@@ -1,11 +1,11 @@
 package com.heeexy.example.controller;
 
 import com.alibaba.fastjson.JSONObject;
-import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.service.PostBaseService;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +30,8 @@ public class PostBaseController {
      * @return 帖子列表
      *             发帖人-poster,
      *             发帖人头像-posterAvatar,
+     *             发帖人性别-posterGender,
+     *             帖子类别-typeName，
      *             帖子Id-postId,
      *             帖子创建时间-createTime,
      *             地址-address,
@@ -37,15 +39,22 @@ public class PostBaseController {
      *             最低价-minPrice,
      *             最高价- maxPrice,
      *             联系方式-phone,
-     *             浏览量-browse,
+     *             真实浏览量-browse,
+     *             偏移浏览量-devBrowse,
      *             评论数量-comments,
-     *             帖子点赞数量-likes,
+     *             点赞真实量-likes,
+     *             点赞偏移量-devLike，
+     *             帖子收藏量-collection，
      *             中介费-fee,
      *             活跃时间-activeTime
      **/
     @GetMapping("/getPostBaseList")
     public JSONObject getPostBaseList(HttpServletRequest request) {
         return postBaseService.getPoseBaseList(CommonUtil.request2Json(request));
+    }
+    @PostMapping("/updatePostBase")
+    public JSONObject updatePostBase(HttpServletRequest request){
+        return postBaseService.updatePostBase(CommonUtil.request2Json(request));
     }
 
 }

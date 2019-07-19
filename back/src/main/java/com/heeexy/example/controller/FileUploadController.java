@@ -9,6 +9,7 @@ package com.heeexy.example.controller;
 import com.heeexy.example.util.FileNameUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -17,13 +18,14 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 文件上传
+ * 文件上传(后台接口)
  */
 @Controller
 @RequestMapping("/file")
 public class FileUploadController {
 
     @RequestMapping(value = "/upload")
+    @ResponseBody
     public String imgUpload(HttpServletRequest req, MultipartHttpServletRequest multiReq) throws IOException {
 
         MultipartFile file = multiReq.getFile("file");
@@ -32,7 +34,6 @@ public class FileUploadController {
                 "E:" + File.separator+"Image"
                         + File.separator+"rent"
                         + "/" ;
-        File localFile  = new File(desFilePath);
         String newFileName = FileNameUtils.getFileName(originalFileName);
         File dir = new File(desFilePath, newFileName);
         File filepath = new File(desFilePath);
@@ -44,8 +45,14 @@ public class FileUploadController {
             localFile.createNewFile();
             file.transferTo(localFile);
         }*/
-        String srcUrl ="http://localhost:8080/images/"+newFileName;
+        String srcUrl ="http://localhost:8080/static/"+newFileName;
+        /*File serverDir = new File(srcUrl,newFileName);
+        if(!serverDir.exists())
+        {
+            serverDir.mkdirs();
+        }
         File newFile = new File(srcUrl);
+        file.transferTo(newFile);*/
         System.out.println(srcUrl);
         return srcUrl;
     }

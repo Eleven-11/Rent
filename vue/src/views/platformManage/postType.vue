@@ -60,7 +60,7 @@
         <el-form-item label="类型图标" required v-if="dialogStatus=='create'">
         <el-upload
           class="avatar-uploader"
-          action="api/file/upload"
+          action=""
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload">
