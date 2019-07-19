@@ -65,7 +65,9 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             postDto.setPostId((Integer) postBaseList.get(i).get("postId"));
             postDto.setPoster((String) postBaseList.get(i).get("poster"));
             postDto.setPostLabels((String) postBaseList.get(i).get("postLabels"));
-            postDto.setPostGender((String) postBaseList.get(i).get("postGender"));
+            postDto.setPostGender((String) postBaseList.get(i).get("posterGender"));
+            postDto.setPosterAvatar((String) postBaseList.get(i).get("posterAvatar"));
+
 
 
             postDto.setCommentList(postCommentList);
