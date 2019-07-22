@@ -31,9 +31,14 @@ public class PostLabelController {
     public JSONObject insertPostLabel(HttpServletRequest request) {
         return postLabelService.insertPostLabel(CommonUtil.request2Json(request));
     }
-    @GetMapping("/getPostLabel")
+    /**
+     * @description 获取帖子标签列表
+     * @param request（待定）（父类标签id-labelParentId）
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @GetMapping("/getPostLabelList")
     public JSONObject getPostLabel(HttpServletRequest request){
-        return null;
+        return postLabelService.getPostLabelList(CommonUtil.request2Json(request));
     }
     /**
      *@description:根据id更新帖子标签详情信息

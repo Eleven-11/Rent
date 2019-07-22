@@ -26,7 +26,7 @@ public class PostBaseController {
 
     /**
      * @description 获取帖子列表（只包括基本信息）
-     * @param 发帖人昵称-nickname（用于获取指定用户发布的帖子列表，非必须），关键词-keyword（用于进行模糊查询，包括地址及帖子内容）
+     * @param request （帖子id-postId，发帖人昵称-nickname（用于获取指定用户发布的帖子列表，非必须），关键词-keyword（用于进行模糊查询，包括地址及帖子内容））
      * @return 帖子列表
      *             发帖人-poster,
      *             发帖人头像-posterAvatar,

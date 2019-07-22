@@ -2,6 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.PostLabelDao">
+    <select id="countPostLabel" resultType="java.lang.Integer">
+        SELECT COUNT(0) FROM (
+        SELECT
+        a.ID postLabelId,
+        a.PARENT_ID postParentId,
+        a.CONTENT labelContent
+        FROM
+        t_post_label a
+        WHERE
+        a.IS_DEL = 0
+        <if test="labelParentId !=null and labelParentId !=''">
+            AND a.PARENT_ID = #{labelParentId}
+        </if>
+        <!--<if test="labelParentContent !=null and labelParentContent!=''">
+            AND a.PARENT_ID = (SELECT b.ID FROM t_post_label b WHERE b.content = #{labelParentContent})
+        </if>-->
+        ORDER BY postParentId
+        )
+    </select>
+    <select id="getPostLabelList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            a.ID postLabelId,
+            a.PARENT_ID postParentId,
+            a.CONTENT labelContent
+        FROM
+            t_post_label a
+        WHERE
+            a.IS_DEL = 0
+        <!--<if test="labelParentId !=null and labelParentId !=''">
+            AND a.PARENT_ID = #{labelParentId}
+        </if>-->
+        <if test="labelParentContent !=null and labelParentContent!=''">
+            AND a.PARENT_ID = (SELECT b.ID FROM t_post_label b WHERE b.content = #{labelParentContent})
+        </if>
+        ORDER BY postParentId
+    </select>
     <insert id="insertPostLabel">
         INSERT INTO t_post_label (parent_id, content)
         <foreach collection="list" item="item" index="index" separator=",">
