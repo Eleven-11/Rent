@@ -5,4 +5,11 @@
     <select id="getPostImgList" resultType="com.alibaba.fastjson.JSONObject">
         select a.IMG_URL img from t_post_picture a where a.POST_ID =#{postId}
     </select>
+    <insert id="insertPostImgList" parameterType="com.alibaba.fastjson.JSONObject">
+        INSERT INTO t_post_picture (POST_ID, IMG_URL,CREATE_TIME)
+        <foreach collection="list" item="item" index="index" separator=",">
+            VALUES
+            (#{item.postId},#{item.postImgList},#{item.createTime})
+        </foreach>
+    </insert>
 </mapper>

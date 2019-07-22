@@ -2,6 +2,7 @@ package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.PostBaseDao;
+import com.heeexy.example.dao.PostImgDao;
 import com.heeexy.example.service.PostBaseService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
@@ -21,6 +22,8 @@ import java.util.List;
 public class PostBaseServiceImpl implements PostBaseService {
     @Autowired
     private PostBaseDao postBaseDao;
+    @Autowired
+    private PostImgDao postImgDao;
 
 
     /**
@@ -47,6 +50,13 @@ public class PostBaseServiceImpl implements PostBaseService {
             postBaseDao.updatePostBase(jsonObject);
             return CommonUtil.successJson("更新成功，刷新后查看");
         }
+    }
+
+    @Override
+    public JSONObject insertPostBase(JSONObject jsonObject) {
+        postBaseDao.insertPostBase(jsonObject);
+        postImgDao.insertPostImgList(jsonObject);
+        return CommonUtil.successJson("发布成功！");
     }
 
 

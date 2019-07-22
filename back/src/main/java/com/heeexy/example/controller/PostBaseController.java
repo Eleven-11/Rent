@@ -50,7 +50,7 @@ public class PostBaseController {
      **/
     @GetMapping("/getPostBaseList")
     public JSONObject getPostBaseList(HttpServletRequest request) {
-        return postBaseService.getPoseBaseList(CommonUtil.request2Json(request));
+        return postBaseService.getPostBaseList(CommonUtil.request2Json(request));
     }
     /**
      * @description

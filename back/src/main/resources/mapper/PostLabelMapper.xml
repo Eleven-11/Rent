@@ -38,7 +38,7 @@
         </if>
         ORDER BY postParentId
     </select>
-    <insert id="insertPostLabel">
+    <insert id="insertPostLabel" parameterType="com.alibaba.fastjson.JSONObject">
         INSERT INTO t_post_label (parent_id, content)
         <foreach collection="list" item="item" index="index" separator=",">
         VALUES
