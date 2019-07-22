@@ -7,8 +7,6 @@ import java.util.List;
 public interface PostBaseDao {
     /**
      * @description 获取帖子列表，包括帖子的基本信息
-     * @param [jsonObject] 支持通过关键词等参数查询，包括发帖人--poster，关键字--keyword
-     * @return java.util.List<com.alibaba.fastjson.JSONObject>
      **/
     List<JSONObject> getPostBaseList(JSONObject jsonObject);
 
@@ -21,4 +19,9 @@ public interface PostBaseDao {
      * @description 更改帖子的点赞数量及浏览量
      **/
     void updatePostBase(JSONObject jsonObject);
+
+    /**
+     * @description 发布帖子时插入帖子基本信息
+     **/
+    String insertPostBase(JSONObject jsonObject);
 }

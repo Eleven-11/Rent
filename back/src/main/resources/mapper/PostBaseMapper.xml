@@ -46,6 +46,41 @@
         ORDER BY
         ACTIVE_TIME DESC) g
     </select>
+    <insert id="insertPostBase" parameterType="com.alibaba.fastjson.JSONObject">
+         INSERT INTO t_post_base (
+            ID,
+            USER_ID,
+            TYPE_ID,
+            CONTENT,
+            MIN_PRICE,
+            MAX_PRICE,
+            PHONE,
+            ADDRESS,
+            LABELS,
+            TOTAL_BROWSE,
+            TOTAL_RESONATE,
+            ACTIVE_TIME,
+            CREATE_TIME,
+            FEE
+        )
+        VALUES
+            (
+            #{postId},
+            #{posterId},
+            #{typeId},
+            #{content},
+            #{minPrice},
+            #{maxPrice},
+            #{phone},
+            #{address},
+            #{labels},
+            #{totalBrowse},
+            #{totalLike},
+            #{activeTime},
+            #{createTime},
+            #{fee}
+            )
+    </insert>
     <select id="getPostBaseList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
         u.WX_NICK_NAME poster,

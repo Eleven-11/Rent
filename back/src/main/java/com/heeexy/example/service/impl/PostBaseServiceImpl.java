@@ -49,5 +49,11 @@ public class PostBaseServiceImpl implements PostBaseService {
         }
     }
 
+    @Override
+    public JSONObject insertPostBase(JSONObject jsonObject) {
+        postBaseDao.insertPostBase(jsonObject);
+        return CommonUtil.successJson("发布成功");
+    }
+
 
 }

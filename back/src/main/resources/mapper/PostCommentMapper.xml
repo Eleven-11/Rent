@@ -42,8 +42,12 @@
         ORDER BY a.CREATE_TIME DESC
     </select>
     <insert id="insertComment" useGeneratedKeys="true" keyProperty="commentId">
+        BEGIN;
         INSERT INTO t_comment(POST_ID,START_ID,RECEIVE_ID,CONTENT,CREATE_TIME)
-        VALUES(#{postId},#{startId},#{receiveId},#{content},DATE_FORMAT(#{commentCreateTime},'%Y.%m.%d %T'))
+        VALUES(#{postId},#{startId},#{receiveId},#{content},DATE_FORMAT(#{commentCreateTime},'%Y.%m.%d %T'));
+        UPDATE t_post_base
+        SET TOTAL_COMMENTS = TOTAL_COMMENTS+1 WHERE ID = #{postID};
+        COMMIT;
     </insert>
     <select id="getCommentStatus" resultType="java.lang.Integer">
         SELECT
