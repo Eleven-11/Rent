@@ -12,4 +12,8 @@ public interface UserFollowService {
      *@description:获取用户粉丝列表
      */
     JSONObject getUserFansList(JSONObject jsonObject);
+    /**
+     * @description 添加用户关注信息
+     **/
+    JSONObject insertUserFollow(JSONObject jsonObject);
 }

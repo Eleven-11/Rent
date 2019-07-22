@@ -34,6 +34,9 @@
         AND m.IS_LOWER_SHELF = '0'
         AND m.IS_DEL = '0'
         AND u.USER_ID = m.USER_ID
+        <if test="typeId !=null and typeId !=''">
+            AND m.TYPE_ID = #{typeId}
+        </if>
         <if test="postId !=null and postId !=''">
             AND m.ID = #{postId}
         </if>

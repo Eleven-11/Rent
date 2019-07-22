@@ -23,4 +23,8 @@ public interface UserFollowDao {
      *@description:计算用户粉丝列表条数
      */
     int countUserFans(JSONObject jsonObject);
+    /**
+     * @description 添加用户关注信息
+     **/
+    int insertUserFollow(JSONObject jsonObject);
 }

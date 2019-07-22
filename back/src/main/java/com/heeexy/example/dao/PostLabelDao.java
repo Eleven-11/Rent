@@ -3,7 +3,6 @@ package com.heeexy.example.dao;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
-import java.util.Map;
 
 public interface PostLabelDao {
     /**
@@ -13,7 +12,7 @@ public interface PostLabelDao {
     /**
      *@description:添加帖子标签
      */
-    int insertPostLabel(Map<String, Object> map);
+    int insertPostLabel(JSONObject jsonObject);
 
     /**
      *@description:更新帖子标签

@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 
 public interface PostLabelService {
     /**
-     * @description 获取帖子标签列表
+     * @description:获取帖子标签列表
      */
     JSONObject getPostLabelList(JSONObject jsonObject);
     /**

@@ -7,9 +7,7 @@ import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Lingling
@@ -31,10 +29,7 @@ public class PostLabelServiceImpl implements PostLabelService {
 
     @Override
     public JSONObject insertPostLabel(JSONObject jsonObject) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("contents",jsonObject.get("contents"));
-        map.put("parentContent", jsonObject.get("parentContent"));
-        postLabelDao.insertPostLabel(map);
+        postLabelDao.insertPostLabel(jsonObject);
         return CommonUtil.successJson("操作成功！请刷新后查看");
     }
 

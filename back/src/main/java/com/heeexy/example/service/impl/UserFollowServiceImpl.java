@@ -7,6 +7,8 @@ import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,5 +40,14 @@ public class UserFollowServiceImpl implements UserFollowService {
         int count = userFollowDao.countUserFans(jsonObject);
         List<JSONObject> list = userFollowDao.getUserFansList(jsonObject);
         return CommonUtil.successPage(jsonObject, list, count);
+    }
+
+    @Override
+    public JSONObject insertUserFollow(JSONObject jsonObject) {
+        Date createTime = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        jsonObject.put("createTime",format.format(createTime));
+        userFollowDao.insertUserFollow(jsonObject);
+        return CommonUtil.successJson("关注成功！");
     }
 }

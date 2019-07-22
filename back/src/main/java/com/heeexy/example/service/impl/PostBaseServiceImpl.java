@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @ClassName PostBaseServiceImpl
@@ -54,6 +55,8 @@ public class PostBaseServiceImpl implements PostBaseService {
 
     @Override
     public JSONObject insertPostBase(JSONObject jsonObject) {
+        String postId =UUID.randomUUID().toString();
+        jsonObject.put("postId", postId);
         postBaseDao.insertPostBase(jsonObject);
         postImgDao.insertPostImgList(jsonObject);
         return CommonUtil.successJson("发布成功！");

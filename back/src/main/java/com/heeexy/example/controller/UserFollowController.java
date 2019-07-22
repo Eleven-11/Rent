@@ -3,9 +3,9 @@ package com.heeexy.example.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserFollowService;
 import com.heeexy.example.util.CommonUtil;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,5 +40,15 @@ public class UserFollowController {
     public JSONObject getUserFansList(HttpServletRequest request) {
         return userFollowService.getUserFansList(CommonUtil.request2Json(request));
     }
+    /**
+     * @description 添加用户关注信息（小程序）
+     * @param 粉丝Id-fanId，关注者Id-followId，创建时间-createTime（后台生成）
+     * @return
+     **/
+    @PostMapping("/insertUserFollow")
+    public JSONObject insertUserFollow(HttpServletRequest request) {
+        return userFollowService.insertUserFollow(CommonUtil.request2Json(request));
+    }
+
 
 }

@@ -45,4 +45,17 @@
     WHERE
         u.FOLLOW_ID = #{wxUserId,jdbcType = VARCHAR} AND u.FAN_ID = m.USER_ID
     </select>
+    <insert id="insertUserFollow">
+        INSERT INTO t_user_follow (
+        FOLLOW_ID,
+        FAN_ID,
+        CREATE_TIME
+    )
+    VALUES
+        (
+            #{followId},
+            #{fanId},
+            #{createTime}
+        )
+    </insert>
 </mapper>

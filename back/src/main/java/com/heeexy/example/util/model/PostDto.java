@@ -22,6 +22,7 @@ public class PostDto {
      * 是否关注发帖人-isFollow,
      * 帖子Id-postId,
      * 帖子创建时间-createTime,
+     * 帖子类别名称-typeName,
      * 地址-address,
      * 帖子内容content,
      * 最低价-minPrice,
@@ -48,6 +49,8 @@ public class PostDto {
     private Date createTime;
 
     private String content;
+
+    private String typeName;
 
     private String minPrice;
 
