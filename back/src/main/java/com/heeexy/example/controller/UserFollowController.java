@@ -41,13 +41,13 @@ public class UserFollowController {
         return userFollowService.getUserFansList(CommonUtil.request2Json(request));
     }
     /**
-     * @description 添加用户关注信息（小程序）
-     * @param 粉丝Id-fanId，关注者Id-followId，创建时间-createTime（后台生成）
+     * @description 更新用户关注信息（小程序）
+     * @param 粉丝Id-fanId，关注者Id-followId
      * @return
      **/
-    @PostMapping("/insertUserFollow")
+    @PostMapping("/updateUserFollow")
     public JSONObject insertUserFollow(HttpServletRequest request) {
-        return userFollowService.insertUserFollow(CommonUtil.request2Json(request));
+        return userFollowService.updateUserFollow(CommonUtil.request2Json(request));
     }
 
 

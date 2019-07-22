@@ -27,4 +27,12 @@ public interface UserFollowDao {
      * @description 添加用户关注信息
      **/
     int insertUserFollow(JSONObject jsonObject);
+    /**
+     * @description 更新用户关注信息
+     **/
+    int updateDelFollow(JSONObject jsonObject);
+    /**
+     * @description 判断是否关注过
+     **/
+    JSONObject getIfFollow(JSONObject jsonObject);
 }

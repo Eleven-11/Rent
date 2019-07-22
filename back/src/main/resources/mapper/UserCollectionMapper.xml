@@ -47,11 +47,35 @@
     order by m.SORT_TIME
     </select>
 
-    <update id="updateUserColl">
+    <update id="sortUserColl">
     START TRANSACTION;
     UPDATE t_user_collection SET t_user_collection.sort_time =#{laterSortTime,jdbcType = DATE} WHERE t_user_collection.post_id = #{formerPostId,jdbcType = VARCHAR};
     UPDATE t_user_collection SET t_user_collection.sort_time =#{formerSortTime,jdbcType = DATE} WHERE t_user_collection.post_id = #{laterPostId,jdbcType = VARCHAR};
     COMMIT;
   </update>
+    <select id="getIfCollect">
+        select id from t_user_collection
+        where USER_ID = #{userId} and POST_ID = #{postId}
+    </select>
+    <insert id="insertUserCollection">
+        INSERT INTO t_user_collection(
+        USER_ID,
+        POST_ID,
+        CREATE_TIME,
+        SORT_TIME
+        )
+        VALUES(#{userId},#{postId},now(),now())
+    </insert>
+    <update id="updateDelCollect">
+        update t_user_collection
+        SET IS_DEL =
+                IF (
+                    t_user_collection.IS_DEL = '1',
+                    '0',
+                    '1'
+                )
+                WHERE
+                    t_user_collection.USER_ID =#{userId} AND t_user_collection.POST_ID = #{postId}
+    </update>
 
 </mapper>

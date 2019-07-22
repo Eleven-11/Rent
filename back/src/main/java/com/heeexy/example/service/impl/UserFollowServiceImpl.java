@@ -7,8 +7,6 @@ import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,13 +39,18 @@ public class UserFollowServiceImpl implements UserFollowService {
         List<JSONObject> list = userFollowDao.getUserFansList(jsonObject);
         return CommonUtil.successPage(jsonObject, list, count);
     }
-
+    /**
+     * @description 更新用户关注信息（首次关注，关注后取关，取关后重新关注）
+     **/
     @Override
-    public JSONObject insertUserFollow(JSONObject jsonObject) {
-        Date createTime = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        jsonObject.put("createTime",format.format(createTime));
-        userFollowDao.insertUserFollow(jsonObject);
-        return CommonUtil.successJson("关注成功！");
+    public JSONObject updateUserFollow(JSONObject jsonObject) {
+        //如果曾经关注过
+        if(userFollowDao.getIfFollow(jsonObject)!=null){
+            userFollowDao.updateDelFollow(jsonObject);
+        }
+        else {
+            userFollowDao.insertUserFollow(jsonObject);
+        }
+        return CommonUtil.successJson("操作成功！");
     }
 }

@@ -50,7 +50,7 @@ public class PostController {
      *             activeTime-活跃时间（默认与发布时间相同）,
      *             createTime-发布时间,
      *             fee-是否有中介费，
-     *
+     *             postImgList-图片列表
      * @return 帖子id-postId
      **/
     @PostMapping("/insertPostBase")

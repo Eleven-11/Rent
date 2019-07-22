@@ -13,7 +13,7 @@ public interface UserFollowService {
      */
     JSONObject getUserFansList(JSONObject jsonObject);
     /**
-     * @description 添加用户关注信息
+     * @description 更新用户关注信息（首次关注、取关、取关后重新关注）
      **/
-    JSONObject insertUserFollow(JSONObject jsonObject);
+    JSONObject updateUserFollow(JSONObject jsonObject);
 }

@@ -3,9 +3,9 @@ package com.heeexy.example.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserCollectionService;
 import com.heeexy.example.util.CommonUtil;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +41,7 @@ public class UserCollectionController {
      *              下面一条帖子的id--laterPostId，对应的排序时间laterSortTime
      *@return com.alibaba.fastjson.JSONObject
      */
-    @GetMapping("/updateUserColl")
+    @GetMapping("/sortUserColl")
     public JSONObject updateUserColl(HttpServletRequest request) {
         JSONObject jsonObject = CommonUtil.request2Json(request);
         /*获取传入的排序时间*/
@@ -70,6 +70,15 @@ public class UserCollectionController {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return userCollectionService.updateUserColl(jsonObject);
+        return userCollectionService.sortUserColl(jsonObject);
+    }
+    /**
+     * @description 更新用户收藏帖子（首次收藏、取消收藏、取消后重新收藏）
+     * @param [request] 用户id-userId，帖子id-postId
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @PostMapping("/updateUserCollection")
+    public JSONObject updateUserCollection(HttpServletRequest request) {
+        return userCollectionService.updateUserCollection(CommonUtil.request2Json(request));
     }
 }

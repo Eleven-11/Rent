@@ -24,7 +24,7 @@ public class DefaultView extends WebMvcConfigurationSupport {
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/images/**").addResourceLocations("file:D:/Image/SpringBoot-Shiro-Vue/");
+		registry.addResourceHandler("/image/**").addResourceLocations("file:///E:\\image\\rent\\");
 		super.addResourceHandlers(registry);
 	}
 

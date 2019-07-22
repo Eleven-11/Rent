@@ -55,7 +55,21 @@
         (
             #{followId},
             #{fanId},
-            #{createTime}
+            now()
         )
     </insert>
+    <select id="getIfFollow">
+        SELECT ID FROM t_user_follow where t_user_follow.FAN_ID= #{fanId} and t_user_follow.FOLLOW_ID=#{followId}
+    </select>
+    <update id="updateDelFollow">
+        UPDATE t_user_follow
+        SET IS_DEL =
+                IF (
+                    t_user_follow.IS_DEL = '1',
+                    '0',
+                    '1'
+                )
+                WHERE
+                    t_user_follow.FAN_ID =#{fanId} AND t_user_follow.FOLLOW_ID = #{followId}
+    </update>
 </mapper>

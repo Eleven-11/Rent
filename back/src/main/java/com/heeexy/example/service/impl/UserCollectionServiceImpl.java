@@ -32,10 +32,24 @@ public class UserCollectionServiceImpl implements UserCollectionService {
      *功能描述:对用户收藏的帖子进行排序
      */
     @Override
-    public JSONObject updateUserColl(JSONObject jsonObject) {
+    public JSONObject sortUserColl(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
         System.out.println(jsonObject.toJSONString());
         userCollectionDao.updateUserColl(jsonObject);
         return CommonUtil.successJson("操作成功！请刷新后查看");
+    }
+    /**
+     * @description 更新用户收藏信息（新增收藏、取消收藏、取消收藏后重新收藏）
+     **/
+    @Override
+    public JSONObject updateUserCollection(JSONObject jsonObject) {
+        //如果曾经收藏过
+        if(userCollectionDao.getIfCollect(jsonObject)!=null){
+            userCollectionDao.updateDelCollect(jsonObject);
+        }
+        else {
+            userCollectionDao.insertUserCollection(jsonObject);
+        }
+        return CommonUtil.successJson("操作成功！");
     }
 }

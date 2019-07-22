@@ -11,5 +11,10 @@ public interface UserCollectionService {
     /**
      *@description:对用户收藏的帖子列表进行排序
      */
-    JSONObject updateUserColl(JSONObject jsonObject);
+    JSONObject sortUserColl(JSONObject jsonObject);
+
+    /**
+     * @description 修改用户收藏信息（新增，取消收藏。重新收藏）
+     **/
+    JSONObject updateUserCollection(JSONObject jsonObject);
 }
