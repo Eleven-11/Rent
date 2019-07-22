@@ -52,6 +52,29 @@ public class PostBaseController {
     public JSONObject getPostBaseList(HttpServletRequest request) {
         return postBaseService.getPoseBaseList(CommonUtil.request2Json(request));
     }
+    /**
+     * @description
+     * @param request
+     *             postId-帖子Id,
+     *             posterId-发帖人id（userid）,
+     *             typeId -帖子类型id,
+     *             content-帖子内容,
+     *             minPrice-最低价,
+     *             maxPrice-最高价,
+     *             phone-联系方式,
+     *             address-地址,
+     *             labels-帖子标签集合,
+     *             totalBrowse-浏览量,
+     *             totalLike-点赞量,
+     *             activeTime-活跃时间（默认与发布时间相同）,
+     *             createTime-发布时间,
+     *             fee-是否有中介费
+     * @return 帖子id-postId
+     **/
+    @PostMapping("/insertPostBase")
+    public JSONObject insertPostBase(HttpServletRequest request){
+        return postBaseService.insertPostBase(CommonUtil.request2Json(request));
+    }
     @PostMapping("/updatePostBase")
     public JSONObject updatePostBase(HttpServletRequest request){
         return postBaseService.updatePostBase(CommonUtil.request2Json(request));

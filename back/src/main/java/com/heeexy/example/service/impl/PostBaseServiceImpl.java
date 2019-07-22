@@ -1,9 +1,10 @@
 package com.heeexy.example.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.service.PostBaseService;
 import com.heeexy.example.util.CommonUtil;
-import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +22,32 @@ public class PostBaseServiceImpl implements PostBaseService {
     @Autowired
     private PostBaseDao postBaseDao;
 
+
+    /**
+     * @description 获取帖子基本信息列表List
+     **/
     @Override
     public JSONObject getPostBaseList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
         int count = postBaseDao.countPost(jsonObject);
-        List<com.alibaba.fastjson.JSONObject> list = postBaseDao.getPostBaseList(jsonObject);
+        List<JSONObject> list = postBaseDao.getPostBaseList(jsonObject);
         return CommonUtil.successPage(jsonObject, list, count);
     }
+
+    /**
+     * @description 更改帖子点赞量、浏览量
+     **/
+    @Override
+    public JSONObject updatePostBase(JSONObject jsonObject) {
+        if((jsonObject.get("devLike")==null||jsonObject.get("devLike")=="")&&(jsonObject.get("devBrowse")==null||jsonObject.get("devBrowse")=="")){
+            return CommonUtil.errorJson(ErrorEnum.E_90003);
+        }
+        else
+        {
+            postBaseDao.updatePostBase(jsonObject);
+            return CommonUtil.successJson("更新成功，刷新后查看");
+        }
+    }
+
 
 }

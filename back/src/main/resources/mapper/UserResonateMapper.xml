@@ -5,7 +5,9 @@
     <select id="getPostLikeList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             u.WX_AVATAR_URL likeImg,
-            u.WX_NICK_NAME likeNickname
+            u.WX_NICK_NAME likeNickname,
+            a.USER_ID userId,
+            a.CREATE_TIME createTime
         FROM
             t_wx_user u,
             t_user_resonate a
@@ -22,7 +24,9 @@
         (
         SELECT
         u.WX_AVATAR_URL likeImg,
-        u.WX_NICK_NAME likeNickname
+        u.WX_NICK_NAME likeNickname,
+        a.USER_ID userId,
+        a.CREATE_TIME createTime
         FROM
         t_wx_user u,
         t_user_resonate a
@@ -36,6 +40,7 @@
     </select>
 
     <insert id="insertPostLike" useGeneratedKeys="true" keyProperty="likeId">
+        BEGIN;
         INSERT INTO t_user_resonate (
             TYPE,
             TARGET_ID,
@@ -48,7 +53,12 @@
                 #{postId},
                 #{userId},
                 DATE_FORMAT(#{postLikeCreateTime},'%Y.%m.%d %T')
-            )
+            );
+        UPDATE t_post_base
+        SET TOTAL_RESONATE = TOTAL_RESONATE + 1
+        WHERE
+            ID = #{postId};
+        COMMIT;
     </insert>
 
     <update id="updateDelPostLike">

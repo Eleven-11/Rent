@@ -55,6 +55,8 @@ public class PostDto {
 
     private String phone;
 
+    private int comments;
+
     private String postLabels;
 
     private String postGender;

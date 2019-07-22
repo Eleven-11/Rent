@@ -11,4 +11,8 @@ public interface PostBaseService {
      * @description 更改帖子浏览量、点赞量
      **/
     JSONObject updatePostBase(JSONObject jsonObject);
+    /**
+     * @description 发布帖子时插入帖子基本信息
+     **/
+    JSONObject insertPostBase(JSONObject jsonObject);
 }

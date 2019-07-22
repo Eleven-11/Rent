@@ -54,6 +54,7 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             postDto.setCollections((Integer) postBaseList.get(i).get("collection"));
             postDto.setContent((String) postBaseList.get(i).get("content"));
             postDto.setCreateTime((Date) postBaseList.get(i).get("createTime"));
+            postDto.setComments((Integer) postBaseList.get(i).get("comments"));
             int browse = (int)postBaseList.get(i).get("browse")+ (int)postBaseList.get(i).get("devBrowse");
             int like = (int)postBaseList.get(i).get("likes")+ (int)postBaseList.get(i).get("devLike");
             postDto.setLikes(like);

@@ -27,7 +27,6 @@ public class PostController {
     @GetMapping("/getPostInfo")
     public List<PostDto> getPostList(HttpServletRequest request) {
         return postForMiniPrgService.getPostInfo(CommonUtil.request2Json(request));
-
     }
 
 
