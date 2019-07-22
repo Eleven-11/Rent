@@ -45,7 +45,7 @@ public class FileUploadController {
             localFile.createNewFile();
             file.transferTo(localFile);
         }*/
-        String srcUrl ="http://localhost:8080/static/"+newFileName;
+        String srcUrl ="http://localhost:8080/Image/"+newFileName;
         /*File serverDir = new File(srcUrl,newFileName);
         if(!serverDir.exists())
         {

@@ -120,7 +120,7 @@ public class TestController {
         SubjectList.add(Subject);
 
 
-        jsonObject.put("Title","民主测评");
+        jsonObject.put("Title","问卷调查");
         jsonObject.put("explain","dddddddddddddd");
         jsonObject.put("manNum",1);
         jsonObject.put("SubjectList",SubjectList);

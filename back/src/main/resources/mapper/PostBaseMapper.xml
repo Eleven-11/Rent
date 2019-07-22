@@ -34,6 +34,9 @@
         AND m.IS_LOWER_SHELF = '0'
         AND m.IS_DEL = '0'
         AND u.USER_ID = m.USER_ID
+        <if test="postId !=null and postId !=''">
+            AND m.ID = #{postId}
+        </if>
         <if test="nickName != null and nickName != ''">
             AND u.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
         </if>
@@ -75,6 +78,9 @@
         AND m.IS_LOWER_SHELF = '0'
         AND m.IS_DEL = '0'
         AND u.USER_ID = m.USER_ID
+        <if test="postId !=null and postId !=''">
+        AND m.ID = #{postId}
+        </if>
         <if test="nickName != null and nickName != ''">
         AND u.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
         </if>
