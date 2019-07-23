@@ -4,14 +4,24 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
+/**
+ * @author: Lingling
+ * @description: 帖子图片表数据库方法
+ * @date: 2019-07-23 17:51
+ */
 public interface PostImgDao {
+
     /**
-     * @description 获取帖子图片列表
-     **/
+     * 获取帖子图片列表
+     * @param jsonObject
+     * @return
+     */
     List<JSONObject> getPostImgList(JSONObject jsonObject);
 
     /**
-     * @description 插入帖子图片列表
-    **/
+     * 插入帖子图片列表
+     * @param jsonObject
+     * @return
+     */
     JSONObject insertPostImgList(JSONObject jsonObject);
 }

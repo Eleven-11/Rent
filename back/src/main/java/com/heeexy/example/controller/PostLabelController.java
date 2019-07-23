@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 public class PostLabelController {
     @Autowired
     private PostLabelService postLabelService;
+
     /**
      *@description:新增帖子标签，支持批量添加
      *@param request(上级菜单parentContent,子类菜单contents,其中子类菜单为列表形式传入
@@ -31,6 +32,7 @@ public class PostLabelController {
     public JSONObject insertPostLabel(HttpServletRequest request) {
         return postLabelService.insertPostLabel(CommonUtil.request2Json(request));
     }
+
     /**
      * @description 获取帖子标签列表
      * @param request（待定）（父类标签id-labelParentId）
@@ -40,6 +42,7 @@ public class PostLabelController {
     public JSONObject getPostLabel(HttpServletRequest request){
         return postLabelService.getPostLabelList(CommonUtil.request2Json(request));
     }
+
     /**
      *@description:根据id更新帖子标签详情信息
      *@param request(标签id --postLabelId)
@@ -49,6 +52,7 @@ public class PostLabelController {
     public JSONObject updatePostLabel(HttpServletRequest request) {
         return postLabelService.updatePostLabel(CommonUtil.request2Json(request));
     }
+
     /**
      *@description:根据id删除帖子标签信息
      *@param request(标签id --postLabelId)

@@ -14,9 +14,15 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserRestrictServiceImpl implements UserRestrictService {
+
     @Autowired
     private UserRestrictDao userRestrictDao;
 
+    /**
+     * 更新小程序用户权限
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject updateWxUserRes(JSONObject jsonObject) {
         userRestrictDao.updateWxUserRes(jsonObject);

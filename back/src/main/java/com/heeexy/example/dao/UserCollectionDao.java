@@ -4,34 +4,52 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
+/**
+ * @author: Lingling
+ * @description: 用户收藏表数据库方法
+ * @date: 2019-07-23 17:53
+ */
 public interface UserCollectionDao {
+
     /**
      * 根据userId查询用户收藏列表
+     * @param jsonObject
+     * @return
      */
     List<JSONObject> getUserCollList(JSONObject jsonObject);
 
     /**
-     *对用户收藏的帖子列表进行排序
+     * 对用户收藏的帖子列表进行排序
+     * @param jsonObject
+     * @return
      */
     int updateUserColl(JSONObject jsonObject);
 
     /**
-     *@description:计算用户收藏的帖子数量
+     * 计算用户收藏的帖子数量
+     * @param jsonObject
+     * @return
      */
     int countCollection(JSONObject jsonObject);
 
     /**
-     * @description 添加用户收藏信息
-     **/
+     * 添加用户收藏信息
+     * @param jsonObject
+     * @return
+     */
     int insertUserCollection(JSONObject jsonObject);
 
     /**
-     * @description 判断用户是否收藏指定帖子
-     **/
+     * 判断用户是否收藏指定帖子
+     * @param jsonObject
+     * @return
+     */
     JSONObject getIfCollect(JSONObject jsonObject);
 
     /**
-     * @description 取消收藏
-     **/
+     * 取消收藏
+     * @param jsonObject
+     * @return
+     */
     int updateDelCollect(JSONObject jsonObject);
 }

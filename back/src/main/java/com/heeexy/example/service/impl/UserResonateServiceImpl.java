@@ -20,9 +20,15 @@ import java.util.List;
  **/
 @Service
 public class UserResonateServiceImpl implements UserResonateService {
+
     @Autowired
     private UserResonateDao userResonateDao;
-    /*获取帖子点赞列表*/
+
+    /**
+     * 获取帖子点赞列表
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject getPostLikeList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
@@ -37,7 +43,11 @@ public class UserResonateServiceImpl implements UserResonateService {
         }
     }
 
-    /*添加帖子点赞信息*/
+    /**
+     * 添加帖子点赞信息
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject insertPostLike(JSONObject jsonObject) {
         /*获取用户首次点赞帖子信息的时间*/
@@ -49,7 +59,11 @@ public class UserResonateServiceImpl implements UserResonateService {
         return CommonUtil.successJson();
     }
 
-    /*取消点赞信息*/
+    /**
+     * 取消点赞信息
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject updateDelPostLike(JSONObject jsonObject) {
        userResonateDao.updateDelPostLike(jsonObject);

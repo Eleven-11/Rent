@@ -2,20 +2,31 @@ package com.heeexy.example.service;
 
 import com.alibaba.fastjson.JSONObject;
 
+/**
+ * @author: Lingling
+ * @description: 后台评论管理业务逻辑
+ * @date: 2019-07-23 17:07
+ */
 public interface PostCommentService {
 
     /**
-     * @description 根据postId获取评论列表
-     **/
+     * 根据postId获取评论列表
+     * @param jsonObject
+     * @return
+     */
     JSONObject getPostCommentList(JSONObject jsonObject);
 
     /**
-     * @description 添加评论信息
-     **/
+     * 添加评论信息
+     * @param jsonObject
+     * @return
+     */
     int insertComment(JSONObject jsonObject);
 
     /**
-     * @description 根据评论id逻辑删除评论
-     **/
+     * 根据评论id逻辑删除评论
+     * @param jsonObject
+     * @return
+     */
     JSONObject updateDelCommentById(JSONObject jsonObject);
 }

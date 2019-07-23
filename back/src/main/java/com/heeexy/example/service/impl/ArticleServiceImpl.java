@@ -22,6 +22,8 @@ public class ArticleServiceImpl implements ArticleService {
 
 	/**
 	 * 新增文章
+	 * @param jsonObject
+	 * @return
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -32,6 +34,8 @@ public class ArticleServiceImpl implements ArticleService {
 
 	/**
 	 * 文章列表
+	 * @param jsonObject
+	 * @return
 	 */
 	@Override
 	public JSONObject listArticle(JSONObject jsonObject) {
@@ -43,6 +47,8 @@ public class ArticleServiceImpl implements ArticleService {
 
 	/**
 	 * 更新文章
+	 * @param jsonObject
+	 * @return
 	 */
 	@Override
 	@Transactional(rollbackFor = Exception.class)

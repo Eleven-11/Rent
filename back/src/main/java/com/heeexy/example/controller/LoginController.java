@@ -34,6 +34,7 @@ public class LoginController {
 
 	/**
 	 * 查询当前登录用户的信息
+	 * @return
 	 */
 	@PostMapping("/getInfo")
 	public JSONObject getInfo() {
@@ -42,6 +43,7 @@ public class LoginController {
 
 	/**
 	 * 登出
+	 * @return
 	 */
 	@PostMapping("/logout")
 	public JSONObject logout() {

@@ -22,7 +22,7 @@ public class UserRestrictController {
 
     /**
      *@description:对用户设置禁言并设定时长
-     *@param requestJson
+     *@param request
      *@return com.alibaba.fastjson.JSONObject
      */
     @RequiresPermissions("wxUser:updateWxUserRes")
@@ -30,5 +30,4 @@ public class UserRestrictController {
     public JSONObject updateUser(HttpServletRequest request) {
         return userRestrictService.updateWxUserRes(CommonUtil.request2Json(request));
     }
-
 }

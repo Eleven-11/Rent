@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * @author: Lingling
+ * @description: 获取微信用户列表
+ * @date: 2019-07-23 17:05
+ */
 @RestController
 @RequestMapping("/wxUser")
 public class WxUserController {
@@ -20,13 +25,14 @@ public class WxUserController {
 
     /**
      *@description:获取用户列表
-     *@param jsonObject(包括用户昵称nickname、最近活跃时间段dateRange,参数都为空时则查询全部用户列表)
+     *@param request (包括用户昵称nickname、最近活跃时间段dateRange,参数都为空时则查询全部用户列表)
      *@return 用户列表(包括用户昵称nickname、用户性别gender、地区region、注册时间createTime、最近活跃时间updateTime)
      */
     @GetMapping("/getWxUserlist")
     public JSONObject getWxUserList(HttpServletRequest request) {
         return wxUserService.getWxUserList(CommonUtil.request2Json(request));
     }
+
     /**
      *@description:用户登录操作，根据是否授权获取用户信息分为四种情况
      *@param request
@@ -53,5 +59,6 @@ public class WxUserController {
         }
         return "123456";
     }
+
 
 }

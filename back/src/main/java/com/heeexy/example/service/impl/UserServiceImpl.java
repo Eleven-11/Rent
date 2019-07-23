@@ -21,11 +21,14 @@ import java.util.Set;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
 	@Autowired
 	private UserDao userDao;
 
 	/**
 	 * 用户列表
+	 * @param jsonObject
+	 * @return
 	 */
 	@Override
 	public JSONObject listUser(JSONObject jsonObject) {
@@ -37,6 +40,8 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 添加用户
+	 * @param jsonObject
+	 * @return
 	 */
 	@Override
 	public JSONObject addUser(JSONObject jsonObject) {
@@ -51,6 +56,7 @@ public class UserServiceImpl implements UserService {
 	/**
 	 * 查询所有的角色
 	 * 在添加/修改用户的时候要使用此方法
+	 * @return
 	 */
 	@Override
 	public JSONObject getAllRoles() {
@@ -69,6 +75,7 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 角色列表
+	 * @return
 	 */
 	@Override
 	public JSONObject listRole() {
@@ -78,6 +85,7 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 查询所有权限, 给角色分配权限时调用
+	 * @return
 	 */
 	@Override
 	public JSONObject listAllPermission() {
@@ -87,6 +95,8 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 添加角色
+	 * @param jsonObject
+	 * @return
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@SuppressWarnings("unchecked")
@@ -99,6 +109,8 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 修改角色
+	 * @param jsonObject
+	 * @return
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@SuppressWarnings("unchecked")
@@ -119,6 +131,8 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 修改角色名称
+	 * @param paramJson
+	 * @param roleInfo
 	 */
 	private void dealRoleName(JSONObject paramJson, JSONObject roleInfo) {
 		String roleName = paramJson.getString("roleName");
@@ -129,6 +143,9 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 为角色添加新权限
+	 * @param roleId
+	 * @param newPerms
+	 * @param oldPerms
 	 */
 	private void saveNewPermission(String roleId, Collection<Integer> newPerms, Collection<Integer> oldPerms) {
 		List<Integer> waitInsert = new ArrayList<>();
@@ -144,6 +161,9 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 删除角色 旧的 不再拥有的权限
+	 * @param roleId
+	 * @param newPerms
+	 * @param oldPerms
 	 */
 	private void removeOldPermission(String roleId, Collection<Integer> newPerms, Collection<Integer> oldPerms) {
 		List<Integer> waitRemove = new ArrayList<>();
@@ -159,6 +179,8 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * 删除角色
+	 * @param jsonObject
+	 * @return
 	 */
 	@Transactional(rollbackFor = Exception.class)
 	@SuppressWarnings("unchecked")

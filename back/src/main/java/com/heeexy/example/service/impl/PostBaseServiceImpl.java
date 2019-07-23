@@ -28,8 +28,10 @@ public class PostBaseServiceImpl implements PostBaseService {
 
 
     /**
-     * @description 获取帖子基本信息列表List
-     **/
+     * 获取帖子基本信息列表List
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject getPostBaseList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
@@ -39,8 +41,10 @@ public class PostBaseServiceImpl implements PostBaseService {
     }
 
     /**
-     * @description 更改帖子点赞量、浏览量
-     **/
+     * 更改帖子点赞量、浏览量
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject updatePostBase(JSONObject jsonObject) {
         if((jsonObject.get("devLike")==null||jsonObject.get("devLike")=="")&&(jsonObject.get("devBrowse")==null||jsonObject.get("devBrowse")=="")){
@@ -53,6 +57,11 @@ public class PostBaseServiceImpl implements PostBaseService {
         }
     }
 
+    /**
+     * 发布帖子
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject insertPostBase(JSONObject jsonObject) {
         String postId =UUID.randomUUID().toString();

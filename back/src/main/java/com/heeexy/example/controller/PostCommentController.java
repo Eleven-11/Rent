@@ -26,7 +26,7 @@ public class PostCommentController {
 
     /**
      * @description 获取帖子评论列表
-     * @param 帖子id-postId
+     * @param request 帖子id-postId
      * @return 帖子评论列表：
      *             评论内容-content,
      *             评论创建时间-createTime,
@@ -43,7 +43,7 @@ public class PostCommentController {
     }
     /**
      * @description 添加用户评论信息
-     * @param 帖子id-postId，评论发起人id-startId，评论接收人id-receiveId（当回复他人评论时不为空）
+     * @param request 帖子id-postId，评论发起人id-startId，评论接收人id-receiveId（当回复他人评论时不为空）
      *        评论内容-content，评论创建时间（后端service层获取当前时间）
      * @return 评论id（主键）-commentId
      **/
@@ -53,7 +53,7 @@ public class PostCommentController {
     }
     /**
      * @description 逻辑删除帖子的评论
-     * @param 评论id-commentId
+     * @param request 评论id-commentId
      * @return com.alibaba.fastjson.JSONObject
      **/
     @PostMapping("/updateDelCommentById")

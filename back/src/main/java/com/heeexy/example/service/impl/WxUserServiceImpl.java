@@ -14,16 +14,24 @@ import java.util.List;
 import java.util.UUID;
 
 
+/**
+ * @author: Lingling
+ * @description: 小程序用户业务逻辑实现
+ * @date: 2019-07-23 17:48
+ */
 @Service
 public class  WxUserServiceImpl implements WxUserService {
+
     @Autowired
     private WxUserDao wxUserDao;
     @Autowired
     private VisitorDao visitorDao;
 
 
-    /*
-     *功能描述:获取用户列表
+    /**
+     * 功能描述:获取用户列表
+     * @param jsonObject
+     * @return
      */
     @Override
     public JSONObject getWxUserList(JSONObject jsonObject) {
@@ -32,8 +40,11 @@ public class  WxUserServiceImpl implements WxUserService {
         List<JSONObject> list = wxUserDao.getWxUserList(jsonObject);
         return CommonUtil.successPage(jsonObject, list, count);
     }
+
     /**
-     *@description:未授权用户后台生成游客信息
+     * 未授权用户后台生成游客信息
+     * @param jsonObject
+     * @return
      */
     @Override
     public String insertVisitor(JSONObject jsonObject) {

@@ -23,7 +23,11 @@ public class PostCommentServiceImpl implements PostCommentService {
     @Autowired
     private PostCommentDao postCommentDao;
 
-    /*获取帖子评论列表*/
+    /**
+     * 获取帖子评论列表
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject getPostCommentList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
@@ -32,7 +36,11 @@ public class PostCommentServiceImpl implements PostCommentService {
         return CommonUtil.successPage(jsonObject, list, count);
     }
 
-    /*插入评论*/
+    /**
+     * 插入评论
+     * @param jsonObject
+     * @return
+     */
     @Override
     public int insertComment(JSONObject jsonObject) {
         /*评论创建时间*/
@@ -43,7 +51,11 @@ public class PostCommentServiceImpl implements PostCommentService {
         return postCommentDao.insertComment(jsonObject);
     }
 
-    /*逻辑删除评论*/
+    /**
+     * 逻辑删除评论
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject updateDelCommentById(JSONObject jsonObject) {
         if (postCommentDao.getCommentStatus(jsonObject) == 1) {

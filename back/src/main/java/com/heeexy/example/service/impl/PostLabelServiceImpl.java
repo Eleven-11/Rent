@@ -19,6 +19,11 @@ public class PostLabelServiceImpl implements PostLabelService {
     @Autowired
     private PostLabelDao postLabelDao;
 
+    /**
+     * 获取帖子标签列表
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject getPostLabelList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
@@ -27,12 +32,22 @@ public class PostLabelServiceImpl implements PostLabelService {
         return CommonUtil.successPage(jsonObject, list, count);
     }
 
+    /**
+     * 插入帖子标签
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject insertPostLabel(JSONObject jsonObject) {
         postLabelDao.insertPostLabel(jsonObject);
         return CommonUtil.successJson("操作成功！请刷新后查看");
     }
 
+    /**
+     * 更新帖子标签
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject updatePostLabel(JSONObject jsonObject) {
         //CommonUtil.fillPageParam(jsonObject);
@@ -41,6 +56,11 @@ public class PostLabelServiceImpl implements PostLabelService {
         return CommonUtil.successJson("操作成功！请刷新后查看");
     }
 
+    /**
+     * 删除帖子标签，逻辑删除
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject deletePostLabel(JSONObject jsonObject) {
         //CommonUtil.fillPageParam(jsonObject);

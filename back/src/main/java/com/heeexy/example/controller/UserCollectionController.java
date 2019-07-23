@@ -24,16 +24,17 @@ import java.util.Date;
 public class UserCollectionController {
     @Autowired
     private UserCollectionService userCollectionService;
+
+
     /**
      *功能描述:根据用户ID查询用户收藏的帖子列表
-     *@param jsonObject(用户id--wxUserId)
+     *@param request (用户id--wxUserId)
      *@return 用户收藏帖子列表（包括发帖人poster、帖子内容content、帖子图片image、收藏时间collTime）
      */
     @GetMapping("/getUserCollList")
     public JSONObject getUserCollList(HttpServletRequest request) {
         return userCollectionService.getUserCollList(CommonUtil.request2Json(request));
     }
-
 
     /**
      *@description:对用户收藏的帖子进行排序
@@ -74,7 +75,7 @@ public class UserCollectionController {
     }
     /**
      * @description 更新用户收藏帖子（首次收藏、取消收藏、取消后重新收藏）
-     * @param [request] 用户id-userId，帖子id-postId
+     * @param request 用户id-userId，帖子id-postId
      * @return com.alibaba.fastjson.JSONObject
      **/
     @PostMapping("/updateUserCollection")

@@ -35,6 +35,11 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
     @Autowired
     private PostCommentDao postCommentDao;
 
+    /**
+     * 获取帖子信息
+     * @param jsonObject
+     * @return
+     */
     @Override
     public List<PostDto> getPostInfo(JSONObject jsonObject) {
         List<PostDto> list = new ArrayList<>();

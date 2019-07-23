@@ -21,7 +21,9 @@ public class PostTypeServiceImpl implements PostTypeService {
     private PostTypeDao postTypeDao;
 
     /**
-     *@description:获取帖子类别列表，已被逻辑删除的则不显示
+     * 获取帖子类别列表，已被逻辑删除的则不显示
+     * @param jsonObject
+     * @return
      */
     @Override
     public JSONObject getPostTypeList(JSONObject jsonObject) {
@@ -32,7 +34,9 @@ public class PostTypeServiceImpl implements PostTypeService {
     }
 
     /**
-     *@description:添加帖子类型信息
+     * 添加帖子类型信息
+     * @param jsonObject
+     * @return
      */
     @Override
     public JSONObject insertPostType(JSONObject jsonObject) {
@@ -49,7 +53,9 @@ public class PostTypeServiceImpl implements PostTypeService {
 
 
     /**
-     *@description:根据id对帖子的类型进行修改
+     * 根据id对帖子的类型进行修改
+     * @param jsonObject
+     * @return
      */
     @Override
     public JSONObject updatePostTypeById(JSONObject jsonObject) {
@@ -60,7 +66,9 @@ public class PostTypeServiceImpl implements PostTypeService {
     }
 
     /**
-     *@description:根据id删除帖子类型信息
+     * 根据id删除帖子类型信息
+     * @param jsonObject
+     * @return
      */
     @Override
     public JSONObject deletePostTypeById(JSONObject jsonObject) {

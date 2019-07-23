@@ -23,6 +23,8 @@ public class ArticleController {
 
 	/**
 	 * 查询文章列表
+	 * @param request
+	 * @return
 	 */
 	@RequiresPermissions("article:list")
 	@GetMapping("/listArticle")
@@ -32,6 +34,8 @@ public class ArticleController {
 
 	/**
 	 * 新增文章
+	 * @param requestJson
+	 * @return
 	 */
 	@RequiresPermissions("article:add")
 	@PostMapping("/addArticle")
@@ -42,6 +46,8 @@ public class ArticleController {
 
 	/**
 	 * 修改文章
+	 * @param requestJson
+	 * @return
 	 */
 	@RequiresPermissions("article:update")
 	@PostMapping("/updateArticle")

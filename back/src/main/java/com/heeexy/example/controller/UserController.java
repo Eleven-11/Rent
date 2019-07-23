@@ -23,6 +23,8 @@ public class UserController {
 
 	/**
 	 * 查询用户列表
+	 * @param request
+	 * @return
 	 */
 	@RequiresPermissions("user:list")
 	@GetMapping("/list")
@@ -30,6 +32,11 @@ public class UserController {
 		return userService.listUser(CommonUtil.request2Json(request));
 	}
 
+	/**
+	 * 添加用户
+	 * @param requestJson
+	 * @return
+	 */
 	@RequiresPermissions("user:add")
 	@PostMapping("/addUser")
 	public JSONObject addUser(@RequestBody JSONObject requestJson) {
@@ -37,6 +44,11 @@ public class UserController {
 		return userService.addUser(requestJson);
 	}
 
+	/**
+	 * 更新用户
+	 * @param requestJson
+	 * @return
+	 */
 	@RequiresPermissions("user:update")
 	@PostMapping("/updateUser")
 	public JSONObject updateUser(@RequestBody JSONObject requestJson) {
@@ -44,6 +56,10 @@ public class UserController {
 		return userService.updateUser(requestJson);
 	}
 
+	/**
+	 * 获取用户权限
+	 * @return
+	 */
 	@RequiresPermissions(value = {"user:add", "user:update"}, logical = Logical.OR)
 	@GetMapping("/getAllRoles")
 	public JSONObject getAllRoles() {
@@ -52,6 +68,7 @@ public class UserController {
 
 	/**
 	 * 角色列表
+	 * @return
 	 */
 	@RequiresPermissions("role:list")
 	@GetMapping("/listRole")
@@ -61,6 +78,7 @@ public class UserController {
 
 	/**
 	 * 查询所有权限, 给角色分配权限时调用
+	 * @return
 	 */
 	@RequiresPermissions("role:list")
 	@GetMapping("/listAllPermission")
@@ -70,6 +88,8 @@ public class UserController {
 
 	/**
 	 * 新增角色
+	 * @param requestJson
+	 * @return
 	 */
 	@RequiresPermissions("role:add")
 	@PostMapping("/addRole")
@@ -80,6 +100,8 @@ public class UserController {
 
 	/**
 	 * 修改角色
+	 * @param requestJson
+	 * @return
 	 */
 	@RequiresPermissions("role:update")
 	@PostMapping("/updateRole")
@@ -90,6 +112,8 @@ public class UserController {
 
 	/**
 	 * 删除角色
+	 * @param requestJson
+	 * @return
 	 */
 	@RequiresPermissions("role:delete")
 	@PostMapping("/deleteRole")

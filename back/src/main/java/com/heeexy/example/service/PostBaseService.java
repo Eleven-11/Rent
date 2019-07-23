@@ -2,17 +2,31 @@ package com.heeexy.example.service;
 
 import com.alibaba.fastjson.JSONObject;
 
+/**
+ * @author: Lingling
+ * @description: 后台帖子管理业务逻辑
+ * @date: 2019-07-23 17:07
+ */
 public interface PostBaseService {
+
     /**
-     * @description 获取帖子列表(基本信息)
-     **/
+     * 获取帖子列表(基本信息)
+     * @param jsonObject
+     * @return
+     */
     JSONObject getPostBaseList(JSONObject jsonObject);
+
     /**
-     * @description 更改帖子浏览量、点赞量
-     **/
+     * 更改帖子浏览量、点赞量
+     * @param jsonObject
+     * @return
+     */
     JSONObject updatePostBase(JSONObject jsonObject);
+
     /**
-     * @description 发布帖子时插入帖子基本信息
-     **/
+     * 发布帖子时插入帖子基本信息
+     * @param jsonObject
+     * @return
+     */
     JSONObject insertPostBase(JSONObject jsonObject);
 }

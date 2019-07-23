@@ -19,6 +19,7 @@ import java.util.List;
  **/
 @Service
 public class PostImgServiceImpl implements PostImgService {
+
     @Autowired
     private PostImgDao postImgDao;
 
@@ -27,6 +28,11 @@ public class PostImgServiceImpl implements PostImgService {
         return postImgDao.getPostImgList(jsonObject);
     }
 
+    /**
+     * 插入帖子图片
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject insertPostImgList(JSONObject jsonObject) {
         postImgDao.insertPostImgList(jsonObject);

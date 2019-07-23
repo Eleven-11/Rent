@@ -1,11 +1,5 @@
 package com.heeexy.example.controller;
 
-/**
- * @author Lingling
- * @description 文件上传
- * @date 2019/7/2 0002
- */
-
 import com.heeexy.example.util.FileNameUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +12,21 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * 文件上传(后台接口)
+ * @author Lingling
+ * @description 文件上传
+ * @date 2019/7/2 0002
  */
 @Controller
 @RequestMapping("/file")
 public class FileUploadController {
 
+    /**
+     * 文件上传
+     * @param req
+     * @param multiReq
+     * @return
+     * @throws IOException
+     */
     @RequestMapping(value = "/upload")
     @ResponseBody
     public String imgUpload(HttpServletRequest req, MultipartHttpServletRequest multiReq) throws IOException {

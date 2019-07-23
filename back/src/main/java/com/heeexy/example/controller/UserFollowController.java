@@ -21,9 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 public class UserFollowController {
     @Autowired
     private UserFollowService userFollowService;
+
     /**
      *功能描述:根据用户ID查询用户关注列表
-     *@param jsonObject(用户id--wxUserId)
+     *@param request (用户id--wxUserId)
      *@return 用户关注的所有关注者昵称列表（nickname）
      */
     @GetMapping("/getUserFollowList")
@@ -33,16 +34,17 @@ public class UserFollowController {
 
     /**
      *功能描述:根据用户ID查询用户粉丝列表
-     *@param jsonObject(用户id--wxUserId)
+     *@param request (用户id--wxUserId)
      *@return 关注指定用户的所有粉丝昵称列表（nickname）
      */
     @GetMapping("/getUserFansList")
     public JSONObject getUserFansList(HttpServletRequest request) {
         return userFollowService.getUserFansList(CommonUtil.request2Json(request));
     }
+
     /**
      * @description 更新用户关注信息（小程序）
-     * @param 粉丝Id-fanId，关注者Id-followId
+     * @param request 粉丝Id-fanId，关注者Id-followId
      * @return
      **/
     @PostMapping("/updateUserFollow")

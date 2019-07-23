@@ -18,8 +18,11 @@ import java.util.List;
 public class UserCollectionServiceImpl implements UserCollectionService {
     @Autowired
     private UserCollectionDao userCollectionDao;
+
     /**
-     *功能描述:根据用户ID查询用户收藏的帖子列表
+     * 功能描述:根据用户ID查询用户收藏的帖子列表
+     * @param jsonObject
+     * @return
      */
     @Override
     public JSONObject getUserCollList(JSONObject jsonObject) {
@@ -28,8 +31,11 @@ public class UserCollectionServiceImpl implements UserCollectionService {
         List<JSONObject> list = userCollectionDao.getUserCollList(jsonObject);
         return CommonUtil.successPage(jsonObject, list, count);
     }
+
     /**
-     *功能描述:对用户收藏的帖子进行排序
+     * 功能描述:对用户收藏的帖子进行排序
+     * @param jsonObject
+     * @return
      */
     @Override
     public JSONObject sortUserColl(JSONObject jsonObject) {
@@ -38,9 +44,12 @@ public class UserCollectionServiceImpl implements UserCollectionService {
         userCollectionDao.updateUserColl(jsonObject);
         return CommonUtil.successJson("操作成功！请刷新后查看");
     }
+
     /**
-     * @description 更新用户收藏信息（新增收藏、取消收藏、取消收藏后重新收藏）
-     **/
+     * 更新用户收藏信息（新增收藏、取消收藏、取消收藏后重新收藏）
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject updateUserCollection(JSONObject jsonObject) {
         //如果曾经收藏过

@@ -4,30 +4,43 @@ import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
 
+/**
+ * @author: Lingling
+ * @description: 帖子类型表数据库方法
+ * @date: 2019-07-23 17:52
+ */
 public interface PostTypeDao {
 
     /**
-     *@description:获取帖子类型列表
+     * 获取帖子类型列表
+     * @param jsonObject
+     * @return
      */
     List<JSONObject> getPostTypeList(JSONObject jsonObject);
 
     /**
-     *@description:添加帖子类型信息
+     * 添加帖子类型信息
+     * @param jsonObject
+     * @return
      */
     int insertPostType(JSONObject jsonObject);
 
     /**
-     *@description:根据帖子类型id修改相应信息
+     * 根据帖子类型id修改相应信息
+     * @param jsonObject
      */
     void updatePostTypeById(JSONObject jsonObject);
 
     /**
-     *@description:根据帖子类型id逻辑删除相应信息
+     * 根据帖子类型id逻辑删除相应信息
+     * @param jsonObject
      */
     void deletePostTypeById(JSONObject jsonObject);
 
     /**
-     *@description:计算列表条数
+     * 计算列表条数
+     * @param jsonObject
+     * @return
      */
     int countPostType(JSONObject jsonObject);
 }

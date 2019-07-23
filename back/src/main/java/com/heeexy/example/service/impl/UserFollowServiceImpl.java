@@ -16,10 +16,14 @@ import java.util.List;
  */
 @Service
 public class UserFollowServiceImpl implements UserFollowService {
+
     @Autowired
     private UserFollowDao userFollowDao;
-    /*
-     *功能描述:根据用户ID查询用户关注列表
+
+    /**
+     * 根据用户ID查询用户关注列表
+     * @param jsonObject
+     * @return
      */
     @Override
     public JSONObject getUserFollowList(JSONObject jsonObject) {
@@ -29,8 +33,11 @@ public class UserFollowServiceImpl implements UserFollowService {
         System.out.println(list);
         return CommonUtil.successPage(jsonObject, list, count);
     }
-    /*
-     *功能描述:根据用户ID查询用户粉丝列表
+
+    /**
+     * 根据用户ID查询用户粉丝列表
+     * @param jsonObject
+     * @return
      */
     @Override
     public JSONObject getUserFansList(JSONObject jsonObject) {
@@ -39,9 +46,12 @@ public class UserFollowServiceImpl implements UserFollowService {
         List<JSONObject> list = userFollowDao.getUserFansList(jsonObject);
         return CommonUtil.successPage(jsonObject, list, count);
     }
+
     /**
-     * @description 更新用户关注信息（首次关注，关注后取关，取关后重新关注）
-     **/
+     * 更新用户关注信息（首次关注，关注后取关，取关后重新关注）
+     * @param jsonObject
+     * @return
+     */
     @Override
     public JSONObject updateUserFollow(JSONObject jsonObject) {
         //如果曾经关注过
