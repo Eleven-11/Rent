@@ -31,11 +31,11 @@ import java.util.Map;
 public class HttpService {
 
     // 创建Httpclient对象
-    @Autowired(required = false)
+    @Autowired
     private CloseableHttpClient httpClient;
 
     // 请求信息的配置
-    @Autowired(required = false)
+    @Autowired
     private RequestConfig requestConfig;
 
     /**
