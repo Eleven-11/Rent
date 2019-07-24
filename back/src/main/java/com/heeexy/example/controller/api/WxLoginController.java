@@ -65,14 +65,13 @@ public class WxLoginController {
         params.put("grant_type", "authorization_code");
         /*in.close();*/
         //请求url
-        //String url = "https://api.weixin.qq.com/sns/jscode2session";
-        String url = "http://www.baidu.com";
+        String url = "https://api.weixin.qq.com/sns/jscode2session";
+        //String url = "http://www.baidu.com";
         //发送请求
         String str = "";
         try {
             str += httpService.doGet(url, params);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             e.printStackTrace();
             map.put("status", 0);
             map.put("msg", "解密失败");
@@ -125,7 +124,20 @@ public class WxLoginController {
      *               创建时间-createTime
      *               最近活跃时间-activeTime
      *@return 首次登录返回系统用户信息userId
-     *        其余情况返回用户信息
+     *        其余情况返回用户信息（如下）
+     *              微信用户id-wxUserId,
+     *              微信用户openID-openId,
+     *              微信用户unionId-unionId,
+     *              微信用户头像-wxAvatar,
+     *              微信用户昵称-wxNickname,
+     *              微信用户性别-wxGender,
+     *              微信用户城市-wxCity,
+     *              微信用户省份-wxProvince,
+     *              微信用户国家-wxCountry,
+     *              信息创建时间-createTime,
+     *              活跃时间-updateTime,
+     *              粉丝数量-fans，
+     *              关注者数量-followers
      */
     @PostMapping("/login")
     public com.alibaba.fastjson.JSONObject login(HttpServletRequest request) {
@@ -140,16 +152,14 @@ public class WxLoginController {
         }
         else if(jsonObject.get("unionId")!=null&&jsonObject.get("userId")!=null){
             //首次登录未授权，获取游客信息userId，之后登录授权，此时执行插入微信用户信息操作
-            return wxUserService.getWxUserList(jsonObject);
-
+            return wxUserService.getWxUserInfo(jsonObject);
         }
         else if(jsonObject.get("unionId")==null&&jsonObject.get("userId")!=null){
             //以游客身份登录
-
+            return CommonUtil.successJson("游客二次登录");
         }
         else {
             return CommonUtil.errorJson(ErrorEnum.E_400);
         }
-        return null;
     }
 }

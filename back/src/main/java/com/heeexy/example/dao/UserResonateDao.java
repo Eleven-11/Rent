@@ -12,6 +12,7 @@ import java.util.List;
 public interface UserResonateDao {
     /**
      * 获取点赞列表条数用于前端分页
+     *
      * @param jsonObject
      * @return
      */
@@ -19,6 +20,7 @@ public interface UserResonateDao {
 
     /**
      * 获取点赞列表(包括点赞人昵称及其头像)
+     *
      * @param jsonObject
      * @return
      */
@@ -26,14 +28,24 @@ public interface UserResonateDao {
 
     /**
      * 添加点赞信息并返回主键
+     *
      * @param jsonObject
      */
     void insertPostLike(JSONObject jsonObject);
 
     /**
      * 取消点赞
+     *
      * @param jsonObject
      * @return
      */
     int updateDelPostLike(JSONObject jsonObject);
+    /**
+     * @description 获取用户点赞过的帖子id
+     *
+     * @param jsonObject
+     * @return
+     **/
+    List<JSONObject> getUserLikeList(JSONObject jsonObject);
+
 }

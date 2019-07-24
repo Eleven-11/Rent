@@ -53,6 +53,15 @@ public class UserResonateController {
     public JSONObject getPostLikeList(HttpServletRequest request){
         return userResonateService.getPostLikeList(CommonUtil.request2Json(request));
     }
+    /**
+     * @description 获取用户点赞过的帖子列表
+     * @param request 系统用户id-userId
+     * @return
+     **/
+    @GetMapping("getUserLikeList")
+    public JSONObject getUserLikePostList(HttpServletRequest request){
+        return userResonateService.getUserLikePostList(CommonUtil.request2Json(request));
+    }
 
 
 

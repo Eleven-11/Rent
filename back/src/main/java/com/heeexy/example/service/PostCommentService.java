@@ -29,4 +29,10 @@ public interface PostCommentService {
      * @return
      */
     JSONObject updateDelCommentById(JSONObject jsonObject);
+    /**
+     * @description 获取指定用户评论列表
+     * @param
+     * @return
+     **/
+    JSONObject getUserComment(JSONObject jsonObject);
 }

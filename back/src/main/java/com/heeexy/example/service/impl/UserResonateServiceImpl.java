@@ -1,6 +1,7 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.dao.UserResonateDao;
 import com.heeexy.example.service.UserResonateService;
 import com.heeexy.example.util.CommonUtil;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +25,8 @@ public class UserResonateServiceImpl implements UserResonateService {
 
     @Autowired
     private UserResonateDao userResonateDao;
+    @Autowired
+    private PostBaseDao postBaseDao;
 
     /**
      * 获取帖子点赞列表
@@ -68,5 +72,22 @@ public class UserResonateServiceImpl implements UserResonateService {
     public JSONObject updateDelPostLike(JSONObject jsonObject) {
        userResonateDao.updateDelPostLike(jsonObject);
        return CommonUtil.successJson();
+    }
+    /**
+     * @description 获取用户点赞列表
+     * @param jsonObject
+     * @return
+     **/
+    @Override
+    public JSONObject getUserLikePostList(JSONObject jsonObject) {
+        CommonUtil.fillPageParam(jsonObject);
+        List<JSONObject> userLikePostIds =userResonateDao.getUserLikeList(jsonObject);
+        List<JSONObject> userLikePostList=new ArrayList<>();
+        for (int i=0;i<userLikePostIds.size();i++){
+            JSONObject userLikePost = postBaseDao.getUserPostInfo(userLikePostIds.get(i));
+            userLikePostList.add(userLikePost);
+        }
+        int count = userLikePostIds.size();
+        return CommonUtil.successPage(jsonObject,userLikePostList,count);
     }
 }

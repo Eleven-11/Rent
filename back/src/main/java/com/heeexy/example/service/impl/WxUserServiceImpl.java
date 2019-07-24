@@ -1,7 +1,6 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.heeexy.example.dao.VisitorDao;
 import com.heeexy.example.dao.WxUserDao;
 import com.heeexy.example.service.WxUserService;
 import com.heeexy.example.util.CommonUtil;
@@ -22,9 +21,6 @@ public class  WxUserServiceImpl implements WxUserService {
 
     @Autowired
     private WxUserDao wxUserDao;
-    @Autowired
-    private VisitorDao visitorDao;
-
 
     /**
      * 功能描述:获取用户列表
@@ -47,6 +43,11 @@ public class  WxUserServiceImpl implements WxUserService {
         JSONObject returnJson = new JSONObject();
         returnJson.put("userId",userId);
         return returnJson;
+    }
+
+    @Override
+    public JSONObject getWxUserInfo(JSONObject jsonObject) {
+        return wxUserDao.getWxUserInfo(jsonObject);
     }
 
 

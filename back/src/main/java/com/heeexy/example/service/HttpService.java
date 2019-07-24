@@ -97,7 +97,7 @@ public class HttpService {
             // 判断返回状态是否为200
             if (response.getStatusLine().getStatusCode() == 200) {
                 // 获取服务端返回的数据,并返回
-                System.out.println(EntityUtils.toString(response.getEntity(), "UTF-8"));
+                //System.out.println(EntityUtils.toString(response.getEntity(), "UTF-8"));
                 return EntityUtils.toString(response.getEntity(), "UTF-8");
             }
         } finally {

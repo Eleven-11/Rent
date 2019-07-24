@@ -18,7 +18,6 @@
             limit #{limit}
         </if>
     </select>
-
     <select id="countPostList" resultType="java.lang.Integer">
         SELECT count(0) from
         (
@@ -38,7 +37,6 @@
         </if>
         ) g
     </select>
-
     <insert id="insertPostLike" useGeneratedKeys="true" keyProperty="likeId">
         BEGIN;
         INSERT INTO t_user_resonate (
@@ -60,7 +58,6 @@
             ID = #{postId};
         COMMIT;
     </insert>
-
     <update id="updateDelPostLike">
         BEGIN;
         UPDATE t_user_resonate
@@ -79,4 +76,15 @@
             ID = #{postId};
         COMMIT;
     </update>
+    <select id="getUserLikeList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            b.TARGET_ID postId
+        FROM
+            t_user_resonate b
+        WHERE
+            b.USER_ID =#{userId}
+        ORDER BY
+            b.CREATE_TIME DESC
+
+    </select>
 </mapper>

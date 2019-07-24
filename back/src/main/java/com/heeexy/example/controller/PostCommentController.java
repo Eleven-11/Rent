@@ -60,4 +60,13 @@ public class PostCommentController {
     public JSONObject updateDelCommentById(HttpServletRequest request) {
         return postCommentService.updateDelCommentById(CommonUtil.request2Json(request));
     }
+    /**
+     * @description 获取指定用户评论列表
+     * @param request 系统用户id-userId
+     * @return
+     **/
+    @GetMapping("getUserComment")
+    public JSONObject getUserComment(HttpServletRequest request){
+        return postCommentService.getUserComment(CommonUtil.request2Json(request));
+    }
 }

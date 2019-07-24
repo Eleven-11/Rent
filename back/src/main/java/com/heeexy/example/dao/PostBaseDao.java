@@ -38,4 +38,11 @@ public interface PostBaseDao {
      * @return
      */
     String insertPostBase(JSONObject jsonObject);
+    /**
+     * 小程序：获取用户点赞的帖子、评论的帖子、浏览过的帖子部分信息用于页面显示
+     *
+     * @param jsonObject
+     * @return
+     **/
+    JSONObject getUserPostInfo(JSONObject jsonObject);
 }

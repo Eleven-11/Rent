@@ -44,4 +44,10 @@ public interface PostCommentDao {
      * @return
      */
     int getCommentStatus(JSONObject jsonObject);
+    /**
+     * @description 获取指定用户评论列表
+     * @param jsonObject 用户id-userId
+     * @return 
+     **/
+    List<JSONObject> getUserCommentList(JSONObject jsonObject);
 }

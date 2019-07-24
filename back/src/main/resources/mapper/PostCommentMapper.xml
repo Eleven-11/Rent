@@ -70,4 +70,23 @@
         WHERE
             ID = #{commentId}
     </update>
+    <select id="getUserCommentList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            a.POST_ID postId,
+            a.CREATE_TIME commentCreateTime,
+            u1.WX_NICK_NAME startNickname,
+            u1.WX_AVATAR_URL startImg,
+            u2.WX_NICK_NAME receiveNickname,
+            u2.WX_AVATAR_URL receiveImg,
+            a.CONTENT commentContent
+        FROM
+            t_comment a
+        LEFT JOIN t_wx_user u1 ON a.START_ID = u1.USER_ID
+        LEFT JOIN t_wx_user u2 ON a.RECEIVE_ID = u2.USER_ID
+        WHERE
+            a.START_ID = #{userId}
+        AND a.IS_DEL = '0'
+        ORDER BY
+            a.CREATE_TIME DESC
+    </select>
 </mapper>

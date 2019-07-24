@@ -29,4 +29,9 @@ public interface UserResonateService {
      * @return
      */
     JSONObject updateDelPostLike(JSONObject jsonObject);
+    /**
+     * @description 获取用户点赞过的帖子id列表
+     *
+     * @return*/
+    JSONObject getUserLikePostList(JSONObject jsonObject);
 }

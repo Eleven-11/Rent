@@ -16,21 +16,31 @@
     </select>
     <select id="getWxUserList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
-        t_wx_user.USER_ID wxUserId,
-        t_wx_user.WX_NICK_NAME nickname,
-        t_wx_user.WX_GENDER gender,
-        CONCAT(
-        t_wx_user.WX_PROVINCE,
-        ' ',
-        t_wx_user.WX_CITY
-        ) AS region,
-        DATE_FORMAT(t_wx_user.CREATE_TIME, '%Y.%m.%d %T') createTime,
-        DATE_FORMAT(t_wx_user.UPDATE_TIME, '%Y.%m.%d %T') updateTime
+        USER_ID         wxUserId,
+        OPEN_ID         openId,
+        UNION_ID        unionId,
+        WX_AVATAR_URL   wxAvatar,
+        WX_NICK_NAME    wxNickname,
+        WX_GENDER       wxGender,
+        WX_CITY         wxCity,
+        WX_PROVINCE     wxProvince,
+        WX_COUNTRY      wxCountry,
+        DEV_FANS        devFans,
+        DATE_FORMAT(CREATE_TIME, '%Y.%m.%d %T')    createTime,
+        DATE_FORMAT(UPDATE_TIME, '%Y.%m.%d %T')    updateTime,
+        (SELECT COUNT(0)FROM t_user_follow a WHERE a.FOLLOW_ID =#{userId}) fans,
+        (SELECT COUNT(0)FROM t_user_follow a WHERE a.FAN_ID =#{userId}) followers
         FROM
         t_wx_user
-        <if test="nickname != null and nickname != ''">
-            WHERE t_wx_user.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
-        </if>
+        <where>
+            IS_DEL='0'
+            <if test="userId != null and userId != ''">
+                AND t_wx_user.USER_ID =#{userId}
+            </if>
+            <if test="nickname != null and nickname != ''">
+                AND t_wx_user.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
+            </if>
+        </where>
     </select>
     <insert id="insertWxUser">
         insert into t_wx_user (USER_ID,
@@ -46,7 +56,28 @@
             UPDATE_TIME) values (#{userId},#{unionId},#{wxAvatar},#{wxNickname},#{wxGender},#{wxCity},#{wxProvince},#{wxCountry},now(),now());
     </insert>
     <select id="getWxUserInfo" resultType="com.alibaba.fastjson.JSONObject">
-        select
+        SELECT
+        USER_ID         wxUserId,
+        OPEN_ID         openId,
+        UNION_ID        unionId,
+        WX_AVATAR_URL   wxAvatar,
+        WX_NICK_NAME    wxNickname,
+        WX_GENDER       wxGender,
+        WX_CITY         wxCity,
+        WX_PROVINCE     wxProvince,
+        WX_COUNTRY      wxCountry,
+        DATE_FORMAT(CREATE_TIME, '%Y.%m.%d %T')    createTime,
+        DATE_FORMAT(UPDATE_TIME, '%Y.%m.%d %T')    updateTime,
+        (SELECT COUNT(0)FROM t_user_follow a WHERE a.FOLLOW_ID =#{userId}) fans,
+        (SELECT COUNT(0)FROM t_user_follow a WHERE a.FAN_ID =#{userId}) followers
+        FROM
+        t_wx_user
+        <where>
+            IS_DEL='0'
+            <if test="userId != null and userId != ''">
+                AND t_wx_user.USER_ID =#{userId}
+            </if>
+        </where>
     </select>
 
 </mapper>

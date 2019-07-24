@@ -22,4 +22,10 @@ public interface WxUserService {
      * @return
      **/
     JSONObject insertWxUser(JSONObject jsonObject);
+    /**
+     * 小程序：获取用户信息
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject getWxUserInfo(JSONObject jsonObject);
 }

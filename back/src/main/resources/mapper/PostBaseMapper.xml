@@ -105,7 +105,7 @@
         m.DEV_RESONATE      devLike,
         m.TOTAL_COLLECTION  collection,
         m.FEE               fee,
-        m.ACTIVE_TIME       activeTime,
+        DATE_FORMAT(m.ACTIVE_TIME,'%Y.%m.%d %T')       activeTime,
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
         FROM
         t_wx_user u,
@@ -136,4 +136,24 @@
         SET DEV_BROWSE = #{devBrowse},DEV_RESONATE =#{devLike}
         WHERE ID = #{postId}
     </update>
+    <select id="getUserPostInfo" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        u.WX_NICK_NAME      poster,
+        u.WX_GENDER         posterGender,
+        u.WX_AVATAR_URL     posterAvatar,
+        f.TYPE_NAME         typeName,
+        m.ID                postId,
+        DATE_FORMAT(m.CREATE_TIME,'%Y.%m.%d %T')       createTime,
+        m.CONTENT           content
+        FROM
+        t_wx_user u,
+        t_post_base m,
+        t_post_type f
+        WHERE
+        m.TYPE_ID = f.ID
+        AND m.IS_LOWER_SHELF = '0'
+        AND m.IS_DEL = '0'
+        AND u.USER_ID = m.USER_ID
+        AND m.ID =#{postId}
+    </select>
 </mapper>

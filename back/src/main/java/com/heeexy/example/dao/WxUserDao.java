@@ -26,7 +26,15 @@ public interface WxUserDao {
     List<JSONObject> getWxUserList(JSONObject jsonObject);
     /**
      * @description 新增授权微信用户信息
+     * @param jsonObject
+     * @return
      **/
     JSONObject insertWxUser(JSONObject jsonObject);
+    /**
+     * @description 获取微信用户信息
+     * @param 
+     * @return 
+     **/
+    JSONObject getWxUserInfo(JSONObject jsonObject);
 
 }
