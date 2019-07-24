@@ -4,6 +4,6 @@
 <mapper namespace="com.heeexy.example.dao.VisitorDao">
     <insert id="insertVisitor" parameterType="com.alibaba.fastjson.JSONObject">
         INSERT into t_visitor(USER_ID,CREATE_TIME)
-        VALUES(#(visitorId),#(DATE_FORMAT(createTime, '%Y.%m.%d %T')))
+        VALUES(#(visitorId),now())
     </insert>
 </mapper>

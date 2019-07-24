@@ -8,8 +8,6 @@ import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,20 +39,14 @@ public class  WxUserServiceImpl implements WxUserService {
         return CommonUtil.successPage(jsonObject, list, count);
     }
 
-    /**
-     * 未授权用户后台生成游客信息
-     * @param jsonObject
-     * @return
-     */
     @Override
-    public String insertVisitor(JSONObject jsonObject) {
-        Date createTime = new Date();
-        SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        jsonObject.put("createTime",dateFormat.format(createTime));
-        String visitorId =UUID.randomUUID().toString();
-        jsonObject.put("visitorId",visitorId);
-        visitorDao.insertVisitor(jsonObject);
-        return visitorId;
+    public JSONObject insertWxUser(JSONObject jsonObject) {
+        String userId =UUID.randomUUID().toString();
+        jsonObject.put("userId",userId);
+        wxUserDao.insertWxUser(jsonObject);
+        JSONObject returnJson = new JSONObject();
+        returnJson.put("userId",userId);
+        return returnJson;
     }
 
 

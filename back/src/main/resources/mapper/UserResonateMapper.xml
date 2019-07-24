@@ -55,13 +55,14 @@
                 DATE_FORMAT(#{postLikeCreateTime},'%Y.%m.%d %T')
             );
         UPDATE t_post_base
-        SET TOTAL_RESONATE = TOTAL_RESONATE + 1
+        SET TOTAL_RESONATE = (select count(0) from t_user_resonate where TARGET_ID=#{postId}), ACTIVE_TIME = NOW()
         WHERE
             ID = #{postId};
         COMMIT;
     </insert>
 
     <update id="updateDelPostLike">
+        BEGIN;
         UPDATE t_user_resonate
         SET IS_DEL =
         IF (
@@ -70,6 +71,12 @@
             '1'
         )
         WHERE
-            t_user_resonate.USER_ID =#{userId} AND t_user_resonate.TARGET_ID=#{postId}
+            t_user_resonate.USER_ID =#{userId} AND t_user_resonate.TARGET_ID=#{postId};
+        UPDATE t_post_base
+        SET
+            ACTIVE_TIME = NOW()
+        WHERE
+            ID = #{postId};
+        COMMIT;
     </update>
 </mapper>

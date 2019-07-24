@@ -1,9 +1,7 @@
 package com.heeexy.example.dao;
 
 import com.alibaba.fastjson.JSONObject;
-import com.heeexy.example.util.model.WxUser;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 /**
@@ -26,5 +24,9 @@ public interface WxUserDao {
      * @return
      */
     List<JSONObject> getWxUserList(JSONObject jsonObject);
+    /**
+     * @description 新增授权微信用户信息
+     **/
+    JSONObject insertWxUser(JSONObject jsonObject);
 
 }

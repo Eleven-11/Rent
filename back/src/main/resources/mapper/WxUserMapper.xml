@@ -31,7 +31,22 @@
         <if test="nickname != null and nickname != ''">
             WHERE t_wx_user.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
         </if>
-
+    </select>
+    <insert id="insertWxUser">
+        insert into t_wx_user (USER_ID,
+            OPEN_ID,
+            UNION_ID,
+            WX_AVATAR_URL,
+            WX_NICK_NAME,
+            WX_GENDER,
+            WX_CITY,
+            WX_PROVINCE,
+            WX_COUNTRY,
+            CREATE_TIME,
+            UPDATE_TIME) values (#{userId},#{unionId},#{wxAvatar},#{wxNickname},#{wxGender},#{wxCity},#{wxProvince},#{wxCountry},now(),now());
+    </insert>
+    <select id="getWxUserInfo" resultType="com.alibaba.fastjson.JSONObject">
+        select
     </select>
 
 </mapper>

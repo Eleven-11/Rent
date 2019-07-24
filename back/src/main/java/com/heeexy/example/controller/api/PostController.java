@@ -35,8 +35,8 @@ public class PostController {
     }
     /**
      * @description 用户发布帖子插入帖子信息
-     * @param request
-     *             postId-帖子Id,
+     * @param request postId-帖子Id,帖子类型id-typeId，昵称-nickName，关键词-keyword（以上参数均可选）
+     * @return
      *             posterId-发帖人id（userid）,
      *             typeId -帖子类型id,
      *             content-帖子内容,
@@ -51,9 +51,8 @@ public class PostController {
      *             createTime-发布时间,
      *             fee-是否有中介费，
      *             postImgList-图片列表
-     * @return 帖子id-postId
      **/
-    @PostMapping("/insertPostBase")
+    @PostMapping("/insertPost")
     public JSONObject insertPostBase(HttpServletRequest request){
         return postBaseService.insertPostBase(CommonUtil.request2Json(request));
     }
