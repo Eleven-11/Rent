@@ -65,8 +65,8 @@ public class WxLoginController {
         params.put("grant_type", "authorization_code");
         /*in.close();*/
         //请求url
-        //String url = "https://api.weixin.qq.com/sns/jscode2session";
-        String url = "http://www.baidu.com";
+        String url = "https://api.weixin.qq.com/sns/jscode2session";
+//        String url = "http://www.baidu.com";
         //发送请求
         String str = "";
         try {
