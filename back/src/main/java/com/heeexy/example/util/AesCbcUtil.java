@@ -36,12 +36,12 @@ public class AesCbcUtil {
 
 
     public static JSONObject decrypt(String data, String key, String iv) throws Exception {
-        // 被加密的数据
-        byte[] dataByte = Base64.decode(data).toString().getBytes();
+        // 被加密的数据 .toString().getBytes()
+        byte[] dataByte = Base64.decode(data);
         // 加密秘钥
-        byte[] keyByte = Base64.decode(key).toString().getBytes();
+        byte[] keyByte = Base64.decode(key);
         // 偏移量
-        byte[] ivByte = Base64.decode(iv).toString().getBytes();
+        byte[] ivByte = Base64.decode(iv);
         try {
             // 如果密钥不足16位，那么就补足.  这个if 中的内容很重要
             int base = 16;

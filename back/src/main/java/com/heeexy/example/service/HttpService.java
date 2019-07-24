@@ -85,7 +85,7 @@ public class HttpService {
             httpGet = new HttpGet(url);
         }
         // 设置请求参数
-        httpGet.setConfig(this.requestConfig);
+//        httpGet.setConfig(this.requestConfig);
         System.out.println(httpGet);
 
         // 请求的结果
@@ -97,8 +97,9 @@ public class HttpService {
             // 判断返回状态是否为200
             if (response.getStatusLine().getStatusCode() == 200) {
                 // 获取服务端返回的数据,并返回
-                //System.out.println(EntityUtils.toString(response.getEntity(), "UTF-8"));
-                return EntityUtils.toString(response.getEntity(), "UTF-8");
+//                System.out.println(EntityUtils.toString(response.getEntity(), "UTF-8"));
+                return new String(EntityUtils.toByteArray(response.getEntity()),"UTF-8");
+//                return EntityUtils.toString(response.getEntity(), "UTF-8");
             }
         } finally {
             if (response != null) {
@@ -111,8 +112,7 @@ public class HttpService {
     /**
      *
      * @param url
-     * @param params
-     *            请求中的参数
+     * @param params 请求中的参数
      * @return 请求到的内容
      * @throws URISyntaxException
      * @throws ClientProtocolException
@@ -178,9 +178,7 @@ public class HttpService {
 
     /**
      *
-     * @param url
-     * @param params
-     *            请求中的参数
+     * @param url 请求路径
      * @return 请求到的内容
      * @throws URISyntaxException
      * @throws ClientProtocolException
