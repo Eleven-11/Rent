@@ -44,7 +44,7 @@ public class PostDto {
 
     private String posterAvatar;
 
-    private int postId;
+    private String postId;
 
     private Date createTime;
 

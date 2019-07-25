@@ -8,6 +8,6 @@ public interface VisitorService {
      * @param jsonObject
      * @return
      */
-    JSONObject insertVisitor(JSONObject jsonObject);
+    String insertVisitor(JSONObject jsonObject);
 
 }

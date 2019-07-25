@@ -53,7 +53,7 @@
             WX_PROVINCE,
             WX_COUNTRY,
             CREATE_TIME,
-            UPDATE_TIME) values (#{userId},#{unionId},#{wxAvatar},#{wxNickname},#{wxGender},#{wxCity},#{wxProvince},#{wxCountry},now(),now());
+            UPDATE_TIME) values (#{userId},#{openId},#{unionId},#{wxAvatar},#{wxNickname},#{wxGender},#{wxCity},#{wxProvince},#{wxCountry},now(),now());
     </insert>
     <select id="getWxUserInfo" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
@@ -78,6 +78,22 @@
                 AND t_wx_user.USER_ID =#{userId}
             </if>
         </where>
+    </select>
+    <select id="getAuthStatus" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            USER_ID	userId,
+            OPEN_ID openId,
+            UNION_ID unionId,
+            WX_AVATAR_URL wxAvatarImg,
+            WX_NICK_NAME wxNickname,
+            WX_GENDER wxGender,
+            WX_CITY wxCity,
+            WX_PROVINCE wxProvince,
+            WX_COUNTRY wxCountry,
+            (SELECT COUNT(0) FROM t_user_follow a WHERE a.FAN_ID = USER_Id) follows,
+            (SELECT COUNT(0) FROM t_user_follow a WHERE a.FOLLOW_ID = USER_Id) fans
+        FROM t_wx_user b
+        WHERE b.OPEN_ID = #{openId}
     </select>
 
 </mapper>

@@ -2,6 +2,8 @@ package com.heeexy.example.service;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.List;
+
 /**
  * @author: Lingling
  * @description: 后台帖子管理业务逻辑
@@ -17,7 +19,7 @@ public interface PostBaseService {
     JSONObject getPostBaseList(JSONObject jsonObject);
 
     /**
-     * 更改帖子浏览量、点赞量
+     * 更改帖子浏览量、点赞量、上架、下架
      * @param jsonObject
      * @return
      */
@@ -28,5 +30,5 @@ public interface PostBaseService {
      * @param jsonObject
      * @return
      */
-    JSONObject insertPostBase(JSONObject jsonObject);
+    JSONObject insertPostBase(JSONObject jsonObject, List<JSONObject> postImgList);
 }

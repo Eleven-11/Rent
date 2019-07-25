@@ -3,6 +3,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.UserBrowseDao">
     <select id="getUserBrowse" resultType="com.alibaba.fastjson.JSONObject">
-        SELECT a.POST_ID FROM t_user_browse a WHERE a.USER_ID =#{userId}
+        SELECT a.POST_ID postId FROM t_user_browse a WHERE a.USER_ID =#{userId}
     </select>
+    <insert id="insertUserBrowse">
+        BEGIN;
+        INSERT INTO t_user_browse(
+        USER_ID,
+        POST_ID,
+        CREATE_TIME
+        )VALUES (#{userId},#{postId},NOW());
+        UPDATE t_post_base
+        SET TOTAL_BROWSE = (SELECT COUNT(0) FROM t_user_browse a WHERE a.POST_ID = #{postId}) WHERE ID = #{postId};
+        COMMIT;
+    </insert>
 </mapper>

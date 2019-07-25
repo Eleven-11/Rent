@@ -35,20 +35,37 @@ public class  WxUserServiceImpl implements WxUserService {
         return CommonUtil.successPage(jsonObject, list, count);
     }
 
+    /**
+     * @description 新增微信授权用户信息
+     * @param jsonObject
+     * @return java.lang.String
+     **/
     @Override
-    public JSONObject insertWxUser(JSONObject jsonObject) {
+    public String insertWxUser(JSONObject jsonObject) {
         String userId =UUID.randomUUID().toString();
         jsonObject.put("userId",userId);
         wxUserDao.insertWxUser(jsonObject);
-        JSONObject returnJson = new JSONObject();
-        returnJson.put("userId",userId);
-        return returnJson;
+        return userId;
     }
 
+    /**
+     * @description 获取微信用户信息
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
     @Override
     public JSONObject getWxUserInfo(JSONObject jsonObject) {
         return wxUserDao.getWxUserInfo(jsonObject);
     }
 
+    /**
+     * @description 判断用户授权状态，若已授权则返回相应信息
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @Override
+    public JSONObject getAuthStatus(JSONObject jsonObject) {
+        return wxUserDao.getAuthStatus(jsonObject);
+    }
 
 }

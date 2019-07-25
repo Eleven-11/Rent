@@ -13,5 +13,5 @@ public interface VisitorDao {
      * @param jsonObject
      * @return
      */
-    JSONObject insertVisitor(JSONObject jsonObject);
+    void insertVisitor(JSONObject jsonObject);
 }

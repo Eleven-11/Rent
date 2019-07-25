@@ -69,6 +69,11 @@ public class PostCommentServiceImpl implements PostCommentService {
         return CommonUtil.successJson("评论已删除，刷新后查看");
     }
 
+    /**
+     * @description 小程序：获取指定用户评论列表及被评论的帖子部分信息用于显示
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
     @Override
     public JSONObject getUserComment(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);

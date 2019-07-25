@@ -29,12 +29,18 @@ public interface WxUserDao {
      * @param jsonObject
      * @return
      **/
-    JSONObject insertWxUser(JSONObject jsonObject);
+    void insertWxUser(JSONObject jsonObject);
     /**
      * @description 获取微信用户信息
      * @param 
      * @return 
      **/
     JSONObject getWxUserInfo(JSONObject jsonObject);
+    /**
+     * @description 获取用户授权信息
+     * @param
+     * @return
+     **/
+    JSONObject getAuthStatus(JSONObject jsonObject);
 
 }

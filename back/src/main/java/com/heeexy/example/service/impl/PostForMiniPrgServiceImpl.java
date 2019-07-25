@@ -42,6 +42,8 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
      */
     @Override
     public List<PostDto> getPostInfo(JSONObject jsonObject) {
+        //小程序请求标识，用于判断是否显示被逻辑删除的帖子(后台管理需显示)
+        jsonObject.put("isMiniPro",'1');
         List<PostDto> list = new ArrayList<>();
         List<JSONObject> postBaseList = postBaseDao.getPostBaseList(jsonObject);
         for (int i=0;i<postBaseList.size();i++)
@@ -69,7 +71,7 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             postDto.setMaxPrice((String) postBaseList.get(i).get("maxPrice"));
             postDto.setFee((Integer) postBaseList.get(i).get("fee"));
             postDto.setPhone((String) postBaseList.get(i).get("phone"));
-            postDto.setPostId((Integer) postBaseList.get(i).get("postId"));
+            postDto.setPostId((String) postBaseList.get(i).get("postId"));
             postDto.setPoster((String) postBaseList.get(i).get("poster"));
             postDto.setPostLabels((String) postBaseList.get(i).get("postLabels"));
             postDto.setPostGender((String) postBaseList.get(i).get("posterGender"));

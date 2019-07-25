@@ -31,9 +31,11 @@
         t_post_type f
         WHERE
         m.TYPE_ID = f.ID
-        AND m.IS_LOWER_SHELF = '0'
-        AND m.IS_DEL = '0'
         AND u.USER_ID = m.USER_ID
+        <if test="isMiniPro !=null and isMiniPro!=''">
+            AND m.IS_LOWER_SHELF = '0'
+            AND m.IS_DEL = '0'
+        </if>
         <if test="typeId !=null and typeId !=''">
             AND m.TYPE_ID = #{typeId}
         </if>
@@ -60,8 +62,6 @@
             PHONE,
             ADDRESS,
             LABELS,
-            TOTAL_BROWSE,
-            TOTAL_RESONATE,
             ACTIVE_TIME,
             CREATE_TIME,
             FEE
@@ -77,10 +77,8 @@
             #{phone},
             #{address},
             #{labels},
-            #{totalBrowse},
-            #{totalLike},
-            #{activeTime},
-            #{createTime},
+            NOW(),
+            NOW(),
             #{fee}
             )
     </insert>
@@ -105,7 +103,7 @@
         m.DEV_RESONATE      devLike,
         m.TOTAL_COLLECTION  collection,
         m.FEE               fee,
-        DATE_FORMAT(m.ACTIVE_TIME,'%Y.%m.%d %T')       activeTime,
+        m.ACTIVE_TIME       activeTime,
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
         FROM
         t_wx_user u,
@@ -113,9 +111,11 @@
         t_post_type f
         WHERE
         m.TYPE_ID = f.ID
-        AND m.IS_LOWER_SHELF = '0'
-        AND m.IS_DEL = '0'
         AND u.USER_ID = m.USER_ID
+        <if test="isMiniPro !=null and isMiniPro!=''">
+            AND m.IS_LOWER_SHELF = '0'
+            AND m.IS_DEL = '0'
+        </if>
         <if test="typeId !=null and typeId !=''">
             AND m.TYPE_ID = #{typeId}
         </if>
@@ -133,7 +133,16 @@
     </select>
     <update id="updatePostBase">
         UPDATE t_post_base
-        SET DEV_BROWSE = #{devBrowse},DEV_RESONATE =#{devLike}
+        SET IS_DEL=0
+        <if test="devBrowse !=null and devBrowse!=''">
+            ,DEV_BROWSE = #{devBrowse}
+        </if>
+        <if test="devLike !=null and devLike !=''">
+            ,DEV_RESONATE =#{devLike}
+        </if>
+        <if test="upShelf!=null and upShelf!=''">
+            ,IS_LOWER_SHELF=#{upShelf}
+        </if>
         WHERE ID = #{postId}
     </update>
     <select id="getUserPostInfo" resultType="com.alibaba.fastjson.JSONObject">
@@ -143,7 +152,7 @@
         u.WX_AVATAR_URL     posterAvatar,
         f.TYPE_NAME         typeName,
         m.ID                postId,
-        DATE_FORMAT(m.CREATE_TIME,'%Y.%m.%d %T')       createTime,
+        DATE_FORMAT(m.CREATE_TIME,'%Y-%m-%d %T')       createTime,
         m.CONTENT           content
         FROM
         t_wx_user u,

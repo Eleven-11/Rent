@@ -26,12 +26,10 @@ public class VisitorServiceImpl implements VisitorService {
      * @return
      */
     @Override
-    public JSONObject insertVisitor(JSONObject jsonObject) {
+    public String insertVisitor(JSONObject jsonObject) {
         String visitorId = UUID.randomUUID().toString();
         jsonObject.put("visitorId",visitorId);
         visitorDao.insertVisitor(jsonObject);
-        JSONObject returnJson = new JSONObject();
-        returnJson.put("userId",visitorId);
-        return returnJson;
+        return visitorId;
     }
 }

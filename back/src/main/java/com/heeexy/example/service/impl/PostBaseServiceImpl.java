@@ -5,12 +5,12 @@ import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.dao.PostImgDao;
 import com.heeexy.example.service.PostBaseService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.UUIDUtils;
 import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @ClassName PostBaseServiceImpl
@@ -63,11 +63,15 @@ public class PostBaseServiceImpl implements PostBaseService {
      * @return
      */
     @Override
-    public JSONObject insertPostBase(JSONObject jsonObject) {
-        String postId =UUID.randomUUID().toString();
+    public JSONObject insertPostBase(JSONObject jsonObject,List<JSONObject> postImgList) {
+        String postId = UUIDUtils.getUUID();
         jsonObject.put("postId", postId);
         postBaseDao.insertPostBase(jsonObject);
-        postImgDao.insertPostImgList(jsonObject);
+        if(postImgList!=null)
+        {
+            postImgDao.insertPostImgList(postImgList );
+            return CommonUtil.successJson("发布成功！");
+        }
         return CommonUtil.successJson("发布成功！");
     }
 

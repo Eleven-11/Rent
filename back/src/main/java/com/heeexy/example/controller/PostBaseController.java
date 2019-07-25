@@ -54,7 +54,7 @@ public class PostBaseController {
     }
 
     /**
-     * 更新帖子
+     * 更新帖子(修改浏览量、点赞量、上架下架)
      * @param request
      * @return
      */

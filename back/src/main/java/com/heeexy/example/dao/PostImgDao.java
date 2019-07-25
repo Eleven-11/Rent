@@ -20,8 +20,8 @@ public interface PostImgDao {
 
     /**
      * 插入帖子图片列表
-     * @param jsonObject
+     * @param
      * @return
      */
-    JSONObject insertPostImgList(JSONObject jsonObject);
+    JSONObject insertPostImgList(List<JSONObject> postImgList);
 }

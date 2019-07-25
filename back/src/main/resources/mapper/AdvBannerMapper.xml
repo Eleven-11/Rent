@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.AdvertBannerDao">
+    <select id="getAdvImg" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        ID advId,
+        ADVERT_TITLE advTitle,
+        IMG_URL advImg
+        FROM t_advert_banner a
+        WHERE a.IS_DEL=0
+        ORDER BY SORT_TIME DESC
+    </select>
+    <insert id="insertAdvImg">
+        INSERT INTO t_advert_banner (
+            ADVERT_TITLE,
+            IMG_URL,
+            CREATE_TIME,
+            SORT_TIME
+        )
+        VALUES
+            (
+                #{advTitle},
+                #{advImg},
+                NOW(),
+                NOW()
+            )
+    </insert>
+    <update id="updateDelAdvImg">
+        update t_advert_banner
+        set IS_DEL=1
+        where ID =#{advId}
+    </update>
+    <update id="updateAdvImg">
+        update t_advert_banner
+        set IS_DEL=0
+        <if test="advTitle!=null and advImg!=''">
+            ,advTitle=#{advTitle}
+        </if>
+        <if test="advImg!=null and advImg!=''">
+            ,advImg=#{advImg}
+        </if>
+        where ID=#{advId}
+    </update>
+</mapper>
