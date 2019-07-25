@@ -30,5 +30,5 @@ public interface PostBaseService {
      * @param jsonObject
      * @return
      */
-    JSONObject insertPostBase(JSONObject jsonObject, List<JSONObject> postImgList);
+    JSONObject insertPostBase(JSONObject jsonObject);
 }

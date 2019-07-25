@@ -13,5 +13,5 @@ public interface NavigationTopDao {
      * @param jsonObject
      * @return
      */
-    JSONObject insertNavigationTop(JSONObject jsonObject);
+    Integer insertNavigationTop(JSONObject jsonObject);
 }

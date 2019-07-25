@@ -7,8 +7,8 @@
     </select>
     <insert id="insertPostImgList">
         INSERT INTO t_post_picture (POST_ID, IMG_URL,CREATE_TIME)
+        VALUES
         <foreach collection="postImgList" item="item" index="index" separator=",">
-            VALUES
             (#{postId},#{item},now())
         </foreach>
     </insert>

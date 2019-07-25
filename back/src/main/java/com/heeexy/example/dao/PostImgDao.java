@@ -23,5 +23,5 @@ public interface PostImgDao {
      * @param
      * @return
      */
-    JSONObject insertPostImgList(List<JSONObject> postImgList);
+    Integer insertPostImgList(JSONObject postImgList);
 }

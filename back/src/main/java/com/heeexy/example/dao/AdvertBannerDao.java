@@ -16,7 +16,7 @@ public interface AdvertBannerDao {
      * @param
      * @return 
      **/
-    JSONObject insertAdvImg(JSONObject jsonObject);
+    Integer insertAdvImg(JSONObject jsonObject);
     /**
      * @description 逻辑删除广告栏图片（后台管理）
      * @param

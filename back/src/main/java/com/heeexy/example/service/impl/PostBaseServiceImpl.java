@@ -9,7 +9,10 @@ import com.heeexy.example.util.UUIDUtils;
 import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +23,9 @@ import java.util.List;
  * @VERSION 1.0
  **/
 @Service
+@Transactional
 public class PostBaseServiceImpl implements PostBaseService {
+
     @Autowired
     private PostBaseDao postBaseDao;
     @Autowired
@@ -63,14 +68,25 @@ public class PostBaseServiceImpl implements PostBaseService {
      * @return
      */
     @Override
-    public JSONObject insertPostBase(JSONObject jsonObject,List<JSONObject> postImgList) {
-        String postId = UUIDUtils.getUUID();
-        jsonObject.put("postId", postId);
+    public JSONObject insertPostBase(JSONObject jsonObject) {
+//        String postId = UUIDUtils.getUUID();
+//        jsonObject.put("postId", postId);
+
+        /*FIXME
+            postId还是int自增长，该插入字段会自动返回数据表id并且变量名为postId
+            如需修改postId为String自定义ID，请修改所有带有postId的表字段，并修改
+            下面的插入方法对应的xml实现
+        */
         postBaseDao.insertPostBase(jsonObject);
-        if(postImgList!=null)
-        {
-            postImgDao.insertPostImgList(postImgList );
-            return CommonUtil.successJson("发布成功！");
+        //判断是否有上传图片集合
+        if (jsonObject.get("postImgList") !=null) {
+            /*FIXME
+                以下图片集合的获取以postman测试工具测试成功
+                并不保证正式环境下小程序的图片集合处理
+                如出现异常，请根据postImgList对应的字段格式做相应处理
+            */
+            jsonObject.put("postImgList",Arrays.asList(jsonObject.get("postImgList").toString().split(",")));
+            postImgDao.insertPostImgList(jsonObject);
         }
         return CommonUtil.successJson("发布成功！");
     }

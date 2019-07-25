@@ -51,32 +51,50 @@
         ORDER BY
         ACTIVE_TIME DESC) g
     </select>
-    <insert id="insertPostBase" parameterType="com.alibaba.fastjson.JSONObject">
+    <insert id="insertPostBase" useGeneratedKeys="true" keyProperty="postId" parameterType="com.alibaba.fastjson.JSONObject">
          INSERT INTO t_post_base (
-            ID,
             USER_ID,
             TYPE_ID,
             CONTENT,
+        <if test="minPrice != null and minPrice != 0">
             MIN_PRICE,
+        </if>
+        <if test="maxPrice != null and maxPrice != 0">
             MAX_PRICE,
+        </if>
+        <if test="phone != null and phone != ''">
             PHONE,
+        </if>
+        <if test="address != null and address != ''">
             ADDRESS,
+        </if>
+        <if test="labels != null and labels != ''">
             LABELS,
+        </if>
             ACTIVE_TIME,
             CREATE_TIME,
             FEE
         )
         VALUES
             (
-            #{postId},
             #{posterId},
             #{typeId},
             #{content},
+        <if test="minPrice != null and minPrice != 0">
             #{minPrice},
+        </if>
+        <if test="maxPrice != null and maxPrice != 0">
             #{maxPrice},
+        </if>
+        <if test="phone != null and phone != ''">
             #{phone},
+        </if>
+        <if test="address != null and address != ''">
             #{address},
+        </if>
+        <if test="labels != null and labels != ''">
             #{labels},
+        </if>
             NOW(),
             NOW(),
             #{fee}
