@@ -5,6 +5,7 @@ import com.heeexy.example.service.VisitorService;
 import com.heeexy.example.service.WxUserService;
 import com.heeexy.example.util.AesCbcUtil;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.UUIDUtils;
 import com.heeexy.example.util.WxConfig;
 import com.heeexy.example.util.constants.ErrorEnum;
 import net.sf.json.JSONObject;
@@ -102,6 +103,10 @@ public class WxLoginController {
                 userInfo.put("country", userInfoJSON.get("country"));
                 userInfo.put("avatarUrl", userInfoJSON.get("avatarUrl"));
                 userInfo.put("unionId", userInfoJSON.get("unionId"));
+                //测试用代码
+                if (userInfo.get("unionId") == null){
+                    userInfo.put("unionId", UUIDUtils.getUUID());
+                }
                 map.put("userInfo", userInfo);
                 return map;
             }
