@@ -88,7 +88,7 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             //图片集合
             postDto.setPostImgs(postImgList);
 
-
+            //判断是否有用户信息，有的判断相关的用户发帖，点赞，收藏信息
             if (!StringUtils.isEmpty(jsonObject.get("userId"))){
                 String userId = jsonObject.get("userId").toString();
                 JSONObject jo = postBaseList.get(i);
