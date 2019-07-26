@@ -1,7 +1,12 @@
 package com.heeexy.example.config.shiro;
 
+import com.heeexy.example.config.shiro.realm.VueUserRealm;
+import com.heeexy.example.config.shiro.realm.WxUserRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy;
+import org.apache.shiro.authc.pam.ModularRealmAuthenticator;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -12,13 +17,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 
 import javax.servlet.Filter;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * @author: hxy
+ * @author: chens
  * @description: shiro配置类
- * @date: 2017/10/24 10:10
+ * @date: 2019/07/24 10:10
  */
 @Configuration
 public class ShiroConfiguration {
@@ -63,19 +70,43 @@ public class ShiroConfiguration {
 	@Bean
 	public SecurityManager securityManager() {
 		DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-		securityManager.setRealm(userRealm());
+		//设置Realm管理办法，自定义
+		securityManager.setAuthenticator(modularRealmAuthenticator());
+		List<Realm> realms = new ArrayList<>();
+		realms.add(userRealm());
+		realms.add(wxUserRealm());
+		securityManager.setRealms(realms);
 		return securityManager;
+	}
+
+	/**
+	 * 系统自带的Realm管理，主要针对多realm
+	 * @return
+	 */
+	@Bean
+	public ModularRealmAuthenticator modularRealmAuthenticator(){
+		//自己重写的ModularRealmAuthenticator
+		UserModularRealmAuthenticator modularRealmAuthenticator = new UserModularRealmAuthenticator();
+		modularRealmAuthenticator.setAuthenticationStrategy(new AtLeastOneSuccessfulStrategy());
+		return modularRealmAuthenticator;
 	}
 
 	/**
 	 * Shiro Realm 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的
 	 */
 	@Bean
-	public UserRealm userRealm() {
-		UserRealm userRealm = new UserRealm();
-		return userRealm;
+	public VueUserRealm userRealm() {
+		VueUserRealm vueUserRealm = new VueUserRealm();
+		return vueUserRealm;
 	}
 
+	@Bean
+	public WxUserRealm wxUserRealm(){
+		WxUserRealm wxUserRealm = new WxUserRealm();
+		//设置解密规则
+//		wxUserRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+		return wxUserRealm;
+	}
 	/**
 	 * 凭证匹配器
 	 * （由于我们的密码校验交给Shiro的SimpleAuthenticationInfo进行处理了

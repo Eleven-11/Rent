@@ -1,6 +1,8 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.config.shiro.token.LoginType;
+import com.heeexy.example.config.shiro.token.ShiroConfigToken;
 import com.heeexy.example.dao.LoginDao;
 import com.heeexy.example.service.LoginService;
 import com.heeexy.example.service.PermissionService;
@@ -8,7 +10,6 @@ import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.Constants;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,8 @@ public class LoginServiceImpl implements LoginService {
 		String password = jsonObject.getString("password");
 		JSONObject info = new JSONObject();
 		Subject currentUser = SecurityUtils.getSubject();
-		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+//		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+		ShiroConfigToken token = new ShiroConfigToken(username, password, LoginType.VUE_BACKEND);
 		try {
 			currentUser.login(token);
 			info.put("result", "success");

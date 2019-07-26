@@ -1,6 +1,7 @@
-package com.heeexy.example.config.shiro;
+package com.heeexy.example.config.shiro.realm;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.config.shiro.token.LoginType;
 import com.heeexy.example.service.LoginService;
 import com.heeexy.example.util.constants.Constants;
 import org.apache.shiro.SecurityUtils;
@@ -17,15 +18,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Collection;
 
 /**
- * @author: hxy
- * @description: 自定义Realm
- * @date: 2017/10/24 10:06
+ * @author: chens
+ * @description: 后台用户realm
+ * @date: 2019/07/24 10:06
  */
-public class UserRealm extends AuthorizingRealm {
-	private Logger logger = LoggerFactory.getLogger(UserRealm.class);
+public class VueUserRealm extends AuthorizingRealm {
+
+	private Logger logger = LoggerFactory.getLogger(VueUserRealm.class);
 
 	@Autowired
 	private LoginService loginService;
+
+
+	@Override
+	public String getName(){
+		return LoginType.VUE_BACKEND;
+	}
 
 	@Override
 	@SuppressWarnings("unchecked")

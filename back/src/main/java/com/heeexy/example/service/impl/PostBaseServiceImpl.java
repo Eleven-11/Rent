@@ -78,11 +78,7 @@ public class PostBaseServiceImpl implements PostBaseService {
         */
         postBaseDao.insertPostBase(jsonObject);
         //判断是否有上传图片集合
-        System.out.println("hello debugger");
-        System.out.println(StringUtils.isEmpty(jsonObject.get("postImgList")));
-        System.out.println(jsonObject.get("postImgList"));
-        System.out.println("byebye debugger");
-        if (jsonObject.get("postImgList") !=null&& !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
+        if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
             /*FIXME
                 以下图片集合的获取以postman测试工具测试成功
                 并不保证正式环境下小程序的图片集合处理
