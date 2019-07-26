@@ -8,9 +8,7 @@ import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,11 +45,7 @@ public class PostCommentServiceImpl implements PostCommentService {
      */
     @Override
     public int insertComment(JSONObject jsonObject) {
-        /*评论创建时间*/
-        Date commentCreateTime = new Date();
-        SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println(dateFormat.format(commentCreateTime));
-        jsonObject.put("commentCreateTime",commentCreateTime);
+        System.out.println(jsonObject);
         return postCommentDao.insertComment(jsonObject);
     }
 

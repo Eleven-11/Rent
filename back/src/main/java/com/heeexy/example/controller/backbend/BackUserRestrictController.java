@@ -1,4 +1,4 @@
-package com.heeexy.example.controller;
+package com.heeexy.example.controller.backbend;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserRestrictService;
@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/userRes")
-public class UserRestrictController {
+public class BackUserRestrictController {
     @Autowired
     private UserRestrictService userRestrictService;
 

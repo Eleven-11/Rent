@@ -1,4 +1,4 @@
-package com.heeexy.example.controller;
+package com.heeexy.example.controller.backbend;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserCollectionService;
@@ -21,7 +21,7 @@ import java.util.Date;
  */
 @RestController
 @RequestMapping("/userCollection")
-public class UserCollectionController {
+public class BackUserCollectionController {
     @Autowired
     private UserCollectionService userCollectionService;
 

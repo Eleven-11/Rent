@@ -1,4 +1,4 @@
-package com.heeexy.example.controller;
+package com.heeexy.example.controller.backbend;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostBaseService;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  **/
 @RestController
 @RequestMapping("/postBase")
-public class PostBaseController {
+public class BackPostBaseController {
     @Autowired
     private PostBaseService postBaseService;
 

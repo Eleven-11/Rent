@@ -22,8 +22,8 @@ import java.util.List;
  * @VERSION 1.0
  **/
 @RestController
-@RequestMapping("/miniPrgPost")
-public class PostController {
+@RequestMapping("/wxPost")
+public class WxPostController {
     @Autowired
     private PostForMiniPrgService postForMiniPrgService;
     @Autowired

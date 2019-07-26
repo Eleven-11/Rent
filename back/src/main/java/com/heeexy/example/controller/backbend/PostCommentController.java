@@ -1,4 +1,4 @@
-package com.heeexy.example.controller;
+package com.heeexy.example.controller.backbend;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostCommentService;
@@ -39,18 +39,10 @@ public class PostCommentController {
      **/
     @GetMapping("/getCommentList")
     public JSONObject getCommentList(HttpServletRequest request) {
+        System.out.println(CommonUtil.request2Json(request));
         return postCommentService.getPostCommentList(CommonUtil.request2Json(request));
     }
-    /**
-     * @description 添加用户评论信息
-     * @param request 帖子id-postId，评论发起人id-startId，评论接收人id-receiveId（当回复他人评论时不为空）
-     *        评论内容-content，评论创建时间（后端service层获取当前时间）
-     * @return 评论id（主键）-commentId
-     **/
-    @PostMapping("/insertComment")
-    public int insertComment(HttpServletRequest request) {
-        return postCommentService.insertComment(CommonUtil.request2Json(request));
-    }
+
     /**
      * @description 逻辑删除帖子的评论
      * @param request 评论id-commentId

@@ -44,7 +44,7 @@
     <insert id="insertComment" useGeneratedKeys="true" keyProperty="commentId">
         BEGIN;
         INSERT INTO t_comment(POST_ID,START_ID,RECEIVE_ID,CONTENT,CREATE_TIME)
-        VALUES(#{postId},#{startId},#{receiveId},#{content},DATE_FORMAT(#{commentCreateTime},'%Y.%m.%d %T'));
+        VALUES(#{postId},#{startId},#{receiveId},#{content},NOW());
         UPDATE t_post_base
         SET TOTAL_COMMENTS =(
             SELECT
@@ -53,7 +53,8 @@
                 t_comment a
             WHERE
                 a.POST_ID = #{postId}
-        ), ACTIVE_TIME = NOW() WHERE ID = #{postID};
+        ), ACTIVE_TIME = NOW()
+        WHERE ID = #{postId};
         COMMIT;
     </insert>
     <select id="getCommentStatus" resultType="java.lang.Integer">

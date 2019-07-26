@@ -1,4 +1,4 @@
-package com.heeexy.example.controller;
+package com.heeexy.example.controller.backbend;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostLabelService;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/postLabel")
-public class PostLabelController {
+public class BackPostLabelController {
     @Autowired
     private PostLabelService postLabelService;
 

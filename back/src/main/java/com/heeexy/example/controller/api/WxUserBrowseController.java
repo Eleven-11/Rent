@@ -18,8 +18,8 @@ import javax.servlet.http.HttpServletRequest;
  * @VERSION 1.0
  **/
 @RestController
-@RequestMapping("/userBrowse")
-public class UserBrowseController {
+@RequestMapping("/wxUserBrowse")
+public class WxUserBrowseController {
     @Autowired
     private UserBrowseService userBrowseService;
     /**

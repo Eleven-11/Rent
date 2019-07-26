@@ -47,7 +47,7 @@ public class FileUploadController {
             localFile.createNewFile();
             file.transferTo(localFile);
         }*/
-        String srcUrl ="http://192.168.1.15:8080/image/"+newFileName;
+        String srcUrl ="http://192.168.1.7:8080/image/"+newFileName;
         /*File serverDir = new File(srcUrl,newFileName);
         if(!serverDir.exists())
         {

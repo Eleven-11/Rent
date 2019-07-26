@@ -1,4 +1,4 @@
-package com.heeexy.example.controller;
+package com.heeexy.example.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserResonateService;
@@ -13,13 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * @ClassName UserResonateController
- * @Description 用户点赞相关操作
+ * @Description 小程序：用户点赞相关操作
  * @Author Lingling00
  * @DATE 7/16/2019 11:39
  * @VERSION 1.0
  **/
 @RestController
-@RequestMapping("/userLike")
+@RequestMapping("/wxUserLike")
 public class UserResonateController {
     @Autowired
     private UserResonateService userResonateService;
@@ -43,7 +43,6 @@ public class UserResonateController {
     public JSONObject updateDelPostLike(HttpServletRequest request) {
         return userResonateService.updateDelPostLike(CommonUtil.request2Json(request));
     }
-
     /**
      * @description 获取帖子点赞列表
      * @param request 条数（可选）-limit，帖子Id-postId

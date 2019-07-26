@@ -84,8 +84,6 @@ public class PostBaseServiceImpl implements PostBaseService {
                 并不保证正式环境下小程序的图片集合处理
                 如出现异常，请根据postImgList对应的字段格式做相应处理
             */
-            System.out.println("进来了");
-            System.out.println(jsonObject.get("postImgList"));
             jsonObject.put("postImgList",Arrays.asList(jsonObject.get("postImgList").toString().split(",")));
             postImgDao.insertPostImgList(jsonObject);
         }
