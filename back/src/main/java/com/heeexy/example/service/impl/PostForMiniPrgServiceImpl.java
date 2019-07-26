@@ -88,8 +88,9 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             //图片集合
             postDto.setPostImgs(postImgList);
 
-            String userId = jsonObject.get("userId").toString();
-            if (!StringUtils.isEmpty(userId)){
+
+            if (!StringUtils.isEmpty(jsonObject.get("userId"))){
+                String userId = jsonObject.get("userId").toString();
                 JSONObject jo = postBaseList.get(i);
                 jo.put("userId",userId);
                 //是否时自己发送的帖子
