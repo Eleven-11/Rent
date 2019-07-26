@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  **/
 @RestController
 @RequestMapping("/wxUserLike")
-public class UserResonateController {
+public class WxUserResonateController {
     @Autowired
     private UserResonateService userResonateService;
 

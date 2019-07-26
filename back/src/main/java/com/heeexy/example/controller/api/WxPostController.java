@@ -29,6 +29,33 @@ public class WxPostController {
     @Autowired
     private PostBaseService postBaseService;
 
+    /**
+     * @description 获取帖子列表
+     * @param request （帖子id-postId，发帖人昵称-nickname（用于获取指定用户发布的帖子列表，非必须），关键词-keyword（用于进行模糊查询，包括地址及帖子内容））
+     * @return
+     *      发帖人-poster,
+     *      发帖人头像-posterAvatar,
+     *      发帖人性别-posterGender，
+     *      是否关注发帖人-isFollow,
+     *      帖子Id-postId,
+     *      帖子创建时间-createTime,
+     *      帖子类别名称-typeName,
+     *      地址-address,
+     *      帖子内容content,
+     *      最低价-minPrice,
+     *      最高价- maxPrice,
+     *      联系方式-phone,
+     *      帖子标签集合-postLabels，
+     *      浏览量-browse，
+     *      评论数量-comments,
+     *      评论列表-commentList，
+     *      图片集合-postImgs，
+     *      点赞列表-likeList，
+     *      点赞量-likes，
+     *      帖子收藏量-collections，
+     *      中介费-fee,
+     *      活跃时间-activeTime
+     **/
     @GetMapping("/getPostInfo")
     public List<PostDto> getPostList(HttpServletRequest request) {
         return postForMiniPrgService.getPostInfo(CommonUtil.request2Json(request));

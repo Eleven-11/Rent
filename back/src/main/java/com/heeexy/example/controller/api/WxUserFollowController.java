@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/wxUserFollow")
-public class UserFollowController {
+public class WxUserFollowController {
     @Autowired
     private UserFollowService userFollowService;
 

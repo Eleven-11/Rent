@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/wxUser")
-public class WxUserController {
+public class BackWxUserController {
 
     @Autowired
     private WxUserService wxUserService;

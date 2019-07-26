@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2019/6/27 0027
  */
 @RestController
-@RequestMapping("/userFollow")
+@RequestMapping("/userFollow1")
 public class UserFollowController {
     @Autowired
     private UserFollowService userFollowService;

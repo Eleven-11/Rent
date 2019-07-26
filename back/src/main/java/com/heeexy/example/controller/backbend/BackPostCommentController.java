@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  **/
 @RestController
 @RequestMapping("/postComment")
-public class PostCommentController {
+public class BackPostCommentController {
     @Autowired
     private PostCommentService postCommentService;
 

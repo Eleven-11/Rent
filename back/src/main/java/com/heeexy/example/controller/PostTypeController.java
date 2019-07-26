@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date 2019/7/2 0002
  */
 @RestController
-@RequestMapping("/postType")
+@RequestMapping("/postType1")
 public class PostTypeController {
     @Autowired
     private PostTypeService postTypeService;
