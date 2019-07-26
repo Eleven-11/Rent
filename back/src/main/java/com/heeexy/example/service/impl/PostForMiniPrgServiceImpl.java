@@ -1,14 +1,12 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.heeexy.example.dao.PostBaseDao;
-import com.heeexy.example.dao.PostCommentDao;
-import com.heeexy.example.dao.PostImgDao;
-import com.heeexy.example.dao.UserResonateDao;
+import com.heeexy.example.dao.*;
 import com.heeexy.example.service.PostForMiniPrgService;
 import com.heeexy.example.util.model.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,6 +21,7 @@ import java.util.List;
  **/
 @Service
 public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
+
     @Autowired
     private PostBaseDao postBaseDao;
 
@@ -34,6 +33,9 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
 
     @Autowired
     private PostCommentDao postCommentDao;
+
+    @Autowired
+    private UserCollectionDao userCollectionDao;
 
     /**
      * 获取帖子信息
@@ -50,11 +52,13 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
         {
             PostDto postDto = new PostDto();
             System.out.println(postBaseList.get(i).toString());
+            //获取帖子评论列表
             List<JSONObject> postCommentList = postCommentDao.getPostCommentList(postBaseList.get(i));
             System.out.println(postCommentList);
+            //获取帖子图片集合
             List<JSONObject> postImgList = postImgDao.getPostImgList(postBaseList.get(i));
+            //获取帖子点赞列表
             List<JSONObject> postLikeList = userResonateDao.getPostLikeList(postBaseList.get(i));
-
 
             postDto.setActiveTime((Date) postBaseList.get(i).get("activeTime"));
             postDto.setBrowse((Integer) postBaseList.get(i).get("browse"));
@@ -77,12 +81,30 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             postDto.setPostGender((String) postBaseList.get(i).get("posterGender"));
             postDto.setPosterAvatar((String) postBaseList.get(i).get("posterAvatar"));
 
-
-
+            //评论列表
             postDto.setCommentList(postCommentList);
+            //点赞列表
             postDto.setLikeList(postLikeList);
+            //图片集合
             postDto.setPostImgs(postImgList);
 
+            String userId = jsonObject.get("userId").toString();
+            if (!StringUtils.isEmpty(userId)){
+                JSONObject jo = postBaseList.get(i);
+                jo.put("userId",userId);
+                //是否时自己发送的帖子
+                if (userId.equals(postDto.getPoster())){
+                    postDto.setMyPost(1);
+                }
+                //是否是自己收藏的帖子
+                if (userCollectionDao.getIfCollect(jo) != null){
+                    postDto.setMyCollection(1);
+                }
+                //是否点赞过
+                if (userResonateDao.getByUserIdPostId(jo) != null){
+                    postDto.setMyLike(1);
+                }
+            }
             list.add(postDto);
         }
        return list;

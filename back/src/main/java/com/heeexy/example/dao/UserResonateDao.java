@@ -41,11 +41,16 @@ public interface UserResonateDao {
      */
     int updateDelPostLike(JSONObject jsonObject);
     /**
-     * @description 获取用户点赞过的帖子id
-     *
+     * 获取用户点赞过的帖子id
      * @param jsonObject
      * @return
      **/
     List<JSONObject> getUserLikeList(JSONObject jsonObject);
+
+    /**
+     * 判断用户是否点赞过
+     * @param jsonObject
+     */
+    JSONObject getByUserIdPostId(JSONObject jsonObject);
 
 }

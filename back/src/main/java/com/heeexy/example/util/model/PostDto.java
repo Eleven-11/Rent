@@ -38,6 +38,9 @@ public class PostDto {
      * 帖子收藏量-collections，
      * 中介费-fee,
      * 活跃时间-activeTime
+     * 评论集合 commentList
+     * 点赞集合 likeList
+     * 图片集合 postImgs
      */
 
     private String poster;
@@ -74,154 +77,22 @@ public class PostDto {
 
     private Date activeTime;
 
-//    public String getPoster() {
-//        return poster;
-//    }
-//
-//    public void setPoster(String poster) {
-//        this.poster = poster;
-//    }
-//
-//    public String getPosterAvatar() {
-//        return posterAvatar;
-//    }
-//
-//    public void setPosterAvatar(String posterAvatar) {
-//        this.posterAvatar = posterAvatar;
-//    }
-//
-//    public int getPostId() {
-//        return postId;
-//    }
-//
-//    public void setPostId(int postId) {
-//        this.postId = postId;
-//    }
-//
-//    public Date getCreateTime() {
-//        return createTime;
-//    }
-//
-//    public void setCreateTime(Date createTime) {
-//        this.createTime = createTime;
-//    }
-//
-//    public String getContent() {
-//        return content;
-//    }
-//
-//    public void setContent(String content) {
-//        this.content = content;
-//    }
-//
-//    public String getMinPrice() {
-//        return minPrice;
-//    }
-//
-//    public void setMinPrice(String minPrice) {
-//        this.minPrice = minPrice;
-//    }
-//
-//    public String getMaxPrice() {
-//        return maxPrice;
-//    }
-//
-//    public void setMaxPrice(String maxPrice) {
-//        this.maxPrice = maxPrice;
-//    }
-//
-//    public String getPhone() {
-//        return phone;
-//    }
-//
-//    public void setPhone(String phone) {
-//        this.phone = phone;
-//    }
-//
-//    public String getPostLabels() {
-//        return postLabels;
-//    }
-//
-//    public void setPostLabels(String postLabels) {
-//        this.postLabels = postLabels;
-//    }
-//
-//    public int getBrowse() {
-//        return browse;
-//    }
-//
-//    public void setBrowse(int browse) {
-//        this.browse = browse;
-//    }
-//
-//    public int getLikes() {
-//        return likes;
-//    }
-//
-//    public void setLikes(int likes) {
-//        this.likes = likes;
-//    }
-//
-//    public int getCollections() {
-//        return collections;
-//    }
-//
-//    public String getPostGender() {
-//        return postGender;
-//    }
-//
-//    public void setPostGender(String postGender) {
-//        this.postGender = postGender;
-//    }
-//
-//    public void setCollections(int collections) {
-//        this.collections = collections;
-//    }
-//
-//    public int getFee() {
-//        return fee;
-//    }
-//
-//    public void setFee(int fee) {
-//        this.fee = fee;
-//    }
-//
-//    public Date getActiveTime() {
-//        return activeTime;
-//    }
-//
-//    public void setActiveTime(Date activeTime) {
-//        this.activeTime = activeTime;
-//    }
-//
-//    public List<JSONObject> getCommentList() {
-//        return commentList;
-//    }
-//
-//    public void setCommentList(List<JSONObject> commentList) {
-//        this.commentList = commentList;
-//    }
-//
-//    public List<JSONObject> getLikeList() {
-//        return likeList;
-//    }
-//
-//    public void setLikeList(List<JSONObject> likeList) {
-//        this.likeList = likeList;
-//    }
-//
-//    public List<JSONObject> getPostImgs() {
-//        return postImgs;
-//    }
-//
-//    public void setPostImgs(List<JSONObject> postImgs) {
-//        this.postImgs = postImgs;
-//    }
-//
     private List<JSONObject> commentList;
 
     private List<JSONObject> likeList;
 
     private List<JSONObject> postImgs;
 
+    /**
+     * 是否时我发的帖子
+     */
+    private Integer myPost = 0;
+    /**
+     * 是否点过赞
+     */
+    private Integer myLike = 0;
+    /**
+     * 是否收藏过
+     */
+    private Integer myCollection = 0;
 }

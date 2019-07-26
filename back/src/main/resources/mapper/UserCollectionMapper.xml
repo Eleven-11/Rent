@@ -26,43 +26,47 @@
 		) g
 
     </select>
+
     <select id="getUserCollList" resultType="com.alibaba.fastjson.JSONObject">
-    SELECT
-        m.POST_ID postId,
-        w.WX_NICK_NAME poster,
-        u.CONTENT content,
-        p.IMG_URL image,
-        DATE_FORMAT(m.CREATE_TIME, '%Y.%m.%d %T') collTime,
-        DATE_FORMAT(m.SORT_TIME, '%Y.%m.%d %T') sortTime
-    FROM
-        t_wx_user w,
-        t_post_base u,
-        t_user_collection m,
-        t_post_picture p
-    WHERE
-        m.USER_ID = #{wxUserId,jdbcType = VARCHAR}
-    AND u.ID = m.POST_ID
-    AND w.USER_ID = u.USER_ID
-    AND m.POST_ID = p.POST_ID
-    order by m.SORT_TIME
+        SELECT
+            m.POST_ID postId,
+            w.WX_NICK_NAME poster,
+            u.CONTENT content,
+            p.IMG_URL image,
+            DATE_FORMAT(m.CREATE_TIME, '%Y.%m.%d %T') collTime,
+            DATE_FORMAT(m.SORT_TIME, '%Y.%m.%d %T') sortTime
+        FROM
+            t_wx_user w,
+            t_post_base u,
+            t_user_collection m,
+            t_post_picture p
+        WHERE
+            m.USER_ID = #{wxUserId,jdbcType = VARCHAR}
+        AND u.ID = m.POST_ID
+        AND w.USER_ID = u.USER_ID
+        AND m.POST_ID = p.POST_ID
+        AND m.is_del = 0
+        order by m.SORT_TIME
     </select>
 
-    <update id="sortUserColl">
-    START TRANSACTION;
-    UPDATE t_user_collection SET t_user_collection.sort_time =#{laterSortTime,jdbcType = DATE} WHERE t_user_collection.post_id = #{formerPostId,jdbcType = VARCHAR};
-    UPDATE t_user_collection SET t_user_collection.sort_time =#{formerSortTime,jdbcType = DATE} WHERE t_user_collection.post_id = #{laterPostId,jdbcType = VARCHAR};
-    COMMIT;
-  </update>
-    <select id="getIfCollect">
+    <update id="sortUserColl" >
+        START TRANSACTION;
+        UPDATE t_user_collection SET t_user_collection.sort_time =#{laterSortTime,jdbcType = DATE} WHERE t_user_collection.post_id = #{formerPostId,jdbcType = VARCHAR};
+        UPDATE t_user_collection SET t_user_collection.sort_time =#{formerSortTime,jdbcType = DATE} WHERE t_user_collection.post_id = #{laterPostId,jdbcType = VARCHAR};
+        COMMIT;
+    </update>
+
+    <select id="getIfCollect" resultType="com.alibaba.fastjson.JSONObject">
         select id from t_user_collection
         where USER_ID = #{userId} and POST_ID = #{postId}
     </select>
+
     <insert id="insertUserCollection">
         INSERT INTO t_user_collection(
-        USER_ID,
-        POST_ID,
-        CREATE_TIME,
-        SORT_TIME
+            USER_ID,
+            POST_ID,
+            CREATE_TIME,
+            SORT_TIME
         )
         VALUES(#{userId},#{postId},now(),now())
     </insert>

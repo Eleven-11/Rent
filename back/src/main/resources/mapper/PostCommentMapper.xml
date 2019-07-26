@@ -53,8 +53,7 @@
                 t_comment a
             WHERE
                 a.POST_ID = #{postId}
-        ), ACTIVE_TIME = NOW()
-        WHERE ID = #{postId};
+        ), ACTIVE_TIME = NOW() WHERE ID = #{postId};
         COMMIT;
     </insert>
     <select id="getCommentStatus" resultType="java.lang.Integer">

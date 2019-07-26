@@ -87,4 +87,10 @@
             b.CREATE_TIME DESC
 
     </select>
+
+    <!-- 判断用户是否已收藏 -->
+    <select id="getByUserIdPostId" resultType="com.alibaba.fastjson.JSONObject">
+        select id from t_user_resonate
+        where USER_ID = #{userId} and TARGET_ID = #{postId}
+    </select>
 </mapper>
