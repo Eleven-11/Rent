@@ -19,7 +19,7 @@
             AND a.PARENT_ID = (SELECT b.ID FROM t_post_label b WHERE b.content = #{labelParentContent})
         </if>-->
         ORDER BY postParentId
-        )
+        ) g
     </select>
     <select id="getPostLabelList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT

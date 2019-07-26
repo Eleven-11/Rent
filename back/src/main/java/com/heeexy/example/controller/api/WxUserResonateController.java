@@ -61,8 +61,4 @@ public class WxUserResonateController {
     public JSONObject getUserLikePostList(HttpServletRequest request){
         return userResonateService.getUserLikePostList(CommonUtil.request2Json(request));
     }
-
-
-
-
 }

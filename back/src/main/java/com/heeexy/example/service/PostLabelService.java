@@ -2,6 +2,8 @@ package com.heeexy.example.service;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.List;
+
 /**
  * @author: Lingling
  * @description: 帖子标签业务逻辑
@@ -14,7 +16,7 @@ public interface PostLabelService {
      * @param jsonObject
      * @return
      */
-    JSONObject getPostLabelList(JSONObject jsonObject);
+    List<JSONObject> getPostLabelList(JSONObject jsonObject);
 
     /**
      * 添加帖子标签

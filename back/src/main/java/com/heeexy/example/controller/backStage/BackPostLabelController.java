@@ -1,4 +1,4 @@
-package com.heeexy.example.controller.backbend;
+package com.heeexy.example.controller.backStage;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostLabelService;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author Lingling
@@ -35,11 +36,11 @@ public class BackPostLabelController {
 
     /**
      * @description 获取帖子标签列表
-     * @param request（待定）（父类标签id-labelParentId）
+     * @param request （待定）（父类标签id-labelParentId）
      * @return com.alibaba.fastjson.JSONObject
      **/
     @GetMapping("/getPostLabelList")
-    public JSONObject getPostLabel(HttpServletRequest request){
+    public List<JSONObject> getPostLabel(HttpServletRequest request){
         return postLabelService.getPostLabelList(CommonUtil.request2Json(request));
     }
 

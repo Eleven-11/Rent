@@ -25,11 +25,12 @@ public class PostLabelServiceImpl implements PostLabelService {
      * @return
      */
     @Override
-    public JSONObject getPostLabelList(JSONObject jsonObject) {
+    public List<JSONObject> getPostLabelList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
         int count = postLabelDao.countPostLabel(jsonObject);
         List<JSONObject> list = postLabelDao.getPostLabelList(jsonObject);
-        return CommonUtil.successPage(jsonObject, list, count);
+        System.out.println(list);
+        return list;
     }
 
     /**

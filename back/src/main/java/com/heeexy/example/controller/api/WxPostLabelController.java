@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @ClassName WxPostLabelController
@@ -28,7 +29,7 @@ public class WxPostLabelController {
      * @return com.alibaba.fastjson.JSONObject
      **/
     @GetMapping("/getPostLabelList")
-    public JSONObject getPostLabel(HttpServletRequest request){
+    public List<JSONObject> getPostLabel(HttpServletRequest request){
         return postLabelService.getPostLabelList(CommonUtil.request2Json(request));
     }
 }
