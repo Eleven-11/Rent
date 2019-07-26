@@ -145,13 +145,17 @@ public class WxLoginController {
             //用户首次登录即授权
             else {
                 String userId = wxUserService.insertWxUser(jsonObject);
-                return CommonUtil.successJson(userId);
+                com.alibaba.fastjson.JSONObject authJson = new com.alibaba.fastjson.JSONObject();
+                authJson.put("userId",userId);
+                return authJson;
             }
         }
         else if(jsonObject.get("openId")==null &&jsonObject.get("userId")==null){
             //首次登录未授权，执行插入游客信息操作
-            String userId = visitorService.insertVisitor(jsonObject);
-            return CommonUtil.successJson(userId);
+            String visitorId = visitorService.insertVisitor(jsonObject);
+            com.alibaba.fastjson.JSONObject visitorJson = new com.alibaba.fastjson.JSONObject();
+            visitorJson.put("userId",visitorId);
+            return visitorJson;
         }
         else if(jsonObject.get("openId")!=null&&jsonObject.get("userId")!=null){
             //首次登录未授权，获取游客信息userId，之后登录授权，此时执行插入微信用户信息操作

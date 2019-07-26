@@ -5,13 +5,12 @@ import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.dao.PostImgDao;
 import com.heeexy.example.service.PostBaseService;
 import com.heeexy.example.util.CommonUtil;
-import com.heeexy.example.util.UUIDUtils;
 import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,7 +45,7 @@ public class PostBaseServiceImpl implements PostBaseService {
     }
 
     /**
-     * 更改帖子点赞量、浏览量
+     * 更改帖子点赞量、浏览量、帖子上架下架
      * @param jsonObject
      * @return
      */
@@ -79,12 +78,18 @@ public class PostBaseServiceImpl implements PostBaseService {
         */
         postBaseDao.insertPostBase(jsonObject);
         //判断是否有上传图片集合
-        if (jsonObject.get("postImgList") !=null) {
+        System.out.println("hello debugger");
+        System.out.println(StringUtils.isEmpty(jsonObject.get("postImgList")));
+        System.out.println(jsonObject.get("postImgList"));
+        System.out.println("byebye debugger");
+        if (jsonObject.get("postImgList") !=null&& !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
             /*FIXME
                 以下图片集合的获取以postman测试工具测试成功
                 并不保证正式环境下小程序的图片集合处理
                 如出现异常，请根据postImgList对应的字段格式做相应处理
             */
+            System.out.println("进来了");
+            System.out.println(jsonObject.get("postImgList"));
             jsonObject.put("postImgList",Arrays.asList(jsonObject.get("postImgList").toString().split(",")));
             postImgDao.insertPostImgList(jsonObject);
         }

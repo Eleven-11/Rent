@@ -71,7 +71,7 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             postDto.setMaxPrice((String) postBaseList.get(i).get("maxPrice"));
             postDto.setFee((Integer) postBaseList.get(i).get("fee"));
             postDto.setPhone((String) postBaseList.get(i).get("phone"));
-            postDto.setPostId((String) postBaseList.get(i).get("postId"));
+            postDto.setPostId((Integer) postBaseList.get(i).get("postId"));
             postDto.setPoster((String) postBaseList.get(i).get("poster"));
             postDto.setPostLabels((String) postBaseList.get(i).get("postLabels"));
             postDto.setPostGender((String) postBaseList.get(i).get("posterGender"));

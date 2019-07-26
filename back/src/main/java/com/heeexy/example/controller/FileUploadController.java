@@ -30,9 +30,7 @@ public class FileUploadController {
     @RequestMapping(value = "/upload")
     @ResponseBody
     public String imgUpload(HttpServletRequest req, MultipartHttpServletRequest multiReq) throws IOException {
-        System.out.println(multiReq);
         MultipartFile file = multiReq.getFile("file");
-        System.out.println(file);
         String originalFileName = file.getOriginalFilename();
         String desFilePath =
                 "E:" + File.separator+"image"
@@ -49,7 +47,7 @@ public class FileUploadController {
             localFile.createNewFile();
             file.transferTo(localFile);
         }*/
-        String srcUrl ="http://localhost:8080/image/"+newFileName;
+        String srcUrl ="http://192.168.1.7:8080/image/"+newFileName;
         /*File serverDir = new File(srcUrl,newFileName);
         if(!serverDir.exists())
         {
@@ -57,7 +55,6 @@ public class FileUploadController {
         }
         File newFile = new File(srcUrl);
         file.transferTo(newFile);*/
-        System.out.println(srcUrl);
         return srcUrl;
     }
 }
