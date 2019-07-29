@@ -57,7 +57,7 @@ public class BackPostCommentController {
      * @param request 系统用户id-userId
      * @return
      **/
-    @GetMapping("getUserComment")
+    @GetMapping("/getUserComment")
     public JSONObject getUserComment(HttpServletRequest request){
         return postCommentService.getUserComment(CommonUtil.request2Json(request));
     }

@@ -27,7 +27,7 @@ public class WxUserBrowseController {
      * @param request 系统用户id-userId
      * @return
      **/
-    @GetMapping("getUserBrowseList")
+    @GetMapping("/getUserBrowseList")
     public JSONObject getUserBrowsePostList(HttpServletRequest request){
         return userBrowseService.getUserBrowsePostList(CommonUtil.request2Json(request));
     }
@@ -36,7 +36,7 @@ public class WxUserBrowseController {
      * @param request
      * @return com.alibaba.fastjson.JSONObject
      **/
-    @GetMapping("insertUserBrowse")
+    @GetMapping("/insertUserBrowse")
     public JSONObject insertUserBrowse(HttpServletRequest request){
         return userBrowseService.insertUserBrowse(CommonUtil.request2Json(request));
     }
