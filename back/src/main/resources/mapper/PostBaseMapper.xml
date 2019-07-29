@@ -39,6 +39,12 @@
         <if test="typeId !=null and typeId !=''">
             AND m.TYPE_ID = #{typeId}
         </if>
+        <if test="isSub !=null and isSub !=''">
+            AND m.IS_SUB = #{isSub}
+        </if>
+        <if test="isMall !=null and isMall !=''">
+            AND m.IS_MALL = #{isMall}
+        </if>
         <if test="postId !=null and postId !=''">
             AND m.ID = #{postId}
         </if>
@@ -71,6 +77,12 @@
         <if test="labels != null and labels != ''">
             LABELS,
         </if>
+        <if test="isSub != null and isSub != ''">
+            IS_SUB,
+        </if>
+        <if test="isMall != null and isMall != ''">
+            IS_MALL,
+        </if>
             ACTIVE_TIME,
             CREATE_TIME,
             FEE
@@ -94,6 +106,12 @@
         </if>
         <if test="labels != null and labels != ''">
             #{labels},
+        </if>
+        <if test="isSub != null and isSub != ''">
+            #{isSub},
+        </if>
+        <if test="isMall != null and isMall != ''">
+            #{isMall},
         </if>
             NOW(),
             NOW(),
@@ -136,6 +154,12 @@
         </if>
         <if test="typeId !=null and typeId !=''">
             AND m.TYPE_ID = #{typeId}
+        </if>
+        <if test="isSub !=null and isSub !=''">
+            AND m.IS_SUB = #{isSub}
+        </if>
+        <if test="isMall !=null and isMall !=''">
+            AND m.IS_MALL = #{isMall}
         </if>
         <if test="postId !=null and postId !=''">
         AND m.ID = #{postId}

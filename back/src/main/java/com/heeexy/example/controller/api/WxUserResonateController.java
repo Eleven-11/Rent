@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @ClassName UserResonateController
+ * @ClassName WxUserResonateController
  * @Description 小程序：用户点赞相关操作
  * @Author Lingling00
  * @DATE 7/16/2019 11:39

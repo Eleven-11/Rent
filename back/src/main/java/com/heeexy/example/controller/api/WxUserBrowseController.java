@@ -1,4 +1,4 @@
-package com.heeexy.example.controller;
+package com.heeexy.example.controller.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserBrowseService;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @ClassName UserBrowseController
+ * @ClassName WxUserBrowseController
  * @Description 用户浏览相关操作
  * @Author Lingling00
  * @DATE 7/25/2019 09:59
