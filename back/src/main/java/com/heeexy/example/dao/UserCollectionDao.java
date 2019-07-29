@@ -23,7 +23,7 @@ public interface UserCollectionDao {
      * @param jsonObject
      * @return
      */
-    int updateUserColl(JSONObject jsonObject);
+    int sortUserColl(JSONObject jsonObject);
 
     /**
      * 计算用户收藏的帖子数量
