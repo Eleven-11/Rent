@@ -183,4 +183,16 @@
         AND u.USER_ID = m.USER_ID
         AND m.ID =#{postId}
     </select>
+
+    <!-- 通过postId 校验是否存在帖子-->
+    <select id="getPostInfoByPostId" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+          ID         postId
+        FROM
+        t_post_base
+        WHERE
+         ID = #{postId}
+         AND IS_DEL = '0'
+    </select>
+
 </mapper>

@@ -1,9 +1,11 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.dao.UserCollectionDao;
 import com.heeexy.example.service.UserCollectionService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +18,11 @@ import java.util.List;
  */
 @Service
 public class UserCollectionServiceImpl implements UserCollectionService {
+
     @Autowired
     private UserCollectionDao userCollectionDao;
+    @Autowired
+    private PostBaseDao postBaseDao;
 
     /**
      * 功能描述:根据用户ID查询用户收藏的帖子列表
@@ -53,6 +58,10 @@ public class UserCollectionServiceImpl implements UserCollectionService {
     @Override
     public JSONObject updateUserCollection(JSONObject jsonObject) {
         //如果曾经收藏过
+        //判断帖子是否存在，逻辑删除的也属于不存在
+//        if (postBaseDao.getPostInfoByPostId(jsonObject) == null){
+//            return CommonUtil.errorJson(ErrorEnum.WX_601);
+//        }
         if(userCollectionDao.getIfCollect(jsonObject)!=null){
             userCollectionDao.updateDelCollect(jsonObject);
         }

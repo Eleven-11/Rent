@@ -32,19 +32,18 @@
             m.POST_ID postId,
             w.WX_NICK_NAME poster,
             u.CONTENT content,
-            p.IMG_URL image,
+			(SELECT TYPE_NAME FROM t_post_type WHERE ID	= u.TYPE_ID) postType ,
+            (SELECT WX_AVATAR_URL FROM t_wx_user WHERE USER_ID = u.USER_ID) image ,
             DATE_FORMAT(m.CREATE_TIME, '%Y.%m.%d %T') collTime,
             DATE_FORMAT(m.SORT_TIME, '%Y.%m.%d %T') sortTime
         FROM
             t_wx_user w,
             t_post_base u,
-            t_user_collection m,
-            t_post_picture p
+            t_user_collection m
         WHERE
             m.USER_ID = #{wxUserId,jdbcType = VARCHAR}
         AND u.ID = m.POST_ID
         AND w.USER_ID = u.USER_ID
-        AND m.POST_ID = p.POST_ID
         AND m.is_del = 0
         order by m.SORT_TIME
     </select>

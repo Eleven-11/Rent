@@ -44,4 +44,11 @@ public interface PostBaseDao {
      * @return
      **/
     JSONObject getUserPostInfo(JSONObject jsonObject);
+
+    /**
+     * 小程序：通过postId，判断帖子是否存在，isDel = 0
+     * @param jsonObject
+     * @return
+     **/
+    JSONObject getPostInfoByPostId(JSONObject jsonObject);
 }
