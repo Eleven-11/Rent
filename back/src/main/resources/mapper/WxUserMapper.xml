@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.WxUserDao">
+    <update id="updateWxUserSummary">
+        UPDATE t_wx_user
+        SET SUMMARY =#{summary}
+        WHERE USER_ID = #{userId}
+    </update>
     <select id="countWxUser" resultType="Integer">
         SELECT count(0)
         FROM t_wx_user
@@ -95,9 +100,9 @@
             WX_PROVINCE     wxProvince,
             WX_COUNTRY      wxCountry,
             SUMMARY         summary,
-            (SELECT COUNT(0) FROM t_user_follow a WHERE a.FAN_ID = USER_Id) follows,
-            ((SELECT COUNT(0)FROM t_user_follow a WHERE a.FOLLOW_ID =#{userId})+DEV_FANS) fans,
-            (SELECT COUNT(0) FROM t_post_base WHERE USER_ID =#{userId} AND IS_DEL =0) releaseNum
+            (SELECT COUNT(0) FROM t_user_follow a WHERE a.FAN_ID =b.USER_ID) follows,
+            ((SELECT COUNT(0) FROM t_user_follow a WHERE a.FOLLOW_ID =b.USER_ID)+DEV_FANS) fans,
+            (SELECT COUNT(0) FROM t_post_base WHERE USER_ID =b.USER_ID AND IS_DEL =0) releaseNum
         FROM t_wx_user b
         WHERE b.OPEN_ID = #{openId}
     </select>

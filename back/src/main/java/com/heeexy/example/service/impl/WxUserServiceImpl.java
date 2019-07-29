@@ -68,4 +68,10 @@ public class  WxUserServiceImpl implements WxUserService {
         return wxUserDao.getAuthStatus(jsonObject);
     }
 
+    @Override
+    public JSONObject updateWxUserSummary(JSONObject jsonObject) {
+        wxUserDao.updateWxUserSummary(jsonObject);
+        return CommonUtil.successJson(jsonObject.get("summary"));
+    }
+
 }

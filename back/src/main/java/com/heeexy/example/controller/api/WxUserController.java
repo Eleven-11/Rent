@@ -5,6 +5,7 @@ import com.heeexy.example.service.WxUserService;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,5 +45,14 @@ public class WxUserController {
     @GetMapping("/getWxUserInfo")
     public JSONObject getWxUserInfo(HttpServletRequest request) {
         return wxUserService.getWxUserInfo(CommonUtil.request2Json(request));
+    }
+    /**
+     * @description 修改用户简介
+     * @param request 用户id -- userId，用户简介 -- summary
+     * @return summary
+     **/
+    @PostMapping("/updateWxUserSummary")
+    public JSONObject updateWxUserSummary(HttpServletRequest request) {
+        return wxUserService.updateWxUserSummary(CommonUtil.request2Json(request));
     }
 }
