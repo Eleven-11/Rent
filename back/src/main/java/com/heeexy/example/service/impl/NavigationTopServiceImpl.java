@@ -28,6 +28,11 @@ public class NavigationTopServiceImpl implements NavigationTopService {
     private NavigationTopDao navigationTopDao;
     @Autowired
     private PostBaseDao postBaseDao;
+    /**
+     * @description 添加置顶帖子
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
     @Override
     public JSONObject insertNavigationTop(JSONObject jsonObject) {
         //判断置顶帖子条数是否超出5条
@@ -44,6 +49,11 @@ public class NavigationTopServiceImpl implements NavigationTopService {
             return CommonUtil.successJson(topPostId);
         }
     }
+    /**
+     * @description 获取模块置顶的帖子列表
+     * @param jsonObject
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
     @Override
     public List<JSONObject> getNavigationTopList(JSONObject jsonObject) {
         List<JSONObject> topJsonObject = navigationTopDao.getNavigationTopList(jsonObject);

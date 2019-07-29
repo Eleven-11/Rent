@@ -9,7 +9,7 @@
         POST_ID,
         SORT_TIME,
         CREATE_TIME
-        )VALUES(#navigationId,#{postId},NOW(),NOW());
+        )VALUES(#{navigationId},#{postId},NOW(),NOW());
         UPDATE t_navigation
         SET MAX_TOP_NUM =(SELECT COUNT(0) FROM t_navigation_top WHERE NAVIGATION_ID =#{navigationId})
         WHERE ID = #{navigationId};

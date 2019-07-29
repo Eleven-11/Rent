@@ -42,5 +42,10 @@ public interface WxUserDao {
      * @return
      **/
     JSONObject getAuthStatus(JSONObject jsonObject);
-
+    /**
+     * @description 修改用户信息
+     * @param
+     * @return
+     **/
+    void updateWxUserSummary(JSONObject jsonObject);
 }

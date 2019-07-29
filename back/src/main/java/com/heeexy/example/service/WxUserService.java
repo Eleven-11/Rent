@@ -34,4 +34,11 @@ public interface WxUserService {
      * @return
      **/
     JSONObject getAuthStatus(JSONObject jsonObject);
+
+    /**
+     * @description 更新用户简介
+     * @param
+     * @return
+     **/
+    JSONObject updateWxUserSummary(JSONObject jsonObject);
 }
