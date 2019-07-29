@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.WxReportDao">
+
+    <!-- 获取当天举报次数 -->
+    <select id="countUserReportToday" resultType="java.lang.Integer">
+        SELECT r.ID
+        FROM t_report_record r
+        WHERE r.USER_ID = #{userId}
+          AND  DATE_FORMAT(r.CREATE_TIME,'%Y-%m-%d')
+					= DATE_FORMAT(now(),'%Y-%m-%d')
+    </select>
+
+    <!-- 确认用户数会否已经举报过了 -->
+    <select id="queryReportByUserId" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT r.ID
+        FROM t_report_record r
+        WHERE r.USER_ID = #{userId}
+          AND r.TARGET_TYPE = #{targetType}
+          AND r.TARGET_ID = #{targetId}
+    </select>
+
+    <!-- 插入举报记录 -->
+    <insert id="insertReport">
+        INSERT INTO t_report_record (
+                USER_ID,
+                TARGET_TYPE,
+                TARGET_ID,
+                CREATE_TIME
+            ) VALUES (
+                #{userId},
+                #{targetType},
+                #{targetId},
+                now()
+            )
+    </insert>
+
+</mapper>
