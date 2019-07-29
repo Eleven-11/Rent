@@ -129,6 +129,9 @@ public class WxLoginController {
      *               微信用户国家-wxCountry
      *               创建时间-createTime
      *               最近活跃时间-activeTime
+     *               发布的帖子总数-releaseNum
+     *               粉丝总数-fans，
+     *               关注者条数-follows，
      *@return 首次登录返回系统用户信息userId
      *        其余情况返回用户信息
      */

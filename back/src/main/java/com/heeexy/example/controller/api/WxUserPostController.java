@@ -6,7 +6,7 @@ import com.heeexy.example.service.WxUserPostService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,8 +32,8 @@ public class WxUserPostController {
      * @param request
      * @return
      */
-    @PostMapping("/list")
-    public JSONObject insertPostBase(HttpServletRequest request){
+    @GetMapping("/list")
+    public JSONObject getWxUserPostList(HttpServletRequest request){
         try{
             return wxUserPostService.getWxUserPostList(CommonUtil.request2Json(request));
         } catch (WxPageException e) {
