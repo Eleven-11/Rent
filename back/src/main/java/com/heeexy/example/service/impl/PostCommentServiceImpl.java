@@ -44,9 +44,9 @@ public class PostCommentServiceImpl implements PostCommentService {
      * @return
      */
     @Override
-    public int insertComment(JSONObject jsonObject) {
+    public JSONObject insertComment(JSONObject jsonObject) {
         System.out.println(jsonObject);
-        return postCommentDao.insertComment(jsonObject);
+        return CommonUtil.successJson(postCommentDao.insertComment(jsonObject));
     }
 
     /**

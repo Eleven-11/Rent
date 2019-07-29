@@ -21,7 +21,7 @@ public interface PostCommentService {
      * @param jsonObject
      * @return
      */
-    int insertComment(JSONObject jsonObject);
+    JSONObject insertComment(JSONObject jsonObject);
 
     /**
      * 根据评论id逻辑删除评论

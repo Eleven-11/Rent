@@ -26,8 +26,8 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
      * @return java.util.List<com.alibaba.fastjson.JSONObject>
      **/
     @Override
-    public List<JSONObject> getAdvImgList(JSONObject jsonObject) {
-        return advertBannerDao.getAdvImg(jsonObject);
+    public JSONObject getAdvImgList(JSONObject jsonObject) {
+        return CommonUtil.successPage(advertBannerDao.getAdvImg(jsonObject));
     }
 
     /**

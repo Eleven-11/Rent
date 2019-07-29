@@ -30,7 +30,7 @@ public class WxPostCommentController {
      * @return 评论id（主键）-commentId
      **/
     @PostMapping("/insertComment")
-    public int insertComment(HttpServletRequest request) {
+    public JSONObject insertComment(HttpServletRequest request) {
         JSONObject jsonObject = CommonUtil.request2Json(request);
         System.out.println(jsonObject);
         if (jsonObject.get("receiveId")==null)

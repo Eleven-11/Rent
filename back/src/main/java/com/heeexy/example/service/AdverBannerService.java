@@ -10,7 +10,7 @@ public interface AdverBannerService {
      * @param
      * @return
      **/
-    List<JSONObject> getAdvImgList(JSONObject jsonObject);
+    JSONObject getAdvImgList(JSONObject jsonObject);
     /**
      * @description 新增广告栏图片信息
      * @param

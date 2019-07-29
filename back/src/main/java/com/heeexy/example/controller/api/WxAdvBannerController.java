@@ -31,8 +31,8 @@ public class WxAdvBannerController {
      *          广告栏图片标题-advTitle
      *          广告栏图片链接-advImg
      **/
-    @GetMapping("getAdvImgList")
-    public List<JSONObject> getAdvImgList(HttpServletRequest request){
+    @GetMapping("/getAdvImgList")
+    public JSONObject getAdvImgList(HttpServletRequest request){
         return adverBannerService.getAdvImgList(CommonUtil.request2Json(request));
     }
 }

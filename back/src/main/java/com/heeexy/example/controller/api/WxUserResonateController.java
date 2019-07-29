@@ -48,7 +48,7 @@ public class WxUserResonateController {
      * @param request 条数（可选）-limit，帖子Id-postId
      * @return 帖子点赞列表：点赞人头像likeImg和昵称likeNickname
      **/
-    @GetMapping("getPostLikeList")
+    @GetMapping("/getPostLikeList")
     public JSONObject getPostLikeList(HttpServletRequest request){
         return userResonateService.getPostLikeList(CommonUtil.request2Json(request));
     }
@@ -57,7 +57,7 @@ public class WxUserResonateController {
      * @param request 系统用户id-userId
      * @return
      **/
-    @GetMapping("getUserLikeList")
+    @GetMapping("/getUserLikeList")
     public JSONObject getUserLikePostList(HttpServletRequest request){
         return userResonateService.getUserLikePostList(CommonUtil.request2Json(request));
     }
