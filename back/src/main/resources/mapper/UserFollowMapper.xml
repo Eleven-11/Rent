@@ -2,30 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.UserFollowDao">
+
+    <!-- 后台dao方法实现 -->
+    <!-- 统计关注 -->
     <select id="countUserFollow" resultType="Integer">
         SELECT COUNT(1) totalFollow
-     FROM
-		(SELECT
-            m.WX_NICK_NAME follows
         FROM
             t_wx_user m,
             t_user_follow u
         WHERE
             u.FAN_ID = #{wxUserId,jdbcType = VARCHAR} AND u.FOLLOW_ID = m.USER_ID
-		) g
     </select>
+
+    <!-- 统计粉丝 -->
     <select id="countUserFans" resultType="Integer">
         SELECT COUNT(1) totalFans
-     FROM
-		(SELECT
             m.WX_NICK_NAME fans
         FROM
             t_wx_user m,
             t_user_follow u
         WHERE
             u.FOLLOW_ID = #{wxUserId,jdbcType = VARCHAR} AND u.FAN_ID = m.USER_ID
-		) g
     </select>
+
     <select id="getUserFollowList" resultType="com.alibaba.fastjson.JSONObject">
     SELECT
         m.WX_NICK_NAME follows
@@ -37,30 +36,37 @@
     </select>
 
     <select id="getUserFansList" resultType="com.alibaba.fastjson.JSONObject">
-    SELECT
-        m.WX_NICK_NAME fans
-    FROM
-        t_wx_user m,
-        t_user_follow u
-    WHERE
-        u.FOLLOW_ID = #{wxUserId,jdbcType = VARCHAR} AND u.FAN_ID = m.USER_ID
+        SELECT
+            m.WX_NICK_NAME fans
+        FROM
+            t_wx_user m,
+            t_user_follow u
+        WHERE
+            u.FOLLOW_ID = #{wxUserId,jdbcType = VARCHAR} AND u.FAN_ID = m.USER_ID
     </select>
+
+    <!-- 小程序dao方法实现 -->
+    <!-- 关注 -->
     <insert id="insertUserFollow">
         INSERT INTO t_user_follow (
-        FOLLOW_ID,
-        FAN_ID,
-        CREATE_TIME
-    )
-    VALUES
-        (
-            #{followId},
-            #{fanId},
-            now()
+            FOLLOW_ID,
+            FAN_ID,
+            CREATE_TIME
         )
+        VALUES
+            (
+                #{followId},
+                #{fanId},
+                now()
+            )
     </insert>
+
+    <!-- 是否已有关注条目 -->
     <select id="getIfFollow">
         SELECT ID FROM t_user_follow where t_user_follow.FAN_ID= #{fanId} and t_user_follow.FOLLOW_ID=#{followId}
     </select>
+
+    <!-- 更新关注状态 -->
     <update id="updateDelFollow">
         UPDATE t_user_follow
         SET IS_DEL =

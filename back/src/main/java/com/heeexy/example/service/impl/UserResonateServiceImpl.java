@@ -84,7 +84,7 @@ public class UserResonateServiceImpl implements UserResonateService {
         List<JSONObject> userLikePostIds =userResonateDao.getUserLikeList(jsonObject);
         List<JSONObject> userLikePostList=new ArrayList<>();
         for (int i=0;i<userLikePostIds.size();i++){
-            JSONObject userLikePost = postBaseDao.getUserPostInfo(userLikePostIds.get(i));
+            JSONObject userLikePost = postBaseDao.getWxUserPostInfo(userLikePostIds.get(i));
             userLikePostList.add(userLikePost);
         }
         int count = userLikePostIds.size();

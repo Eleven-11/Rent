@@ -35,7 +35,7 @@ public class UserBrowseServiceImpl implements UserBrowseService {
         List<JSONObject> userBrowsePostIds =userBrowseDao.getUserBrowse(jsonObject);
         List<JSONObject> userBrowsePostList=new ArrayList<>();
         for (int i=0;i<userBrowsePostIds.size();i++){
-            JSONObject userBrowsePost = postBaseDao.getUserPostInfo(userBrowsePostIds.get(i));
+            JSONObject userBrowsePost = postBaseDao.getWxUserPostInfo(userBrowsePostIds.get(i));
             userBrowsePostList.add(userBrowsePost);
         }
         int count = userBrowsePostIds.size();

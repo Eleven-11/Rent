@@ -2,6 +2,7 @@ package com.heeexy.example.util;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.config.exception.CommonJsonException;
+import com.heeexy.example.config.exception.WxPageException;
 import com.heeexy.example.util.constants.Constants;
 import com.heeexy.example.util.constants.ErrorEnum;
 
@@ -130,7 +131,7 @@ public class CommonUtil {
 						sb.append(",");
 					}
 					sb.append(pv[i]);
-                    System.out.println(pv[i]);
+//                    System.out.println(pv[i]);
 				}
 			}
 			requestJson.put(paramName, sb.toString());
@@ -199,5 +200,26 @@ public class CommonUtil {
 	 */
 	public static void fillPageParam(final JSONObject paramObject) {
 		fillPageParam(paramObject, 10);
+	}
+
+
+	/**
+	 * 处理微信分页参数
+	 * 参数必须有 pageNum，pageSize
+	 * @param jsonObject
+	 * @return
+	 * @throws WxPageException
+	 */
+	public static JSONObject WxPageParam(JSONObject jsonObject) throws WxPageException{
+		try{
+			Integer pageNum = jsonObject.get("pageNum") != null ? Integer.valueOf(jsonObject.get("pageNum").toString()) : 1;
+			Integer pageSize = jsonObject.get("pageSize") != null ? Integer.valueOf(jsonObject.get("pageSize").toString()) : 10;
+			jsonObject.put("start",(pageNum - 1) * pageSize);
+			jsonObject.put("end", pageSize - 1);
+			return jsonObject;
+		}catch (Exception e){
+			//抛出自定义的分页异常
+			throw new WxPageException();
+		}
 	}
 }

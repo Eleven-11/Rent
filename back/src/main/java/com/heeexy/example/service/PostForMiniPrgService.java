@@ -1,6 +1,7 @@
 package com.heeexy.example.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.config.exception.WxPageException;
 import com.heeexy.example.util.model.PostDto;
 
 import java.util.List;
@@ -17,5 +18,5 @@ public interface PostForMiniPrgService {
      * @param jsonObject
      * @return
      */
-    List<PostDto> getPostInfo(JSONObject jsonObject);
+    JSONObject getPostInfo(JSONObject jsonObject) throws WxPageException;
 }

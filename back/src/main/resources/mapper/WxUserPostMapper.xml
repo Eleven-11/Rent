@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.WxUserPostDao">
+
+    <!-- 查询微信用户帖子列表 -->
+    <select id="getWxUserPostList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            u.USER_ID           postUserId,
+            u.WX_NICK_NAME      poster,
+            u.WX_GENDER         posterGender,
+            u.WX_AVATAR_URL     posterAvatar,
+            f.TYPE_NAME         typeName,
+            m.ID                postId,
+            m.CREATE_TIME       createTime,
+            m.ADDRESS           address,
+            m.LABELS            postLabels,
+            m.CONTENT           content,
+            m.MIN_PRICE         minPrice,
+            m.MAX_PRICE         maxPrice,
+            m.PHONE             phone,
+            m.TOTAL_COMMENTS    comments,
+            m.TOTAL_BROWSE+m.DEV_BROWSE          browse,
+            m.TOTAL_RESONATE+m.DEV_RESONATE      likes,
+            m.TOTAL_COLLECTION  collection,
+            m.FEE               fee,
+            m.ACTIVE_TIME       activeTimes
+        FROM
+          t_wx_user u,
+          t_post_base m,
+          t_post_type f
+        WHERE
+          m.IS_DEL='0'
+          AND m.USER_ID = #{userId}
+          AND u.USER_ID = m.USER_ID
+          AND m.TYPE_ID = f.ID
+          AND m.IS_LOWER_SHELF = '0'
+          AND m.IS_DEL = '0'
+        ORDER BY m.CREATE_TIME DESC
+        LIMIT ${start},${end}
+    </select>
+
+    <!-- 查询帖子是否属于该用户（不包含逻辑删除） -->
+    <select id="queryPostByUserIdPostId" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            m.ID                postId
+        FROM
+          t_post_base m
+        WHERE
+          m.IS_DEL='0'
+          AND m.USER_ID = #{userId}
+          AND m.POST_ID = #{postId}
+    </select>
+
+</mapper>

@@ -20,7 +20,8 @@ public enum ErrorEnum {
 	/**
 	 * 小程序错误
 	 */
-	WX_601("WX_601"," 帖子不存在");
+	WX_601("WX_601","帖子不存在"),
+	WX_900("WX_900","分页参数错误"),;
 
 	private String errorCode;
 

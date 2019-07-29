@@ -38,17 +38,28 @@ public interface PostBaseDao {
      * @return
      */
     void insertPostBase(JSONObject jsonObject);
+
+
+    //------------- 小程序相关操作 ----------------
+
+    /**
+     * 获取帖子列表，包括帖子的基本信息
+     * @param jsonObject
+     * @return
+     */
+    List<JSONObject> getWxPostBaseList(JSONObject jsonObject);
+
     /**
      * 小程序：获取用户点赞的帖子、评论的帖子、浏览过的帖子部分信息用于页面显示
      * @param jsonObject
      * @return
      **/
-    JSONObject getUserPostInfo(JSONObject jsonObject);
+    JSONObject getWxUserPostInfo(JSONObject jsonObject);
 
     /**
      * 小程序：通过postId，判断帖子是否存在，isDel = 0
      * @param jsonObject
      * @return
      **/
-    JSONObject getPostInfoByPostId(JSONObject jsonObject);
+    JSONObject getWxPostInfoByPostId(JSONObject jsonObject);
 }

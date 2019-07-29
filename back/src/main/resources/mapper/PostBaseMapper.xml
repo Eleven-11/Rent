@@ -2,6 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.PostBaseDao">
+
+    <!-- 后台帖子dao实现 -->
     <select id="countPost" resultType="java.lang.Integer">
         select count(0) from (SELECT
         u.WX_NICK_NAME      poster,
@@ -56,7 +58,9 @@
         </if>
         ORDER BY
         ACTIVE_TIME DESC) g
+
     </select>
+
     <insert id="insertPostBase" useGeneratedKeys="true" keyProperty="postId" parameterType="com.alibaba.fastjson.JSONObject">
          INSERT INTO t_post_base (
             USER_ID,
@@ -118,6 +122,7 @@
             #{fee}
             )
     </insert>
+
     <select id="getPostBaseList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
         u.WX_NICK_NAME      poster,
@@ -148,10 +153,10 @@
         WHERE
         m.TYPE_ID = f.ID
         AND u.USER_ID = m.USER_ID
-        <if test="isMiniPro !=null and isMiniPro!=''">
-            AND m.IS_LOWER_SHELF = '0'
-            AND m.IS_DEL = '0'
-        </if>
+        <!--<if test="isMiniPro !=null and isMiniPro!=''">-->
+            <!--AND m.IS_LOWER_SHELF = '0'-->
+            <!--AND m.IS_DEL = '0'-->
+        <!--</if>-->
         <if test="typeId !=null and typeId !=''">
             AND m.TYPE_ID = #{typeId}
         </if>
@@ -173,6 +178,7 @@
         ORDER BY
             ACTIVE_TIME DESC
     </select>
+
     <update id="updatePostBase">
         UPDATE t_post_base
         SET IS_DEL=0
@@ -187,7 +193,10 @@
         </if>
         WHERE ID = #{postId}
     </update>
-    <select id="getUserPostInfo" resultType="com.alibaba.fastjson.JSONObject">
+
+    <!-- 微信dao方法实现 -->
+    <!-- 用户帖子详情 -->
+    <select id="getWxUserPostInfo" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
         u.WX_NICK_NAME      poster,
         u.WX_GENDER         posterGender,
@@ -208,8 +217,8 @@
         AND m.ID =#{postId}
     </select>
 
-    <!-- 通过postId 校验是否存在帖子-->
-    <select id="getPostInfoByPostId" resultType="com.alibaba.fastjson.JSONObject">
+    <!-- 获取帖子详情 -->
+    <select id="getWxPostInfoByPostId" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
           ID         postId
         FROM
@@ -217,6 +226,55 @@
         WHERE
          ID = #{postId}
          AND IS_DEL = '0'
+    </select>
+
+    <!-- 微信分页加载帖子列表 -->
+    <select id="getWxPostBaseList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        u.USER_ID           postUserId,
+        u.WX_NICK_NAME      poster,
+        u.WX_GENDER         posterGender,
+        u.WX_AVATAR_URL     posterAvatar,
+        f.TYPE_NAME         typeName,
+        m.ID                postId,
+        m.CREATE_TIME       createTime,
+        m.ADDRESS           address,
+        m.LABELS            postLabels,
+        m.CONTENT           content,
+        m.MIN_PRICE         minPrice,
+        m.MAX_PRICE         maxPrice,
+        m.PHONE             phone,
+        m.TOTAL_COMMENTS    comments,
+        m.TOTAL_BROWSE+m.DEV_BROWSE          browse,
+        m.TOTAL_RESONATE+m.DEV_RESONATE      likes,
+        m.TOTAL_COLLECTION  collection,
+        m.FEE               fee,
+        m.ACTIVE_TIME       activeTime,
+        (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
+        FROM
+        t_wx_user u,
+        t_post_base m,
+        t_post_type f
+        WHERE
+        m.TYPE_ID = f.ID
+        AND u.USER_ID = m.USER_ID
+        AND m.IS_LOWER_SHELF = '0'
+        AND m.IS_DEL = '0'
+        <if test="typeId !=null and typeId !=''">
+            AND m.TYPE_ID = #{typeId}
+        </if>
+        <if test="postId !=null and postId !=''">
+            AND m.ID = #{postId}
+        </if>
+        <if test="nickName != null and nickName != ''">
+            AND u.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
+        </if>
+        <if test="keyword !=null and keyword !=''">
+            AND (m.CONTENT LIKE CONCAT(CONCAT('%',#{keyword}),'%') OR m.ADDRESS LIKE CONCAT(CONCAT('%',#{keyword}),'%'))
+        </if>
+        ORDER BY
+        ACTIVE_TIME DESC
+        LIMIT ${start},${end}
     </select>
 
 </mapper>
