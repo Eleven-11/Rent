@@ -38,6 +38,8 @@ public class WxUserPostController {
             return wxUserPostService.getWxUserPostList(CommonUtil.request2Json(request));
         } catch (WxPageException e) {
             return CommonUtil.errorJson(ErrorEnum.WX_900);
+        }catch (Exception e){
+            return CommonUtil.errorJson(ErrorEnum.E_405);
         }
     }
 }
