@@ -46,7 +46,7 @@ public class UserCollectionServiceImpl implements UserCollectionService {
     public JSONObject sortUserColl(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
         System.out.println(jsonObject.toJSONString());
-        userCollectionDao.updateUserColl(jsonObject);
+        userCollectionDao.sortUserColl(jsonObject);
         return CommonUtil.successJson("操作成功！请刷新后查看");
     }
 

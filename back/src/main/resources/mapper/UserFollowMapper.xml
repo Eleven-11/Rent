@@ -17,7 +17,6 @@
     <!-- 统计粉丝 -->
     <select id="countUserFans" resultType="Integer">
         SELECT COUNT(1) totalFans
-            m.WX_NICK_NAME fans
         FROM
             t_wx_user m,
             t_user_follow u
@@ -27,7 +26,11 @@
 
     <select id="getUserFollowList" resultType="com.alibaba.fastjson.JSONObject">
     SELECT
-        m.WX_NICK_NAME follows
+        m.WX_NICK_NAME followNickname,
+        m.USER_ID followId,
+        m.WX_AVATAR_URL fanAvatar,
+        m.WX_GENDER followGender,
+        (SELECT IFNULL((SELECT ID FROM t_user_follow u WHERE u.FAN_ID =#{wxUserId} AND u.FOLLOW_ID = followId),'0')) isFollow
     FROM
         t_wx_user m,
         t_user_follow u
@@ -37,12 +40,17 @@
 
     <select id="getUserFansList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
-            m.WX_NICK_NAME fans
+            m.WX_NICK_NAME fanNickname,
+            m.USER_ID fanId,
+            m.WX_AVATAR_URL fanAvatar,
+            m.WX_GENDER fanGender,
+        (SELECT IFNULL((SELECT ID FROM t_user_follow u WHERE u.FAN_ID =#{wxUserId} AND u.FOLLOW_ID = fanId),'0')) isFollow
         FROM
             t_wx_user m,
             t_user_follow u
         WHERE
-            u.FOLLOW_ID = #{wxUserId,jdbcType = VARCHAR} AND u.FAN_ID = m.USER_ID
+            u.FOLLOW_ID = #{wxUserId}
+        AND u.FAN_ID = m.USER_ID
     </select>
 
     <!-- 小程序dao方法实现 -->
@@ -62,7 +70,7 @@
     </insert>
 
     <!-- 是否已有关注条目 -->
-    <select id="getIfFollow">
+    <select id="getIfFollow" resultType="com.alibaba.fastjson.JSONObject">
         SELECT ID FROM t_user_follow where t_user_follow.FAN_ID= #{fanId} and t_user_follow.FOLLOW_ID=#{followId}
     </select>
 

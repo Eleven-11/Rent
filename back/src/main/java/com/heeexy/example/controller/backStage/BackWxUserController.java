@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * @date: 2019-07-23 17:05
  */
 @RestController
-@RequestMapping("/wxUser")
+@RequestMapping("/bkwxUser")
 public class BackWxUserController {
 
     @Autowired

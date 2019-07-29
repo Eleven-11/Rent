@@ -2,6 +2,8 @@ package com.heeexy.example.dao;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.List;
+
 /**
  * @author: Lingling
  * @description: 置顶帖子
@@ -13,5 +15,13 @@ public interface NavigationTopDao {
      * @param jsonObject
      * @return
      */
-    Integer insertNavigationTop(JSONObject jsonObject);
+    int insertNavigationTop(JSONObject jsonObject);
+
+    /**
+     * @description 查询模块置顶帖子列表
+     * @param
+     * @return
+     **/
+    List<JSONObject> getNavigationTopList(JSONObject jsonObject);
+
 }
