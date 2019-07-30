@@ -54,7 +54,7 @@
                 '1',
                 #{postId},
                 #{userId},
-                DATE_FORMAT(#{postLikeCreateTime},'%Y.%m.%d %T')
+               NOW()
             );
         UPDATE t_post_base
         SET TOTAL_RESONATE = (select count(0) from t_user_resonate where TARGET_ID=#{postId}), ACTIVE_TIME = NOW()
@@ -95,7 +95,13 @@
             b.CREATE_TIME DESC
 
     </select>
-
+    <!-- 判断用户是否点赞过该帖子-->
+    <select id="getIfLiked" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT ID
+        FROM t_user_resonate
+        WHERE USER_ID = #{userId}
+          AND TARGET_ID = #{postId}
+    </select>
     <!-- 判断用户是否已收藏，is_del = 0 -->
     <select id="getByUserIdPostId" resultType="com.alibaba.fastjson.JSONObject">
         SELECT ID

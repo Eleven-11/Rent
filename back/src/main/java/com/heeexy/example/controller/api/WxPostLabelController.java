@@ -25,7 +25,7 @@ public class WxPostLabelController {
     private PostLabelService postLabelService;
     /**
      * @description 获取帖子标签列表
-     * @param request（待定）（父类标签id-labelParentId）
+     * @param request（父类标签id-labelParentId） -- 1.家用设备，2.热门商圈，3.地铁周边
      * @return com.alibaba.fastjson.JSONObject
      **/
     @GetMapping("/getPostLabelList")

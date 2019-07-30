@@ -26,24 +26,15 @@ public class WxUserResonateController {
     private UserResonateService userResonateService;
 
     /**
-     * @description 添加用户点赞信息
-     * @param request 帖子id-postId,系统用户id-userId，插入数据库的数据同时包括点赞时间，在service层生成
-     * @return 无返回值
-     **/
-    @PostMapping("/insertPostLike")
-    public JSONObject insertPostLike(HttpServletRequest request) {
-        return userResonateService.insertPostLike(CommonUtil.request2Json(request));
-    }
-
-    /**
-     * @description 用户更改点赞状态（在已点过赞的基础上取消赞或取消后重新点赞）
+     * @description 添加用户点赞信息,点赞后取消，取消后重新点赞
      * @param request 帖子id-postId,系统用户id-userId
      * @return 无返回值
      **/
-    @PostMapping("/updateDelPostLike")
-    public JSONObject updateDelPostLike(HttpServletRequest request) {
-        return userResonateService.updateDelPostLike(CommonUtil.request2Json(request));
+    @PostMapping("/updatePostLike")
+    public JSONObject updatePostLike(HttpServletRequest request) {
+        return userResonateService.updatePostLike(CommonUtil.request2Json(request));
     }
+
     /**
      * @description 获取帖子点赞列表
      * @param request 条数（可选）-limit，帖子Id-postId

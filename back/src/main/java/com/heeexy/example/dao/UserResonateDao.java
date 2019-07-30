@@ -48,10 +48,16 @@ public interface UserResonateDao {
     List<JSONObject> getUserLikeList(JSONObject jsonObject);
 
     /**
-     * 判断用户是否点赞过
+     * 判断用户是否点赞
      * is_del = 0
      * @param jsonObject
      */
     JSONObject getByUserIdPostId(JSONObject jsonObject);
 
+    /**
+     * @description 判断用户是否点赞过，用于更新点赞状态（即包括取消点赞状态的记录）
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject getIfLiked(JSONObject jsonObject);
 }

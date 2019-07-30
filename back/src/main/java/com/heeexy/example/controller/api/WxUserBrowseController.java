@@ -33,7 +33,7 @@ public class WxUserBrowseController {
     }
     /**
      * @description 添加用户浏览信息，同时更新对应帖子的浏览量
-     * @param request
+     * @param request 系统用户id - userId，帖子id - postId
      * @return com.alibaba.fastjson.JSONObject
      **/
     @GetMapping("/insertUserBrowse")

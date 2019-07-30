@@ -8,9 +8,7 @@ import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,30 +46,20 @@ public class UserResonateServiceImpl implements UserResonateService {
     }
 
     /**
-     * 添加帖子点赞信息
-     * @param jsonObject
-     * @return
-     */
-    @Override
-    public JSONObject insertPostLike(JSONObject jsonObject) {
-        /*获取用户首次点赞帖子信息的时间*/
-        Date postLikeCreateTime = new Date();
-        SimpleDateFormat dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        System.out.println(dateFormat.format(postLikeCreateTime));
-        jsonObject.put("postLikeCreateTime",postLikeCreateTime);
-        userResonateDao.insertPostLike(jsonObject);
-        return CommonUtil.successJson();
-    }
-
-    /**
      * 取消点赞信息
      * @param jsonObject
      * @return
      */
     @Override
-    public JSONObject updateDelPostLike(JSONObject jsonObject) {
-       userResonateDao.updateDelPostLike(jsonObject);
-       return CommonUtil.successJson();
+    public JSONObject updatePostLike(JSONObject jsonObject) {
+        if(userResonateDao.getIfLiked(jsonObject)!=null){
+            userResonateDao.updateDelPostLike(jsonObject);
+            return CommonUtil.successJson();
+        }
+        else{
+            userResonateDao.insertPostLike(jsonObject);
+            return CommonUtil.successJson();
+        }
     }
     /**
      * @description 获取用户点赞列表

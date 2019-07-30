@@ -17,18 +17,11 @@ public interface UserResonateService {
     JSONObject getPostLikeList(JSONObject jsonObject);
 
     /**
-     * 添加帖子点赞信息
+     * @description 更新帖子点赞信息（首次点赞，取消点赞，取消后重新点赞）
      * @param jsonObject
-     * @return
-     */
-    JSONObject insertPostLike(JSONObject jsonObject);
-
-    /**
-     * 取消点赞信息
-     * @param jsonObject
-     * @return
-     */
-    JSONObject updateDelPostLike(JSONObject jsonObject);
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject updatePostLike(JSONObject jsonObject);
     /**
      * @description 获取用户点赞过的帖子id列表
      *
