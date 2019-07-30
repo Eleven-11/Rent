@@ -49,6 +49,7 @@ public interface UserResonateDao {
 
     /**
      * 判断用户是否点赞过
+     * is_del = 0
      * @param jsonObject
      */
     JSONObject getByUserIdPostId(JSONObject jsonObject);

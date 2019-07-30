@@ -96,9 +96,12 @@
 
     </select>
 
-    <!-- 判断用户是否已收藏 -->
+    <!-- 判断用户是否已收藏，is_del = 0 -->
     <select id="getByUserIdPostId" resultType="com.alibaba.fastjson.JSONObject">
-        select id from t_user_resonate
-        where USER_ID = #{userId} and TARGET_ID = #{postId}
+        SELECT ID
+        FROM t_user_resonate
+        WHERE USER_ID = #{userId}
+          AND TARGET_ID = #{postId}
+          AND IS_DEL = 0
     </select>
 </mapper>
