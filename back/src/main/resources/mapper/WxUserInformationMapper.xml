@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.WxUserInformationDao">
+
+    <!-- 查询用户收到的最新消息集合 -->
+    <select id="getNewInformationByUserIdFlagTime" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+          u.WX_AVATAR_URL       startAvatarUrl,
+          u.WX_NICK_NAME        startNickName,
+          u.WX_GENDER           startGender,
+          i.START_ID            startId,
+          i.CONTENT             content,
+          i.CREATE_TIME         createTime
+        FROM t_user_information i,
+             t_wx_user u
+        WHERE i.IS_DEL = 0
+          AND i.RECEIVE_ID = #{receiveId}
+          AND CREATE_TIME > #{flagTime}
+          AND u.USER_ID = i.STRAT_ID
+    </select>
+
+
+    <!-- 创建消息条目 -->
+    <insert id="insertInformation">
+        insert into t_user_information (
+                START_ID
+                RECEIVE_ID,
+                CONTENT,
+                CREATE_TIME
+              ) values (
+                #{startId},
+                #{receiveId},
+                #{content},
+                now()
+              );
+    </insert>
+
+</mapper>

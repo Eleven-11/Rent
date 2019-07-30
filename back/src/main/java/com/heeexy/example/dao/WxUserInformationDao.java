@@ -9,7 +9,7 @@ import java.util.List;
  * @description: 用户消息dao接口定义
  * @date: 2019-07-29 20:03
  */
-public interface UserInformationDao {
+public interface WxUserInformationDao {
 
 
     /**
@@ -18,6 +18,12 @@ public interface UserInformationDao {
      * flagTime 参考时间
      * @param jsonObject
      * @return
+     *          startAvatarUrl
+     *          startNickName
+     *          startGender
+     *          startId
+     *          content
+     *          createTime
      */
     List<JSONObject> getNewInformationByUserIdFlagTime(JSONObject jsonObject);
 
