@@ -7,6 +7,11 @@
     <!-- 校验是否已收藏该帖子 -->
     <select id="getIfCollect" resultType="com.alibaba.fastjson.JSONObject">
         select id from t_user_collection
+        where USER_ID = #{userId} and POST_ID = #{postId} AND IS_DEL=0
+    </select>
+    <!--判断用户是否收藏过该帖（包含取消收藏状态）-->
+    <select id="getIfCollected" resultType="com.alibaba.fastjson.JSONObject">
+        select id from t_user_collection
         where USER_ID = #{userId} and POST_ID = #{postId}
     </select>
 
@@ -62,6 +67,7 @@
         AND m.is_del = 0
         order by m.SORT_TIME
     </select>
+
 
     <!-- 收藏帖子排序 -->
     <update id="sortUserColl" >

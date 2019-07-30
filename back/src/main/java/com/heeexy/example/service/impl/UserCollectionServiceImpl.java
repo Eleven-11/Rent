@@ -5,7 +5,6 @@ import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.dao.UserCollectionDao;
 import com.heeexy.example.service.UserCollectionService;
 import com.heeexy.example.util.CommonUtil;
-import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +61,7 @@ public class UserCollectionServiceImpl implements UserCollectionService {
 //        if (postBaseDao.getPostInfoByPostId(jsonObject) == null){
 //            return CommonUtil.errorJson(ErrorEnum.WX_601);
 //        }
-        if(userCollectionDao.getIfCollect(jsonObject)!=null){
+        if(userCollectionDao.getIfCollected(jsonObject)!=null){
             userCollectionDao.updateDelCollect(jsonObject);
         }
         else {

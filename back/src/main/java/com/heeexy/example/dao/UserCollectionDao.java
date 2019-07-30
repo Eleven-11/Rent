@@ -40,6 +40,12 @@ public interface UserCollectionDao {
     int insertUserCollection(JSONObject jsonObject);
 
     /**
+     * 判断用户是否收藏过指定帖子（用于更新收藏状态，因此包含已取消收藏状态的判断）
+     * @param jsonObject
+     * @return
+     */
+    JSONObject getIfCollected(JSONObject jsonObject);
+    /**
      * 判断用户是否收藏指定帖子
      * @param jsonObject
      * @return

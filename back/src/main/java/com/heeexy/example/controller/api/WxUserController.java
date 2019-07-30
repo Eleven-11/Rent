@@ -44,6 +44,8 @@ public class WxUserController {
      **/
     @GetMapping("/getWxUserInfo")
     public JSONObject getWxUserInfo(HttpServletRequest request) {
+        JSONObject jsonObject = CommonUtil.request2Json(request);
+        System.out.println(wxUserService.getWxUserInfo(jsonObject));
         return wxUserService.getWxUserInfo(CommonUtil.request2Json(request));
     }
     /**

@@ -24,4 +24,6 @@ public interface NavigationTopDao {
      **/
     List<JSONObject> getNavigationTopList(JSONObject jsonObject);
 
+    void updateNavigationTop(JSONObject jsonObject);
+
 }

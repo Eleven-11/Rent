@@ -15,6 +15,9 @@
         WHERE ID = #{navigationId};
         COMMIT;
     </insert>
+    <!--<update id="updateNavigationTop">
+
+    </update>-->
     <select id="getNavigationTopList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             a.NAVIGATION_ID navigationId,

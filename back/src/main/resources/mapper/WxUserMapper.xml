@@ -73,7 +73,7 @@
         WX_PROVINCE     wxProvince,
         WX_COUNTRY      wxCountry,
         SUMMARY         summary,
-        ((SELECT COUNT(0)FROM t_user_follow a WHERE a.FOLLOW_ID =#{userId})+DEV_FANS) fans,
+        ((SELECT COUNT(0)FROM t_user_follow a WHERE a.FOLLOW_ID =#{userId} AND IS_DEL =0)+DEV_FANS) fans,
         (SELECT COUNT(0)FROM t_user_follow a WHERE a.FAN_ID =#{userId}) followers,
         <if test="myUserId != null and myUserId != ''">
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID = #{myUserId} AND u.FOLLOW_ID=#{userId} AND u.IS_DEL = 0),'0')) isFollow,

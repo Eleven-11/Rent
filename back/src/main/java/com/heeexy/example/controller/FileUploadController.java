@@ -30,6 +30,7 @@ public class FileUploadController {
     @RequestMapping(value = "/upload")
     @ResponseBody
     public String imgUpload(HttpServletRequest req, MultipartHttpServletRequest multiReq) throws IOException {
+        System.out.println("进来了");
         MultipartFile file = multiReq.getFile("file");
         String originalFileName = file.getOriginalFilename();
         String desFilePath =
@@ -55,6 +56,7 @@ public class FileUploadController {
         }
         File newFile = new File(srcUrl);
         file.transferTo(newFile);*/
+        System.out.println(srcUrl);
         return srcUrl;
     }
 }
