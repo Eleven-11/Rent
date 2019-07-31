@@ -76,7 +76,7 @@ public class PostBaseServiceImpl implements PostBaseService {
             如需修改postId为String自定义ID，请修改所有带有postId的表字段，并修改
             下面的插入方法对应的xml实现
         */
-        if (postBaseDao.getReleaseTime(jsonObject) <= 5) {
+        if (postBaseDao.getReleaseTime(jsonObject) <5) {
             postBaseDao.insertPostBase(jsonObject);
             //判断是否有上传图片集合
             if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {

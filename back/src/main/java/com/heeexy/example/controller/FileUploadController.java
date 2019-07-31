@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 
@@ -22,41 +21,50 @@ public class FileUploadController {
 
     /**
      * 文件上传
-     * @param req
+     * @param
      * @param multiReq
      * @return
      * @throws IOException
      */
     @RequestMapping(value = "/upload")
     @ResponseBody
-    public String imgUpload(HttpServletRequest req, MultipartHttpServletRequest multiReq) throws IOException {
-        System.out.println("进来了");
+    public String imgUpload(String type, MultipartHttpServletRequest multiReq) throws IOException {
         MultipartFile file = multiReq.getFile("file");
         String originalFileName = file.getOriginalFilename();
-        String desFilePath =
-                "E:" + File.separator+"image"
-                        + File.separator+"rent"
-                        + "/" ;
-        String newFileName = FileNameUtils.getFileName(originalFileName);
-        File dir = new File(desFilePath, newFileName);
-        File filepath = new File(desFilePath);
-        if(!filepath.exists()){
-            filepath.mkdirs();
+        if("chat".equals(type)) {
+            String desFilePath =
+                    "E:" + File.separator + "image"
+                            + File.separator + "rent"
+                            + File.separator + "chat"
+                            + "/";
+            String newFileName = FileNameUtils.getFileName(originalFileName);
+            File dir = new File(desFilePath, newFileName);
+            File filepath = new File(desFilePath);
+            if (!filepath.exists()) {
+                filepath.mkdirs();
+            }
+            file.transferTo(dir);
+            String srcUrl = "http://192.168.1.7:8080/image/chat" + newFileName;
+            System.out.println(srcUrl);
+            return srcUrl;
         }
-        file.transferTo(dir);
-        /*if (!localFile.exists()) {
-            localFile.createNewFile();
-            file.transferTo(localFile);
-        }*/
-        String srcUrl ="http://192.168.1.7:8080/image/"+newFileName;
-        /*File serverDir = new File(srcUrl,newFileName);
-        if(!serverDir.exists())
-        {
-            serverDir.mkdirs();
+        else{
+            String desFilePath =
+                    "E:" + File.separator + "image"
+                            + File.separator + "rent"
+                            + File.separator + "static"
+                            + "/";
+            String newFileName = FileNameUtils.getFileName(originalFileName);
+            File dir = new File(desFilePath, newFileName);
+            File filepath = new File(desFilePath);
+            if (!filepath.exists()) {
+                filepath.mkdirs();
+            }
+            file.transferTo(dir);
+            String srcUrl = "http://192.168.1.7:8080/image/static" + newFileName;
+            System.out.println(srcUrl);
+            return srcUrl;
+
         }
-        File newFile = new File(srcUrl);
-        file.transferTo(newFile);*/
-        System.out.println(srcUrl);
-        return srcUrl;
     }
 }

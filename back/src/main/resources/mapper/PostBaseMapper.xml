@@ -278,7 +278,7 @@
     </select>
     <select id="getReleaseTime" resultType="INTEGER">
         SELECT
-            COUNT(0)
+            COUNT(0) releaseNum
         FROM
             t_post_base a
         WHERE
