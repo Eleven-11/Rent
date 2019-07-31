@@ -276,5 +276,15 @@
         ACTIVE_TIME DESC
         LIMIT ${start},${end}
     </select>
+    <select id="getReleaseTime" resultType="INTEGER">
+        SELECT
+            COUNT(0) releaseNum
+        FROM
+            t_post_base a
+        WHERE
+            DAY (a.CREATE_TIME) = DAY (NOW())
+        AND a.USER_ID = #{posterId}
+        AND a.IS_DEL = 0
+    </select>
 
 </mapper>

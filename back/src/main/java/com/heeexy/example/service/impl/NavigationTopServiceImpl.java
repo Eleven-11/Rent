@@ -65,4 +65,15 @@ public class NavigationTopServiceImpl implements NavigationTopService {
         }
         return navigationTopList;
     }
+
+    /**
+     * @description 更新置顶帖子
+     * @param jsonObject
+     * @return void
+     **/
+    @Override
+    public JSONObject updateNavigationTop(JSONObject jsonObject) {
+        navigationTopDao.updateNavigationTop(jsonObject);
+        return CommonUtil.successJson("修改成功，刷新后查看！");
+    }
 }

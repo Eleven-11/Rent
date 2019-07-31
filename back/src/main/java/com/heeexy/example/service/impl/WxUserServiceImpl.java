@@ -4,11 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.WxUserDao;
 import com.heeexy.example.service.WxUserService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 
 /**
@@ -42,7 +42,7 @@ public class  WxUserServiceImpl implements WxUserService {
      **/
     @Override
     public String insertWxUser(JSONObject jsonObject) {
-        String userId =UUID.randomUUID().toString();
+        String userId = UUIDUtils.getUUID();
         jsonObject.put("userId",userId);
         wxUserDao.insertWxUser(jsonObject);
         return userId;

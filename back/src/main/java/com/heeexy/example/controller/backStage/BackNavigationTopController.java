@@ -41,8 +41,13 @@ public class BackNavigationTopController {
     public JSONObject getNavigationTopList(HttpServletRequest request){
         return CommonUtil.successJson(navigationTopService.getNavigationTopList(CommonUtil.request2Json(request)));
     }
-
-
-
-
+    /**
+     * @description 更新导航栏置顶帖子信息
+     * @param
+     * @return
+     **/
+    @PostMapping("/updateNavigationTop")
+    public JSONObject updateNavigationTop(HttpServletRequest request){
+        return navigationTopService.updateNavigationTop(CommonUtil.request2Json(request));
+    }
 }

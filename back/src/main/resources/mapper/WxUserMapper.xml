@@ -15,7 +15,7 @@
             t_wx_user.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
 		</if>
             <if test="startTime != null and startTime != '' and endTime != null and endTime !=''" >
-			and date(t_wx_user.UPDATE_TIME) BETWEEN startTime and endTime
+			and date(t_wx_user.UPDATE_TIME) BETWEEN #{startTime} and #{endTime}
 			</if>
         </where>
     </select>
@@ -31,8 +31,8 @@
         WX_PROVINCE     wxProvince,
         WX_COUNTRY      wxCountry,
         DEV_FANS        devFans,
-        DATE_FORMAT(CREATE_TIME, '%Y.%m.%d %T')    createTime,
-        DATE_FORMAT(UPDATE_TIME, '%Y.%m.%d %T')    updateTime,
+        DATE_FORMAT(CREATE_TIME, '%Y-%m-%d %T')    createTime,
+        DATE_FORMAT(UPDATE_TIME, '%Y-%m-%d %T')    updateTime,
         (SELECT COUNT(0)FROM t_user_follow a WHERE a.FOLLOW_ID =#{userId}) fans,
         (SELECT COUNT(0)FROM t_user_follow a WHERE a.FAN_ID =#{userId}) followers,
         (SELECT COUNT(0) FROM t_post_base WHERE USER_ID =#{userId} AND IS_DEL =0) releaseNum
@@ -45,6 +45,9 @@
             </if>
             <if test="nickname != null and nickname != ''">
                 AND t_wx_user.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
+            </if>
+            <if test="startTime != null and startTime != '' and endTime != null and endTime !=''" >
+                and date(t_wx_user.UPDATE_TIME) BETWEEN #{startTime} and #{endTime}
             </if>
         </where>
     </select>

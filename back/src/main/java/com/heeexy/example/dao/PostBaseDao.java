@@ -62,4 +62,10 @@ public interface PostBaseDao {
      * @return
      **/
     JSONObject getWxPostInfoByPostId(JSONObject jsonObject);
+    /**
+     * 小程序：判断用户发帖次数是否超过上限
+     * @param
+     * @return
+     **/
+    int getReleaseTime(JSONObject jsonObject);
 }
