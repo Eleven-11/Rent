@@ -17,4 +17,10 @@ public interface NavigationTopService {
      * @return
      **/
     List<JSONObject> getNavigationTopList(JSONObject jsonObject);
+    /**
+     * @description 更新置顶帖子
+     * @param jsonObject
+     * @return
+     **/
+    JSONObject updateNavigationTop(JSONObject jsonObject);
 }

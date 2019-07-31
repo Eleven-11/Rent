@@ -24,6 +24,11 @@ public interface NavigationTopDao {
      **/
     List<JSONObject> getNavigationTopList(JSONObject jsonObject);
 
+    /**
+     * @description 更新置顶帖子
+     * @param jsonObject
+     * @return
+     **/
     void updateNavigationTop(JSONObject jsonObject);
 
 }

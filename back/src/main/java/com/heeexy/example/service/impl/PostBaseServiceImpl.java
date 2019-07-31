@@ -76,19 +76,20 @@ public class PostBaseServiceImpl implements PostBaseService {
             如需修改postId为String自定义ID，请修改所有带有postId的表字段，并修改
             下面的插入方法对应的xml实现
         */
-        postBaseDao.insertPostBase(jsonObject);
-        //判断是否有上传图片集合
-        if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
+        if (postBaseDao.getReleaseTime(jsonObject) <= 5) {
+            postBaseDao.insertPostBase(jsonObject);
+            //判断是否有上传图片集合
+            if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
             /*FIXME
                 以下图片集合的获取以postman测试工具测试成功
                 并不保证正式环境下小程序的图片集合处理
                 如出现异常，请根据postImgList对应的字段格式做相应处理
             */
-            jsonObject.put("postImgList",Arrays.asList(jsonObject.get("postImgList").toString().split(",")));
-            postImgDao.insertPostImgList(jsonObject);
+                jsonObject.put("postImgList", Arrays.asList(jsonObject.get("postImgList").toString().split(",")));
+                postImgDao.insertPostImgList(jsonObject);
+            }
+            return CommonUtil.successJson("发布成功！");
         }
-        return CommonUtil.successJson("发布成功！");
+        return CommonUtil.errorJson(ErrorEnum.E_30001);
     }
-
-
 }
