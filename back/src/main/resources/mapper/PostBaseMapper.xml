@@ -283,7 +283,7 @@
             t_post_base a
         WHERE
             DAY (a.CREATE_TIME) = DAY (NOW())
-        AND a.USER_ID = #{userId}
+        AND a.USER_ID = #{posterId}
         AND a.IS_DEL = 0
     </select>
 
