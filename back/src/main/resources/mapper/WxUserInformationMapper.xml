@@ -16,8 +16,9 @@
              t_wx_user u
         WHERE i.IS_DEL = 0
           AND i.RECEIVE_ID = #{receiveId}
-          AND CREATE_TIME > #{flagTime}
+          AND i.CREATE_TIME > #{flagTime}
           AND u.USER_ID = i.STRAT_ID
+        ORDER BY CREATE_TIME DESC
     </select>
 
 
@@ -32,7 +33,7 @@
                 #{startId},
                 #{receiveId},
                 #{content},
-                now()
+                #{createTime}
               );
     </insert>
 

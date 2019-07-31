@@ -1,11 +1,14 @@
 package com.heeexy.example;
 
+import com.heeexy.example.config.websocket.WebSocketServer;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  * @author: hxy
@@ -20,6 +23,8 @@ public class MyApplication extends SpringBootServletInitializer {
 		SpringApplication application = new SpringApplication(MyApplication.class);
 		application.setBannerMode(Banner.Mode.OFF);
 		application.run(args);
+//		ConfigurableApplicationContext configurableApplicationContext = application.run(args);
+//		WebSocketServer.setApplicationContext(configurableApplicationContext);
 	}
 
 	@Override

@@ -1,12 +1,16 @@
 package com.heeexy.example.config.websocket;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.config.SpringUtil;
+import com.heeexy.example.dao.WxUserInformationDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since https://blog.csdn.net/moshowgame/article/details/80275084
  * @date: 2019-07-26 15:46
  */
-@ServerEndpoint("/WebSocketServer/{username}")
+@ServerEndpoint(value = "/websocket/{username}")
 @Component
 public class WebSocketServer {
 
@@ -25,6 +29,12 @@ public class WebSocketServer {
     private static Map<String, WebSocketServer> clients = new ConcurrentHashMap<String, WebSocketServer>();
     private Session session;
     private String username;
+
+    /**
+     * 手动显示加载bean
+     */
+    @Autowired
+    private WxUserInformationDao wxUserInformationDao = (WxUserInformationDao) SpringUtil.getBean("wxUserInformationDao");;
 
     /**
      * 建立链接时触发
@@ -41,9 +51,7 @@ public class WebSocketServer {
             addOnlineCount();
         }
         clients.put(username, this);
-
         System.out.println("已连接");
-
     }
 
     /**
@@ -58,21 +66,36 @@ public class WebSocketServer {
 
     /**
      * 发送消息
+     * startId     发送人ID
+     * receiveId   接收人ID
+     * content     发送内容
      * @param message
      * @throws IOException
      */
     @OnMessage
     public void onMessage(String message) throws IOException {
-        JSONObject jsonTo = JSONObject.parseObject(message);
-        System.out.println(jsonTo.getString("to") +":"+ jsonTo.getString("msg"));
+        JSONObject jsonObject = JSONObject.parseObject(message);
+        System.out.println(jsonObject.getString("startId") +" to "+jsonObject.getString("receiveId") +":"+ jsonObject.getString("content"));
 
-        if (!jsonTo.getString("to").toLowerCase().equals("all")){
-            sendMessageTo(jsonTo.getString("msg"), jsonTo.getString("to"));
-        }else{
-            sendMessageAll(jsonTo.getString("msg"));
+        if (jsonObject.getString("receiveId") != null){
+            //判断是个人消息还是系统消息
+            if (!jsonObject.getString("receiveId").toLowerCase().equals("sys_infor_key")){
+                jsonObject.put("createTime",new Date());
+                wxUserInformationDao.insertInformation(jsonObject);
+                sendMessageTo(jsonObject, jsonObject.getString("receiveId"));
+            }
+//            else {
+//                sendMessageAll(jsonObject.getString("msg"));
+//            }
         }
+
     }
 
+    /**
+     * 链接出错
+     * @param session
+     * @param error
+     */
     @OnError
     public void onError(Session session, Throwable error) {
         error.printStackTrace();
@@ -80,18 +103,24 @@ public class WebSocketServer {
 
     /**
      * 消息单发
-     * @param message
-     * @param To
+     * @param jsonObject
+     * @param to
      * @throws IOException
      */
-    public void sendMessageTo(String message, String To) throws IOException {
+    public void sendMessageTo(JSONObject jsonObject, String to) throws IOException {
         // session.getBasicRemote().sendText(message);  
-        //session.getAsyncRemote().sendText(message);  
-        for (WebSocketServer item : clients.values()) {
-            if (item.username.equals(To) ){
-                item.session.getAsyncRemote().sendText(message);
-            }
+        //session.getAsyncRemote().sendText(message);
+        //获取接收人的socker对象
+        WebSocketServer toServer = clients.get(to);
+        //判断是否在线
+        if (toServer != null && toServer.session != null){
+            toServer.session.getAsyncRemote().sendText(jsonObject.toJSONString());
         }
+//        for (WebSocketServer item : clients.values()) {
+//            if (item.username.equals(to) ){
+//                item.session.getAsyncRemote().sendText(message);
+//            }
+//        }
     }
 
     /**
@@ -99,7 +128,7 @@ public class WebSocketServer {
      * @param message
      * @throws IOException
      */
-    public void sendMessageAll(String message) throws IOException {
+    public static void sendMessageAll(String message) throws IOException {
         for (WebSocketServer item : clients.values()) {
             item.session.getAsyncRemote().sendText(message);
         }
