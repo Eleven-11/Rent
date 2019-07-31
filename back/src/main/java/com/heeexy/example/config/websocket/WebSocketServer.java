@@ -2,6 +2,7 @@ package com.heeexy.example.config.websocket;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.config.SpringUtil;
+import com.heeexy.example.dao.WxUserDao;
 import com.heeexy.example.dao.WxUserInformationDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,9 @@ public class WebSocketServer {
     @Autowired
     private WxUserInformationDao wxUserInformationDao = (WxUserInformationDao) SpringUtil.getBean("wxUserInformationDao");;
 
+    @Autowired
+    private WxUserDao wxUserDao = (WxUserDao) SpringUtil.getBean("wxUserDao");;
+
     /**
      * 建立链接时触发
      * @param username
@@ -51,7 +55,7 @@ public class WebSocketServer {
             addOnlineCount();
         }
         clients.put(username, this);
-        System.out.println("已连接");
+        System.out.println("已连接:" + username);
     }
 
     /**
@@ -75,18 +79,18 @@ public class WebSocketServer {
     @OnMessage
     public void onMessage(String message) throws IOException {
         JSONObject jsonObject = JSONObject.parseObject(message);
-        System.out.println(jsonObject.getString("startId") +" to "+jsonObject.getString("receiveId") +":"+ jsonObject.getString("content"));
-
-        if (jsonObject.getString("receiveId") != null){
-            //判断是个人消息还是系统消息
-            if (!jsonObject.getString("receiveId").toLowerCase().equals("sys_infor_key")){
-                jsonObject.put("createTime",new Date());
-                wxUserInformationDao.insertInformation(jsonObject);
-                sendMessageTo(jsonObject, jsonObject.getString("receiveId"));
+        if (jsonObject != null){
+            System.out.println(jsonObject.getString("startId") +" to "+jsonObject.getString("receiveId") +":"+ jsonObject.getString("content"));
+            //判断是否有接受者
+            if (jsonObject.getString("receiveId") != null
+                && null != wxUserDao.getWxUserInfo((JSONObject) new JSONObject().put("userId",jsonObject.get("receiveId")))){
+                //判断是个人消息还是系统消息
+                if (!jsonObject.getString("receiveId").toLowerCase().equals("sys_infor_key")){
+                    jsonObject.put("createTime",new Date());
+                    wxUserInformationDao.insertInformation(jsonObject);
+                    sendMessageTo(jsonObject, jsonObject.getString("receiveId"));
+                }
             }
-//            else {
-//                sendMessageAll(jsonObject.getString("msg"));
-//            }
         }
 
     }
@@ -124,13 +128,27 @@ public class WebSocketServer {
     }
 
     /**
-     * 消息群发
-     * @param message
+     * 发送系统通知
+     * 个人
+     * @param jsonObject
+     * @param to
+     */
+    public static void sendSysMessage(JSONObject jsonObject,String to){
+        WebSocketServer toServer = clients.get(to);
+        //判断是否在线
+        if (toServer != null && toServer.session != null){
+            toServer.session.getAsyncRemote().sendText(jsonObject.toJSONString());
+        }
+    }
+
+    /**
+     * 系统消息群发
+     * @param jsonObject
      * @throws IOException
      */
-    public static void sendMessageAll(String message) throws IOException {
+    public static void sendMessageAll(JSONObject jsonObject) throws IOException {
         for (WebSocketServer item : clients.values()) {
-            item.session.getAsyncRemote().sendText(message);
+            item.session.getAsyncRemote().sendText(jsonObject.toJSONString());
         }
     }
 

@@ -3,6 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.WxUserInformationDao">
 
+    <!--小程序dao方法实现-->
     <!-- 查询用户收到的最新消息集合 -->
     <select id="getNewInformationByUserIdFlagTime" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
@@ -17,15 +18,15 @@
         WHERE i.IS_DEL = 0
           AND i.RECEIVE_ID = #{receiveId}
           AND i.CREATE_TIME > #{flagTime}
-          AND u.USER_ID = i.STRAT_ID
-        ORDER BY CREATE_TIME DESC
+          AND u.USER_ID = i.START_ID
+        ORDER BY i.CREATE_TIME DESC
     </select>
 
 
     <!-- 创建消息条目 -->
     <insert id="insertInformation">
         insert into t_user_information (
-                START_ID
+                START_ID,
                 RECEIVE_ID,
                 CONTENT,
                 CREATE_TIME

@@ -91,6 +91,7 @@
             </if>
         </where>
     </select>
+
     <select id="getAuthStatus" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             USER_ID	        userId,
@@ -108,6 +109,13 @@
             (SELECT COUNT(0) FROM t_post_base WHERE USER_ID =b.USER_ID AND IS_DEL =0) releaseNum
         FROM t_wx_user b
         WHERE b.OPEN_ID = #{openId}
+    </select>
+
+    <!-- 校验用户是否存在 -->
+    <select id="queryUser" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT ID
+        FROM t_wx_user u
+        WHERE u.USER_ID = #{userId}
     </select>
 
 </mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.SysInformationDao">
+
+    <!-- 小程序的dao实现方法 -->
+    <!-- 查询用户收到的最新消息集合 -->
+    <select id="getSysInforListByUserIdFlagTime" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+          i.TARGET_ID           targetId,
+          i.CONTENT             content,
+          i.CREATE_TIME         createTime
+        FROM t_sys_information i
+        WHERE i.CREATE_TIME > #{flagTime}
+          AND i.TARGET_ID in (#{targetId},'system_info')
+        ORDER BY i.CREATE_TIME DESC
+    </select>
+
+    <!-- 后台消息dao方法实现 -->
+    <!-- 创建系统消息条目 -->
+    <insert id="insertInformation">
+        insert into t_sys_information (
+                TARGET_ID,
+                CONTENT,
+                CREATE_TIME
+              ) values (
+                #{targetId},
+                #{content},
+                #{createTime}
+              );
+    </insert>
+
+</mapper>

@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
  * @description: 微信用户消息处理接口
  * @date: 2019-07-30 13:59
  */
-public interface WxUserInformationService {
+public interface WxInformationService {
 
 
     /**
@@ -19,10 +19,10 @@ public interface WxUserInformationService {
      */
     JSONObject getNewInfomation(JSONObject jsonObject);
 
-//    /**
-//     * 微信用户发送消息
-//     * @param jsonObject
-//     * @return
-//     */
-//    JSONObject sendMessage(JSONObject jsonObject);
+    /**
+     * 获取系统消息
+     * @param jsonObject
+     * @return
+     */
+    JSONObject getSysInformation(JSONObject jsonObject);
 }
