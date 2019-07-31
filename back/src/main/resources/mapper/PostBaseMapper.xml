@@ -284,6 +284,7 @@
         WHERE
             DAY (a.CREATE_TIME) = DAY (NOW())
         AND a.USER_ID = #{userId}
+        AND a.IS_DEL = 0
     </select>
 
 </mapper>
