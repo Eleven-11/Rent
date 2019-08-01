@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.PostCommentDao">
+
+
+
     <select id="countComments" resultType="java.lang.Integer">
         select count(0) from
         (SELECT
@@ -56,6 +59,7 @@
         ), ACTIVE_TIME = NOW() WHERE ID = #{postId};
         COMMIT;
     </insert>
+
     <select id="getCommentStatus" resultType="java.lang.Integer">
         SELECT
             IS_DEL deleteStatus
@@ -64,12 +68,14 @@
         WHERE
             ID = #{commentId}
     </select>
+
     <update id="updateDelCommentById">
         UPDATE t_comment
         SET IS_DEL = '1'
         WHERE
             ID = #{commentId}
     </update>
+
     <select id="getUserCommentList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             a.POST_ID postId,
@@ -89,4 +95,18 @@
         ORDER BY
             a.CREATE_TIME DESC
     </select>
+
+    <!-- getNewCommentList -->
+    <select id="getNewCommentList" resultType="com.alibaba.fastjson.JSONObject">
+       SELECT
+
+        FROM t_comment c,
+             t_wx_user u
+        WHERE i.IS_DEL = 0
+          AND i.RECEIVE_ID = #{receiveId}
+          AND i.CREATE_TIME > #{flagTime}
+          AND u.USER_ID = i.START_ID
+        ORDER BY i.CREATE_TIME DESC
+    </select>
+
 </mapper>

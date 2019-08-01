@@ -10,6 +10,36 @@ import java.util.List;
  * @date: 2019-07-23 17:56
  */
 public interface UserResonateDao {
+
+    /**
+     * 获取未查看的点赞消息
+     * xml未实现
+     * @param jsonObject
+     * @return
+     */
+    List<JSONObject> getNewResonateList(JSONObject jsonObject);
+
+    /**
+     * 获取用户点赞过的帖子id
+     * @param jsonObject
+     * @return
+     **/
+    List<JSONObject> getUserLikeList(JSONObject jsonObject);
+
+    /**
+     * 判断用户是否点赞
+     * is_del = 0
+     * @param jsonObject
+     */
+    JSONObject getByUserIdPostId(JSONObject jsonObject);
+
+    /**
+     * @description 判断用户是否点赞过，用于更新点赞状态（即包括取消点赞状态的记录）
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject getIfLiked(JSONObject jsonObject);
+
     /**
      * 获取点赞列表条数用于前端分页
      *
@@ -40,24 +70,5 @@ public interface UserResonateDao {
      * @return
      */
     int updateDelPostLike(JSONObject jsonObject);
-    /**
-     * 获取用户点赞过的帖子id
-     * @param jsonObject
-     * @return
-     **/
-    List<JSONObject> getUserLikeList(JSONObject jsonObject);
 
-    /**
-     * 判断用户是否点赞
-     * is_del = 0
-     * @param jsonObject
-     */
-    JSONObject getByUserIdPostId(JSONObject jsonObject);
-
-    /**
-     * @description 判断用户是否点赞过，用于更新点赞状态（即包括取消点赞状态的记录）
-     * @param jsonObject
-     * @return com.alibaba.fastjson.JSONObject
-     **/
-    JSONObject getIfLiked(JSONObject jsonObject);
 }

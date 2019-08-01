@@ -12,6 +12,14 @@ import java.util.List;
 public interface PostCommentDao {
 
     /**
+     * 获取未读评论
+     * xml未实现
+     * @param jsonObject
+     * @return
+     */
+    List<JSONObject> getNewCommentList(JSONObject jsonObject);
+
+    /**
      * 获取帖子评论列表
      * @param jsonObject
      * @return

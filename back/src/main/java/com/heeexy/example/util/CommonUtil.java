@@ -212,8 +212,8 @@ public class CommonUtil {
 	 */
 	public static JSONObject WxPageParam(JSONObject jsonObject) throws WxPageException{
 		try{
-			Integer pageNum = jsonObject.get("pageNum") != null ? Integer.valueOf(jsonObject.get("pageNum").toString()) : 1;
-			Integer pageSize = jsonObject.get("pageSize") != null ? Integer.valueOf(jsonObject.get("pageSize").toString()) : 10;
+			Integer pageNum = jsonObject.getInteger("pageNum") != null && jsonObject.getInteger("pageNum") > 1  ? jsonObject.getInteger("pageNum") : 1;
+			Integer pageSize = jsonObject.getInteger("pageSize") != null && jsonObject.getInteger("pageSize") > 1 ? jsonObject.getInteger("pageSize") : 10;
 			jsonObject.put("start",(pageNum - 1) * pageSize);
 			jsonObject.put("end", pageSize - 1);
 			return jsonObject;
