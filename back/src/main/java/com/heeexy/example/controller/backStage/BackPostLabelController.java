@@ -38,7 +38,7 @@ public class BackPostLabelController {
 
     /**
      * @description 获取帖子标签列表
-     * @param request （待定）（父类标签id-labelParentId）
+     * @param request （父类标签id-labelParentId）
      * @return com.alibaba.fastjson.JSONObject
      **/
     @GetMapping("/getPostLabelList")
@@ -48,7 +48,7 @@ public class BackPostLabelController {
 
     /**
      *@description:根据id更新帖子标签详情信息
-     *@param request(标签id --postLabelId)
+     *@param request(标签id --postLabelId 标签内容 -- content)
      *@return com.alibaba.fastjson.JSONObject
      */
     @PostMapping("/updatePostLabel")
@@ -61,9 +61,9 @@ public class BackPostLabelController {
      *@param request(标签id --postLabelId)
      *@return com.alibaba.fastjson.JSONObject
      */
-    @PostMapping("/deletePostLabel")
-    public JSONObject deletePostLabel(HttpServletRequest request) {
-        return postLabelService.deletePostLabel(CommonUtil.request2Json(request));
+    @GetMapping("/updateDelPostLabel")
+    public JSONObject updateDelPostLabel(HttpServletRequest request) {
+        return postLabelService.updateDelPostLabel(CommonUtil.request2Json(request));
     }
 
 }

@@ -15,4 +15,31 @@ public interface UserRestrictDao {
     *@return int
     */
     void updateWxUserRes(JSONObject jsonObject);
+
+    /**
+     * @description 获取用户当前限制状态
+     * @param jsonObject
+     * @return int
+     **/
+    int getResStatus(JSONObject jsonObject);
+
+    /**
+     * @description 添加用户禁言数据
+     * @param
+     * @return
+     **/
+    void insertWxUserRes(JSONObject jsonObject);
+
+    /**
+     * @description 手动解除禁言状态
+     * @param jsonObject
+     * @return void
+     **/
+    void updateDelWxUserRes(JSONObject jsonObject);
+    /**
+     * @description 判断用户是否曾被禁言过
+     * @param jsonObject
+     * @return java.lang.String
+     **/
+    String getIfRestricted(JSONObject jsonObject);
 }

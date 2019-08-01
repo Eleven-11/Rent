@@ -2,7 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.WxUserPostDao">
-
     <!-- 查询微信用户帖子列表 -->
     <select id="getWxUserPostList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
@@ -53,5 +52,11 @@
           AND m.USER_ID = #{userId}
           AND m.POST_ID = #{postId}
     </select>
+    <!--设置帖子上下架-->
+    <update id="updateOnShelf">
+        UPDATE t_post_base
+        SET IS_DEL=0,IS_LOWER_SHELF=#{ifLowShelf}
+        WHERE ID = #{postId}
+    </update>
 
 </mapper>

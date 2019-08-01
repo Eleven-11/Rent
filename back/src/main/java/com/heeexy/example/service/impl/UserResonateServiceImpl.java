@@ -3,8 +3,10 @@ package com.heeexy.example.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.dao.UserResonateDao;
+import com.heeexy.example.dao.UserRestrictDao;
 import com.heeexy.example.service.UserResonateService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ public class UserResonateServiceImpl implements UserResonateService {
     private UserResonateDao userResonateDao;
     @Autowired
     private PostBaseDao postBaseDao;
+    @Autowired
+    private UserRestrictDao userRestrictDao;
 
     /**
      * 获取帖子点赞列表
@@ -46,19 +50,24 @@ public class UserResonateServiceImpl implements UserResonateService {
     }
 
     /**
-     * 取消点赞信息
+     * 添加点赞信息、取消点赞、取消后重新点赞
      * @param jsonObject
      * @return
      */
     @Override
     public JSONObject updatePostLike(JSONObject jsonObject) {
-        if(userResonateDao.getIfLiked(jsonObject)!=null){
-            userResonateDao.updateDelPostLike(jsonObject);
-            return CommonUtil.successJson();
+        //用户处于禁言状态无法点赞
+        if (userRestrictDao.getResStatus(jsonObject) == 1) {
+            return CommonUtil.errorJson(ErrorEnum.WX_884);
         }
-        else{
-            userResonateDao.insertPostLike(jsonObject);
-            return CommonUtil.successJson();
+        else {
+            if (userResonateDao.getIfLiked(jsonObject) != null) {
+                userResonateDao.updateDelPostLike(jsonObject);
+                return CommonUtil.successJson(userResonateDao.getLikeStatus(jsonObject));
+            } else {
+                userResonateDao.insertPostLike(jsonObject);
+                return CommonUtil.successJson(userResonateDao.getLikeStatus(jsonObject));
+            }
         }
     }
     /**

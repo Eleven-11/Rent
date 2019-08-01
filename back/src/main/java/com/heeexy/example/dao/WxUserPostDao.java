@@ -21,4 +21,10 @@ public interface WxUserPostDao {
      * @return
      */
     JSONObject queryPostByUserIdPostId(JSONObject jsonObject);
+    /**
+     * @description 设置帖子上下架
+     * @param jsonObject
+     * @return int
+     **/
+    int updateOnShelf(JSONObject jsonObject);
 }

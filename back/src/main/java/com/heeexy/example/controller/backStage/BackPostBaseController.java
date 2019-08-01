@@ -26,7 +26,8 @@ public class BackPostBaseController {
 
     /**
      * @description 获取帖子列表（只包括基本信息）
-     * @param request （帖子id-postId，发帖人昵称-nickname（用于获取指定用户发布的帖子列表，非必须），关键词-keyword（用于进行模糊查询，包括地址及帖子内容））
+     * @param request （帖子id-postId，发帖人昵称-nickname（用于获取指定用户发布的帖子列表，非必须）
+     *                关键词-keyword（用于进行模糊查询，包括地址及帖子内容））
      * @return 帖子列表
      *         发帖人-poster,
      *         发帖人头像-posterAvatar,
@@ -46,7 +47,8 @@ public class BackPostBaseController {
      *         点赞偏移量-devLike，
      *         帖子收藏量-collection，
      *         中介费-fee,
-     *         活跃时间-activeTime
+     *         活跃时间-activeTime,
+     *         上下架情况-isLowerShelf
      **/
     @GetMapping("/getPostBaseList")
     public JSONObject getPostBaseList(HttpServletRequest request) {
@@ -54,13 +56,22 @@ public class BackPostBaseController {
     }
 
     /**
-     * 更新帖子(修改浏览量、点赞量、上架下架)
+     * 更新帖子(修改浏览量、点赞量)
      * @param request
      * @return
      */
     @PostMapping("/updatePostBase")
     public JSONObject updatePostBase(HttpServletRequest request){
         return postBaseService.updatePostBase(CommonUtil.request2Json(request));
+    }
+    /**
+     * 修改帖子上下架
+     * @param request
+     * @return
+     */
+    @PostMapping("/updateOnShelf")
+    public JSONObject updateOnShelf(HttpServletRequest request){
+        return postBaseService.updateOnShelf(CommonUtil.request2Json(request));
     }
 
 }

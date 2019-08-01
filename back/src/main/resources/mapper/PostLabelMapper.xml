@@ -24,8 +24,10 @@
     <select id="getPostLabelList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             a.ID postLabelId,
-            a.PARENT_ID postParentId,
-            a.CONTENT labelContent
+            a.PARENT_ID labelParentId,
+            a.CONTENT labelContent,
+            a.TYPE labelTypeId,
+            a.TYPE_IMG_URL labelImg
         FROM
             t_post_label a
         WHERE
@@ -33,12 +35,15 @@
         <if test="labelParentId !=null and labelParentId !=''">
             AND a.PARENT_ID = #{labelParentId}
         </if>
-        <if test="labelParentContent !=null and labelParentContent!=''">
+        <!--<if test="labelParentContent !=null and labelParentContent!=''">
             AND a.PARENT_ID = (SELECT b.ID FROM t_post_label b WHERE b.content = #{labelParentContent})
+        </if>-->
+        <if test="labelTypeId != null and labelTypeId !=''">
+            AND a.TYPE = #{labelTypeId}
         </if>
-        ORDER BY postParentId
+        ORDER BY labelParentId
     </select>
-    <insert id="insertPostLabel">
+    <insert id="insertPostLabel" useGeneratedKeys="true" keyProperty="postLabelId">
         INSERT INTO t_post_label (parent_id, content)
         VALUES
         <foreach collection="contents" item="item" index="index" separator=",">
@@ -63,9 +68,10 @@
         SET a.CONTENT = #{content}
         WHERE a.ID = #{postLabelId}
     </update>
-    <delete id="deletePostLabel">
-        DELETE from t_post_label
+    <update id="updateDelPostLabel">
+        update t_post_label
+        SET IS_DEL = 1
         WHERE ID = #{postLabelId}
-    </delete>
+    </update>
 
 </mapper>

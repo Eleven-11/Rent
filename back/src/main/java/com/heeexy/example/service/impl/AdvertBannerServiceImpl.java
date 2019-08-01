@@ -4,10 +4,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.AdvertBannerDao;
 import com.heeexy.example.service.AdverBannerService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @ClassName AdvertBannerServiceImpl
@@ -48,6 +47,10 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
      **/
     @Override
     public JSONObject updateDelAdvImg(JSONObject jsonObject) {
+        if(jsonObject.get("advId")==null||jsonObject.get("advId")=="")
+        {
+            return CommonUtil.errorJson(ErrorEnum.E_90003);
+        }
         advertBannerDao.updateDelAdvImg(jsonObject);
         return CommonUtil.successJson("操作成功");
     }

@@ -8,6 +8,7 @@ import com.heeexy.example.dao.UserResonateDao;
 import com.heeexy.example.dao.WxUserPostDao;
 import com.heeexy.example.service.WxUserPostService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,5 +58,21 @@ public class WxUserPostServiceImpl implements WxUserPostService {
             jo.put("postLikeList", userResonateDao.getPostLikeList(jo));
         }
         return CommonUtil.successPage(upList);
+    }
+
+    /**
+     * @description 用户设置帖子上下架
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @Override
+    public JSONObject updateOnShelf(JSONObject jsonObject) {
+        if (wxUserPostDao.queryPostByUserIdPostId(jsonObject)!=null){
+            wxUserPostDao.updateOnShelf(jsonObject);
+            return CommonUtil.successJson("已下架");
+        }
+        else {
+            return CommonUtil.errorJson(ErrorEnum.E_502);
+        }
     }
 }

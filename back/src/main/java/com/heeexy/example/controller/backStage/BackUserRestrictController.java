@@ -3,7 +3,6 @@ package com.heeexy.example.controller.backStage;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserRestrictService;
 import com.heeexy.example.util.CommonUtil;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +22,22 @@ public class BackUserRestrictController {
     private UserRestrictService userRestrictService;
 
     /**
-     *@description:对用户设置禁言并设定时长
-     *@param request
+     *@description:对用户设置禁言并设定时长,用户记录在授权信息生成时同时生成
+     *@param request 用户id - userId，限制结束时间 - resEndTime
      *@return com.alibaba.fastjson.JSONObject
      */
-    @RequiresPermissions("wxUser:updateWxUserRes")
-    @PostMapping("/updateWxUserRes")
-    public JSONObject updateUser(HttpServletRequest request) {
-        return userRestrictService.updateWxUserRes(CommonUtil.request2Json(request));
+    @PostMapping("/insertWxUserRes")
+    public JSONObject insertWxUserRes(HttpServletRequest request) {
+        return userRestrictService.insertWxUserRes(CommonUtil.request2Json(request));
     }
+    /**
+     * @description 手动解除用户禁言
+     * @param request 用户id - userId
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @PostMapping("/updateDelWxUserRes")
+    public JSONObject updateDelWxUserRes(HttpServletRequest request) {
+        return userRestrictService.updateDelWxUserRes(CommonUtil.request2Json(request));
+    }
+
 }

@@ -3,6 +3,7 @@ package com.heeexy.example.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.dao.PostImgDao;
+import com.heeexy.example.dao.UserRestrictDao;
 import com.heeexy.example.service.PostBaseService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
@@ -29,6 +30,8 @@ public class PostBaseServiceImpl implements PostBaseService {
     private PostBaseDao postBaseDao;
     @Autowired
     private PostImgDao postImgDao;
+    @Autowired
+    private UserRestrictDao userRestrictDao;
 
 
     /**
@@ -68,15 +71,28 @@ public class PostBaseServiceImpl implements PostBaseService {
      */
     @Override
     public JSONObject insertPostBase(JSONObject jsonObject) {
-        if (postBaseDao.getReleaseTime(jsonObject) <5) {
-            postBaseDao.insertPostBase(jsonObject);
-            //判断是否有上传图片集合
-            if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
-                jsonObject.put("postImgList", Arrays.asList(jsonObject.get("postImgList").toString().split(",")));
-                postImgDao.insertPostImgList(jsonObject);
+//        String postId = UUIDUtils.getUUID();
+//        jsonObject.put("postId", postId);
+        //用户处于禁言状态时
+        if (userRestrictDao.getResStatus(jsonObject) == 1) {
+            return CommonUtil.errorJson(ErrorEnum.WX_884);
+        } else {
+            if (postBaseDao.getReleaseTime(jsonObject) < 5) {
+                postBaseDao.insertPostBase(jsonObject);
+                //判断是否有上传图片集合
+                if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
+                    jsonObject.put("postImgList", Arrays.asList(jsonObject.get("postImgList").toString().split(",")));
+                    postImgDao.insertPostImgList(jsonObject);
+                }
+                return CommonUtil.successJson("发布成功！");
             }
-            return CommonUtil.successJson("发布成功！");
+            return CommonUtil.errorJson(ErrorEnum.E_30001);
         }
-        return CommonUtil.errorJson(ErrorEnum.E_30001);
+    }
+
+    @Override
+    public JSONObject updateOnShelf(JSONObject jsonObject) {
+        postBaseDao.updateOnShelf(jsonObject);
+        return CommonUtil.successJson("修改成功，刷新后查看");
     }
 }

@@ -5,6 +5,7 @@ import com.heeexy.example.service.AdverBannerService;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,7 +30,7 @@ public class BackAdvertBannerController {
      *          广告图片链接-advImg
      * @return com.alibaba.fastjson.JSONObject
      **/
-    @GetMapping("/insertAdvImg")
+    @PostMapping("/insertAdvImg")
     public JSONObject insertAdvImg(HttpServletRequest request){
         return adverBannerService.insertAdvImg(CommonUtil.request2Json(request));
     }
@@ -43,11 +44,13 @@ public class BackAdvertBannerController {
         return adverBannerService.updateDelAdvImg(CommonUtil.request2Json(request));
     }
     /**
-     * @description 后台管理：逻辑删除广告图片
-     * @param request （图片id-advId）
+     * @description 后台管理：修改广告栏图片
+     * @param request  图片id-advId
+     *                 图片路径 - advImg
+     *                 标题 - advTitle
      * @return com.alibaba.fastjson.JSONObject
      **/
-    @GetMapping("/updateAdvImg")
+    @PostMapping("/updateAdvImg")
     public JSONObject updateAdvImg(HttpServletRequest request){
         return adverBannerService.updateAdvImg(CommonUtil.request2Json(request));
     }

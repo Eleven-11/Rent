@@ -32,7 +32,6 @@ public class PostLabelServiceImpl implements PostLabelService {
         CommonUtil.fillPageParam(jsonObject);
         int count = postLabelDao.countPostLabel(jsonObject);
         List<JSONObject> list = postLabelDao.getPostLabelList(jsonObject);
-        System.out.println(list);
         return list;
     }
 
@@ -47,7 +46,7 @@ public class PostLabelServiceImpl implements PostLabelService {
         if (jsonObject.get("contents") != null && !StringUtils.isEmpty(jsonObject.get("contents"))) {
             jsonObject.put("contents", Arrays.asList(jsonObject.get("contents").toString().split(",")));
             postLabelDao.insertPostLabel(jsonObject);
-            return CommonUtil.successJson("操作成功！请刷新后查看");
+            return CommonUtil.successJson(jsonObject.get("postLabelId"));
         }
         return CommonUtil.errorJson(ErrorEnum.E_90003);
     }
@@ -71,10 +70,14 @@ public class PostLabelServiceImpl implements PostLabelService {
      * @return
      */
     @Override
-    public JSONObject deletePostLabel(JSONObject jsonObject) {
+    public JSONObject updateDelPostLabel(JSONObject jsonObject) {
         //CommonUtil.fillPageParam(jsonObject);
         //System.out.println(jsonObject.toJSONString());
-        postLabelDao.deletePostLabel(jsonObject);
+        if(jsonObject.get("postLabelId")==null||jsonObject.get("postLabelId")=="")
+        {
+            return CommonUtil.errorJson(ErrorEnum.E_90003);
+        }
+        postLabelDao.updateDelPostLabel(jsonObject);
         return CommonUtil.successJson("操作成功！请刷新后查看");
     }
 }

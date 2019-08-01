@@ -17,21 +17,8 @@ public interface UserResonateDao {
      * @param jsonObject
      * @return
      */
-    List<JSONObject> getNewResonateList(JSONObject jsonObject);
+    /*List<JSONObject> getNewResonateList(JSONObject jsonObject);*/
 
-    /**
-     * 获取用户点赞过的帖子id
-     * @param jsonObject
-     * @return
-     **/
-    List<JSONObject> getUserLikeList(JSONObject jsonObject);
-
-    /**
-     * 判断用户是否点赞
-     * is_del = 0
-     * @param jsonObject
-     */
-    JSONObject getByUserIdPostId(JSONObject jsonObject);
 
     /**
      * @description 判断用户是否点赞过，用于更新点赞状态（即包括取消点赞状态的记录）
@@ -70,5 +57,24 @@ public interface UserResonateDao {
      * @return
      */
     int updateDelPostLike(JSONObject jsonObject);
+    /**
+     * 获取用户点赞过的帖子id
+     * @param jsonObject
+     * @return
+     **/
+    List<JSONObject> getUserLikeList(JSONObject jsonObject);
+
+    /**
+     * 判断用户是否点赞
+     * is_del = 0
+     * @param jsonObject
+     */
+    JSONObject getByUserIdPostId(JSONObject jsonObject);
+    /**
+     * @description 判断用户当前点赞状态用于返回给前端更改页面状态
+     * @param
+     * @return
+     **/
+    int getLikeStatus(JSONObject jsonObject);
 
 }

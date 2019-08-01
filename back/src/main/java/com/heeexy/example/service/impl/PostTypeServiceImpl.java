@@ -47,7 +47,7 @@ public class PostTypeServiceImpl implements PostTypeService {
         }
         else {
             postTypeDao.insertPostType(jsonObject);
-            return CommonUtil.successJson("操作成功！请刷新后查看");
+            return CommonUtil.successJson(jsonObject.get("postTypeId"));
         }
     }
 
@@ -71,10 +71,10 @@ public class PostTypeServiceImpl implements PostTypeService {
      * @return
      */
     @Override
-    public JSONObject deletePostTypeById(JSONObject jsonObject) {
+    public JSONObject updateDelPostTypeById(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
         System.out.println(jsonObject.toJSONString());
-        postTypeDao.deletePostTypeById(jsonObject);
+        postTypeDao.updateDelPostTypeById(jsonObject);
         return CommonUtil.successJson("操作成功！请刷新后查看");
     }
 

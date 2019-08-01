@@ -3,8 +3,10 @@ package com.heeexy.example.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.dao.PostCommentDao;
+import com.heeexy.example.dao.UserRestrictDao;
 import com.heeexy.example.service.PostCommentService;
 import com.heeexy.example.util.CommonUtil;
+import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ public class PostCommentServiceImpl implements PostCommentService {
     private PostCommentDao postCommentDao;
     @Autowired
     private PostBaseDao postBaseDao;
+    @Autowired
+    private UserRestrictDao userRestrictDao;
 
     /**
      * 获取帖子评论列表
@@ -46,7 +50,11 @@ public class PostCommentServiceImpl implements PostCommentService {
     @Override
     public JSONObject insertComment(JSONObject jsonObject) {
         System.out.println(jsonObject);
-        return CommonUtil.successJson(postCommentDao.insertComment(jsonObject));
+        if (userRestrictDao.getResStatus(jsonObject) == 1) {
+            return CommonUtil.errorJson(ErrorEnum.WX_884);
+        } else {
+            return CommonUtil.successJson(postCommentDao.insertComment(jsonObject));
+        }
     }
 
     /**

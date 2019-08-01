@@ -35,7 +35,7 @@ public interface PostLabelDao {
      * 删除帖子标签
      * @param jsonObject
      */
-    void deletePostLabel(JSONObject jsonObject);
+    void updateDelPostLabel(JSONObject jsonObject);
 
     /**
      * 帖子标签

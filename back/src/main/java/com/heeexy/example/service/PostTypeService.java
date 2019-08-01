@@ -28,7 +28,7 @@ public interface PostTypeService {
      * @param jsonObject
      * @return
      */
-    JSONObject deletePostTypeById(JSONObject jsonObject);
+    JSONObject updateDelPostTypeById(JSONObject jsonObject);
 
     /**
      * 添加帖子类型信息

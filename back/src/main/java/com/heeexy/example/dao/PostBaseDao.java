@@ -68,4 +68,10 @@ public interface PostBaseDao {
      * @return
      **/
     int getReleaseTime(JSONObject jsonObject);
+    /**
+     * @description 设置帖子上下架
+     * @param jsonObject
+     * @return int
+     **/
+    int updateOnShelf(JSONObject jsonObject);
 }

@@ -37,5 +37,5 @@ public interface PostLabelService {
      * @param jsonObject
      * @return
      */
-    JSONObject deletePostLabel(JSONObject jsonObject);
+    JSONObject updateDelPostLabel(JSONObject jsonObject);
 }

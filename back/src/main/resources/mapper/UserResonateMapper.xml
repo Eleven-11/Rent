@@ -51,7 +51,7 @@
         )
         VALUES
             (
-                '1',
+                1,
                 #{postId},
                 #{userId},
                NOW()
@@ -98,6 +98,12 @@
     <!-- 判断用户是否点赞过该帖子-->
     <select id="getIfLiked" resultType="com.alibaba.fastjson.JSONObject">
         SELECT ID
+        FROM t_user_resonate
+        WHERE USER_ID = #{userId}
+          AND TARGET_ID = #{postId}
+    </select>
+    <select id="getLikeStatus" resultType="INTEGER">
+        SELECT IS_DEL likeStatus
         FROM t_user_resonate
         WHERE USER_ID = #{userId}
           AND TARGET_ID = #{postId}

@@ -14,5 +14,11 @@ public interface UserRestrictService {
      * @param jsonObject
      * @return
      */
-    JSONObject updateWxUserRes(JSONObject jsonObject);
+    JSONObject insertWxUserRes(JSONObject jsonObject);
+    /**
+     * @description 手动解除用户禁言结束禁言状态
+     * @param
+     * @return
+     **/
+    JSONObject updateDelWxUserRes(JSONObject jsonObject);
 }

@@ -34,10 +34,10 @@
         WHERE
         m.TYPE_ID = f.ID
         AND u.USER_ID = m.USER_ID
-        <if test="isMiniPro !=null and isMiniPro!=''">
-            AND m.IS_LOWER_SHELF = '0'
-            AND m.IS_DEL = '0'
-        </if>
+        <!--<if test="isMiniPro !=null and isMiniPro!=''">-->
+        <!--AND m.IS_LOWER_SHELF = '0'-->
+        <!--AND m.IS_DEL = '0'-->
+        <!--</if>-->
         <if test="typeId !=null and typeId !=''">
             AND m.TYPE_ID = #{typeId}
         </if>
@@ -50,11 +50,14 @@
         <if test="postId !=null and postId !=''">
             AND m.ID = #{postId}
         </if>
-        <if test="nickName != null and nickName != ''">
+        <if test="nickname != null and nickname != ''">
             AND u.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
         </if>
         <if test="keyword !=null and keyword !=''">
             AND (m.CONTENT LIKE CONCAT(CONCAT('%',#{keyword}),'%') OR m.ADDRESS LIKE CONCAT(CONCAT('%',#{keyword}),'%'))
+        </if>
+        <if test="startTime !=null and startTime !='' and endTime !=null and endTime">
+            AND m.CREATE_TIME BETWEEN DATE_FORMAT(#{startTime},'%Y-%m-%d %T') AND DATE_FORMAT(#{endTime},'%Y-%m-%d %T')
         </if>
         ORDER BY
         ACTIVE_TIME DESC) g
@@ -122,7 +125,6 @@
             #{fee}
             )
     </insert>
-
     <select id="getPostBaseList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
         u.WX_NICK_NAME      poster,
@@ -145,6 +147,7 @@
         m.TOTAL_COLLECTION  collection,
         m.FEE               fee,
         m.ACTIVE_TIME       activeTime,
+        m.IS_LOWER_SHELF    isLowerShelf,
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
         FROM
         t_wx_user u,
@@ -169,11 +172,14 @@
         <if test="postId !=null and postId !=''">
         AND m.ID = #{postId}
         </if>
-        <if test="nickName != null and nickName != ''">
+        <if test="nickname != null and nickname != ''">
         AND u.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
         </if>
         <if test="keyword !=null and keyword !=''">
         AND (m.CONTENT LIKE CONCAT(CONCAT('%',#{keyword}),'%') OR m.ADDRESS LIKE CONCAT(CONCAT('%',#{keyword}),'%'))
+        </if>
+        <if test="startTime !=null and startTime !='' and endTime !=null and endTime">
+        AND m.CREATE_TIME BETWEEN DATE_FORMAT(#{startTime},'%Y-%m-%d %T') AND DATE_FORMAT(#{endTime},'%Y-%m-%d %T')
         </if>
         ORDER BY
             ACTIVE_TIME DESC
@@ -193,6 +199,7 @@
         </if>
         WHERE ID = #{postId}
     </update>
+
 
     <!-- 微信dao方法实现 -->
     <!-- 用户帖子详情 -->
@@ -266,7 +273,7 @@
         <if test="postId !=null and postId !=''">
             AND m.ID = #{postId}
         </if>
-        <if test="nickName != null and nickName != ''">
+        <if test="nickname != null and nickname != ''">
             AND u.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
         </if>
         <if test="keyword !=null and keyword !=''">
@@ -287,5 +294,10 @@
         AND a.USER_ID = #{posterId}
         AND a.IS_DEL = 0
     </select>
+    <update id="updateOnShelf">
+        UPDATE t_post_base
+        SET IS_DEL=0,IS_LOWER_SHELF=#{upShelf}
+        WHERE ID = #{postId}
+    </update>
 
 </mapper>

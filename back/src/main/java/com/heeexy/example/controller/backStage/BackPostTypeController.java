@@ -1,4 +1,4 @@
-package com.heeexy.example.controller;
+package com.heeexy.example.controller.backStage;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostTypeService;
@@ -35,7 +35,7 @@ public class BackPostTypeController {
 
     /**
      *@description:添加帖子类型信息
-     *@param request(帖子类型名称postTypeName,帖子类型图标postTypeImg,帖子类型创建时间postTypeCreateTime)
+     *@param request(帖子类型名称 -- postTypeName,帖子类型图标链接 -- postTypeImg
      *@return com.alibaba.fastjson.JSONObject
      */
     @PostMapping("/insertPostType")
@@ -45,7 +45,7 @@ public class BackPostTypeController {
 
     /**
      *@description:根据帖子类型id更新帖子类型相关信息
-     *@param request(帖子类型id--postTypeId,帖子类型名称postTypeName,帖子类型图标postTypeImg,帖子类型创建时间postTypeCreateTime)
+     *@param request(帖子类型id--postTypeId,帖子类型名称postTypeName,帖子类型图标postTypeImg
      *@return com.alibaba.fastjson.JSONObject
      */
     @PostMapping("/updatePostType")
@@ -58,9 +58,9 @@ public class BackPostTypeController {
      *@param request(帖子类型id--postTypeId)
      *@return com.alibaba.fastjson.JSONObject
      */
-    @PostMapping("/deletePostType")
+    @PostMapping("/updateDelPostType")
     public JSONObject updateDelPostTypeById(HttpServletRequest request) {
-        return postTypeService.deletePostTypeById(CommonUtil.request2Json(request));
+        return postTypeService.updateDelPostTypeById(CommonUtil.request2Json(request));
     }
 
 }

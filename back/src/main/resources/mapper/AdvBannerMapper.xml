@@ -34,11 +34,11 @@
     <update id="updateAdvImg">
         update t_advert_banner
         set IS_DEL=0
-        <if test="advTitle!=null and advImg!=''">
-            ,advTitle=#{advTitle}
+        <if test="advTitle!=null and advTitle!=''">
+            ,ADVERT_TITLE=#{advTitle}
         </if>
         <if test="advImg!=null and advImg!=''">
-            ,advImg=#{advImg}
+            ,IMG_URL=#{advImg}
         </if>
         where ID=#{advId}
     </update>

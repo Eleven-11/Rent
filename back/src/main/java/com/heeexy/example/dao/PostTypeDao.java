@@ -35,7 +35,7 @@ public interface PostTypeDao {
      * 根据帖子类型id逻辑删除相应信息
      * @param jsonObject
      */
-    void deletePostTypeById(JSONObject jsonObject);
+    void updateDelPostTypeById(JSONObject jsonObject);
 
     /**
      * 计算列表条数

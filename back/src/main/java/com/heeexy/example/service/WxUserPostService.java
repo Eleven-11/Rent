@@ -12,4 +12,11 @@ public interface WxUserPostService {
      * @return
      */
     JSONObject getWxUserPostList(JSONObject jsonObject) throws WxPageException;
+
+    /**
+     * @description 设置帖子上下架
+     * @param jsonObject
+     * @return int
+     **/
+    JSONObject updateOnShelf(JSONObject jsonObject);
 }

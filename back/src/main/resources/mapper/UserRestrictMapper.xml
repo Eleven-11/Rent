@@ -2,10 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.UserRestrictDao">
+    <insert id="insertWxUserRes">
+        INSERT INTO t_user_operation_restrict (USER_ID,RESTRICT_STATUS,RESTRICT_END_TIME)
+        VALUES
+            (
+                #{userId},
+                1,
+                DATE_FORMAT(#{resEndTime},'%Y-%m-%d %T')
+            )
+    </insert>
     <update id="updateWxUserRes">
     UPDATE t_user_operation_restrict u
-    SET u.RESTRICT_STATE = 1 and u.RESTRICT_END_TIME = DATE_FORMAT(#{resEndTime},'%Y.%m.%d %T')#{resEndTime}
+    SET u.RESTRICT_STATE = 1,u.RESTRICT_END_TIME = DATE_FORMAT(#{resEndTime},'%Y-%m-%d %T')
     WHERE
-        u.USER_ID = #{wxUserId,jdbcType=VARCHAR}
+        u.USER_ID = #{userId,jdbcType=VARCHAR}
+    </update>
+    <select id="getResStatus" resultType="INTEGER">
+        SELECT
+        IF (
+            (
+                SELECT
+                    USER_ID
+                FROM
+                    t_user_operation_restrict a
+                WHERE
+                    RESTRICT_END_TIME > NOW()
+                AND RESTRICT_STATE = 1
+                AND USER_ID = #{userId}
+            ),
+            1,
+            0
+        ) resStatus
+    </select>
+    <select id="getIfRestricted" resultType="java.lang.String">
+        SELECT
+            USER_ID
+        FROM
+            t_user_operation_restrict
+        WHERE USER_ID = #{userId}
+    </select>
+    <update id="updateDelWxUserRes">
+    UPDATE t_user_operation_restrict u
+    SET u.RESTRICT_STATE = 0 ,u.RESTRICT_END_TIME  = NOW()
+    WHERE
+        u.USER_ID = #{userId,jdbcType=VARCHAR}
     </update>
 </mapper>
