@@ -48,7 +48,6 @@ public class WxInformationController {
     @PostMapping("/newSys")
     public JSONObject getSysInformation(HttpServletRequest request) {
         try {
-            //FIXME 等待测试
             return wxInformationService.getSysInformation(CommonUtil.request2Json(request));
         }catch (Exception e){
             return CommonUtil.errorJson(ErrorEnum.E_405);

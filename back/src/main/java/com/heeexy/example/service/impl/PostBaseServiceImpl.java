@@ -68,23 +68,10 @@ public class PostBaseServiceImpl implements PostBaseService {
      */
     @Override
     public JSONObject insertPostBase(JSONObject jsonObject) {
-//        String postId = UUIDUtils.getUUID();
-//        jsonObject.put("postId", postId);
-
-        /*FIXME
-            postId还是int自增长，该插入字段会自动返回数据表id并且变量名为postId
-            如需修改postId为String自定义ID，请修改所有带有postId的表字段，并修改
-            下面的插入方法对应的xml实现
-        */
         if (postBaseDao.getReleaseTime(jsonObject) <5) {
             postBaseDao.insertPostBase(jsonObject);
             //判断是否有上传图片集合
             if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
-            /*FIXME
-                以下图片集合的获取以postman测试工具测试成功
-                并不保证正式环境下小程序的图片集合处理
-                如出现异常，请根据postImgList对应的字段格式做相应处理
-            */
                 jsonObject.put("postImgList", Arrays.asList(jsonObject.get("postImgList").toString().split(",")));
                 postImgDao.insertPostImgList(jsonObject);
             }

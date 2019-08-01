@@ -1,8 +1,8 @@
 package com.heeexy.example.common.enums;
 
 /**
- * @author: mac
- * @description: TODO
+ * @author: chens
+ * @description: 举报类型
  * @date: 2019-07-29 19:08
  */
 public enum ReportType {
