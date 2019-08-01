@@ -13,11 +13,19 @@ public interface PostCommentDao {
 
     /**
      * 获取未读评论
-     * xml未实现
+     * userId   用户Id
+     * flagTime 参考时间
      * @param jsonObject
      * @return
+     * content          评论内容
+     * postId           帖子Id
+     * startId          评论者ID
+     * startAvatarUrl   评论者头像
+     * startNickName    评论者昵称
+     * createTime       评论时间
      */
-    List<JSONObject> getNewCommentList(JSONObject jsonObject);
+    //FIXME 未测试
+    List<JSONObject> getNewCommentListByUserIdFlagTime(JSONObject jsonObject);
 
     /**
      * 获取帖子评论列表

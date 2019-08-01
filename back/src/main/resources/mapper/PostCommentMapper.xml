@@ -96,17 +96,29 @@
             a.CREATE_TIME DESC
     </select>
 
-    <!-- getNewCommentList -->
-    <select id="getNewCommentList" resultType="com.alibaba.fastjson.JSONObject">
-       SELECT
-
-        FROM t_comment c,
+    <!-- 小程序dao实现 -->
+    <!-- 获取用户未读的评论列表 -->
+    <select id="getNewCommentListByUserIdFlagTime" resultType="com.alibaba.fastjson.JSONObject">
+      	SELECT
+            c.CONTENT           content,
+            c.POST_ID           postId,
+            c.START_ID          startId,
+            u.WX_AVATAR_URL     startAvatarUrl,
+            u.WX_NICK_NAME      startNickName,
+            c.CREATE_TIME       createTime
+		FROM t_comment c,
+             t_post_base p,
              t_wx_user u
-        WHERE i.IS_DEL = 0
-          AND i.RECEIVE_ID = #{receiveId}
-          AND i.CREATE_TIME > #{flagTime}
-          AND u.USER_ID = i.START_ID
-        ORDER BY i.CREATE_TIME DESC
+		WHERE c.IS_DEL = 0
+			AND p.ID = c.POST_ID
+			AND (c.RECEIVE_ID = #{userId}
+					AND c.START_ID != c.RECEIVE_ID
+					OR (p.USER_ID = #{userId}
+						AND  ISNULL(c.RECEIVE_ID)
+						AND c.START_ID != p.USER_ID))
+			AND u.USER_ID = c.START_ID
+			AND c.CREATE_TIME > #{flagTime}
+		ORDER BY c.CREATE_TIME DESC
     </select>
 
 </mapper>

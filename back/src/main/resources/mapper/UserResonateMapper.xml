@@ -108,6 +108,8 @@
         WHERE USER_ID = #{userId}
           AND TARGET_ID = #{postId}
     </select>
+
+    <!-- 小程序dao实现 -->
     <!-- 判断用户是否已收藏，is_del = 0 -->
     <select id="getByUserIdPostId" resultType="com.alibaba.fastjson.JSONObject">
         SELECT ID
@@ -115,5 +117,23 @@
         WHERE USER_ID = #{userId}
           AND TARGET_ID = #{postId}
           AND IS_DEL = 0
+    </select>
+
+    <!-- 获取未查看的点赞消息 -->
+    <select id="getNewResonateListByUserIdFlagTime" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            p.ID                  postId,
+            r.USER_ID             resId,
+            u.WX_AVATAR_URL       resAvatarUrl,
+            u.WX_NICK_NAME        resNickName,
+            r.CREATE_TIME         createTime
+        FROM t_user_resonate r,
+             t_post_base p,
+             t_wx_user u
+        WHERE r.IS_DEL = 0
+            AND p.ID = r.TARGET_ID
+            AND p.USER_ID = #{userId}
+            AND u.USER_ID = r.USER_ID
+            AND r.CREATE_TIME > #{flagTime}
     </select>
 </mapper>

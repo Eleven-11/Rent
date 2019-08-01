@@ -18,20 +18,20 @@ import javax.servlet.http.HttpServletRequest;
  * @date: 2019-07-31 11:30
  */
 @RestController
-@RequestMapping("/wxInfor")
-public class WxInformationController {
+@RequestMapping("/wxNewInfor")
+public class WxUserInformationController {
 
     @Autowired
     private WxInformationService wxInformationService;
 
     /**
-     * 获取微信用户未收到的最新消息
+     * 获取未读聊天消息
      * userId   用户ID
      * flagTime 参考时间
      * @param request
      * @return
      */
-    @PostMapping("/news")
+    @PostMapping("/message")
     public JSONObject getNewInformation(HttpServletRequest request) {
         try {
             return wxInformationService.getNewInfomation(CommonUtil.request2Json(request));
@@ -41,14 +41,42 @@ public class WxInformationController {
     }
 
     /**
-     *
+     * 获取系统未读消息
      * @param request
      * @return
      */
-    @PostMapping("/newSys")
+    @PostMapping("/sysMessage")
     public JSONObject getSysInformation(HttpServletRequest request) {
         try {
             return wxInformationService.getSysInformation(CommonUtil.request2Json(request));
+        }catch (Exception e){
+            return CommonUtil.errorJson(ErrorEnum.E_405);
+        }
+    }
+
+    /**
+     * 获取未读点赞消息
+     * @param request
+     * @return
+     */
+    @PostMapping("/resonate")
+    public JSONObject getNewRes(HttpServletRequest request) {
+        try {
+            return wxInformationService.getNewRes(CommonUtil.request2Json(request));
+        }catch (Exception e){
+            return CommonUtil.errorJson(ErrorEnum.E_405);
+        }
+    }
+
+    /**
+     * 获取未读评论消息
+     * @param request
+     * @return
+     */
+    @PostMapping("/comment")
+    public JSONObject getNewCom(HttpServletRequest request) {
+        try {
+            return wxInformationService.getNewCom(CommonUtil.request2Json(request));
         }catch (Exception e){
             return CommonUtil.errorJson(ErrorEnum.E_405);
         }

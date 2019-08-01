@@ -20,9 +20,22 @@ public interface WxInformationService {
     JSONObject getNewInfomation(JSONObject jsonObject);
 
     /**
-     * 获取系统消息
+     * 获取未读系统消息
      * @param jsonObject
      * @return
      */
     JSONObject getSysInformation(JSONObject jsonObject);
+
+    /**
+     * 获取未读点赞消息
+     * @param jsonObject
+     * @return
+     */
+    JSONObject getNewRes(JSONObject jsonObject);
+
+    /**
+     * 获取未读评论消息
+     * @param jsonObject
+     */
+    JSONObject getNewCom(JSONObject jsonObject);
 }

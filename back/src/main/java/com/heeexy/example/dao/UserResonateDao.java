@@ -13,11 +13,18 @@ public interface UserResonateDao {
 
     /**
      * 获取未查看的点赞消息
-     * xml未实现
+     * userId     用户ID
+     * flagTime   参考时间
      * @param jsonObject
      * @return
+     * postId           帖子Id
+     * resId            点赞人ID
+     * resAvatarUrl     点赞人头像
+     * resNickName      点赞人昵称
+     * createTime       点赞时间
      */
-    /*List<JSONObject> getNewResonateList(JSONObject jsonObject);*/
+    //FIXME 未测试
+    List<JSONObject> getNewResonateListByUserIdFlagTime(JSONObject jsonObject);
 
 
     /**

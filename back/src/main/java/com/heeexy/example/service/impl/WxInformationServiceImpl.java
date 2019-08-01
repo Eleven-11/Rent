@@ -35,10 +35,6 @@ public class WxInformationServiceImpl implements WxInformationService {
     @Autowired
     private UserResonateDao userResonateDao;
 
-
-
-
-
     /**
      * 获取用户最新未读消息
      * userId   用户ID
@@ -48,22 +44,31 @@ public class WxInformationServiceImpl implements WxInformationService {
      */
     @Override
     public JSONObject getNewInfomation(JSONObject jsonObject) {
-//        if (wxUserDao.queryUser(jsonObject) == null){
-//            return
-//        }
         //获取到最新的消息数据
         List<JSONObject> joList = wxUserInformationDao.getNewInformationByUserIdFlagTime(jsonObject);
         return CommonUtil.successPage(joList);
     }
 
     /**
-     * 获取系统消息
+     * 获取未读的系统消息
      * @param jsonObject
      * @return
      */
     @Override
     public JSONObject getSysInformation(JSONObject jsonObject) {
         List<JSONObject> joList = sysInformationDao.getSysInforListByUserIdFlagTime(jsonObject);
+        return CommonUtil.successPage(joList);
+    }
+
+    @Override
+    public JSONObject getNewRes(JSONObject jsonObject) {
+        List<JSONObject> joList = userResonateDao.getNewResonateListByUserIdFlagTime(jsonObject);
+        return CommonUtil.successPage(joList);
+    }
+
+    @Override
+    public JSONObject getNewCom(JSONObject jsonObject) {
+        List<JSONObject> joList = postCommentDao.getNewCommentListByUserIdFlagTime(jsonObject);
         return CommonUtil.successPage(joList);
     }
 }

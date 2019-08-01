@@ -15,6 +15,9 @@ public interface SysInformationDao {
     /**
      * 获取系统消息
      * @param jsonObject
+     * targetId       接收人ID
+     * content        内容
+     * createTime     创建时间
      * @return
      */
     List<JSONObject> getSysInforListByUserIdFlagTime(JSONObject jsonObject);
