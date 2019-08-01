@@ -217,7 +217,7 @@
         AND m.ID =#{postId}
     </select>
 
-    <!-- 获取帖子详情 -->
+    <!-- 校验帖子是否存在 -->
     <select id="getWxPostInfoByPostId" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
           ID         postId
@@ -276,6 +276,7 @@
         ACTIVE_TIME DESC
         LIMIT ${start},${end}
     </select>
+
     <select id="getReleaseTime" resultType="INTEGER">
         SELECT
             COUNT(0) releaseNum

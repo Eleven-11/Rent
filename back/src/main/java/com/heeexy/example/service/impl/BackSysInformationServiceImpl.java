@@ -1,6 +1,7 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.common.Const;
 import com.heeexy.example.config.websocket.WebSocketServer;
 import com.heeexy.example.dao.SysInformationDao;
 import com.heeexy.example.service.BackSysInformationService;
@@ -23,19 +24,21 @@ public class BackSysInformationServiceImpl implements BackSysInformationService 
 
     /**
      * 发送系统消息
-     * startId     发送人ID  rent系统默认
-     * receiveId   接收人ID
+     * targetId   接收人ID  如果为system_info群发
      * content    发送的内容
+     * 注意该接口未做targetId校验
      * @param jsonObject
      * @return
      */
     @Override
     public JSONObject sendMessage(JSONObject jsonObject) throws IOException {
         //判断是群发还是单发
-        if (jsonObject.getString("receiveId").equals("rent")){
-            WebSocketServer.sendMessageAll(jsonObject);
+        if (jsonObject.getString("targetId").equals("system_info")){
+            sysInformationDao.insertInformation(jsonObject);
+            WebSocketServer.sendMessageAll(jsonObject, Const.SEND_SYS_MESSAGE);
         } else {
-            WebSocketServer.sendSysMessage(jsonObject,jsonObject.getString("receiveId"));
+            sysInformationDao.insertInformation(jsonObject);
+            WebSocketServer.sendMessage(jsonObject, jsonObject.getString("targetId"), Const.SEND_SYS_MESSAGE);
         }
         return CommonUtil.successJson("发送成功");
     }

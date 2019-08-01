@@ -9,5 +9,21 @@ import lombok.Data;
  */
 public class Const {
 
+    /**
+     * websocket推送类型 - 用户消息
+     */
+    public final static String SEND_MESSAGE = "send_message";
+    /**
+     * websocket推送类型 - 系统消息
+     */
+    public final static String SEND_SYS_MESSAGE = "send_sys_message";
+    /**
+     * websocket推送类型 - 评论通知
+     */
+    public final static String SEND_COMMENT = "send_comment";
+    /**
+     * websocket推送类型 - 点赞通知
+     */
+    public final static String SEND_RESONATE ="send_resonate";
 
 }

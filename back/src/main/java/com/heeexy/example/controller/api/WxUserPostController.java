@@ -26,6 +26,7 @@ public class WxUserPostController {
 
     /**
      * 分页加载用户发布的帖子列表
+     * lookId 查看人id
      * userId 用户id
      * pageNum 第几页
      * pageSize 页大小

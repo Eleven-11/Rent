@@ -1,6 +1,7 @@
 package com.heeexy.example.util;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.common.enums.ReportType;
 import com.heeexy.example.config.exception.CommonJsonException;
 import com.heeexy.example.config.exception.WxPageException;
 import com.heeexy.example.util.constants.Constants;
@@ -222,4 +223,18 @@ public class CommonUtil {
 			throw new WxPageException();
 		}
 	}
+
+	/**
+	 * 封装处理websocket消息发送实体
+	 * @param type
+	 * @param jsonObject
+	 * @return
+	 */
+	public static JSONObject sendParam(String type, JSONObject jsonObject) {
+		JSONObject resultJson = new JSONObject();
+		resultJson.put("sendType",type);
+		resultJson.put("entry",jsonObject);
+		return successJson(resultJson);
+	}
+
 }

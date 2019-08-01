@@ -34,7 +34,9 @@
           AND m.USER_ID = #{userId}
           AND u.USER_ID = m.USER_ID
           AND m.TYPE_ID = f.ID
-          AND m.IS_LOWER_SHELF = '0'
+          <if test="lookId != userId">
+            AND m.IS_LOWER_SHELF = '0'
+          </if>
           AND m.IS_DEL = '0'
         ORDER BY m.CREATE_TIME DESC
         LIMIT ${start},${end}

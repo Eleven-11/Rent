@@ -12,7 +12,7 @@
           i.CREATE_TIME         createTime
         FROM t_sys_information i
         WHERE i.CREATE_TIME > #{flagTime}
-          AND i.TARGET_ID in (#{targetId},'system_info')
+          AND i.TARGET_ID in (#{userId},'system_info')
         ORDER BY i.CREATE_TIME DESC
     </select>
 
@@ -26,7 +26,7 @@
               ) values (
                 #{targetId},
                 #{content},
-                #{createTime}
+                now()
               );
     </insert>
 

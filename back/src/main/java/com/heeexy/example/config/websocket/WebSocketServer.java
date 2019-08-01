@@ -1,9 +1,11 @@
 package com.heeexy.example.config.websocket;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.common.Const;
 import com.heeexy.example.config.SpringUtil;
 import com.heeexy.example.dao.WxUserDao;
 import com.heeexy.example.dao.WxUserInformationDao;
+import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -88,7 +90,7 @@ public class WebSocketServer {
                 if (!jsonObject.getString("receiveId").toLowerCase().equals("sys_infor_key")){
                     jsonObject.put("createTime",new Date());
                     wxUserInformationDao.insertInformation(jsonObject);
-                    sendMessageTo(jsonObject, jsonObject.getString("receiveId"));
+                    sendMessage(jsonObject, jsonObject.getString("receiveId"), Const.SEND_MESSAGE);
                 }
             }
         }
@@ -106,49 +108,47 @@ public class WebSocketServer {
     }
 
     /**
-     * 消息单发
-     * @param jsonObject
-     * @param to
-     * @throws IOException
-     */
-    public void sendMessageTo(JSONObject jsonObject, String to) throws IOException {
-        // session.getBasicRemote().sendText(message);  
-        //session.getAsyncRemote().sendText(message);
-        //获取接收人的socker对象
-        WebSocketServer toServer = clients.get(to);
-        //判断是否在线
-        if (toServer != null && toServer.session != null){
-            toServer.session.getAsyncRemote().sendText(jsonObject.toJSONString());
-        }
-//        for (WebSocketServer item : clients.values()) {
-//            if (item.username.equals(to) ){
-//                item.session.getAsyncRemote().sendText(message);
-//            }
-//        }
-    }
-
-    /**
-     * 发送系统通知
+     * 发送系统推送
      * 个人
+     * 点赞、消息、评论、系统消息
      * @param jsonObject
      * @param to
+     * @param type
+     * @throws IOException
      */
-    public static void sendSysMessage(JSONObject jsonObject,String to){
+    public static void sendMessage(JSONObject jsonObject,String to,String type) throws IOException {
         WebSocketServer toServer = clients.get(to);
         //判断是否在线
         if (toServer != null && toServer.session != null){
-            toServer.session.getAsyncRemote().sendText(jsonObject.toJSONString());
+            toServer.session.getAsyncRemote().sendText(
+                    CommonUtil.sendParam(type, jsonObject).toJSONString());
         }
     }
 
+//    /**
+//     * 发送系统通知
+//     * 个人
+//     * @param jsonObject
+//     * @param to
+//     */
+//    public static void sendSysMessage(JSONObject jsonObject,String to){
+//        WebSocketServer toServer = clients.get(to);
+//        //判断是否在线
+//        if (toServer != null && toServer.session != null){
+//            toServer.session.getAsyncRemote().sendText(jsonObject.toJSONString());
+//        }
+//    }
+
     /**
-     * 系统消息群发
+     * 消息群发
+     * 系统消息
      * @param jsonObject
      * @throws IOException
      */
-    public static void sendMessageAll(JSONObject jsonObject) throws IOException {
+    public static void sendMessageAll(JSONObject jsonObject, String type) throws IOException {
         for (WebSocketServer item : clients.values()) {
-            item.session.getAsyncRemote().sendText(jsonObject.toJSONString());
+            item.session.getAsyncRemote().sendText(
+                    CommonUtil.sendParam(type, jsonObject).toJSONString());
         }
     }
 
