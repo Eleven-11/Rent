@@ -46,7 +46,7 @@ public class WxUserPostController {
     }
     /**
      * 修改帖子上下架
-     * @param request 进行操作的帖子id-postId，用户id-userId，上下架状态-ifLowShelf（0上架，1下架）
+     * @param request 进行操作的帖子id-postId，用户id-userId，上下架状态-isLowerShelf（0上架，1下架）
      * @return
      */
     @PostMapping("/updateOnShelf")

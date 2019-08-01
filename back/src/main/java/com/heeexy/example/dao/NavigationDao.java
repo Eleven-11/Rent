@@ -10,4 +10,11 @@ public interface NavigationDao {
      * @return int
      **/
     int getNavigationNum(JSONObject jsonObject);
+
+    /**
+     * @description 更新板块置顶帖子数量
+     * @param
+     * @return
+     **/
+    void updateTopNum(JSONObject jsonObject);
 }

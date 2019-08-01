@@ -3,18 +3,14 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.NavigationTopDao">
     <insert id="insertNavigationTop" useGeneratedKeys="true" keyProperty="topPostId">
-        BEGIN;
         INSERT INTO t_navigation_top(
         NAVIGATION_ID,
         POST_ID,
         SORT_TIME,
         CREATE_TIME
         )VALUES(#{navigationId},#{postId},NOW(),NOW());
-        UPDATE t_navigation
-        SET MAX_TOP_NUM =(SELECT COUNT(0) FROM t_navigation_top WHERE NAVIGATION_ID =#{navigationId})
-        WHERE ID = #{navigationId};
-        COMMIT;
     </insert>
+
     <update id="updateNavigationTop">
         UPDATE t_navigation_top
         SET POST_ID = #{postId}
@@ -33,7 +29,7 @@
         <if test="navigationId != null and navigationId !=''">
             AND NAVIGATION_ID = #{navigationId}
         </if>
-        <if test="postId != null and postId=''">
+        <if test="postId != null and postId !=''">
             AND POST_ID = #{postId}
         </if>
     </select>

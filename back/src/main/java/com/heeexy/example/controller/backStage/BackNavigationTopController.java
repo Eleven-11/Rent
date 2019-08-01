@@ -24,7 +24,7 @@ public class BackNavigationTopController {
     private NavigationTopService navigationTopService;
     /**
      * @description 添加置顶帖子信息
-     * @param request 导航栏id -- navigationId，要置顶的帖子id -- postId
+     * @param request 导航栏id -- navigationIds，要置顶的帖子id -- postId
      * @return 置顶后生成的主键 -- topPostId
      **/
     @PostMapping("/insertNavigationTop")

@@ -57,16 +57,16 @@ public class BackPostBaseController {
 
     /**
      * 更新帖子(修改浏览量、点赞量)
-     * @param request
+     * @param request 帖子id-postId，帖子偏移浏览量-devBrowse，帖子偏移点赞量-devLike（修改哪个量传哪个）
      * @return
      */
-    @PostMapping("/updatePostBase")
+    @PostMapping("/updatePostDev")
     public JSONObject updatePostBase(HttpServletRequest request){
         return postBaseService.updatePostBase(CommonUtil.request2Json(request));
     }
     /**
      * 修改帖子上下架
-     * @param request
+     * @param request 上下架帖子id - postId，上下架状态-isLowerShelf（上架0，下架1）
      * @return
      */
     @PostMapping("/updateOnShelf")

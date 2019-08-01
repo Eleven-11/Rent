@@ -55,7 +55,7 @@
     <!--设置帖子上下架-->
     <update id="updateOnShelf">
         UPDATE t_post_base
-        SET IS_DEL=0,IS_LOWER_SHELF=#{ifLowShelf}
+        SET IS_DEL=0,IS_LOWER_SHELF=#{isLowerShelf}
         WHERE ID = #{postId}
     </update>
 

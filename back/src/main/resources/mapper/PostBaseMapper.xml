@@ -194,9 +194,6 @@
         <if test="devLike !=null and devLike !=''">
             ,DEV_RESONATE =#{devLike}
         </if>
-        <if test="onShelf!=null and onShelf!=''">
-            ,IS_LOWER_SHELF=#{upShelf}
-        </if>
         WHERE ID = #{postId}
     </update>
 
@@ -296,7 +293,7 @@
     </select>
     <update id="updateOnShelf">
         UPDATE t_post_base
-        SET IS_DEL=0,IS_LOWER_SHELF=#{upShelf}
+        SET IS_DEL=0,IS_LOWER_SHELF=#{isLowerShelf}
         WHERE ID = #{postId}
     </update>
 

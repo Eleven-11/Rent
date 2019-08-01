@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,19 +36,30 @@ public class NavigationTopServiceImpl implements NavigationTopService {
      **/
     @Override
     public JSONObject insertNavigationTop(JSONObject jsonObject) {
-        //判断置顶帖子条数是否超出5条
-        if (navigationDao.getNavigationNum(jsonObject)==5) {
-            return CommonUtil.errorJson(ErrorEnum.E_30001);
+        //将传进来的导航栏id字符串分割成数组
+        List<String> navigationIds = Arrays.asList(jsonObject.get("navigationIds").toString().split(","));
+        System.out.println(navigationIds);
+        //添加置顶后返回的主键列表
+        List<Integer> topPostId = new ArrayList<>();
+        for (int i=0;i<navigationIds.size();i++) {
+            jsonObject.put("navigationId", navigationIds.get(i));
+            //判断置顶帖子条数是否超出5条
+            if (navigationDao.getNavigationNum(jsonObject) == 5) {
+                return CommonUtil.errorJson(ErrorEnum.E_30001);
+            }
+            //判断要设置置顶的帖子是否已经在该模块置顶
+            else if (navigationDao.getNavigationNum(jsonObject) <= 5 && !navigationTopDao.getNavigationTopList(jsonObject).isEmpty()) {
+                return CommonUtil.errorJson(ErrorEnum.WX_803);
+            }
+            //添加置顶帖子信息并返回主键topPostId
+            else {
+                navigationTopDao.insertNavigationTop(jsonObject);
+                navigationDao.updateTopNum(jsonObject);
+                System.out.println(jsonObject.get("topPostId"));
+                topPostId.add(i, Integer.valueOf(jsonObject.get("topPostId").toString()));
+            }
         }
-        //判断要设置置顶的帖子是否已经在该模块置顶
-        else if (navigationDao.getNavigationNum(jsonObject)<=5 &&navigationTopDao.getNavigationTopList(jsonObject)!=null){
-            return CommonUtil.errorJson(ErrorEnum.WX_803);
-        }
-        //添加置顶帖子信息并返回主键topPostId
-        else {
-            int topPostId = navigationTopDao.insertNavigationTop(jsonObject);
-            return CommonUtil.successJson(topPostId);
-        }
+        return CommonUtil.successJson(topPostId);
     }
     /**
      * @description 获取模块置顶的帖子列表

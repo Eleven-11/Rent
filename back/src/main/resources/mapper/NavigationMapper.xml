@@ -3,6 +3,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.NavigationDao">
     <select id="getNavigationNum" resultType="java.lang.Integer">
-        SELECT a.MAX_TOP_NUM topNum FROM t_navigation a WHERE a.ID = #{navigationId}
+        SELECT
+            a.MAX_TOP_NUM topNum
+        FROM
+            t_navigation a
+        WHERE a.ID = #{navigationId}
     </select>
+    <update id="updateTopNum">
+        UPDATE t_navigation
+        SET MAX_TOP_NUM =(SELECT COUNT(0) FROM t_navigation_top WHERE NAVIGATION_ID =#{navigationId})
+        WHERE ID = #{navigationId};
+    </update>
 </mapper>
