@@ -136,4 +136,20 @@
 		ORDER BY c.CREATE_TIME DESC
     </select>
 
+    <select id="getMessageDataById" resultType="com.alibaba.fastjson.JSONObject">
+      	SELECT
+            c.CONTENT           content,
+            c.POST_ID           postId,
+            c.START_ID          startId,
+            u.WX_AVATAR_URL     startAvatarUrl,
+            u.WX_NICK_NAME      startNickName,
+            c.CREATE_TIME       createTime
+        FROM t_comment c,
+            t_post_base p,
+            t_wx_user u
+        WHERE c.IS_DEL = 0
+            AND p.ID = c.POST_ID
+            AND c.ID = #{commentId}
+            AND u.USER_ID = c.START_ID
+    </select>
 </mapper>

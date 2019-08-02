@@ -24,8 +24,14 @@ public interface PostCommentDao {
      * startNickName    评论者昵称
      * createTime       评论时间
      */
-    //FIXME 未测试
     List<JSONObject> getNewCommentListByUserIdFlagTime(JSONObject jsonObject);
+
+    /**
+     * 通过pcommentId获取评论通知推送的实体
+     * @param jsonObject
+     * @return
+     */
+    JSONObject getMessageDataById(JSONObject jsonObject);
 
     /**
      * 获取帖子评论列表

@@ -1,6 +1,8 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.common.Const;
+import com.heeexy.example.config.websocket.WebSocketServer;
 import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.dao.UserResonateDao;
 import com.heeexy.example.dao.UserRestrictDao;
@@ -9,7 +11,9 @@ import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,13 +63,15 @@ public class UserResonateServiceImpl implements UserResonateService {
         //用户处于禁言状态无法点赞
         if (userRestrictDao.getResStatus(jsonObject) == 1) {
             return CommonUtil.errorJson(ErrorEnum.WX_884);
-        }
-        else {
+        } else {
+            //判断是否已存在点赞记录
             if (userResonateDao.getIfLiked(jsonObject) != null) {
                 userResonateDao.updateDelPostLike(jsonObject);
                 return CommonUtil.successJson(userResonateDao.getLikeStatus(jsonObject));
             } else {
                 userResonateDao.insertPostLike(jsonObject);
+                //FIXME 如果是第一次点赞，发送推送给用户
+                send(jsonObject);
                 return CommonUtil.successJson(userResonateDao.getLikeStatus(jsonObject));
             }
         }
@@ -86,5 +92,31 @@ public class UserResonateServiceImpl implements UserResonateService {
         }
         int count = userLikePostIds.size();
         return CommonUtil.successPage(jsonObject,userLikePostList,count);
+    }
+
+
+    /**
+     * 发送点赞消息给发帖人
+     * 仅第一次点赞有效，取消后在点赞无效
+     * @param resonate
+     */
+    private void send(JSONObject resonate){
+        try {
+            //获取帖子实体
+            JSONObject post = postBaseDao.getWxUserPostInfo(resonate);
+            //如果有帖子实体
+            if (post != null){
+                String to = post.getString("userId");
+                //判断接受者是否在线
+                if (!StringUtils.isEmpty(to) && WebSocketServer.queryOnLine(to)){
+                    //通过
+                    JSONObject jo = userResonateDao.getMessageDataById(resonate);
+
+                        WebSocketServer.sendMessage(jo,to, Const.SEND_RESONATE);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

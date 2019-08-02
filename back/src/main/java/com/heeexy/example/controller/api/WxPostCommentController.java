@@ -3,6 +3,7 @@ package com.heeexy.example.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostCommentService;
 import com.heeexy.example.util.CommonUtil;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +22,10 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/wxPostComment")
 public class WxPostCommentController {
+
     @Autowired
     private PostCommentService postCommentService;
+
     /**
      * @description 添加用户评论信息
      * @param request 帖子id-postId，评论发起人id-startId，评论接收人id-receiveId（当回复他人评论时不为空）
@@ -39,6 +42,7 @@ public class WxPostCommentController {
         }
         return postCommentService.insertComment(jsonObject);
     }
+
     /**
      * @description 获取帖子评论列表
      * @param request 帖子id-postId
@@ -57,6 +61,7 @@ public class WxPostCommentController {
         System.out.println(CommonUtil.request2Json(request));
         return postCommentService.getPostCommentList(CommonUtil.request2Json(request));
     }
+
     /**
      * @description 逻辑删除帖子的评论
      * @param request 评论id-commentId
@@ -66,6 +71,7 @@ public class WxPostCommentController {
     public JSONObject updateDelCommentById(HttpServletRequest request) {
         return postCommentService.updateDelCommentById(CommonUtil.request2Json(request));
     }
+
     /**
      * @description 获取指定用户评论列表
      * @param request 系统用户id-userId

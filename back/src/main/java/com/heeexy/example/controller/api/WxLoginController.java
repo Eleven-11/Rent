@@ -49,7 +49,6 @@ public class WxLoginController {
     public Map decodeUserInfo(@RequestParam String encryptedData,
                               @RequestParam String iv,
                               @RequestParam String code) throws IOException {
-
         Map map = new HashMap();
         //登录凭证不能为空
         if (code == null || code.length() == 0) {

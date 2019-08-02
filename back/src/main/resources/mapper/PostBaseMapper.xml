@@ -213,6 +213,7 @@
         u.WX_AVATAR_URL     posterAvatar,
         f.TYPE_NAME         typeName,
         m.ID                postId,
+        m.USER_ID           userId,
         DATE_FORMAT(m.CREATE_TIME,'%Y-%m-%d %T')       createTime,
         m.CONTENT           content
         FROM

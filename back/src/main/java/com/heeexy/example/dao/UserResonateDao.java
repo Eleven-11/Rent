@@ -26,6 +26,12 @@ public interface UserResonateDao {
     //FIXME 未测试
     List<JSONObject> getNewResonateListByUserIdFlagTime(JSONObject jsonObject);
 
+    /**
+     * 通过likeId获取发送的点赞消息数据
+     * @param jsonObject
+     * @return
+     */
+    JSONObject getMessageDataById(JSONObject jsonObject);
 
     /**
      * @description 判断用户是否点赞过，用于更新点赞状态（即包括取消点赞状态的记录）

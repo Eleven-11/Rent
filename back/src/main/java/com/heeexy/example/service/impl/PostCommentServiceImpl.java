@@ -1,15 +1,20 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.common.Const;
+import com.heeexy.example.config.websocket.WebSocketServer;
 import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.dao.PostCommentDao;
 import com.heeexy.example.dao.UserRestrictDao;
 import com.heeexy.example.service.PostCommentService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
+import org.apache.ibatis.javassist.tools.web.Webserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +59,8 @@ public class PostCommentServiceImpl implements PostCommentService {
             return CommonUtil.errorJson(ErrorEnum.WX_884);
         } else {
             postCommentDao.insertComment(jsonObject);
+            //FIXME 发送评论推送给关联的用户
+            send(jsonObject);
             return CommonUtil.successJson(jsonObject.get("commentId"));
         }
     }
@@ -97,5 +104,33 @@ public class PostCommentServiceImpl implements PostCommentService {
         }
         int count = userCommentList.size();
         return CommonUtil.successPage(jsonObject,userCommentPostList,count);
+    }
+
+    /**
+     * 通过评论实体发送评论通知
+     * @param comment
+     */
+    private void send(JSONObject comment){
+        try {
+            String to = comment.getString("receiveId");
+            //判断评论是否有指定接收人，如果没有去寻找帖子发布人
+            if (StringUtils.isEmpty(to)){
+                //通过postId获取帖子详情
+                JSONObject post = postBaseDao.getWxUserPostInfo(comment);
+                //如果帖子不为空
+                if (post != null){
+                    //设置消息接收人为发帖人
+                    to  = post.getString("userId");
+                }
+            }
+            //校验用户当前是否登录
+            if (!StringUtils.isEmpty(to) && WebSocketServer.queryOnLine(to)){
+                //通过commentId获取发送的消息实体
+                JSONObject jo = postCommentDao.getMessageDataById(comment);
+                WebSocketServer.sendMessage(jo,to, Const.SEND_COMMENT);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

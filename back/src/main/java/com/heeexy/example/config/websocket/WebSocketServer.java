@@ -3,6 +3,7 @@ package com.heeexy.example.config.websocket;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.common.Const;
 import com.heeexy.example.config.SpringUtil;
+import com.heeexy.example.dao.PostBaseDao;
 import com.heeexy.example.dao.WxUserDao;
 import com.heeexy.example.dao.WxUserInformationDao;
 import com.heeexy.example.util.CommonUtil;
@@ -41,6 +42,12 @@ public class WebSocketServer {
 
     @Autowired
     private WxUserDao wxUserDao = (WxUserDao) SpringUtil.getBean("wxUserDao");;
+
+    /**
+     * 手动显示加载bean
+     */
+    @Autowired
+    private PostBaseDao postBaseDao = (PostBaseDao) SpringUtil.getBean("postBaseDao");;
 
     /**
      * 建立链接时触发
@@ -107,6 +114,7 @@ public class WebSocketServer {
         error.printStackTrace();
     }
 
+
     /**
      * 发送系统推送
      * 个人
@@ -117,27 +125,13 @@ public class WebSocketServer {
      * @throws IOException
      */
     public static void sendMessage(JSONObject jsonObject,String to,String type) throws IOException {
-        WebSocketServer toServer = clients.get(to);
         //判断是否在线
-        if (toServer != null && toServer.session != null){
+        if (queryOnLine(to)){
+            WebSocketServer toServer = clients.get(to);
             toServer.session.getAsyncRemote().sendText(
                     CommonUtil.sendParam(type, jsonObject).toJSONString());
         }
     }
-
-//    /**
-//     * 发送系统通知
-//     * 个人
-//     * @param jsonObject
-//     * @param to
-//     */
-//    public static void sendSysMessage(JSONObject jsonObject,String to){
-//        WebSocketServer toServer = clients.get(to);
-//        //判断是否在线
-//        if (toServer != null && toServer.session != null){
-//            toServer.session.getAsyncRemote().sendText(jsonObject.toJSONString());
-//        }
-//    }
 
     /**
      * 消息群发
@@ -150,6 +144,20 @@ public class WebSocketServer {
             item.session.getAsyncRemote().sendText(
                     CommonUtil.sendParam(type, jsonObject).toJSONString());
         }
+    }
+
+    /**
+     * 判断用户是否在线
+     * @param key
+     * @return
+     */
+    public static boolean queryOnLine(String key){
+        WebSocketServer toServer = clients.get(key);
+        //判断是否在线
+        if (toServer != null && toServer.session != null){
+            return true;
+        }
+        return false;
     }
 
     public static synchronized int getOnlineCount() {
