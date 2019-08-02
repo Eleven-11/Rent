@@ -8,9 +8,12 @@
     <select id="countComments" resultType="java.lang.Integer">
         select count(0) from
         (SELECT
+            a.ID commentId,
             a.CONTENT content,
             a.CREATE_TIME createTime,
             u1.WX_NICK_NAME startNickname,
+            a.START_ID startId,
+            a.RECEIVE_ID receiveId,
             u1.WX_GENDER startGender,
             u1.WX_AVATAR_URL startImg,
             u2.WX_NICK_NAME receiveNickname,
@@ -27,8 +30,11 @@
     </select>
     <select id="getPostCommentList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
+            a.ID commentId,
             a.CONTENT content,
             a.CREATE_TIME createTime,
+            a.START_ID startId,
+            a.RECEIVE_ID receiveId,
             u1.WX_NICK_NAME startNickname,
             u1.WX_GENDER startGender,
             u1.WX_AVATAR_URL startImg,
@@ -70,16 +76,25 @@
     </select>
 
     <update id="updateDelCommentById">
+        BEGIN;
         UPDATE t_comment
         SET IS_DEL = '1'
         WHERE
-            ID = #{commentId}
+            ID = #{commentId};
+        UPDATE t_post_base
+        SET TOTAL_COMMENTS =(SELECT COUNT(0) FROM t_comment WHERE POST_ID =(SELECT a.POST_ID FROM t_comment a WHERE a.ID =#{commentId}) AND a.IS_DEL =0)
+        WHERE
+            ID = #{postId};
+        COMMIT;
     </update>
 
     <select id="getUserCommentList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             a.POST_ID postId,
+            a.ID commentId,
             a.CREATE_TIME commentCreateTime,
+            a.START_ID startId,
+            a.RECEIVE_ID receiveId,
             u1.WX_NICK_NAME startNickname,
             u1.WX_AVATAR_URL startImg,
             u2.WX_NICK_NAME receiveNickname,

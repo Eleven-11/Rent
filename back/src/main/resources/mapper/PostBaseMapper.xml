@@ -38,6 +38,9 @@
         <!--AND m.IS_LOWER_SHELF = '0'-->
         <!--AND m.IS_DEL = '0'-->
         <!--</if>-->
+        <if test="isDel != null and isDel !=''">
+            AND m.IS_DEL = #{isDel}
+        </if>
         <if test="typeId !=null and typeId !=''">
             AND m.TYPE_ID = #{typeId}
         </if>
@@ -160,6 +163,9 @@
             <!--AND m.IS_LOWER_SHELF = '0'-->
             <!--AND m.IS_DEL = '0'-->
         <!--</if>-->
+        <if test="isDel != null and isDel !=''">
+            AND m.IS_DEL = #{isDel}
+        </if>
         <if test="typeId !=null and typeId !=''">
             AND m.TYPE_ID = #{typeId}
         </if>
@@ -295,6 +301,16 @@
         UPDATE t_post_base
         SET IS_DEL=0,IS_LOWER_SHELF=#{isLowerShelf}
         WHERE ID = #{postId}
+    </update>
+    <update id="updateDelPost">
+        UPDATE t_post_base
+        SET IS_DEL = 1
+        WHERE ID =#{postId}
+    </update>
+    <update id="updateDeletedPost">
+        UPDATE t_post_base
+        SET IS_DEL = 0
+        WHERE ID =#{postId}
     </update>
 
 </mapper>

@@ -53,7 +53,8 @@ public class PostCommentServiceImpl implements PostCommentService {
         if (userRestrictDao.getResStatus(jsonObject) == 1) {
             return CommonUtil.errorJson(ErrorEnum.WX_884);
         } else {
-            return CommonUtil.successJson(postCommentDao.insertComment(jsonObject));
+            postCommentDao.insertComment(jsonObject);
+            return CommonUtil.successJson(jsonObject.get("commentId"));
         }
     }
 

@@ -48,7 +48,7 @@ public class PostBaseServiceImpl implements PostBaseService {
     }
 
     /**
-     * 更改帖子点赞量、浏览量、帖子上架下架
+     * 更改帖子点赞量、浏览量
      * @param jsonObject
      * @return
      */
@@ -90,9 +90,37 @@ public class PostBaseServiceImpl implements PostBaseService {
         }
     }
 
+    /**
+     * 后台：设置帖子上下架
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
     @Override
     public JSONObject updateOnShelf(JSONObject jsonObject) {
         postBaseDao.updateOnShelf(jsonObject);
         return CommonUtil.successJson("修改成功，刷新后查看");
     }
+
+    /**
+     * 后台： 逻辑删除帖子
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @Override
+    public JSONObject updateDelPost(JSONObject jsonObject) {
+        postBaseDao.updateDelPost(jsonObject);
+        return CommonUtil.successJson("删除成功");
+    }
+
+    /**
+     * @description 恢复逻辑删除的帖子
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @Override
+    public JSONObject recoverPost(JSONObject jsonObject) {
+        postBaseDao.updateDeletedPost(jsonObject);
+        return CommonUtil.successJson("恢复帖子成功，刷新后查看");
+    }
+
 }

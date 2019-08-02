@@ -27,7 +27,8 @@ public class BackPostBaseController {
     /**
      * @description 获取帖子列表（只包括基本信息）
      * @param request （帖子id-postId，发帖人昵称-nickname（用于获取指定用户发布的帖子列表，非必须）
-     *                关键词-keyword（用于进行模糊查询，包括地址及帖子内容））
+     *                关键词-keyword（用于进行模糊查询，包括地址及帖子内容）
+     *                isDel - 查看被删除的帖子时传入1，否则传入0）
      * @return 帖子列表
      *         发帖人-poster,
      *         发帖人头像-posterAvatar,
@@ -72,6 +73,24 @@ public class BackPostBaseController {
     @PostMapping("/updateOnShelf")
     public JSONObject updateOnShelf(HttpServletRequest request){
         return postBaseService.updateOnShelf(CommonUtil.request2Json(request));
+    }
+    /**
+     * 逻辑删除帖子
+     * @param request 删除帖子id - postId
+     * @return
+     */
+    @PostMapping("/updateDelPost")
+    public JSONObject updateDelPost(HttpServletRequest request){
+        return postBaseService.updateDelPost(CommonUtil.request2Json(request));
+    }
+    /**
+     * 恢复逻辑删除的帖子
+     * @param request 被删除帖子id - postId
+     * @return
+     */
+    @PostMapping("/recoverPost")
+    public JSONObject recoverPost(HttpServletRequest request){
+        return postBaseService.recoverPost(CommonUtil.request2Json(request));
     }
 
 }
