@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 /**
  * @author Lingling
@@ -23,6 +24,7 @@ public class WxUserCollectionController {
     private UserCollectionService userCollectionService;
 
 
+
     /**
      *功能描述:根据用户ID查询用户收藏的帖子列表
      *@param request (用户id--wxUserId)
@@ -30,6 +32,7 @@ public class WxUserCollectionController {
      */
     @GetMapping("/getUserCollList")
     public JSONObject getUserCollList(HttpServletRequest request) {
+
         return userCollectionService.getUserCollList(CommonUtil.request2Json(request));
     }
     /**

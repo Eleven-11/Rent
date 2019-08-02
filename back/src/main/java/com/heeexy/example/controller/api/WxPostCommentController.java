@@ -3,7 +3,6 @@ package com.heeexy.example.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostCommentService;
 import com.heeexy.example.util.CommonUtil;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +34,7 @@ public class WxPostCommentController {
     @PostMapping("/insertComment")
     public JSONObject insertComment(HttpServletRequest request) {
         JSONObject jsonObject = CommonUtil.request2Json(request);
+
         System.out.println(jsonObject);
         if (jsonObject.get("receiveId")==null)
         {
@@ -58,7 +58,7 @@ public class WxPostCommentController {
      **/
     @GetMapping("/getCommentList")
     public JSONObject getCommentList(HttpServletRequest request) {
-        System.out.println(CommonUtil.request2Json(request));
+
         return postCommentService.getPostCommentList(CommonUtil.request2Json(request));
     }
 
