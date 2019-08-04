@@ -57,7 +57,7 @@
                NOW()
             );
         UPDATE t_post_base
-        SET TOTAL_RESONATE = (select count(0) from t_user_resonate where TARGET_ID=#{postId}), ACTIVE_TIME = NOW()
+        SET TOTAL_RESONATE = (select count(0) from t_user_resonate where TARGET_ID=#{postId} AND IS_DEL = 0), ACTIVE_TIME = NOW()
         WHERE
             ID = #{postId};
         COMMIT;

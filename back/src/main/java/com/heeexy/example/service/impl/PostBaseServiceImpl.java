@@ -78,6 +78,10 @@ public class PostBaseServiceImpl implements PostBaseService {
             return CommonUtil.errorJson(ErrorEnum.WX_884);
         } else {
             if (postBaseDao.getReleaseTime(jsonObject) < 5) {
+                if ((Integer)jsonObject.get("minPrice")>(Integer) jsonObject.get("maxPrice"))
+                {
+                    return CommonUtil.errorJson(ErrorEnum.WX_807);
+                }
                 postBaseDao.insertPostBase(jsonObject);
                 //判断是否有上传图片集合
                 if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {

@@ -36,8 +36,20 @@
           <if test="lookId != userId">
             AND m.IS_LOWER_SHELF = '0'
           </if>
+          <if test="isMall!=null and isMall! !=''">
+            AND m.IS_MALL = #{isMall}
+          </if>
+           <if test="isSub != null and isSub !=''">
+            AND m.IS_SUB = #{isSub}
+           </if>
           AND m.IS_DEL = '0'
-        ORDER BY m.CREATE_TIME DESC
+          <if test="isPop ==null">
+              ORDER BY m.CREATE_TIME DESC
+          </if>
+          <if test="isPop !=null">
+              ORDER BY m.ACTIVE_TIME DESC
+          </if>
+
         LIMIT ${start},${end}
     </select>
 

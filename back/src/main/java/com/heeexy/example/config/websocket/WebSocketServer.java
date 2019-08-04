@@ -91,8 +91,10 @@ public class WebSocketServer {
         if (jsonObject != null){
             System.out.println(jsonObject.getString("startId") +" to "+jsonObject.getString("receiveId") +":"+ jsonObject.getString("content"));
             //判断是否有接受者
+            JSONObject u = new JSONObject();
+            u.put("userId",jsonObject.get("receiveId"));
             if (jsonObject.getString("receiveId") != null
-                && null != wxUserDao.getWxUserInfo((JSONObject) new JSONObject().put("userId",jsonObject.get("receiveId")))){
+                && null != wxUserDao.getWxUserInfo(u)){
                 //判断是个人消息还是系统消息
                 if (!jsonObject.getString("receiveId").toLowerCase().equals("sys_infor_key")){
                     jsonObject.put("createTime",new Date());
@@ -129,7 +131,7 @@ public class WebSocketServer {
         if (queryOnLine(to)){
             WebSocketServer toServer = clients.get(to);
             toServer.session.getAsyncRemote().sendText(
-                    CommonUtil.sendParam(type, jsonObject).toJSONString());
+                     CommonUtil.sendParam(type, jsonObject).toJSONString());
         }
     }
 
