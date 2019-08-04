@@ -184,7 +184,8 @@ public class WxLoginController {
             //首次登录未授权，获取游客信息userId，之后登录授权，此时执行插入微信用户信息操作
             //获取登录用户的userId
             session.setAttribute("userId",jsonObject.get("userId"));
-            return wxUserService.getWxUserList(jsonObject);
+            wxUserService.insertWxUser(jsonObject);
+            return CommonUtil.successJson(jsonObject.get("userId"));
 
         }
         else if(jsonObject.get("openId")==null&&jsonObject.get("userId")!=null){
