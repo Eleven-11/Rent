@@ -151,7 +151,6 @@ public class WxLoginController {
             //当用户已授权过但清除缓存（即无法获取userId）
             System.out.println(wxUserService.getAuthStatus(jsonObject));
             if(wxUserService.getAuthStatus(jsonObject)!=null){
-                //TODO
                 com.alibaba.fastjson.JSONObject authJson = wxUserService.getAuthStatus(jsonObject);
                 //获取登录用户的userId
                 session.setAttribute("userId",authJson.get("userId"));
@@ -160,7 +159,7 @@ public class WxLoginController {
             }
             //用户首次登录即授权
             else {
-                //TODO
+                //TODO 首次登录即授权
                 String userId = wxUserService.insertWxUser(jsonObject);
                 com.alibaba.fastjson.JSONObject authJson = new com.alibaba.fastjson.JSONObject();
                 authJson.put("userId",userId);
@@ -169,8 +168,9 @@ public class WxLoginController {
                 return authJson;
             }
         }
-        //TODO
+
         else if(jsonObject.get("openId")==null &&jsonObject.get("userId")==null){
+            //TODO 首次不授权以游客身份登录
             //首次登录未授权，执行插入游客信息操作
             String visitorId = visitorService.insertVisitor(jsonObject);
             com.alibaba.fastjson.JSONObject visitorJson = new com.alibaba.fastjson.JSONObject();
@@ -180,7 +180,7 @@ public class WxLoginController {
             return visitorJson;
         }
         else if(jsonObject.get("openId")!=null&&jsonObject.get("userId")!=null){
-            //TODO
+            //TODO 首次授权
             //首次登录未授权，获取游客信息userId，之后登录授权，此时执行插入微信用户信息操作
             //获取登录用户的userId
             session.setAttribute("userId",jsonObject.get("userId"));
@@ -188,7 +188,6 @@ public class WxLoginController {
 
         }
         else if(jsonObject.get("openId")==null&&jsonObject.get("userId")!=null){
-            //TODO
             //获取登录用户的userId
             session.setAttribute("userId",jsonObject.get("userId"));
             //以游客身份登录
