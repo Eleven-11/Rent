@@ -1,11 +1,14 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.common.Const;
+import com.heeexy.example.config.websocket.WebSocketServer;
 import com.heeexy.example.dao.VisitorDao;
 import com.heeexy.example.service.VisitorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -30,11 +33,19 @@ public class VisitorServiceImpl implements VisitorService {
         String visitorId = UUID.randomUUID().toString();
         jsonObject.put("visitorId",visitorId);
         visitorDao.insertVisitor(jsonObject);
-        //发送系统消息
+        /* 发送系统消息
+         * targetId       接收人ID
+         * content        内容
+         * createTime     创建时间
+         */
         try{
-            //TODO WebSocketServer.sendMessageAll("", Const.SEND_SYS_MESSAGE);
+            JSONObject sys = new JSONObject();
+            sys.put("targetId",visitorId);
+            sys.put("content","游客用户第一次登陆");
+            sys.put("createTime",new Date());
+            WebSocketServer.sendMessageAll(sys, Const.SEND_SYS_MESSAGE);
         }catch (Exception e){
-
+            e.printStackTrace();
         }
         return visitorId;
     }

@@ -10,6 +10,7 @@ import com.heeexy.example.util.UUIDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -47,11 +48,19 @@ public class  WxUserServiceImpl implements WxUserService {
         String userId = UUIDUtils.getUUID();
         jsonObject.put("userId",userId);
         wxUserDao.insertWxUser(jsonObject);
-        //自动发送系统消息
+        /* 发送系统消息
+         * targetId       接收人ID
+         * content        内容
+         * createTime     创建时间
+         */
         try{
-           //TODO WebSocketServer.sendMessageAll("", Const.SEND_SYS_MESSAGE);
+            JSONObject sys = new JSONObject();
+            sys.put("targetId",userId);
+            sys.put("content","微信用户第一次授权");
+            sys.put("createTime",new Date());
+            WebSocketServer.sendMessageAll(sys, Const.SEND_SYS_MESSAGE);
         }catch (Exception e){
-
+            e.printStackTrace();
         }
         return userId;
     }
