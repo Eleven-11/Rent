@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.heeexy.example.dao.StatisticsDao">
+    <select id="getGenderByAll" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT WX_GENDER,COUNT(0) FROM t_wx_user
+        GROUP BY WX_GENDER
+        ORDER BY WX_GENDER
+    </select>
+
+    <select id="getGenderByMonth" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+         count(t_wx_user.WX_GENDER) count,
+        --  CONCAT(YEAR(CREATE_TIME),'-',MONTH(CREATE_TIME)) AS createTime,
+         t_date.cmonth
+        FROM
+         (#           构造当前日期之前6个月的时间表
+          SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 5 MONTH),'%Y-%m') AS cmonth
+          UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 4 MONTH),'%Y-%m') AS cmonth
+          UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 3 MONTH),'%Y-%m') AS cmonth
+          UNION ALL
+            SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 2 MONTH),'%Y-%m') AS cmonth
+          UNION ALL
+          SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 1 MONTH),'%Y-%m') AS cmonth
+            UNION ALL
+          SELECT DATE_FORMAT(CURDATE(),'%Y-%m') AS cmonth
+         ) t_date
+         LEFT JOIN t_wx_user ON DATE_FORMAT(t_wx_user.create_time,'%Y-%m') = t_date.cmonth
+        WHERE t_wx_user.WX_GENDER =#{gender}
+        GROUP BY
+         t_date.cmonth
+    </select>
+    <select id="getPostCommentByWeek" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(0) commentNum,
+            POST_ID postId,
+            a.content
+        FROM
+            t_comment
+        LEFT JOIN t_post_base a ON t_comment.POST_ID = a.ID
+        WHERE
+            t_comment.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY)
+        AND NOW()
+        AND t_comment.IS_DEL =0
+        GROUP BY
+            POST_ID
+        ORDER BY commentNum DESC
+    </select>
+    <select id="getPostCommentByMonth" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(0) commentNum,
+            POST_ID postId,
+            a.content
+        FROM
+            t_comment
+        LEFT JOIN t_post_base a ON t_comment.POST_ID = a.ID
+        WHERE
+            t_comment.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH)
+        AND NOW()
+        AND t_comment.IS_DEL =0
+        GROUP BY
+            POST_ID
+        ORDER BY commentNum DESC
+    </select>
+    <select id="getPostPriceByMonth" resultType="com.alibaba.fastjson.JSONObject">
+    </select>
+    <select id="getPostPriceByWeek" resultType="com.alibaba.fastjson.JSONObject"></select>
+    <select id="getPostCollectByWeek" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(0) collectNum,
+            POST_ID postId,
+            a.content
+        FROM
+            t_user_collection
+        LEFT JOIN t_post_base a ON t_user_collection.POST_ID = a.ID
+        WHERE
+            t_user_collection.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 7 day)
+        AND NOW()
+        AND t_user_collection.IS_DEL = 0
+        GROUP BY
+            POST_ID
+        ORDER BY collectNum DESC
+    </select>
+    <select id="getPostCollectByMonth" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(0) collectNum,
+            POST_ID postId,
+            a.content
+        FROM
+            t_user_collection
+        LEFT JOIN t_post_base a ON t_user_collection.POST_ID = a.ID
+        WHERE
+            t_user_collection.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH)
+        AND NOW()
+        AND t_user_collection.IS_DEL = 0
+        GROUP BY
+            POST_ID
+        ORDER BY collectNum DESC
+    </select>
+
+    <select id="getPostLikeByWeek" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(0) likeNum,
+            TARGET_ID postId,
+            a.content
+        FROM
+            t_user_resonate
+        LEFT JOIN t_post_base a ON t_user_resonate.TARGET_ID = a.ID
+        WHERE
+            t_user_resonate.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 7 day)
+        AND NOW()
+        AND t_user_resonate.IS_DEL =0
+        GROUP BY
+            TARGET_ID
+        ORDER BY likeNum DESC
+    </select>
+    <select id="getPostLikeByMonth" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(0) likeNum,
+            TARGET_ID postId,
+            a.content
+        FROM
+            t_user_resonate
+        LEFT JOIN t_post_base a ON t_user_resonate.TARGET_ID = a.ID
+        WHERE
+            t_user_resonate.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH)
+        AND NOW()
+        AND t_user_resonate.IS_DEL =0
+        GROUP BY
+            TARGET_ID
+        ORDER BY likeNum DESC
+    </select>
+    <select id="getPostRegionByMonth" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(c.USER_ID) browse,
+            b.REGION region
+        FROM
+            t_post_base a
+        LEFT JOIN t_post_region b ON a.ADDRESS LIKE CONCAT('%', b.region, '%')
+        LEFT JOIN t_user_browse c ON a.ID = c.POST_ID
+        AND c.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH)
+        AND NOW()
+        AND c.IS_DEL = 0
+        GROUP BY
+            b.REGION
+    </select>
+    <select id="getPostRegionByWeek" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(c.USER_ID) browse,
+            b.REGION region
+        FROM
+            t_post_base a
+        LEFT JOIN t_post_region b ON a.ADDRESS LIKE CONCAT('%', b.region, '%')
+        LEFT JOIN t_user_browse c ON a.ID = c.POST_ID
+        AND c.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 7 day)
+        AND NOW()
+        AND c.IS_DEL = 0
+        GROUP BY
+            b.REGION
+
+    </select>
+    <select id="getUserFollowByMonth" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(FAN_ID) fans,
+            FOLLOW_ID follower,
+            a.WX_NICK_NAME
+        FROM
+            t_user_follow
+        LEFT JOIN t_wx_user a ON t_user_follow.FOLLOW_ID = a.USER_ID
+        WHERE
+            t_user_follow.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH)
+        AND NOW()
+        AND t_user_follow.IS_DEL = 0
+        GROUP BY
+            FOLLOW_ID
+        ORDER BY
+            fans DESC
+    </select>
+    <select id="getUserFollowByWeek" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(FAN_ID) fans,
+            FOLLOW_ID follower,
+            a.WX_NICK_NAME
+        FROM
+            t_user_follow
+        LEFT JOIN t_wx_user a ON t_user_follow.FOLLOW_ID = a.USER_ID
+        WHERE
+            t_user_follow.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 7 day)
+        AND NOW()
+        AND t_user_follow.IS_DEL = 0
+        GROUP BY
+            FOLLOW_ID
+        ORDER BY
+            fans DESC
+    </select>
+</mapper>
