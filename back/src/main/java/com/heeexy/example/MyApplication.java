@@ -23,8 +23,6 @@ public class MyApplication extends SpringBootServletInitializer {
 		SpringApplication application = new SpringApplication(MyApplication.class);
 		application.setBannerMode(Banner.Mode.OFF);
 		application.run(args);
-//		ConfigurableApplicationContext configurableApplicationContext = application.run(args);
-//		WebSocketServer.setApplicationContext(configurableApplicationContext);
 	}
 
 	@Override

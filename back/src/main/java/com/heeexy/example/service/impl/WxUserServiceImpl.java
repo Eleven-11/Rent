@@ -1,6 +1,8 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.common.Const;
+import com.heeexy.example.config.websocket.WebSocketServer;
 import com.heeexy.example.dao.WxUserDao;
 import com.heeexy.example.service.WxUserService;
 import com.heeexy.example.util.CommonUtil;
@@ -45,6 +47,12 @@ public class  WxUserServiceImpl implements WxUserService {
         String userId = UUIDUtils.getUUID();
         jsonObject.put("userId",userId);
         wxUserDao.insertWxUser(jsonObject);
+        //自动发送系统消息
+        try{
+           //TODO WebSocketServer.sendMessageAll("", Const.SEND_SYS_MESSAGE);
+        }catch (Exception e){
+
+        }
         return userId;
     }
 

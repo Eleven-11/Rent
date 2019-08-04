@@ -23,7 +23,6 @@ public interface UserResonateDao {
      * resNickName      点赞人昵称
      * createTime       点赞时间
      */
-    //FIXME 未测试
     List<JSONObject> getNewResonateListByUserIdFlagTime(JSONObject jsonObject);
 
     /**

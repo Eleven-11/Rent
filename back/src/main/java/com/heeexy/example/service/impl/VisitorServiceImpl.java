@@ -30,6 +30,12 @@ public class VisitorServiceImpl implements VisitorService {
         String visitorId = UUID.randomUUID().toString();
         jsonObject.put("visitorId",visitorId);
         visitorDao.insertVisitor(jsonObject);
+        //发送系统消息
+        try{
+            //TODO WebSocketServer.sendMessageAll("", Const.SEND_SYS_MESSAGE);
+        }catch (Exception e){
+
+        }
         return visitorId;
     }
 }

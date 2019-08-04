@@ -83,27 +83,34 @@ public class WebSocketServer {
      * receiveId   接收人ID
      * content     发送内容
      * @param message
-     * @throws IOException
      */
     @OnMessage
-    public void onMessage(String message) throws IOException {
-        JSONObject jsonObject = JSONObject.parseObject(message);
-        if (jsonObject != null){
-            System.out.println(jsonObject.getString("startId") +" to "+jsonObject.getString("receiveId") +":"+ jsonObject.getString("content"));
-            //判断是否有接受者
-            JSONObject u = new JSONObject();
-            u.put("userId",jsonObject.get("receiveId"));
-            if (jsonObject.getString("receiveId") != null
-                && null != wxUserDao.getWxUserInfo(u)){
-                //判断是个人消息还是系统消息
-                if (!jsonObject.getString("receiveId").toLowerCase().equals("sys_infor_key")){
-                    jsonObject.put("createTime",new Date());
-                    wxUserInformationDao.insertInformation(jsonObject);
-                    sendMessage(jsonObject, jsonObject.getString("receiveId"), Const.SEND_MESSAGE);
+    public void onMessage(String message) {
+        try{
+            //判断数据是否是心跳数据
+            if (!Const.SEND_HEAD_CHECK.equals(message)) {
+                JSONObject jsonObject = JSONObject.parseObject(message);
+                if (jsonObject != null) {
+                    System.out.println(jsonObject.getString("startId") + " to " + jsonObject.getString("receiveId") + ":" + jsonObject.getString("content"));
+                    //判断是否有接受者
+                    JSONObject u = new JSONObject();
+                    u.put("userId", jsonObject.get("receiveId"));
+                    if (jsonObject.getString("receiveId") != null
+                            && null != wxUserDao.getWxUserInfo(u)) {
+                        //判断是个人消息还是系统消息
+                        if (!jsonObject.getString("receiveId").toLowerCase().equals("sys_infor_key")) {
+                            jsonObject.put("createTime", new Date());
+                            wxUserInformationDao.insertInformation(jsonObject);
+                            sendMessage(jsonObject, jsonObject.getString("receiveId"), Const.SEND_MESSAGE);
+                        }
+                    }
                 }
+            }else {
+                System.out.println(this.username + "：发送的心跳消息");
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
-
     }
 
     /**

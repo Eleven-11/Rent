@@ -10,6 +10,10 @@ import lombok.Data;
 public class Const {
 
     /**
+     * websocket心跳类型 - 用户消息
+     */
+    public final static String SEND_HEAD_CHECK = "send_head_check";
+    /**
      * websocket推送类型 - 用户消息
      */
     public final static String SEND_MESSAGE = "send_message";

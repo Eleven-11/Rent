@@ -27,6 +27,7 @@ import java.util.List;
  **/
 @Service
 public class PostCommentServiceImpl implements PostCommentService {
+
     @Autowired
     private PostCommentDao postCommentDao;
     @Autowired
