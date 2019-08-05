@@ -78,7 +78,7 @@ public class PostBaseServiceImpl implements PostBaseService {
             return CommonUtil.errorJson(ErrorEnum.WX_884);
         } else {
             if (postBaseDao.getReleaseTime(jsonObject) < 5) {
-                if ((Integer)jsonObject.get("minPrice")>(Integer) jsonObject.get("maxPrice"))
+                if (jsonObject.getInteger("minPrice")>jsonObject.getInteger("maxPrice"))
                 {
                     return CommonUtil.errorJson(ErrorEnum.WX_807);
                 }

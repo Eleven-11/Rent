@@ -12,7 +12,7 @@ public class Const {
     /**
      * websocket心跳类型 - 用户消息
      */
-    public final static String SEND_HEAD_CHECK = "send_head_check";
+    public final static String SEND_HEART_CHECK = "send_heart_check";
     /**
      * websocket推送类型 - 用户消息
      */
