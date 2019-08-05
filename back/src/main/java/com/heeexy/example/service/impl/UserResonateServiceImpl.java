@@ -11,6 +11,7 @@ import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -59,6 +60,7 @@ public class UserResonateServiceImpl implements UserResonateService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public JSONObject updatePostLike(JSONObject jsonObject) {
         //用户处于禁言状态无法点赞
         if (userRestrictDao.getResStatus(jsonObject) == 1) {
@@ -67,12 +69,18 @@ public class UserResonateServiceImpl implements UserResonateService {
             //判断是否已存在点赞记录
             if (userResonateDao.getIfLiked(jsonObject) != null) {
                 userResonateDao.updateDelPostLike(jsonObject);
-                return CommonUtil.successJson(userResonateDao.getLikeStatus(jsonObject));
+                JSONObject jo = new JSONObject();
+                jo.put("likeStatus",userResonateDao.getLikeStatus(jsonObject)==0?1:0);
+                System.out.println(jo);
+                return CommonUtil.successJson(jo);
             } else {
                 userResonateDao.insertPostLike(jsonObject);
                 //FIXME 如果是第一次点赞，发送推送给用户
                 send(jsonObject);
-                return CommonUtil.successJson(userResonateDao.getLikeStatus(jsonObject));
+                JSONObject jo = new JSONObject();
+                jo.put("likeStatus",userResonateDao.getLikeStatus(jsonObject)==0?1:0);
+                System.out.println(jo);
+                return CommonUtil.successJson(jo);
             }
         }
     }
@@ -84,9 +92,13 @@ public class UserResonateServiceImpl implements UserResonateService {
     @Override
     public JSONObject getUserLikePostList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
+        //用户点赞的帖子id列表
         List<JSONObject> userLikePostIds =userResonateDao.getUserLikeList(jsonObject);
+
         List<JSONObject> userLikePostList=new ArrayList<>();
+
         for (int i=0;i<userLikePostIds.size();i++){
+            //根据帖子id获取具体信息
             JSONObject userLikePost = postBaseDao.getWxUserPostInfo(userLikePostIds.get(i));
             userLikePostList.add(userLikePost);
         }

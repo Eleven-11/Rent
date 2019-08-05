@@ -9,12 +9,11 @@ import com.heeexy.example.dao.UserRestrictDao;
 import com.heeexy.example.service.PostCommentService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
-import org.apache.ibatis.javassist.tools.web.Webserver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,6 +53,7 @@ public class PostCommentServiceImpl implements PostCommentService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public JSONObject insertComment(JSONObject jsonObject) {
         System.out.println(jsonObject);
         if (userRestrictDao.getResStatus(jsonObject) == 1) {
@@ -72,6 +72,7 @@ public class PostCommentServiceImpl implements PostCommentService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public JSONObject updateDelCommentById(JSONObject jsonObject) {
         if (postCommentDao.getCommentStatus(jsonObject) == 1) {
             return CommonUtil.successJson("评论已被删除，无需再次删除");

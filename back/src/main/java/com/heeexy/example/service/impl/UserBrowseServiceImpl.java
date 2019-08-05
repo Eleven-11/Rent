@@ -7,6 +7,7 @@ import com.heeexy.example.service.UserBrowseService;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,7 @@ public class UserBrowseServiceImpl implements UserBrowseService {
      * @return com.alibaba.fastjson.JSONObject
      **/
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public JSONObject insertUserBrowse(JSONObject jsonObject) {
         userBrowseDao.insertUserBrowse(jsonObject);
         return CommonUtil.successJson("插入成功");

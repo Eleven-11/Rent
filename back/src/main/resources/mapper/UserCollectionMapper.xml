@@ -14,6 +14,11 @@
         select id from t_user_collection
         where USER_ID = #{userId} and POST_ID = #{postId}
     </select>
+    <!--获取当前用户收藏状态-->
+    <select id="getCollectStatus" resultType="java.lang.Integer">
+        select IS_DEL from t_user_collection
+        where USER_ID = #{userId} and POST_ID = #{postId}
+    </select>
 
     <!-- 更新帖子收藏状态 -->
     <update id="updateDelCollect">
@@ -78,13 +83,19 @@
     </update>
 
     <insert id="insertUserCollection">
+        BEGIN;
         INSERT INTO t_user_collection(
             USER_ID,
             POST_ID,
             CREATE_TIME,
             SORT_TIME
         )
-        VALUES(#{userId},#{postId},now(),now())
+        VALUES(#{userId},#{postId},now(),now());
+        UPDATE t_post_base
+        SET TOTAL_COLLECTION = (SELECT COUNT(0) FROM t_user_collection WHERE POST_ID =#{postId} AND IS_DEL =0)
+        WHERE
+        ID = #{postId};
+        COMMIT;
     </insert>
 
 </mapper>

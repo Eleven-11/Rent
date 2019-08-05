@@ -58,4 +58,11 @@ public interface UserCollectionDao {
      * @return
      */
     int updateDelCollect(JSONObject jsonObject);
+
+    /**
+     * @description 获取用户当前收藏状态
+     * @param jsonObject
+     * @return int
+     **/
+    int getCollectStatus(JSONObject jsonObject);
 }

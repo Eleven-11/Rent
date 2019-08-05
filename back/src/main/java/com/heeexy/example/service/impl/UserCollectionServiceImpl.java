@@ -7,6 +7,7 @@ import com.heeexy.example.service.UserCollectionService;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -42,6 +43,7 @@ public class UserCollectionServiceImpl implements UserCollectionService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public JSONObject sortUserColl(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
         System.out.println(jsonObject.toJSONString());
@@ -55,6 +57,7 @@ public class UserCollectionServiceImpl implements UserCollectionService {
      * @return
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public JSONObject updateUserCollection(JSONObject jsonObject) {
         //如果曾经收藏过
         //判断帖子是否存在，逻辑删除的也属于不存在
@@ -63,10 +66,17 @@ public class UserCollectionServiceImpl implements UserCollectionService {
 //        }
         if(userCollectionDao.getIfCollected(jsonObject)!=null){
             userCollectionDao.updateDelCollect(jsonObject);
+            JSONObject jo = new JSONObject();
+            jo.put("collectStatus",userCollectionDao.getCollectStatus(jsonObject)==0?1:0);
+            System.out.println(jo);
+            return CommonUtil.successJson(jo);
         }
         else {
             userCollectionDao.insertUserCollection(jsonObject);
+            JSONObject jo = new JSONObject();
+            jo.put("collectStatus", userCollectionDao.getCollectStatus(jsonObject) == 0?1:0);
+            System.out.println(jo);
+            return CommonUtil.successJson(jo);
         }
-        return CommonUtil.successJson("操作成功！");
     }
 }

@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.StatisticsDao">
     <select id="getGenderByAll" resultType="com.alibaba.fastjson.JSONObject">
-        SELECT WX_GENDER,COUNT(0) FROM t_wx_user
+        SELECT WX_GENDER,COUNT(0) count FROM t_wx_user
         GROUP BY WX_GENDER
         ORDER BY WX_GENDER
     </select>
@@ -14,7 +14,8 @@
         --  CONCAT(YEAR(CREATE_TIME),'-',MONTH(CREATE_TIME)) AS createTime,
          t_date.cmonth
         FROM
-         (#           构造当前日期之前6个月的时间表
+         (
+                    <!-- 构造当前日期之前6个月的时间表 -->
           SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 5 MONTH),'%Y-%m') AS cmonth
           UNION ALL
             SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 4 MONTH),'%Y-%m') AS cmonth
@@ -64,9 +65,57 @@
             POST_ID
         ORDER BY commentNum DESC
     </select>
-    <select id="getPostPriceByMonth" resultType="com.alibaba.fastjson.JSONObject">
+    <select id="getPostMinPriceByMonth" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            a.CONTENT content,
+            a.MIN_PRICE minPrice
+        FROM
+            t_post_base a
+        WHERE
+            a.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH)
+        AND NOW()
+        AND a.IS_DEL = 0
+        ORDER BY
+            MIN_PRICE
     </select>
-    <select id="getPostPriceByWeek" resultType="com.alibaba.fastjson.JSONObject"></select>
+    <select id="getPostMinPriceByWeek" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            a.CONTENT content,
+            a.MIN_PRICE minPrice
+        FROM
+            t_post_base a
+        WHERE
+            a.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY)
+        AND NOW()
+        AND a.IS_DEL = 0
+        ORDER BY
+            MIN_PRICE</select>
+    <select id="getPostMaxPriceByMonth" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            a.CONTENT content,
+            a.MAX_PRICE maxPrice
+        FROM
+            t_post_base a
+        WHERE
+            a.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH)
+        AND NOW()
+        AND a.IS_DEL = 0
+        ORDER BY
+            maxPrice
+    </select>
+    <select id="getPostMaxPriceByWeek" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            a.CONTENT content,
+            a.MAX_PRICE maxPrice
+        FROM
+            t_post_base a
+        WHERE
+            a.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 7 DAY)
+        AND NOW()
+        AND a.IS_DEL = 0
+        ORDER BY
+            maxPrice
+    </select>
     <select id="getPostCollectByWeek" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             COUNT(0) collectNum,
@@ -135,16 +184,31 @@
     <select id="getPostRegionByMonth" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             COUNT(c.USER_ID) browse,
-            b.REGION region
+            b.REGION region,
+            t_date.cmonth
         FROM
             t_post_base a
         LEFT JOIN t_post_region b ON a.ADDRESS LIKE CONCAT('%', b.region, '%')
         LEFT JOIN t_user_browse c ON a.ID = c.POST_ID
-        AND c.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH)
+        LEFT JOIN(
+                    SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 5 MONTH),'%Y-%m') AS cmonth
+                    UNION ALL
+                        SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 4 MONTH),'%Y-%m') AS cmonth
+                    UNION ALL
+                        SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 3 MONTH),'%Y-%m') AS cmonth
+                    UNION ALL
+                        SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 2 MONTH),'%Y-%m') AS cmonth
+                    UNION ALL
+                    SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 1 MONTH),'%Y-%m') AS cmonth
+                        UNION ALL
+                    SELECT DATE_FORMAT(CURDATE(),'%Y-%m') AS cmonth
+        ) t_date ON
+            DATE_FORMAT(c.CREATE_TIME,'%Y-%m') = t_date.cmonth
         AND NOW()
         AND c.IS_DEL = 0
-        GROUP BY
+        GROUP BY cmonth,
             b.REGION
+        ORDER BY cmonth
     </select>
     <select id="getPostRegionByWeek" resultType="com.alibaba.fastjson.JSONObject">
         SELECT

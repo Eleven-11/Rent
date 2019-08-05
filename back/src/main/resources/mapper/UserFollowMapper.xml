@@ -73,6 +73,10 @@
     <select id="getIfFollow" resultType="com.alibaba.fastjson.JSONObject">
         SELECT ID FROM t_user_follow where t_user_follow.FAN_ID= #{fanId} and t_user_follow.FOLLOW_ID=#{followId}
     </select>
+    <!-- 获取关注状态 -->
+    <select id="getFollowStatus" resultType="java.lang.Integer">
+        SELECT IS_DEL FROM t_user_follow where t_user_follow.FAN_ID= #{fanId} and t_user_follow.FOLLOW_ID=#{followId}
+    </select>
 
     <!-- 更新关注状态 -->
     <update id="updateDelFollow">

@@ -57,10 +57,17 @@ public class UserFollowServiceImpl implements UserFollowService {
         //如果曾经关注过
         if(userFollowDao.getIfFollow(jsonObject)!=null){
             userFollowDao.updateDelFollow(jsonObject);
+            JSONObject jo = new JSONObject();
+            jo.put("followStatus",userFollowDao.getFollowStatus(jsonObject)==0?1:0);
+            System.out.println(jo);
+            return CommonUtil.successJson(jo);
         }
         else {
             userFollowDao.insertUserFollow(jsonObject);
+            JSONObject jo = new JSONObject();
+            jo.put("followStatus",userFollowDao.getFollowStatus(jsonObject)==0?1:0);
+            System.out.println(jo);
+            return CommonUtil.successJson(jo);
         }
-        return CommonUtil.successJson("操作成功！");
     }
 }

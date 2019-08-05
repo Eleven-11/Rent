@@ -86,7 +86,7 @@
         SET TOTAL_COMMENTS =(SELECT COUNT(0) FROM t_comment WHERE POST_ID =(SELECT a.POST_ID FROM t_comment a WHERE a.ID =#{commentId}) AND IS_DEL =0)
         WHERE
             ID = (SELECT a.POST_ID FROM t_comment a WHERE a.ID =#{commentId});
-        COMMIT
+        COMMIT;
     </update>
 
     <select id="getUserCommentList" resultType="com.alibaba.fastjson.JSONObject">

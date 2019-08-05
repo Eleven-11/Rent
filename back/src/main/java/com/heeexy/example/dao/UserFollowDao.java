@@ -59,4 +59,12 @@ public interface UserFollowDao {
      * @return
      */
     JSONObject getIfFollow(JSONObject jsonObject);
+
+
+    /**
+     * @description 获取用户关注状态
+     * @param jsonObject
+     * @return int
+     **/
+    int getFollowStatus(JSONObject jsonObject);
 }
