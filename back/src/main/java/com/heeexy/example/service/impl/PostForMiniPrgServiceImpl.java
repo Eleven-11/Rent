@@ -1,18 +1,14 @@
 package com.heeexy.example.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.config.exception.WxPageException;
 import com.heeexy.example.dao.*;
 import com.heeexy.example.service.PostForMiniPrgService;
 import com.heeexy.example.util.CommonUtil;
-import com.heeexy.example.util.model.PostDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,7 +53,14 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             //获取帖子图片集合
             jo.put("postImgList", postImgDao.getPostImgList(jo));
             //获取帖子点赞列表
-            jo.put("postLikeList", userResonateDao.getPostLikeList(jo));
+            List<JSONObject> postLikeList = userResonateDao.getPostLikeList(jo);
+            //没有头像的用户设置为默认头像
+            for (int i=0;i<postLikeList.size();i++){
+                if (postLikeList.get(i).get("likeImg")==null){
+                    postLikeList.get(i).put("likeImg","http://192.168.1.7:8080/image/static/default.png");
+                }
+            }
+            jo.put("postLikeList",postLikeList);
             //判断是否有用户id
             if (!StringUtils.isEmpty(jsonObject.get("userId"))){
                 String userId = jsonObject.get("userId").toString();

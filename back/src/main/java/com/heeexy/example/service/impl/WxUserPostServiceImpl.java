@@ -55,7 +55,15 @@ public class WxUserPostServiceImpl implements WxUserPostService {
             //获取帖子评论集合
             jo.put("postCommentList", postCommentDao.getPostCommentList(jo));
             //获取帖子点赞列表
-            jo.put("postLikeList", userResonateDao.getPostLikeList(jo));
+            List<JSONObject> postLikeList = userResonateDao.getPostLikeList(jo);
+            //没有头像的用户设置为默认头像
+            for (int i=0;i<postLikeList.size();i++){
+                if (postLikeList.get(i).get("likeImg")==null){
+                    postLikeList.get(i).put("likeImg","http://192.168.1.7:8080/image/static/default.png");
+                }
+            }
+            System.out.println(postLikeList);
+            jo.put("postLikeList",postLikeList);
         }
         return CommonUtil.successPage(upList);
     }

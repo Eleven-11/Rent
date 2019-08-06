@@ -43,14 +43,20 @@ public class UserBrowseServiceImpl implements UserBrowseService {
         return CommonUtil.successPage(jsonObject,userBrowsePostList,count);
     }
     /**
-     * @description 添加用户浏览信息并更新对应帖子的浏览量
+     * @description 添加用户浏览信息并更新对应帖子的浏览量，若已浏览过则更新浏览时间
      * @param jsonObject
      * @return com.alibaba.fastjson.JSONObject
      **/
     @Override
     @Transactional(rollbackFor = Exception.class)
     public JSONObject insertUserBrowse(JSONObject jsonObject) {
-        userBrowseDao.insertUserBrowse(jsonObject);
-        return CommonUtil.successJson("插入成功");
+        if(userBrowseDao.getBrowseStatus(jsonObject) != null){
+            userBrowseDao.updateUserBrowse(jsonObject);
+            return CommonUtil.successJson();
+        }
+        else {
+            userBrowseDao.insertUserBrowse(jsonObject);
+            return CommonUtil.successJson("插入成功");
+        }
     }
 }

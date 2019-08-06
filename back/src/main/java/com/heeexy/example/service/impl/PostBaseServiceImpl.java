@@ -74,9 +74,13 @@ public class PostBaseServiceImpl implements PostBaseService {
 //        String postId = UUIDUtils.getUUID();
 //        jsonObject.put("postId", postId);
         //用户处于禁言状态时
+        System.out.println(jsonObject);
         if (userRestrictDao.getResStatus(jsonObject) == 1) {
             return CommonUtil.errorJson(ErrorEnum.WX_884);
         } else {
+            System.out.println("hello");
+            System.out.println(jsonObject);
+            System.out.println("world");
             if (postBaseDao.getReleaseTime(jsonObject) < 5) {
                 if (jsonObject.getInteger("minPrice")>jsonObject.getInteger("maxPrice"))
                 {

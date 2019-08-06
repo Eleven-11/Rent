@@ -5,16 +5,21 @@
 
     <select id="getPostLikeList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
-            u.WX_AVATAR_URL likeImg,
-            u.WX_NICK_NAME likeNickname,
-            a.USER_ID userId,
-            a.CREATE_TIME createTime
+        u.WX_AVATAR_URL likeImg,
+        u.WX_NICK_NAME likeNickname,
+        u.WX_GENDER gender,
+        a.USER_ID userId,
+        a.CREATE_TIME createTime
         FROM
-            t_wx_user u,
-            t_user_resonate a
+        t_user_resonate a
+        LEFT JOIN t_wx_user u ON u.USER_ID = a.USER_ID
         WHERE
-            a.TYPE ='1' AND a.TARGET_ID = #{postId}
-        AND u.USER_ID = a.USER_ID
+        a.TYPE = '1'
+        AND a.TARGET_ID = #{postId}
+        AND a.IS_DEL = 0
+        ORDER BY
+        gender DESC,
+        createTime DESC
         <if test="limit !=null and limit !=''">
             limit #{limit}
         </if>

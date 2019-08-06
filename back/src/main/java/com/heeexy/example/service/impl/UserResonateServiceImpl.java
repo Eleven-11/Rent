@@ -45,11 +45,27 @@ public class UserResonateServiceImpl implements UserResonateService {
         CommonUtil.fillPageParam(jsonObject);
         if (jsonObject.get("limit")!=null &&jsonObject.get("limit")!=""){
             List<JSONObject> list = userResonateDao.getPostLikeList(jsonObject);
+            for (int i=0;i<list.size();i++){
+                if (list.get(i).get("likeImg")==null){
+                    list.get(i).put("likeImg","http://192.168.1.7:8080/image/static/default.png");
+                }
+            }
+            System.out.println("111");
+            System.out.println(list);
+            System.out.println("222");
             return CommonUtil.successPage(jsonObject, list, (Integer) jsonObject.get("limit"));
         }
         else {
             int count = userResonateDao.countPostList(jsonObject);
             List<JSONObject> list = userResonateDao.getPostLikeList(jsonObject);
+            for (int i=0;i<list.size();i++){
+                if (list.get(i).get("likeImg")==null){
+                    list.get(i).put("likeImg","http://192.168.1.7:8080/image/static/default.png");
+                }
+            }
+            System.out.println("111");
+            System.out.println(list);
+            System.out.println("222");
             return CommonUtil.successPage(jsonObject, list, count);
         }
     }

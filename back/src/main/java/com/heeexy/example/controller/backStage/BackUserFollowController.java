@@ -5,7 +5,6 @@ import com.heeexy.example.service.UserFollowService;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,15 +41,6 @@ public class BackUserFollowController {
         return userFollowService.getUserFansList(CommonUtil.request2Json(request));
     }
 
-    /**
-     * @description 更新用户关注信息（小程序）
-     * @param request 粉丝Id-fanId，关注者Id-followId
-     * @return
-     **/
-    @PostMapping("/updateUserFollow")
-    public JSONObject insertUserFollow(HttpServletRequest request) {
-        return userFollowService.updateUserFollow(CommonUtil.request2Json(request));
-    }
 
 
 }

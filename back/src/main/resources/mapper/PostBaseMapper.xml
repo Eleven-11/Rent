@@ -151,6 +151,8 @@
         m.FEE               fee,
         m.ACTIVE_TIME       activeTime,
         m.IS_LOWER_SHELF    isLowerShelf,
+        m.IS_MALL           isMall,
+        m.IS_SUB            isSub,
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
         FROM
         t_wx_user u,
@@ -187,8 +189,15 @@
         <if test="startTime !=null and startTime !='' and endTime !=null and endTime">
         AND m.CREATE_TIME BETWEEN DATE_FORMAT(#{startTime},'%Y-%m-%d %T') AND DATE_FORMAT(#{endTime},'%Y-%m-%d %T')
         </if>
-        ORDER BY
-            ACTIVE_TIME DESC
+        <if test="isRecommend ==null">
+            ORDER BY m.CREATE_TIME DESC
+        </if>
+        <if test="isRecommend != null">
+            ORDER BY activeTime DESC
+        </if>
+        <if test="isPop">
+            ,browse DESC
+        </if>
     </select>
 
     <update id="updatePostBase">
@@ -202,8 +211,6 @@
         </if>
         WHERE ID = #{postId}
     </update>
-
-
     <!-- 微信dao方法实现 -->
     <!-- 用户帖子详情 -->
     <select id="getWxUserPostInfo" resultType="com.alibaba.fastjson.JSONObject">
@@ -261,6 +268,8 @@
         m.TOTAL_COLLECTION  collection,
         m.FEE               fee,
         m.ACTIVE_TIME       activeTime,
+        m.IS_MALL           isMall,
+        m.IS_SUB            isSub,
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
         FROM
         t_wx_user u,
@@ -277,14 +286,28 @@
         <if test="postId !=null and postId !=''">
             AND m.ID = #{postId}
         </if>
+        <if test="isSub !=null and isSub !=''">
+            AND m.IS_SUB = #{isSub}
+        </if>
+        <if test="isMall !=null and isMall !=''">
+            AND m.IS_MALL = #{isMall}
+        </if>
         <if test="nickname != null and nickname != ''">
             AND u.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
         </if>
         <if test="keyword !=null and keyword !=''">
             AND (m.CONTENT LIKE CONCAT(CONCAT('%',#{keyword}),'%') OR m.ADDRESS LIKE CONCAT(CONCAT('%',#{keyword}),'%'))
         </if>
-        ORDER BY
-        ACTIVE_TIME DESC
+        <if test="isRecommend ==null">
+            ORDER BY m.CREATE_TIME DESC
+        </if>
+        <if test="isRecommend != null">
+            ORDER BY activeTime DESC
+        </if>
+        <if test="isPop">
+            ,browse DESC
+        </if>
+
         LIMIT ${start},${end}
     </select>
 
