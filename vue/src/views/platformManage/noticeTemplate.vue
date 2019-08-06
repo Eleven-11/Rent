@@ -8,6 +8,7 @@
         </el-form-item>
       </el-form>
     </div>
+
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
               highlight-current-row>
       <el-table-column align="center" label="序号" width="80">
@@ -15,23 +16,18 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="id" prop="postTypeId" v-if="false" style="width: 60px;"></el-table-column>
-      <el-table-column align="center" label="名称" prop="postTypeName"  width="220" style="width: 60px;"></el-table-column>
-      <el-table-column label="图片" min-width="20%"  align="center">
-        <!-- 图片的显示 -->
-        <template   slot-scope="scope" >
-          <img :src="scope.row.postTypeImg"  min-width="70" height="70"/>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="管理" width="220">
+      <el-table-column align="center" label="id" prop="sysTempId" v-if="false" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" prop="sysTempTitle" label="模版名称" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" prop="sysTempContent" label="模版内容" style="width: 60px;"></el-table-column>
+      <el-table-column align="center" prop="isGuide" label="引导语" style="width: 60px;"></el-table-column>
+
+      <el-table-column align="center" label="管理" width="200" v-if="hasPerm('article:update')">
         <template slot-scope="scope">
-          <el-button type="primary" icon="edit" @click="updatePostType(scope.$index)">修改</el-button>
-          <el-button type="danger" icon="delete" v-if="scope.row.postTypeId!=postTypeId "
-                     @click="deletePostType(scope.$index)">删除
-          </el-button>
+          <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
         </template>
       </el-table-column>
     </el-table>
+
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -41,37 +37,31 @@
       :page-sizes="[10, 20, 50, 100]"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
-    <el-dialog v-model="newPostType" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" :model="postType" label-position="left" label-width="80px"
+
+    <el-dialog v-model="newNoticeTemplate" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form class="small-space" :model="noticeTemplate" label-position="left" label-width="80px"
                style='width: 300px; margin-left:50px;'>
-        <el-form-item label="类型名称" required v-if="dialogStatus=='create'">
-          <el-input type="text" v-model="postType.postTypeName">
+        <el-form-item label="模版名称" required v-if="dialogStatus=='create'">
+          <el-input type="text" v-model="noticeTemplate.sysTempTitle">
           </el-input>
         </el-form-item>
-        <el-form-item label="创建时间" required v-if="dialogStatus=='create'">
-          <div class="block">
-            <el-date-picker
-              v-model="postType.postTypeCreateTime"
-              type="datetime"
-              placeholder="选择日期时间">
-            </el-date-picker>
-          </div>
+        <el-form-item label="模版名称" required v-if="dialogStatus=='create'">
+          <el-input type="text" v-model="noticeTemplate.sysTempContent">
+          </el-input>
         </el-form-item>
-        <el-form-item label="类型图标" required v-if="dialogStatus=='create'">
-          <el-upload
-            class="avatar-uploader"
-            :action="api/file/upload"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
-        </el-form-item>
+        <!--<el-form-item label="引导语" required v-if="dialogStatus=='create'">-->
+          <!--<div class="block">-->
+            <!--<el-date-picker-->
+              <!--v-model="noticeTemplate.isGuide"-->
+              <!--type="datetime"-->
+              <!--placeholder="选择日期时间">-->
+            <!--</el-date-picker>-->
+          <!--</div>-->
+        <!--</el-form-item>-->
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="success" @click="insertPostType">创 建</el-button>
+        <el-button v-if="dialogStatus=='create'" type="success" @click="insertnoticeTemplate">创 建</el-button>
         <el-button type="primary" v-else @click="updateUser">修 改</el-button>
       </div>
     </el-dialog>
@@ -99,32 +89,36 @@
           update: '编辑',
           create: '新建'
         },
-        postType: {
-          postTypeId: '',
-          postTypeName: '',
-          postTypeImg: '',
-          postTypeCreateTime:''
+        //设置数据模版
+        noticeTemplate: {
+          sysTempId: '',
+          sysTempTitle: '',
+          sysTempContent: '',
+          isGuide:''
         },
-        newPostType:{
-          postTypeImg:'',
-          postTypeCreateTime:'',
-          postTypeName:''
+        newNoticeTemplate:{
+          sysTempContent:'',
+          isGuide:'',
+          sysTempTitle:''
         },
         imageUrl:''
       }
     },
     created() {
-      this.getPostTypeList();
+      this.getnoticeTemplateList();
       /*if (this.hasPerm('user:add') || this.hasPerm('user:update')) {
         this.getAllRoles();
       }*/
     },
     computed: {
       ...mapGetters([
-        'postTypeId'
+        'sysTempId'
       ])
     },
     methods:{
+      /**
+       * 获取消息模版列表
+       */
       getNoticeTemplateList()
       {
         this.listLoading = true;
@@ -138,46 +132,30 @@
           this.totalCount = data.totalCount;
         })
       },
-      handleAvatarSuccess(res, file) {
-        this.imageUrl = URL.createObjectURL(file.raw);
-        this.dialogFormVisible.imageUrl = this.imageUrl;
-        console.log(this.dialogFormVisible.imageUrl);
-        //this.imageUrl = URL.createObjectURL(file.raw);
-        //console.log(this.imageUrl)
-        // this.tempUser.categoriesImg = this.imageUrl;
-        // alert(this.tempUser.categoriesImg);
-      },
-      beforeAvatarUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
 
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
-        }
-        return isJPG && isLt2M;
-      },
-      insertPostType()
+      /**
+       * 添加系统模版
+       */
+      insertSysTemplate()
       {
-        let newPostType = this.newPostType;
-        newPostType.postTypeCreateTime = this.formatter(this.postType.postTypeCreateTime, 'yyyy-MM-dd hh:mm:ss');
-        console.log(newPostType.postTypeCreateTime);
-        newPostType.postTypeImg = this.imageUrl;
-        console.log(newPostType.postTypeImg);
-        newPostType.postTypeName = this.postType.postTypeName;
-        console.log(newPostType.postTypeName)
+        let newNoticeTemplate = this.newNoticeTemplate;
+        // newNoticeTemplate.isGuide = this.noticeTemplate.isGuide;
+        // console.log(newNoticeTemplate.isGuide);
+        newNoticeTemplate.sysTempContent = this.sysTempContent;
+        console.log(newNoticeTemplate.sysTempContent);
+        newNoticeTemplate.sysTempTitle = this.noticeTemplate.sysTempTitle;
+        console.log(newNoticeTemplate.sysTempTitle)
 
         this.listLoading = true;
         this.api({
-          url: "/postType/insertPostType",
+          url: "/sysTemplate/insertSysTemplate",
           method: "post",
-          params:newPostType
+          params:newNoticeTemplate
         }).then(() => {
-          console.log("插入成功！")
+          console.log("创建模版成功！")
         })
       },
+
       handleSizeChange(val) {
         //改变每页数量
         this.listQuery.pageRow = val
@@ -188,6 +166,7 @@
         this.listQuery.pageNum = val
         this.getList();
       },
+
       handleFilter() {
         //查询事件
         this.listQuery.pageNum = 1
@@ -199,17 +178,17 @@
       },
       showCreate() {
         //显示新增对话框
-        this.postType.postTypeId = "";
-        this.postType.postTypeImg = "";
-        this.postType.postTypeName = "";
+        this.noticeTemplate.sysTempId = "";
+        this.noticeTemplate.sysTempContent = "";
+        this.noticeTemplate.sysTempTitle = "";
         this.dialogStatus = "create"
         this.dialogFormVisible = true
       },
       showUpdate($index) {
-        let postType = this.list[$index];
-        this.postType.postTypeName = postType.postTypeName;
-        this.postType.postTypeImg = postType.postTypeImg;
-        this.postType.postTypeId = postType.postTypeId
+        let noticeTemplate = this.list[$index];
+        this.noticeTemplate.sysTempTitle = noticeTemplate.sysTempTitle;
+        this.noticeTemplate.sysTempContent = noticeTemplate.sysTempContent;
+        this.noticeTemplate.sysTempId = noticeTemplate.sysTempId
         this.dialogStatus = "update"
         this.dialogFormVisible = true
       },

@@ -110,36 +110,45 @@ public class WebSocketServer {
         try{
             //判断数据是否是心跳数据
             JSONObject jsonObject = JSONObject.parseObject(message);
-            if (jsonObject.getString("type") != null && !Const.SEND_HEART_CHECK.equals(jsonObject.getString("type"))) {
-                if (jsonObject != null) {
-                    System.out.println(jsonObject.getString("startId") + " to " + jsonObject.getString("receiveId") + ":" + jsonObject.getString("content"));
-                    //判断是否有接受者
-                    JSONObject u = new JSONObject();
-                    u.put("userId", jsonObject.get("receiveId"));
-                    if (jsonObject.getString("receiveId") != null
-                            && null != wxUserDao.getWxUserInfo(u)) {
-                        //获取发送者信息
-                        u.put("userId", jsonObject.get("startId"));
-                        JSONObject user = wxUserDao.getWxUserInfo(u);
-                        //判断发送者是否存在
-                        if (user != null) {
-                            //保存消息
-                            jsonObject.put("createTime", new Date());
-                            wxUserInformationDao.insertInformation(jsonObject);
-                            //封装返回的消息数据
-                            jsonObject.put("startAvatar",user.getString("wxAvatar"));
-                            jsonObject.put("startNickName",user.getString("wxNickname"));
-                            sendMessage(jsonObject, jsonObject.getString("receiveId"), Const.SEND_MESSAGE);
+            if (jsonObject != null) {
+                JSONObject info = (JSONObject) jsonObject.get("info");
+                //数据不为空
+                if (info.getString("sendType") != null ) {
+                    //是心跳数据
+                    if (info.getString("sendType").equals(Const.SEND_HEART_CHECK)) {
+                        JSONObject entry = (JSONObject) info.get("entry");
+                        if (queryOnLine(entry.getString("username"))) {
+                            WebSocketServer toServer = clients.get(entry.getString("username"));
+                            toServer.isHeart = true;
+                        }
+                        System.out.println(this.username + "：返回的心跳消息");
+                        //是普通消息数据
+                    } else if (info.getString("sendType").equals(Const.SEND_MESSAGE)) {
+                        //获取消息对应实体
+                        jsonObject = (JSONObject) info.get("entry");
+                        System.out.println(jsonObject.getString("startId") + " to " + jsonObject.getString("receiveId") + ":" + jsonObject.getString("content"));
+                        //判断是否有接受者
+                        JSONObject u = new JSONObject();
+                        u.put("userId", jsonObject.get("receiveId"));
+                        if (jsonObject.getString("receiveId") != null
+                                && null != wxUserDao.getWxUserInfo(u)) {
+                            //获取发送者信息
+                            u.put("userId", jsonObject.get("startId"));
+                            JSONObject user = wxUserDao.getWxUserInfo(u);
+                            //判断发送者是否存在
+                            if (user != null) {
+                                //保存消息
+                                jsonObject.put("createTime", new Date());
+                                wxUserInformationDao.insertInformation(jsonObject);
+                                //封装返回的消息数据
+                                jsonObject.put("startAvatar", user.getString("wxAvatar"));
+                                jsonObject.put("startNickName", user.getString("wxNickname"));
+                                sendMessage(jsonObject, jsonObject.getString("receiveId"), Const.SEND_MESSAGE);
+                            }
                         }
                     }
-                 }
-            }else {
-                if (queryOnLine(jsonObject.getString("username"))){
-                    WebSocketServer toServer = clients.get(jsonObject.getString("username"));
-                    toServer.isHeart = true;
                 }
-                System.out.println(this.username + "：返回的心跳消息");
-            }
+             }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -259,7 +268,7 @@ public class WebSocketServer {
             while (true) {
                 try {
 //                    logger.debug("发送心跳包当前人数为:"+getUserOnlineNum());
-                    sendPing(heartJson.toString());
+                    sendPing(CommonUtil.sendParam(Const.SEND_HEART_CHECK, heartJson).toJSONString());
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
