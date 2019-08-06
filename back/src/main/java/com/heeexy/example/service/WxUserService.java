@@ -41,4 +41,11 @@ public interface WxUserService {
      * @return
      **/
     JSONObject updateWxUserSummary(JSONObject jsonObject);
+
+    /**
+     * @description 更改用户粉丝数量
+     * @param jsonObject
+     * @return void
+     **/
+    JSONObject updateWxUserInfo(JSONObject jsonObject);
 }

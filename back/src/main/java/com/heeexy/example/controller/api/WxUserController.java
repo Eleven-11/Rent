@@ -57,4 +57,6 @@ public class WxUserController {
     public JSONObject updateWxUserSummary(HttpServletRequest request) {
         return wxUserService.updateWxUserSummary(CommonUtil.request2Json(request));
     }
+
+
 }

@@ -1,6 +1,5 @@
 package com.heeexy.example.dao;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import java.util.List;
@@ -56,4 +55,11 @@ public interface WxUserDao {
      * @return
      */
     JSONObject queryUser(JSONObject jsonObject);
+
+    /**
+     * @description 更改用户粉丝数量
+     * @param jsonObject
+     * @return void
+     **/
+    void updateWxUserInfo(JSONObject jsonObject);
 }

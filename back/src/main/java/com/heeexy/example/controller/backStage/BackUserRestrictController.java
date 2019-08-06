@@ -22,7 +22,7 @@ public class BackUserRestrictController {
     private UserRestrictService userRestrictService;
 
     /**
-     *@description:对用户设置禁言并设定时长,用户记录在授权信息生成时同时生成
+     *@description:对用户设置禁言并设定时长
      *@param request 用户id - userId，限制结束时间 - resEndTime
      *@return com.alibaba.fastjson.JSONObject
      */

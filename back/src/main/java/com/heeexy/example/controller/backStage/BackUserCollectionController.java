@@ -5,7 +5,6 @@ import com.heeexy.example.service.UserCollectionService;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -72,14 +71,5 @@ public class BackUserCollectionController {
             e.printStackTrace();
         }
         return userCollectionService.sortUserColl(jsonObject);
-    }
-    /**
-     * @description 更新用户收藏帖子（首次收藏、取消收藏、取消后重新收藏）
-     * @param request 用户id-userId，帖子id-postId
-     * @return com.alibaba.fastjson.JSONObject
-     **/
-    @PostMapping("/updateUserCollection")
-    public JSONObject updateUserCollection(HttpServletRequest request) {
-        return userCollectionService.updateUserCollection(CommonUtil.request2Json(request));
     }
 }

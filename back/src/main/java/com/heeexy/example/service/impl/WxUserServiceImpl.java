@@ -35,6 +35,9 @@ public class  WxUserServiceImpl implements WxUserService {
         CommonUtil.fillPageParam(jsonObject);
         int count = wxUserDao.countWxUser(jsonObject);
         List<JSONObject> list = wxUserDao.getWxUserList(jsonObject);
+        for (int i=0;i<list.size();i++){
+            list.get(i).put("region",list.get(i).get("wxCountry")+" "+list.get(i).get("wxProvince")+" "+list.get(i).get("wxCity"));
+        }
         return CommonUtil.successPage(jsonObject, list, count);
     }
 
@@ -89,6 +92,17 @@ public class  WxUserServiceImpl implements WxUserService {
     public JSONObject updateWxUserSummary(JSONObject jsonObject) {
         wxUserDao.updateWxUserSummary(jsonObject);
         return CommonUtil.successJson(jsonObject.get("summary"));
+    }
+
+    /**
+     * @description 修改用户粉丝数量
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @Override
+    public JSONObject updateWxUserInfo(JSONObject jsonObject) {
+        wxUserDao.updateWxUserInfo(jsonObject);
+        return CommonUtil.successJson("修改成功，刷新后查看");
     }
 
 }

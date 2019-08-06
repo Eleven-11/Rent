@@ -5,6 +5,21 @@
     <select id="getUserBrowse" resultType="com.alibaba.fastjson.JSONObject">
         SELECT a.POST_ID postId FROM t_user_browse a WHERE a.USER_ID =#{userId}
     </select>
+    <select id="getBrowseStatus" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            ID
+        FROM
+            t_user_browse
+        WHERE
+            USER_ID = #{userId}
+        AND POST_ID = #{postId}
+        AND DATE_FORMAT(CREATE_TIME, '%Y-%m-%d') = CURDATE()
+    </select>
+    <update id="updateUserBrowse">
+        UPDATE t_user_browse
+        SET CREATE_TIME = NOW()
+        WHERE USER_ID = #{userId} AND POST_ID = #{postId};
+    </update>
     <insert id="insertUserBrowse">
         BEGIN;
         INSERT INTO t_user_browse(

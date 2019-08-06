@@ -17,4 +17,18 @@ public interface UserBrowseDao {
      * @return
      **/
     void insertUserBrowse(JSONObject jsonObject);
+
+    /**
+     * @description 获取用户浏览状态
+     * @param jsonObject
+     * @return int
+     **/
+    JSONObject getBrowseStatus(JSONObject jsonObject);
+
+    /**
+     * @description 更新用户浏览时间
+     * @param
+     * @return
+     **/
+    void updateUserBrowse(JSONObject jsonObject);
 }
