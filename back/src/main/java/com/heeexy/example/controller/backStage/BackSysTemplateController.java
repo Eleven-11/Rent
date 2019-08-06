@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  **/
 @RestController
 @RequestMapping("/sysTemplate")
-public class BackSystemplateController {
+public class BackSysTemplateController {
     @Autowired
     private SysTemplateService sysTemplateService;
 
