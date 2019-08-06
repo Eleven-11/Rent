@@ -27,113 +27,160 @@ export default new Router({
 })
 export const asyncRouterMap = [
   {
-    path: '/system',
+    path: '/sys',
     component: Layout,
-    redirect: '/system/article',
-    name: '功能模块',
-    meta: {title: '功能模块', icon: 'tree'},
+    redirect: '/sys/',
+    name: '系统管理',
+    meta: {title: '系统管理', icon: 'table'},
     children: [
       {
-        path: 'article',
-        name: '文章',
-        component: _import('article/article'),
-        meta: {title: '文章', icon: 'example'},
-        menu: 'article'
-      },
-    ]
-  },
-  //用户管理
-  {
-    path: '/wxUser',
-    component: Layout,
-    redirect: '/wxUser/',
-    name: '',
-    meta: {title: '微信管理', icon: 'wx'},
-    children: [
-      {
-        path: 'wxUser',
-        name: '用户管理',
-        component: _import('wxUser/wxUser'),
-        meta: {title: '用户管理', icon: 'user1'},
-        menu: 'user1'
-      },
-      {
-        path: 'wxLogin',
-        name: '登录管理',
-        component: _import('wxUser/wxLogin'),
-        meta: {title: '登录管理', icon: 'user1'},
-        menu: 'wxLogin'
-      },
-    ]
-  },
-  //帖子管理
-  {
-    path: '/Post',
-    component: Layout,
-    redirect: '/Post/',
-    name: '',
-    meta: {title: '帖子管理', icon: 'Post'},
-    children: [
-      {
-        path: 'Post',
-        name: '帖子管理',
-        component: _import('Post/Post'),
-        meta: {title: '帖子管理', icon: 'Post'},
-        menu: 'user1'
-      },
-      {
-        path: '',
-        name: '标签管理',
-        component: _import('Post/Post'),
-        meta: {title: '标签管理', icon: 'Post'},
-        menu: 'user1'
-      },
-      {
-        path: 'postType',
-        name: '帖子类别',
-        component: _import('Post/postType'),
-        meta: {title: '帖子类别', icon: 'list'},
-        menu: 'platform'
-      },
-    ]
-  },
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/',
-    name: '',
-    meta: {title: '用户权限', icon: 'table'},
-    children: [
-      {
-        path: '', name: '用户列表', component: _import('user/user'), meta: {title: '用户列表', icon: 'user'}, menu: 'user'
+        path: 'user',
+        name: '用户列表',
+        component: _import('sys/user'),
+        meta: {title: '用户列表', icon: 'user'},
+        menu: 'user'
       },
       {
         path: 'role',
         name: '权限管理',
-        component: _import('user/role'),
+        component: _import('sys/role'),
         meta: {title: '权限管理', icon: 'password'},
         menu: 'role'
       },
     ]
   },
-
-
+  /**
+   * 用户管理
+   */
+  {
+    path: '/wxUser',
+    component: Layout,
+    redirect: '/wxUser/',
+    name: '用户管理',
+    meta: {title: '用户管理', icon: 'user'},
+    children: [
+      {
+        path: 'wxUser',
+        name: '小程序管理',
+        component: _import('wxUser/wxUser'),
+        meta: {title: '小程序管理', icon: 'list'},
+        menu: 'wxUser'
+      },
+      {
+        path: 'notice',
+        name: '通知推送',
+        component: _import('wxUser/notice'),
+        meta: {title: '通知推送', icon: 'list'},
+        menu: 'notice'
+      }
+    ]
+  },
+  /**
+   * 平台管理
+   */
   {
     path: '/platformManage',
     component: Layout,
     redirect: '/platformManage/',
-    name: '',
-    meta: {title: '平台管理', icon: 'table'},
+    name: '平台管理',
+    meta: {title: '平台管理', icon: 'mng'},
     children: [
+      {
+        path: 'banner',
+        name: '首页滚动栏',
+        component: _import('platformManage/banner'),
+        meta: {title: '首页滚动栏', icon: 'list'},
+        menu: 'banner'
+      },
+      {
+        path: 'postType',
+        name: '帖子类别',
+        component: _import('platformManage/postType'),
+        meta: {title: '帖子类别', icon: 'list'},
+        menu: 'postType'
+      },
       {
         path: 'postLabel',
         name: '帖子标签',
         component: _import('platformManage/postLabel'),
-        meta: {title: '帖子标签', icon: 'mng'},
-        menu: 'platform'
+        meta: {title: '帖子标签', icon: 'list'},
+        menu: 'postLabel'
       },
+      {
+        path: 'noticeTemplate',
+        name: '通知模版',
+        component: _import('platformManage/noticeTemplate'),
+        meta: {title: '通知模版', icon: 'list'},
+        menu: 'noticeTemplate'
+      }
+    ]
+  },
+  /**
+   * 帖子管理
+   */
+  {
+    path: '/post',
+    component: Layout,
+    redirect: '/post/',
+    name: '帖子管理',
+    meta: {title: '帖子管理', icon: 'mng'},
+    children: [
+      {
+        path: 'post',
+        name: '帖子管理',
+        component: _import('post/post'),
+        meta: {title: '帖子管理', icon: 'list'},
+        menu: 'post'
+      },
+      {
+        path: 'comment',
+        name: '评论管理',
+        component: _import('post/comment'),
+        meta: {title: '评论管理', icon: 'list'},
+        menu: 'comment'
+      }
+    ]
+  },
+  /**
+   * 数据统计
+   */
+  {
+    path: '/statistics',
+    component: Layout,
+    redirect: '/statistics/',
+    name: '数据统计',
+    meta: {title: '数据统计', icon: 'mng'},
+    children: [
+      {
+        path: 'genderStatistics',
+        name: '性别统计',
+        component: _import('statistics/genderStatistics'),
+        meta: {title: '性别统计', icon: 'list'},
+        menu: 'genderStatistics'
+      },
+      {
+        path: 'postStatistics',
+        name: '帖子统计',
+        component: _import('statistics/postStatistics'),
+        meta: {title: '帖子统计', icon: 'list'},
+        menu: 'postStatistics'
+      },
+      {
+        path: 'resonateStatistics',
+        name: '关注统计',
+        component: _import('statistics/resonateStatistics'),
+        meta: {title: '关注统计', icon: 'list'},
+        menu: 'resonateStatistics'
+      }, {
+        path: 'regionStatistics',
+        name: '地区统计',
+        component: _import('statistics/regionStatistics'),
+        meta: {title: '地区统计', icon: 'list'},
+        menu: 'regionStatistics'
+      }
 
     ]
   },
+
   {path: '*', redirect: '/404', hidden: true}
 ]

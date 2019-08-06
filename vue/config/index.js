@@ -29,7 +29,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     devtool:'source-map',
-     : {
+    proxyTable : {
       '/api': {
         target: 'http://localhost:8080',
         pathRewrite: {

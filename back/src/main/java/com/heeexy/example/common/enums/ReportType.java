@@ -6,7 +6,7 @@ package com.heeexy.example.common.enums;
  * @date: 2019-07-29 19:08
  */
 public enum ReportType {
-    POST("post"), COMMON("common");
+    POST("post"), COMMONT("commont");
 
     private String type;
 
