@@ -41,4 +41,12 @@ public interface SysTemplateDao {
     int getGuideNum(JSONObject jsonObject);
 
 
+    /**
+     * @description 更改系统引导语为普通模板
+     * @param jsonObject
+     * @return void
+     **/
+    void updateDelGuide(JSONObject jsonObject);
+
+
 }

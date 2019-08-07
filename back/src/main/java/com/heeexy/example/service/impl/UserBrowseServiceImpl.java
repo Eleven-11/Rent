@@ -52,10 +52,12 @@ public class UserBrowseServiceImpl implements UserBrowseService {
     public JSONObject insertUserBrowse(JSONObject jsonObject) {
         if(userBrowseDao.getBrowseStatus(jsonObject) != null){
             userBrowseDao.updateUserBrowse(jsonObject);
+            System.out.println("if");
             return CommonUtil.successJson();
         }
         else {
             userBrowseDao.insertUserBrowse(jsonObject);
+            System.out.println("else");
             return CommonUtil.successJson("插入成功");
         }
     }

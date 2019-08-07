@@ -5,6 +5,7 @@ import com.heeexy.example.service.UserBrowseService;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,7 +37,7 @@ public class WxUserBrowseController {
      * @param request 系统用户id - userId，帖子id - postId
      * @return com.alibaba.fastjson.JSONObject
      **/
-    @GetMapping("/insertUserBrowse")
+    @PostMapping("/insertUserBrowse")
     public JSONObject insertUserBrowse(HttpServletRequest request){
         return userBrowseService.insertUserBrowse(CommonUtil.request2Json(request));
     }

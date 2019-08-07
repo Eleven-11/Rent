@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.dao.SysTemplateDao;
 import com.heeexy.example.service.SysTemplateService;
 import com.heeexy.example.util.CommonUtil;
-import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +53,11 @@ public class SysTemplateServiceImpl implements SysTemplateService {
         if (jsonObject.get("isGuide")!=null && "1".equals(jsonObject.get("isGuide"))){
             //获取当前系统消息模板中是否存在引导语，若已存在则不允许修改
             if (sysTemplateDao.getGuideNum(jsonObject)==1){
-                return CommonUtil.errorJson(ErrorEnum.E_30001);
+                //将原来的引导语删除（设置为普通模板）
+                sysTemplateDao.updateDelGuide(jsonObject);
+                //将当前的模板设置为新的引导语
+                sysTemplateDao.updateSysTemplate(jsonObject);
+                return CommonUtil.successJson("修改成功");
             }
             else {
                 sysTemplateDao.updateSysTemplate(jsonObject);

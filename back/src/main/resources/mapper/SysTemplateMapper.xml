@@ -59,5 +59,10 @@
         SET IS_DEL = 1
         WHERE ID = #{sysTempId}
     </update>
+    <update id="updateDelGuide">
+        UPDATE t_sys_template
+        SET IS_GUIDE = 0
+        WHERE IS_GUIDE = 1 AND IS_DEL =0
+     </update>
 
 </mapper>
