@@ -126,6 +126,13 @@ export const asyncRouterMap = [
     meta: {title: '帖子管理', icon: 'post'},
     children: [
       {
+        path: 'top',
+        name: '置顶管理',
+        component: _import('post/top'),
+        meta: {title: '置顶管理', icon: 'postTop'},
+        menu: 'top'
+      },
+      {
         path: 'post',
         name: '帖子管理',
         component: _import('post/post'),

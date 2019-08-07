@@ -4,6 +4,7 @@
       <!--搜索表单-->
       <el-form class="small-space" inline :model="listQuery">
 
+        <el-form-item>模版名称:</el-form-item>
         <!--内容输入框-->
         <el-form-item>
           <el-input type="text" v-model="listQuery.title" placeholder="输入模版名称"/>
@@ -372,7 +373,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>
