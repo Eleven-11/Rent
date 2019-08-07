@@ -8,6 +8,7 @@ import com.heeexy.example.dao.WxUserInformationDao;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -202,6 +203,9 @@ public class WebSocketServer {
      * @return
      */
     public static boolean queryOnLine(String key){
+        if (StringUtils.isEmpty(key)){
+            return false;
+        }
         WebSocketServer toServer = clients.get(key);
         //判断是否在线
         if (toServer != null && toServer.session != null){
@@ -235,8 +239,10 @@ public class WebSocketServer {
                 synchronized (clients) {
                     item.timeStr = getTimeInMillis();
                     item.isHeart = false;
+                    //判断是否有链接
                     item.session.getAsyncRemote().sendText(message);
                     System.out.println(item.username + item.session + " to heart");
+
                 }
         }
     }

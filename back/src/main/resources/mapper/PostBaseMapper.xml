@@ -311,6 +311,7 @@
         LIMIT ${start},${end}
     </select>
 
+    <!-- 判断用户今日发帖数量 去掉 AND a.IS_DEL = 0 -->
     <select id="getReleaseTime" resultType="INTEGER">
         SELECT
             COUNT(0) releaseNum
@@ -319,7 +320,6 @@
         WHERE
             DAY (a.CREATE_TIME) = DAY (NOW())
         AND a.USER_ID = #{posterId}
-        AND a.IS_DEL = 0
     </select>
     <update id="updateOnShelf">
         UPDATE t_post_base
