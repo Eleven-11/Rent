@@ -13,6 +13,13 @@ public interface SysTemplateDao {
     List<JSONObject> getSysTemplateList(JSONObject jsonObject);
 
     /**
+     * 获取数据总条数
+     * @param jsonObject
+     * @return
+     */
+    Integer countSysTemplate(JSONObject jsonObject);
+
+    /**
      * @description 添加系统消息模板
      * @param jsonObject
      * @return int

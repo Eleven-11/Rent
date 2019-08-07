@@ -22,6 +22,22 @@ public interface SysInformationDao {
      */
     List<JSONObject> getSysInforListByUserIdFlagTime(JSONObject jsonObject);
 
+    //back - dao
+
+    /**
+     * 获取后台系统消息列表
+     * @param jsonObject
+     * @return
+     */
+    List<JSONObject> getBackSysInforList(JSONObject jsonObject);
+
+    /**
+     * 统计列表数据
+     * @param jsonObject
+     * @return
+     */
+    Integer countBackSysInfor(JSONObject jsonObject);
+
     /**
      * 插入系统消息数据
      *  targetId   目标ID，单发则是相应的用户ID，群发为system_info
@@ -31,4 +47,12 @@ public interface SysInformationDao {
      * @return
      */
     Integer insertInformation(JSONObject jsonObject);
+
+    /**
+     * 逻辑删除
+     * @param jsonObject
+     * @return
+     */
+    Integer updateDel(JSONObject jsonObject);
+
 }

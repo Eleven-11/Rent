@@ -7,6 +7,8 @@ import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @ClassName SysTemplateServiceImpl
  * @Description
@@ -27,7 +29,9 @@ public class SysTemplateServiceImpl implements SysTemplateService {
     @Override
     public JSONObject getSysTemplateList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
-        return CommonUtil.successPage(sysTemplateDao.getSysTemplateList(jsonObject));
+        int count = sysTemplateDao.countSysTemplate(jsonObject);
+        List<JSONObject> list = sysTemplateDao.getSysTemplateList(jsonObject);
+        return CommonUtil.successPage(jsonObject, list, count);
     }
 
     /**

@@ -26,6 +26,16 @@ public class BackSysInformationController {
     private BackSysInformationService backSysInformationService;
 
     /**
+     * 获取后台系统消息列表
+     * @param request
+     * @return
+     */
+    @GetMapping("/list")
+    public JSONObject getBackSysInforList(HttpServletRequest request) {
+        return backSysInformationService.getBackSysInforList(CommonUtil.request2Json(request));
+    }
+
+    /**
      * 发送系统消息
      * @param request
      * @return
@@ -39,5 +49,21 @@ public class BackSysInformationController {
             return CommonUtil.errorJson(ErrorEnum.E_405);
         }
     }
+
+    /**
+     * 逻辑删除系统消息
+     * @param request
+     * @return
+     */
+    @PostMapping("/del")
+    public JSONObject updateDel(HttpServletRequest request) {
+        try {
+            return backSysInformationService.sendMessage(CommonUtil.request2Json(request));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return CommonUtil.errorJson(ErrorEnum.E_405);
+        }
+    }
+
 
 }

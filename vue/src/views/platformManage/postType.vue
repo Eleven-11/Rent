@@ -122,9 +122,8 @@
         'postTypeId'
       ])
     },
-    methods:{
-      getPostTypeList()
-      {
+    methods: {
+      getPostTypeList() {
         this.listLoading = true;
         this.api({
           url: "/postType/getPostTypelist",
@@ -157,8 +156,7 @@
         }
         return isJPG && isLt2M;
       },
-      insertPostType()
-      {
+      insertPostType() {
         let newPostType = this.newPostType;
         newPostType.postTypeCreateTime = this.formatter(this.postType.postTypeCreateTime, 'yyyy-MM-dd hh:mm:ss');
         console.log(newPostType.postTypeCreateTime);
@@ -171,7 +169,7 @@
         this.api({
           url: "/postType/insertPostType",
           method: "post",
-          params:newPostType
+          params: newPostType
         }).then(() => {
           console.log("插入成功！")
         })
@@ -210,27 +208,6 @@
         this.postType.postTypeId = postType.postTypeId
         this.dialogStatus = "update"
         this.dialogFormVisible = true
-      },
-      formatter(thistime, fmt) {
-        let $this = new Date(thistime)
-        let o = {
-          'M+': $this.getMonth() + 1,
-          'd+': $this.getDate(),
-          'h+': $this.getHours(),
-          'm+': $this.getMinutes(),
-          's+': $this.getSeconds(),
-          'q+': Math.floor(($this.getMonth() + 3) / 3),
-          'S': $this.getMilliseconds()
-        }
-        if (/(y+)/.test(fmt)) {
-          fmt = fmt.replace(RegExp.$1, ($this.getFullYear() + '').substr(4 - RegExp.$1.length))
-        }
-        for (var k in o) {
-          if (new RegExp('(' + k + ')').test(fmt)) {
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
-          }
-        }
-        return fmt
       }
     }
   }
