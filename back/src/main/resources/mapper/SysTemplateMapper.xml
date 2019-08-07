@@ -5,13 +5,14 @@
     <!--获取系统消息模板-->
     <select id="getSysTemplateList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
-            a.TITLE sysTempTitle,
-            a.CONTENT sysTempContent,
-            a.ID sysTempId,
-            a.IS_GUIDE isGuide
+            t.TITLE sysTempTitle,
+            t.CONTENT sysTempContent,
+            t.ID sysTempId,
+            t.IS_GUIDE isGuide
         FROM
-            t_sys_template a
-        WHERE a.IS_DEL =0
+            t_sys_template t
+        ORDER BY t.id DESC
+        LIMIT #{offSet}, #{pageRow}
     </select>
     <!--获取当前作为引导语的模板数量-->
     <select id="getGuideNum" resultType="java.lang.Integer">

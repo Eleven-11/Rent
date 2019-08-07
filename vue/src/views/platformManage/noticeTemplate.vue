@@ -38,31 +38,22 @@
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
 
-    <el-dialog v-model="newNoticeTemplate" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      
       <el-form class="small-space" :model="noticeTemplate" label-position="left" label-width="80px"
                style='width: 300px; margin-left:50px;'>
-        <el-form-item label="模版名称" required v-if="dialogStatus=='create'">
-          <el-input type="text" v-model="noticeTemplate.sysTempTitle">
-          </el-input>
+        <el-form-item label="模版名称">
+          <el-input type="text" v-model="noticeTemplate.sysTempTitle"></el-input>
         </el-form-item>
-        <el-form-item label="模版名称" required v-if="dialogStatus=='create'">
-          <el-input type="text" v-model="noticeTemplate.sysTempContent">
-          </el-input>
+        <el-form-item label="模版内容">
+          <el-input type="textarea" v-model="noticeTemplate.sysTempContent"></el-input>
         </el-form-item>
-        <!--<el-form-item label="引导语" required v-if="dialogStatus=='create'">-->
-          <!--<div class="block">-->
-            <!--<el-date-picker-->
-              <!--v-model="noticeTemplate.isGuide"-->
-              <!--type="datetime"-->
-              <!--placeholder="选择日期时间">-->
-            <!--</el-date-picker>-->
-          <!--</div>-->
-        <!--</el-form-item>-->
       </el-form>
+
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="success" @click="insertnoticeTemplate">创 建</el-button>
-        <el-button type="primary" v-else @click="updateUser">修 改</el-button>
+        <el-button v-if="dialogStatus=='create'" type="success" @click="createSysTemplate">创 建</el-button>
+        <el-button type="primary" v-else @click="updateSysTemplate">修 改</el-button>
       </div>
     </el-dialog>
   </div>
@@ -105,7 +96,7 @@
       }
     },
     created() {
-      this.getnoticeTemplateList();
+      this.getNoticeTemplateList();
       /*if (this.hasPerm('user:add') || this.hasPerm('user:update')) {
         this.getAllRoles();
       }*/
@@ -125,37 +116,13 @@
         this.api({
           url: "/sysTemplate/getSysTemplateList",
           method: "get",
-          params: this.dialogFormVisible
+          params: this.listQuery
         }).then(data => {
           this.listLoading = false;
           this.list = data.list;
           this.totalCount = data.totalCount;
         })
       },
-
-      /**
-       * 添加系统模版
-       */
-      insertSysTemplate()
-      {
-        let newNoticeTemplate = this.newNoticeTemplate;
-        // newNoticeTemplate.isGuide = this.noticeTemplate.isGuide;
-        // console.log(newNoticeTemplate.isGuide);
-        newNoticeTemplate.sysTempContent = this.sysTempContent;
-        console.log(newNoticeTemplate.sysTempContent);
-        newNoticeTemplate.sysTempTitle = this.noticeTemplate.sysTempTitle;
-        console.log(newNoticeTemplate.sysTempTitle)
-
-        this.listLoading = true;
-        this.api({
-          url: "/sysTemplate/insertSysTemplate",
-          method: "post",
-          params:newNoticeTemplate
-        }).then(() => {
-          console.log("创建模版成功！")
-        })
-      },
-
       handleSizeChange(val) {
         //改变每页数量
         this.listQuery.pageRow = val
@@ -176,6 +143,9 @@
         //表格序号
         return (this.listQuery.pageNum - 1) * this.listQuery.pageRow + $index + 1
       },
+      /**
+       * 创建模版对话框
+       */
       showCreate() {
         //显示新增对话框
         this.noticeTemplate.sysTempId = "";
@@ -184,6 +154,9 @@
         this.dialogStatus = "create"
         this.dialogFormVisible = true
       },
+      /**
+       * 修改模版对话框
+       */
       showUpdate($index) {
         let noticeTemplate = this.list[$index];
         this.noticeTemplate.sysTempTitle = noticeTemplate.sysTempTitle;
@@ -192,27 +165,29 @@
         this.dialogStatus = "update"
         this.dialogFormVisible = true
       },
-      formatter(thistime, fmt) {
-        let $this = new Date(thistime)
-        let o = {
-          'M+': $this.getMonth() + 1,
-          'd+': $this.getDate(),
-          'h+': $this.getHours(),
-          'm+': $this.getMinutes(),
-          's+': $this.getSeconds(),
-          'q+': Math.floor(($this.getMonth() + 3) / 3),
-          'S': $this.getMilliseconds()
-        }
-        if (/(y+)/.test(fmt)) {
-          fmt = fmt.replace(RegExp.$1, ($this.getFullYear() + '').substr(4 - RegExp.$1.length))
-        }
-        for (var k in o) {
-          if (new RegExp('(' + k + ')').test(fmt)) {
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
-          }
-        }
-        return fmt
-      }
+
+      /**
+       * 添加系统模版
+       */
+      createSysTemplate()
+      {
+        let newNoticeTemplate = this.newNoticeTemplate;
+        // newNoticeTemplate.isGuide = this.noticeTemplate.isGuide;
+        // console.log(newNoticeTemplate.isGuide);
+        newNoticeTemplate.sysTempContent = this.sysTempContent;
+        console.log(newNoticeTemplate.sysTempContent);
+        newNoticeTemplate.sysTempTitle = this.noticeTemplate.sysTempTitle;
+        console.log(newNoticeTemplate.sysTempTitle)
+
+        this.listLoading = true;
+        this.api({
+          url: "/sysTemplate/insertSysTemplate",
+          method: "post",
+          params:newNoticeTemplate
+        }).then(() => {
+          console.log("创建模版成功！")
+        })
+      },
     }
   }
 </script>
