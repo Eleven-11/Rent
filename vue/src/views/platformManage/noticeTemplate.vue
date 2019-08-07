@@ -4,6 +4,7 @@
       <!--搜索表单-->
       <el-form class="small-space" inline :model="listQuery">
 
+        <el-form-item>模版名称:</el-form-item>
         <!--内容输入框-->
         <el-form-item>
           <el-input type="text" v-model="listQuery.title" placeholder="输入模版名称"/>
@@ -128,9 +129,6 @@
     },
     created() {
       this.getNoticeTemplateList();
-      /*if (this.hasPerm('user:add') || this.hasPerm('user:update')) {
-        this.getAllRoles();
-      }*/
     },
     computed: {
       ...mapGetters([
@@ -163,13 +161,13 @@
       handleCurrentChange(val) {
         //改变页码
         this.listQuery.pageNum = val
-        this.getList();
+        this.getNoticeTemplateList();
       },
 
       handleFilter() {
         //查询事件
         this.listQuery.pageNum = 1
-        this.getList()
+        this.getNoticeTemplateList()
       },
       getIndex($index) {
         //表格序号
@@ -372,7 +370,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>

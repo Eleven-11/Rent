@@ -37,7 +37,7 @@ public class WebSocketServer {
     private Session session;
     private String username;
     private long timeStr;
-    private boolean isHeart = false;
+    private boolean isHeart = true;
 
     /**
      * 手动显示加载bean
@@ -179,6 +179,7 @@ public class WebSocketServer {
         //判断是否在线
         if (queryOnLine(to)){
             WebSocketServer toServer = clients.get(to);
+            System.out.println(toServer.session);
             toServer.session.getAsyncRemote().sendText(
                      CommonUtil.sendParam(type, jsonObject).toJSONString());
         }
@@ -209,6 +210,7 @@ public class WebSocketServer {
         WebSocketServer toServer = clients.get(key);
         //判断是否在线
         if (toServer != null && toServer.session != null){
+//            toServer.isHeart = true;
             return true;
         }
         return false;

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author: chens
@@ -21,6 +22,14 @@ public class BackSysInformationServiceImpl implements BackSysInformationService 
 
     @Autowired
     private SysInformationDao sysInformationDao;
+
+    @Override
+    public JSONObject getBackSysInforList(JSONObject jsonObject) {
+        CommonUtil.fillPageParam(jsonObject);
+        int count = sysInformationDao.countBackSysInfor(jsonObject);
+        List<JSONObject> list = sysInformationDao.getBackSysInforList(jsonObject);
+        return CommonUtil.successPage(jsonObject, list, count);
+    }
 
     /**
      * 发送系统消息
@@ -40,6 +49,17 @@ public class BackSysInformationServiceImpl implements BackSysInformationService 
             sysInformationDao.insertInformation(jsonObject);
             WebSocketServer.sendMessage(jsonObject, jsonObject.getString("targetId"), Const.SEND_SYS_MESSAGE);
         }
-        return CommonUtil.successJson("发送成功");
+        return CommonUtil.successJson();
+    }
+
+    /**
+     * 逻辑删除帖子
+     * @param jsonObject
+     * @return
+     */
+    @Override
+    public JSONObject updateDel(JSONObject jsonObject) {
+        sysInformationDao.updateDel(jsonObject);
+        return CommonUtil.successJson();
     }
 }

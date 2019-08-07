@@ -13,10 +13,57 @@
         FROM t_sys_information i
         WHERE i.CREATE_TIME > #{flagTime}
           AND i.TARGET_ID in (#{userId},'system_info')
+          AND i.IS_DEL = 0
         ORDER BY i.CREATE_TIME DESC
     </select>
 
     <!-- 后台消息dao方法实现 -->
+    <!-- 查询用户收到的最新消息集合 -->
+    <select id="getBackSysInforList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+          i.ID                                    sysInformationId,
+          i.TARGET_ID                             targetId,
+          u.WX_NICK_NAME                          targetNickName,
+          i.CONTENT                               content,
+          DATE_FORMAT(i.CREATE_TIME,'%Y-%m-%d %H:%i:%s')   createTime
+        FROM t_sys_information i
+        LEFT JOIN t_wx_user u on i.TARGET_ID = u.USER_ID
+        <where>
+            i.IS_DEL = 0
+            <if test="group == 1">
+                AND i.TARGET_ID = 'system_info'
+            </if>
+            <if test="group == 2">
+                AND i.TARGET_ID != 'system_info'
+            </if>
+            <if test="targetNickName != null and targetNickName != ''">
+                AND u.WX_NICK_NAME LIKE CONCAT(#{targetNickName},'%')
+                OR i.TARGET_ID = 'system_info'
+            </if>
+        </where>
+        ORDER BY i.CREATE_TIME DESC
+        LIMIT #{offSet}, #{pageRow}
+    </select>
+    <!-- 获取条数 -->
+    <select id="countBackSysInfor" resultType="Integer">
+        SELECT count(0)
+        FROM t_sys_information i
+        LEFT JOIN t_wx_user u on i.TARGET_ID = u.USER_ID
+        <where>
+            i.IS_DEL = 0
+            <if test="group == 1">
+                AND i.TARGET_ID = 'system_info'
+            </if>
+            <if test="group == 2">
+                AND i.TARGET_ID != 'system_info'
+            </if>
+            <if test="targetNickName != null and targetNickName != ''">
+                AND u.WX_NICK_NAME LIKE CONCAT(#{targetNickName},'%')
+                OR i.TARGET_ID = 'system_info'
+            </if>
+        </where>
+    </select>
+
     <!-- 创建系统消息条目 -->
     <insert id="insertInformation">
         insert into t_sys_information (

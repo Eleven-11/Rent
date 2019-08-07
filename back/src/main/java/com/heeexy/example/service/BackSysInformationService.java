@@ -15,9 +15,23 @@ public interface BackSysInformationService {
 //    JSONObject
 
     /**
+     * 获取后台列表
+     * @param jsonObject
+     * @return
+     */
+    JSONObject getBackSysInforList(JSONObject jsonObject);
+
+    /**
      * 发送系统消息
      * @param jsonObject
      * @return
      */
     JSONObject sendMessage(JSONObject jsonObject) throws IOException;
+
+    /**
+     * 逻辑删除系统消息
+     * @param jsonObject
+     * @return
+     */
+    JSONObject updateDel(JSONObject jsonObject);
 }
