@@ -11,7 +11,11 @@
             t.IS_GUIDE isGuide
         FROM
             t_sys_template t
-        ORDER BY t.id DESC
+        WHERE t.IS_DEL = 0
+        <if test="title != null and title != ''">
+            AND t.TITLE like CONCAT(#{title},'%')
+        </if>
+        ORDER BY t.IS_GUIDE DESC ,t.ID DESC
         LIMIT #{offSet}, #{pageRow}
     </select>
     <!--获取当前作为引导语的模板数量-->
@@ -36,17 +40,17 @@
     <!--修改系统消息模板-->
     <update id="updateSysTemplate">
         UPDATE t_sys_template
-        SET
-            IS_DEL =0
-        <if test="sysTempTitle !=null and sysTempTitle !=''">
-            ,TITLE =#{sysTempTitle}
-        </if>
-        <if test="sysTempContent !=null and sysTempContent !=''">
-            ,CONTENT =#{sysTempContent}
-        </if>
-        <if test="isGuide !=null and isGuide !=''">
-            ,IS_GUIDE =#{isGuide}
-        </if>
+        <set>
+            <if test="sysTempTitle != null and sysTempTitle != ''">
+                TITLE =#{sysTempTitle},
+            </if>
+            <if test="sysTempContent != null and sysTempContent != ''">
+                CONTENT =#{sysTempContent},
+            </if>
+            <if test="isGuide != null and isGuide != ''">
+                IS_GUIDE =#{isGuide}
+            </if>
+        </set>
         WHERE ID = #{sysTempId}
     </update>
     <!--逻辑删除系统消息模板-->

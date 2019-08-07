@@ -50,6 +50,7 @@ public class SysTemplateServiceImpl implements SysTemplateService {
     @Override
     public JSONObject updateSysTemplate(JSONObject jsonObject) {
         //是否要设置成引导语
+        //FIXME 已有则覆盖之前多引导语
         if (jsonObject.get("isGuide")!=null && "1".equals(jsonObject.get("isGuide"))){
             //获取当前系统消息模板中是否存在引导语，若已存在则不允许修改
             if (sysTemplateDao.getGuideNum(jsonObject)==1){
@@ -57,12 +58,12 @@ public class SysTemplateServiceImpl implements SysTemplateService {
             }
             else {
                 sysTemplateDao.updateSysTemplate(jsonObject);
-                return CommonUtil.successJson("修改成功，刷新后查看");
+                return CommonUtil.successJson();
             }
         }
         else {
             sysTemplateDao.updateSysTemplate(jsonObject);
-            return CommonUtil.successJson("修改成功，刷新后查看");
+            return CommonUtil.successJson();
         }
     }
 
@@ -74,7 +75,7 @@ public class SysTemplateServiceImpl implements SysTemplateService {
     @Override
     public JSONObject updateDelTemplate(JSONObject jsonObject) {
         sysTemplateDao.updateDelTemplate(jsonObject);
-        return CommonUtil.successJson("删除成功，刷新后查看");
+        return CommonUtil.successJson();
     }
 
 }
