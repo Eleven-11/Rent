@@ -28,7 +28,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="success" icon="plus" @click="showCreate">发送消息</el-button>
+          <el-button type="success" icon="plus" @click="showSend">发送消息</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -76,17 +76,22 @@
 
       <el-form class="small-space" :model="sysInformation" :rules="rules" ref="sysInformation" label-position="left" label-width="80px"
                style='width: 400px; margin-left:50px;'>
-        <el-form-item label="模版名称" prop="targetNickName">
+
+
+        <el-form-item label="发送人" prop="targetNickName">
           <el-input type="text" v-model="sysInformation.targetNickName"></el-input>
         </el-form-item>
-        <el-form-item label="模版内容" prop="content">
+        <el-form-item label="选择模版" prop="content">
           <el-input type="textarea" :rows="6" v-model="sysInformation.content"></el-input>
         </el-form-item>
+
+
+
       </el-form>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeForm('sysInformation')">取 消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="success" @click="createSysTemplate('sysInformation')">创 建</el-button>
+        <el-button type="success" @click="sendSysTemplate('sysInformation')">创 建</el-button>
       </div>
     </el-dialog>
   </div>
@@ -101,7 +106,7 @@
     data() {
       return {
         rules:{
-          targetNickName :[{required: true, message: '请输入模版名称', trigger: 'blur'}],
+          targetNickName :[{required: true, message: '请选择发送人', trigger: 'blur'}],
           content :[{required: true, message: '请输入模版内容', trigger: 'blur'}]
         },
         optionGroup: [{
@@ -124,12 +129,11 @@
           pageRow: 50,//每页条数
         },
         roles: [],//角色列表
-        dialogStatus: 'create',
+        dialogStatus: 'send',
         dialogFormVisible: false,
         dialogMessage:'',
         textMap: {
-          update: '编辑',
-          create: '新建'
+          send: '发送消息'
         },
         //设置数据模版
         sysInformation: {
@@ -188,25 +192,25 @@
         return (this.listQuery.pageNum - 1) * this.listQuery.pageRow + $index + 1
       },
       /**
-       * 创建模版 - 对话框
+       * 发送消息 - 对话框
        */
-      showCreate() {
+      showSend() {
         //显示新增对话框
         this.sysInformation.content = "";
         this.sysInformation.targetNickName = "";
-        this.dialogStatus = "create";
+        this.dialogStatus = "send";
         this.dialogFormVisible = true;
       },
 
       /**
-       * 添加模版 - 功能
+       * 发送消息 - 功能
        */
-      createOperation(formName) {
+      sendOperation(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.listLoading = true;
             this.api({
-              url: "/sysTemplate/insertSysTemplate",
+              url: "/backInfor/send",
               method: "post",
               params: this.sysInformation
             }).then(() => {
@@ -240,7 +244,7 @@
         }).then(() => {
 
           this.api({
-            url: "/sysTemplate/updateDelTemplate",
+            url: "/backInfor/del",
             method: "post",
             params:this.sysInformation
           }).then(data => {
@@ -271,27 +275,6 @@
       closeDialog(){
         // 点击关闭 数据重置
         this.$refs['sysInformation'].clearValidate();
-      },
-      formatter(thistime, fmt) {
-        let $this = new Date(thistime)
-        let o = {
-          'M+': $this.getMonth() + 1,
-          'd+': $this.getDate(),
-          'h+': $this.getHours(),
-          'm+': $this.getMinutes(),
-          's+': $this.getSeconds(),
-          'q+': Math.floor(($this.getMonth() + 3) / 3),
-          'S': $this.getMilliseconds()
-        }
-        if (/(y+)/.test(fmt)) {
-          fmt = fmt.replace(RegExp.$1, ($this.getFullYear() + '').substr(4 - RegExp.$1.length))
-        }
-        for (var k in o) {
-          if (new RegExp('(' + k + ')').test(fmt)) {
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
-          }
-        }
-        return fmt
       }
     }
   }

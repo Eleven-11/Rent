@@ -57,12 +57,7 @@ public class BackSysInformationController {
      */
     @PostMapping("/del")
     public JSONObject updateDel(HttpServletRequest request) {
-        try {
-            return backSysInformationService.sendMessage(CommonUtil.request2Json(request));
-        } catch (IOException e) {
-            e.printStackTrace();
-            return CommonUtil.errorJson(ErrorEnum.E_405);
-        }
+        return backSysInformationService.updateDel(CommonUtil.request2Json(request));
     }
 
 
