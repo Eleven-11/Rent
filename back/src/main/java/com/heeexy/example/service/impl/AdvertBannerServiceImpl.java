@@ -37,7 +37,7 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
     @Override
     public JSONObject insertAdvImg(JSONObject jsonObject) {
         advertBannerDao.insertAdvImg(jsonObject);
-        return CommonUtil.successJson("操作成功！刷新后查看！");
+        return CommonUtil.successJson(jsonObject.get("advId"));
     }
 
     /**

@@ -31,4 +31,11 @@ public interface UserBrowseDao {
      * @return
      **/
     void updateUserBrowse(JSONObject jsonObject);
+
+    /**
+     * @description 获取浏览过指定帖子的用户列表
+     * @param jsonObject
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    List<JSONObject> getPostBrowseList(JSONObject jsonObject);
 }

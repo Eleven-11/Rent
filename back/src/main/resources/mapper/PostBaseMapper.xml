@@ -327,9 +327,15 @@
         WHERE ID = #{postId}
     </update>
     <update id="updateDelPost">
+        BEGIN;
         UPDATE t_post_base
         SET IS_DEL = 1
-        WHERE ID =#{postId}
+        WHERE ID =#{postId};
+        UPDATE t_comment
+        SET IS_DEL = 1
+        WHERE
+        POST_ID = #{postId};
+        COMMIT;
     </update>
     <update id="updateDeletedPost">
         UPDATE t_post_base

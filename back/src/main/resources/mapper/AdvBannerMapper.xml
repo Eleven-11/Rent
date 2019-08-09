@@ -6,12 +6,13 @@
         SELECT
         ID advId,
         ADVERT_TITLE advTitle,
-        IMG_URL advImg
+        IMG_URL advImg,
+        SORT_TIME sortTime
         FROM t_advert_banner a
         WHERE a.IS_DEL=0
         ORDER BY SORT_TIME DESC
     </select>
-    <insert id="insertAdvImg">
+    <insert id="insertAdvImg" useGeneratedKeys="true" keyProperty="advId">
         INSERT INTO t_advert_banner (
             ADVERT_TITLE,
             IMG_URL,

@@ -115,6 +115,7 @@ public class PostBaseServiceImpl implements PostBaseService {
      * @return com.alibaba.fastjson.JSONObject
      **/
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public JSONObject updateDelPost(JSONObject jsonObject) {
         postBaseDao.updateDelPost(jsonObject);
         return CommonUtil.successJson("删除成功");

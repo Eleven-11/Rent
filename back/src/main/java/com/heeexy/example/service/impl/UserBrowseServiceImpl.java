@@ -34,6 +34,7 @@ public class UserBrowseServiceImpl implements UserBrowseService {
     public JSONObject getUserBrowsePostList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
         List<JSONObject> userBrowsePostIds =userBrowseDao.getUserBrowse(jsonObject);
+        System.out.println(userBrowsePostIds);
         List<JSONObject> userBrowsePostList=new ArrayList<>();
         for (int i=0;i<userBrowsePostIds.size();i++){
             JSONObject userBrowsePost = postBaseDao.getWxUserPostInfo(userBrowsePostIds.get(i));
@@ -50,15 +51,21 @@ public class UserBrowseServiceImpl implements UserBrowseService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public JSONObject insertUserBrowse(JSONObject jsonObject) {
-        if(userBrowseDao.getBrowseStatus(jsonObject) != null){
-            userBrowseDao.updateUserBrowse(jsonObject);
-            System.out.println("if");
-            return CommonUtil.successJson();
+        synchronized(this){
+            if(userBrowseDao.getBrowseStatus(jsonObject) != null){
+                userBrowseDao.updateUserBrowse(jsonObject);
+                return CommonUtil.successJson();
+            }
+            else {
+                userBrowseDao.insertUserBrowse(jsonObject);
+                return CommonUtil.successJson("插入成功");
+
+            }
         }
-        else {
-            userBrowseDao.insertUserBrowse(jsonObject);
-            System.out.println("else");
-            return CommonUtil.successJson("插入成功");
-        }
+    }
+
+    @Override
+    public JSONObject getPostBrowseList(JSONObject jsonObject) {
+        return CommonUtil.successJson(userBrowseDao.getPostBrowseList(jsonObject));
     }
 }

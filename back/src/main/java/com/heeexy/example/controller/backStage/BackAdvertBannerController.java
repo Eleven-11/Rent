@@ -51,7 +51,7 @@ public class BackAdvertBannerController {
      * @param request （图片id-advId）
      * @return com.alibaba.fastjson.JSONObject
      **/
-    @GetMapping("/updateDelAdvImg")
+    @PostMapping("/updateDelAdvImg")
     public JSONObject updateDelAdvImg(HttpServletRequest request){
         return adverBannerService.updateDelAdvImg(CommonUtil.request2Json(request));
     }

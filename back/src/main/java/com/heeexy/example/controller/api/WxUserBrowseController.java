@@ -32,6 +32,16 @@ public class WxUserBrowseController {
     public JSONObject getUserBrowsePostList(HttpServletRequest request){
         return userBrowseService.getUserBrowsePostList(CommonUtil.request2Json(request));
     }
+
+    /**
+     * @description 获取浏览过指定帖子的用户列表
+     * @param request 帖子id-postId
+     * @return
+     **/
+    @GetMapping("/getPostBrowseList")
+    public JSONObject getPostBrowseList(HttpServletRequest request){
+        return userBrowseService.getPostBrowseList(CommonUtil.request2Json(request));
+    }
     /**
      * @description 添加用户浏览信息，同时更新对应帖子的浏览量
      * @param request 系统用户id - userId，帖子id - postId
