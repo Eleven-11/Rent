@@ -53,4 +53,28 @@ public class WxUserPostController {
     public JSONObject updateOnShelf(HttpServletRequest request){
         return wxUserPostService.updateOnShelf(CommonUtil.request2Json(request));
     }
+    /**
+     * 用户编辑帖子内容
+     * @param request 进行操作的帖子id-postId，类型id-typeId，帖子内容-content，
+     *                最低价-minPrice，最高价-maxPrice，联系方式-phone，地址-address，
+     *                标签集合-labels，是否有中介费-fee，是否为地铁周边-isSub，是否商圈周边-isMall，
+     *                图片集合 - postImgList
+     * @return
+     */
+    @PostMapping("/updatePost")
+    public JSONObject updatePost(HttpServletRequest request){
+        return wxUserPostService.updatePost(CommonUtil.request2Json(request));
+    }
+
+    /**
+     * @description 获取用户要编辑的帖子基本信息及图片
+     * @param request 帖子id - postId
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @GetMapping("/postInfo")
+    public JSONObject getUpdatePostInfo(HttpServletRequest request){
+        return wxUserPostService.getUpdatePostInfo(CommonUtil.request2Json(request));
+    }
+
+
 }

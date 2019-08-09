@@ -24,4 +24,11 @@ public interface PostImgDao {
      * @return
      */
     Integer insertPostImgList(JSONObject postImgList);
+
+    /**
+     * @description 删除帖子图片（用户编辑已发布的帖子内容时触发）
+     * @param jsonObject
+     * @return void
+     **/
+    void deletePostImg(JSONObject jsonObject);
 }

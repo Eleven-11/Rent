@@ -78,9 +78,6 @@ public class PostBaseServiceImpl implements PostBaseService {
         if (userRestrictDao.getResStatus(jsonObject) == 1) {
             return CommonUtil.errorJson(ErrorEnum.WX_884);
         } else {
-            System.out.println("hello");
-            System.out.println(jsonObject);
-            System.out.println("world");
             if (postBaseDao.getReleaseTime(jsonObject) < 5) {
                 if (jsonObject.getInteger("minPrice")>jsonObject.getInteger("maxPrice"))
                 {

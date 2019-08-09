@@ -23,6 +23,7 @@
             m.TOTAL_RESONATE+m.DEV_RESONATE      likes,
             m.TOTAL_COLLECTION  collection,
             m.FEE               fee,
+            m.IS_LOWER_SHELF    isLowerShelf,
             m.ACTIVE_TIME       activeTimes
         FROM
           t_wx_user u,
@@ -50,12 +51,64 @@
         WHERE
           m.IS_DEL='0'
           AND m.USER_ID = #{userId}
-          AND m.POST_ID = #{postId}
+          AND m.ID = #{postId}
+    </select>
+    <!--获取帖子上下架状态-->
+    <select id="getIfOnShelf" resultType="java.lang.Integer">
+        SELECT
+            IS_LOWER_SHELF offShelf
+        FROM
+            t_post_base
+        WHERE
+            ID = #{postId}
     </select>
     <!--设置帖子上下架-->
     <update id="updateOnShelf">
         UPDATE t_post_base
-        SET IS_DEL=0,IS_LOWER_SHELF=#{isLowerShelf}
+        <set>
+            IS_DEL=0,
+        <if test='isLowerShelf != NULL and isLowerShelf == "0"'>
+            IS_LOWER_SHELF=0,CREATE_TIME = NOW(),ACTIVE_TIME = NOW()
+        </if>
+        <if test='isLowerShelf != NULL and isLowerShelf == "1"'>
+            IS_LOWER_SHELF=1
+        </if>
+        </set>
+        WHERE ID = #{postId}
+    </update>
+    <!--获取要进行编辑的帖子基本信息-->
+    <select id="getUpdatePostBaseInfo" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        f.TYPE_NAME         typeName,
+        m.ID                postId,
+        m.CREATE_TIME       createTime,
+        m.ADDRESS           address,
+        m.LABELS            postLabels,
+        m.CONTENT           content,
+        m.MIN_PRICE         minPrice,
+        m.MAX_PRICE         maxPrice,
+        m.PHONE             phone,
+        m.FEE               fee
+        FROM
+        t_post_base m,
+        t_post_type f
+        WHERE
+        m.ID = #{postId}
+        AND m.TYPE_ID = f.ID
+    </select>
+    <!--用户编辑帖子信息-->
+    <update id="updatePost">
+        UPDATE t_post_base
+        SET
+            CONTENT = #{content},
+            MIN_PRICE = #{minPrice},
+            MAX_PRICE = #{maxPrice},
+            PHONE = #{phone},
+            ADDRESS = #{address},
+            LABELS = #{labels},
+            FEE = #{fee},
+            IS_SUB = #{isSub},
+            IS_MALL = #{isMall}
         WHERE ID = #{postId}
     </update>
 

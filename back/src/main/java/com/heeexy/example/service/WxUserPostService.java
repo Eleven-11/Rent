@@ -19,4 +19,18 @@ public interface WxUserPostService {
      * @return int
      **/
     JSONObject updateOnShelf(JSONObject jsonObject);
+
+    /**
+     * @description 用户编辑帖子
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject updatePost(JSONObject jsonObject);
+
+    /**
+     * @description 获取要编辑的帖子基本信息及图片
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject getUpdatePostInfo(JSONObject jsonObject);
 }

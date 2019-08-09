@@ -8,7 +8,10 @@ import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -80,12 +83,52 @@ public class WxUserPostServiceImpl implements WxUserPostService {
      **/
     @Override
     public JSONObject updateOnShelf(JSONObject jsonObject) {
+        System.out.println("aaaaaaaaa");
+        System.out.println(jsonObject);
         if (wxUserPostDao.queryPostByUserIdPostId(jsonObject)!=null){
             wxUserPostDao.updateOnShelf(jsonObject);
-            return CommonUtil.successJson("已下架");
+            return CommonUtil.successJson("修改成功");
         }
         else {
             return CommonUtil.errorJson(ErrorEnum.E_502);
         }
+    }
+
+    /**
+     * @description 发帖人修改帖子内容
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @Override
+    public JSONObject updatePost(JSONObject jsonObject) {
+        if (wxUserPostDao.getIfOnShelf(jsonObject)==1) {
+            wxUserPostDao.updatePost(jsonObject);
+            if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
+                //先将原来的帖子图片记录删除
+                postImgDao.deletePostImg(jsonObject);
+                //插入新的帖子图片
+                jsonObject.put("postImgList", Arrays.asList(jsonObject.get("postImgList").toString().split(",")));
+                postImgDao.insertPostImgList(jsonObject);
+            }
+            return CommonUtil.successJson("修改成功");
+        }
+        else {
+            return CommonUtil.errorJson(ErrorEnum.WX_907);
+        }
+    }
+
+    /**
+     * @description 获取用户要编辑的帖子基本信息及图片
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @Override
+    public JSONObject getUpdatePostInfo(JSONObject jsonObject) {
+        List<JSONObject> postInfo = new ArrayList<>();
+        JSONObject jo = new JSONObject();
+        jo.put("postBase",wxUserPostDao.getUpdatePostBaseInfo(jsonObject));
+        jo.put("postImg",postImgDao.getPostImgList(jsonObject));
+        postInfo.add(0,jo);
+        return CommonUtil.successJson(postInfo);
     }
 }

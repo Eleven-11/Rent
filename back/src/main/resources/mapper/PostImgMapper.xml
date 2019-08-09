@@ -2,9 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.PostImgDao">
+    <!--删除帖子图片-->
+    <delete id="deletePostImg">
+        DELETE FROM t_post_picture
+        WHERE POST_ID =#{postId}
+    </delete>
+    <!--获取帖子图片列表-->
     <select id="getPostImgList" resultType="com.alibaba.fastjson.JSONObject">
         select a.IMG_URL img from t_post_picture a where a.POST_ID =#{postId}
     </select>
+    <!--添加帖子图片-->
     <insert id="insertPostImgList">
         INSERT INTO t_post_picture (POST_ID, IMG_URL,CREATE_TIME)
         VALUES
