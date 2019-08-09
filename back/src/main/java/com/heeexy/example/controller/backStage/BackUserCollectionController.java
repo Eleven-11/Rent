@@ -5,6 +5,7 @@ import com.heeexy.example.service.UserCollectionService;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,7 +42,7 @@ public class BackUserCollectionController {
      *              下面一条帖子的id--laterPostId，对应的排序时间laterSortTime
      *@return com.alibaba.fastjson.JSONObject
      */
-    @GetMapping("/sortUserColl")
+    @PostMapping("/sortUserColl")
     public JSONObject updateUserColl(HttpServletRequest request) {
         JSONObject jsonObject = CommonUtil.request2Json(request);
         /*获取传入的排序时间*/

@@ -69,4 +69,16 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
         return CommonUtil.successJson("操作成功！刷新后查看！");
 
     }
+
+    /**
+     * @description 对广告栏图片进行排序
+     * @param jsonObject
+     * @return void
+     **/
+    @Override
+    public JSONObject sortAdvImgList(JSONObject jsonObject) {
+        advertBannerDao.sortAdvImgList(jsonObject);
+        return CommonUtil.successJson("操作成功！刷新后查看！");
+
+    }
 }

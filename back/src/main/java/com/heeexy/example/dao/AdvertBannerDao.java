@@ -30,4 +30,11 @@ public interface AdvertBannerDao {
      **/
     void updateAdvImg(JSONObject jsonObject);
 
+    /**
+     * @description 对广告栏图片进行排序
+     * @param jsonObject
+     * @return void
+     **/
+    void sortAdvImgList(JSONObject jsonObject);
+
 }

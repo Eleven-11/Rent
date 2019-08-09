@@ -66,5 +66,17 @@ public class BackAdvertBannerController {
     public JSONObject updateAdvImg(HttpServletRequest request){
         return adverBannerService.updateAdvImg(CommonUtil.request2Json(request));
     }
+    /**
+     * @description 后台管理：对广告栏图片进行编辑
+     * @param request  首行图片id - formerAdvId
+     *                 末行图片id - laterAdvId
+     *                 首行图片排序时间 - formerSortTime
+     *                 末行图片排序时间 - laterSortTime
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @PostMapping("/updateAdvImg")
+    public JSONObject sortAdvImgList(HttpServletRequest request){
+        return adverBannerService.sortAdvImgList(CommonUtil.request2Json(request));
+    }
     
 }

@@ -10,8 +10,9 @@
         SORT_TIME sortTime
         FROM t_advert_banner a
         WHERE a.IS_DEL=0
-        ORDER BY SORT_TIME DESC
+        ORDER BY SORT_TIME
     </select>
+
     <insert id="insertAdvImg" useGeneratedKeys="true" keyProperty="advId">
         INSERT INTO t_advert_banner (
             ADVERT_TITLE,
@@ -27,11 +28,14 @@
                 NOW()
             )
     </insert>
+
+
     <update id="updateDelAdvImg">
         update t_advert_banner
         set IS_DEL=1
         where ID =#{advId}
     </update>
+
     <update id="updateAdvImg">
         update t_advert_banner
         set IS_DEL=0
@@ -42,5 +46,11 @@
             ,IMG_URL=#{advImg}
         </if>
         where ID=#{advId}
+    </update>
+    <update id="sortAdvImgList">
+        START TRANSACTION;
+        UPDATE t_advert_banner SET SORT_TIME =#{laterSortTime} WHERE ID = #{formerAdvId};
+        UPDATE t_advert_banner SET SORT_TIME =#{formerSortTime} WHERE ID = #{laterAdvId};
+        COMMIT;
     </update>
 </mapper>

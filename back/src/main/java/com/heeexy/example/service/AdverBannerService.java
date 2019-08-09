@@ -2,8 +2,6 @@ package com.heeexy.example.service;
 
 import com.alibaba.fastjson.JSONObject;
 
-import java.util.List;
-
 public interface AdverBannerService {
     /**
      * @description 获取广告栏图片
@@ -29,4 +27,11 @@ public interface AdverBannerService {
      * @return
      **/
     JSONObject updateAdvImg(JSONObject jsonObject);
+
+    /**
+     * @description 对广告栏图片进行排序
+     * @param jsonObject
+     * @return
+     **/
+    JSONObject sortAdvImgList(JSONObject jsonObject);
 }
