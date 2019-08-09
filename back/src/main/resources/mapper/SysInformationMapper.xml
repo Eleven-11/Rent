@@ -38,7 +38,9 @@
             </if>
             <if test="targetNickName != null and targetNickName != ''">
                 AND u.WX_NICK_NAME LIKE CONCAT(#{targetNickName},'%')
-                OR i.TARGET_ID = 'system_info'
+                <if test=" group != 2">
+                    OR i.TARGET_ID = 'system_info'
+                </if>
             </if>
         </where>
         ORDER BY i.CREATE_TIME DESC
@@ -59,7 +61,9 @@
             </if>
             <if test="targetNickName != null and targetNickName != ''">
                 AND u.WX_NICK_NAME LIKE CONCAT(#{targetNickName},'%')
-                OR i.TARGET_ID = 'system_info'
+                <if test=" group != 2">
+                    OR i.TARGET_ID = 'system_info'
+                </if>
             </if>
         </where>
     </select>
