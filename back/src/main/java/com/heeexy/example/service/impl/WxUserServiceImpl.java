@@ -99,6 +99,11 @@ public class  WxUserServiceImpl implements WxUserService {
         return wxUserDao.getAuthStatus(jsonObject);
     }
 
+    /**
+     * @description 更新用户简介
+     * @param
+     * @return
+     **/
     @Override
     public JSONObject updateWxUserSummary(JSONObject jsonObject) {
         wxUserDao.updateWxUserSummary(jsonObject);
@@ -114,6 +119,17 @@ public class  WxUserServiceImpl implements WxUserService {
     public JSONObject updateWxUserInfo(JSONObject jsonObject) {
         wxUserDao.updateWxUserInfo(jsonObject);
         return CommonUtil.successJson("修改成功，刷新后查看");
+    }
+
+    /**
+     * 后台管理：其他页面使用的查询用户
+     * @param jsonObject
+     * @return
+     */
+    @Override
+    public JSONObject queryUser(JSONObject jsonObject) {
+        List<JSONObject> list = wxUserDao.queryUserList(jsonObject);
+        return CommonUtil.successPage(list);
     }
 
 }

@@ -24,6 +24,15 @@ public interface WxUserDao {
      * @return
      */
     List<JSONObject> getWxUserList(JSONObject jsonObject);
+
+    /**
+     * 通过昵称查询微信用户列表
+     * @param jsonObject
+     * @return
+     */
+    List<JSONObject> queryUserList(JSONObject jsonObject);
+
+
     /**
      * @description 新增授权微信用户信息
      * @param jsonObject

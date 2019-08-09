@@ -21,6 +21,7 @@ public class SysTemplateServiceImpl implements SysTemplateService {
     @Autowired
     private SysTemplateDao sysTemplateDao;
 
+
     /**
      * @description 获取系统消息模板列表
      * @param jsonObject
@@ -28,10 +29,8 @@ public class SysTemplateServiceImpl implements SysTemplateService {
      **/
     @Override
     public JSONObject getSysTemplateList(JSONObject jsonObject) {
-        CommonUtil.fillPageParam(jsonObject);
-        int count = sysTemplateDao.countSysTemplate(jsonObject);
-        List<JSONObject> list = sysTemplateDao.getSysTemplateList(jsonObject);
-        return CommonUtil.successPage(jsonObject, list, count);
+        List<JSONObject> list = sysTemplateDao.getTemplateList(jsonObject);
+        return CommonUtil.successPage(list);
     }
 
     /**

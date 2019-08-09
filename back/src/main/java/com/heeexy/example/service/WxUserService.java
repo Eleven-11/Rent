@@ -17,6 +17,20 @@ public interface WxUserService {
     JSONObject getWxUserList(JSONObject jsonObject);
 
     /**
+     * 后台管理 更改用户粉丝数量
+     * @param jsonObject
+     * @return void
+     **/
+    JSONObject updateWxUserInfo(JSONObject jsonObject);
+
+    /**
+     * 后台管理：其他页面使用的查询用户
+     * @param jsonObject
+     * @return
+     */
+    JSONObject queryUser(JSONObject jsonObject);
+
+    /**
      * 小程序：添加微信授权用户信息
      * @param jsonObject
      * @return
@@ -41,11 +55,4 @@ public interface WxUserService {
      * @return
      **/
     JSONObject updateWxUserSummary(JSONObject jsonObject);
-
-    /**
-     * @description 更改用户粉丝数量
-     * @param jsonObject
-     * @return void
-     **/
-    JSONObject updateWxUserInfo(JSONObject jsonObject);
 }

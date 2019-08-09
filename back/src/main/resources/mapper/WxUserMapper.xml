@@ -28,6 +28,8 @@
 			</if>
         </where>
     </select>
+
+
     <select id="getWxUserList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
         USER_ID         wxUserId,
@@ -60,6 +62,18 @@
             </if>
         </where>
     </select>
+
+    <select id="queryUserList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        USER_ID         wxUserId,
+        WX_NICK_NAME    value
+        FROM t_wx_user
+        <where>
+            IS_DEL='0'
+            AND WX_NICK_NAME LIKE CONCAT(#{nickName},'%')
+        </where>
+    </select>
+
     <insert id="insertWxUser">
         insert into t_wx_user (USER_ID,
             OPEN_ID,
