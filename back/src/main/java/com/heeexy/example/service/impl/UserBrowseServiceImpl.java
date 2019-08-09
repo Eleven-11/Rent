@@ -34,6 +34,7 @@ public class UserBrowseServiceImpl implements UserBrowseService {
     public JSONObject getUserBrowsePostList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
         List<JSONObject> userBrowsePostIds =userBrowseDao.getUserBrowse(jsonObject);
+        System.out.println(userBrowsePostIds);
         List<JSONObject> userBrowsePostList=new ArrayList<>();
         for (int i=0;i<userBrowsePostIds.size();i++){
             JSONObject userBrowsePost = postBaseDao.getWxUserPostInfo(userBrowsePostIds.get(i));
@@ -61,5 +62,10 @@ public class UserBrowseServiceImpl implements UserBrowseService {
 
             }
         }
+    }
+
+    @Override
+    public JSONObject getPostBrowseList(JSONObject jsonObject) {
+        return CommonUtil.successJson(userBrowseDao.getPostBrowseList(jsonObject));
     }
 }

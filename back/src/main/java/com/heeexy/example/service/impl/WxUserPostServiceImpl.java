@@ -2,10 +2,7 @@ package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.config.exception.WxPageException;
-import com.heeexy.example.dao.PostCommentDao;
-import com.heeexy.example.dao.PostImgDao;
-import com.heeexy.example.dao.UserResonateDao;
-import com.heeexy.example.dao.WxUserPostDao;
+import com.heeexy.example.dao.*;
 import com.heeexy.example.service.WxUserPostService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
@@ -34,6 +31,9 @@ public class WxUserPostServiceImpl implements WxUserPostService {
     @Autowired
     private UserResonateDao userResonateDao;
 
+    @Autowired
+    private UserBrowseDao userBrowseDao;
+
     /**
      * 用户发帖列表
      * 分页加载
@@ -56,14 +56,19 @@ public class WxUserPostServiceImpl implements WxUserPostService {
             jo.put("postCommentList", postCommentDao.getPostCommentList(jo));
             //获取帖子点赞列表
             List<JSONObject> postLikeList = userResonateDao.getPostLikeList(jo);
+            //获取帖子浏览用户列表
+            List<JSONObject> postBrowseList = userBrowseDao.getPostBrowseList(jo);
+
+            System.out.println(postBrowseList);
             //没有头像的用户设置为默认头像
             for (int i=0;i<postLikeList.size();i++){
                 if (postLikeList.get(i).get("likeImg")==null){
                     postLikeList.get(i).put("likeImg","http://192.168.1.7:8080/image/static/default.png");
                 }
             }
-            System.out.println(postLikeList);
+
             jo.put("postLikeList",postLikeList);
+            jo.put("postBrowseList",postBrowseList);
         }
         return CommonUtil.successPage(upList);
     }

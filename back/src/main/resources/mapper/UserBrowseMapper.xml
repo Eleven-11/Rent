@@ -15,6 +15,18 @@
         AND POST_ID = #{postId}
         AND DATE_FORMAT(CREATE_TIME, '%Y-%m-%d') = CURDATE()
     </select>
+    <select id="getPostBrowseList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            a.USER_ID userId,
+            a.CREATE_TIME createTime,
+            b.WX_AVATAR_URL avatar,
+            b.WX_NICK_NAME nickname,
+            b.WX_GENDER gender
+        FROM
+            t_user_browse a,t_wx_user b
+        WHERE
+            a.USER_ID = b.USER_ID AND a.POST_ID =#{postId}
+    </select>
     <update id="updateUserBrowse">
         UPDATE t_user_browse
         SET CREATE_TIME = NOW()

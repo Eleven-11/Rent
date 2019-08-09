@@ -14,4 +14,11 @@ public interface UserBrowseService {
       * @return
       **/
      JSONObject insertUserBrowse(JSONObject jsonObject);
+
+    /**
+     * @description 获取浏览过指定帖子的用户列表
+     * @param jsonObject
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    JSONObject getPostBrowseList(JSONObject jsonObject);
 }

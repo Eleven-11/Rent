@@ -32,9 +32,13 @@ public class  WxUserServiceImpl implements WxUserService {
      */
     @Override
     public JSONObject getWxUserList(JSONObject jsonObject) {
+        System.out.println(jsonObject);
         CommonUtil.fillPageParam(jsonObject);
         int count = wxUserDao.countWxUser(jsonObject);
         List<JSONObject> list = wxUserDao.getWxUserList(jsonObject);
+        System.out.println("emmm");
+        System.out.println(list);
+        System.out.println("hhhhh");
 
         for (int i=0;i<list.size();i++){
             StringBuffer sb = new StringBuffer("");
@@ -42,6 +46,8 @@ public class  WxUserServiceImpl implements WxUserService {
             sb.append(list.get(i).get("wxProvince")==null?" ":list.get(i).get("wxProvince"));
             sb.append(list.get(i).get("wxCity")==null?"":list.get(i).get("wxCity"));
             list.get(i).put("region",sb);
+            System.out.println(list.get(i).get("wxGender"));
+            list.get(i).put("wxGender",(Integer) list.get(i).get("wxGender")==1?"男":"女");
         }
         return CommonUtil.successPage(jsonObject, list, count);
     }
