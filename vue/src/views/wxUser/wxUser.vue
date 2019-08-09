@@ -16,7 +16,7 @@
               end-placeholder="结束日期"
               :default-time="['00:00:00', '23:59:59']">
             </el-date-picker>
-            <el-button type="primary" icon="plus" v-if="hasPerm('wxUser:list')" @click="getWxUserList">查询</el-button>
+            <el-button type="primary" icon="plus" v-if="true" @click="getWxUserList">查询</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -28,8 +28,8 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="微信昵称" prop="nickname" style="width: 20px;"></el-table-column>
-      <el-table-column align="center" label="性别" prop="gender" style="width: 20px;"></el-table-column>
+      <el-table-column align="center" label="微信昵称" prop="wxNickname" style="width: 20px;"></el-table-column>
+      <el-table-column align="center" label="性别" prop="wxGender" style="width: 20px;"></el-table-column>
       <el-table-column align="center" label="地区" prop="region" style="width: 20px;"></el-table-column>
       <el-table-column align="center" label="注册时间" prop="createTime" width="170"></el-table-column>
       <el-table-column align="center" label="最近活跃时间" prop="updateTime" width="170"></el-table-column>
@@ -43,7 +43,11 @@
             <el-table :data="gridData">
               <el-table-column width="80" property="poster" label="发帖人"></el-table-column>
               <el-table-column width="100" property="content" label="帖子内容"></el-table-column>
-              <el-table-column width="100" property="image" label="图片"></el-table-column>
+              <el-table-column align="center" label="图片" prop="image"  width="100">
+                <template slot-scope="scope">
+                  <img :src="scope.row.image" style="width: 60px; height: 60px;"/>
+                </template>
+              </el-table-column>
               <el-table-column width="150" property="collTime" label="收藏时间"></el-table-column>
               <el-table-column width="150" property="sortTime" label="排序时间" v-if="false"></el-table-column>
               <el-table-column align="center" label="帖子ID" prop="postId" style="width: 20px;"v-if="false"></el-table-column>
@@ -125,6 +129,8 @@
           nickname: this.nickname,
           pageNum: 1,//页码
           pageRow: 50,//每页条数
+          startTime:'11',
+          endTime:'111'
         },
         /*        roles: [],//角色列表*/
         dialogStatus: 'create',
@@ -152,7 +158,7 @@
         }],
         input: '',
         fvisible:false,
-        daterange: [],
+        daterange: [new Date(2018, 16, 24, 10, 10), new Date()],
         resEndTime:'',
         startTime: '',
         endTime: '',
@@ -173,13 +179,17 @@
       /*获取用户列表*/
       getWxUserList() {
         this.listQuery.nickname = this.nickname
-        this.startTime = this.formatter(this.daterange[0], 'yyyy-MM-dd hh:mm:ss')
-        this.endTime = this.formatter(this.daterange[1], 'yyyy-MM-dd hh:mm:ss')
+        //this.startTime = this.formatter(this.daterange[0], 'yyyy-MM-dd hh:mm:ss')
+        this.listQuery.startTime = this.formatter(this.daterange[0], 'yyyy-MM-dd hh:mm:ss')
+        //this.endTime = this.formatter(this.daterange[1], 'yyyy-MM-dd hh:mm:ss')
+        this.listQuery.endTime = this.formatter(this.daterange[1], 'yyyy-MM-dd hh:mm:ss')
         this.api({
-          url: "/wxUser/getWxUserlist",
+          url: "/bkWxUser/getWxUserlist",
           method: "get",
           params: this.listQuery
         }).then(data => {
+
+          console.log( this.listQuery)
           this.listLoading = false;
           this.list = data.list;
           this.totalCount = data.totalCount;
@@ -213,7 +223,7 @@
         let formerPost = this.gridData[$formerIndex];
         let laterPost = this.gridData[$laterIndex];
         this.api({
-          url: "/userCollection/updateUserColl",
+          url: "/userCollection/sortUserColl",
           method: "get",
           params: {
             formerPostId:formerPost.postId,
