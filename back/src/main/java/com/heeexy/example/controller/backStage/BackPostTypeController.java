@@ -34,6 +34,19 @@ public class BackPostTypeController {
     }
 
     /**
+     * @description 后台管理：对广告栏图片进行编辑
+     * @param request  首行类型id - formerTypeId
+     *                 末行图片id - laterTypeId
+     *                 首行图片排序时间 - formerSortTime
+     *                 末行图片排序时间 - laterSortTime
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @PostMapping("/sortPostType")
+    public JSONObject sortPostType(HttpServletRequest request){
+        return postTypeService.sortPostType(CommonUtil.request2Json(request));
+    }
+
+    /**
      *@description:添加帖子类型信息
      *@param request(帖子类型名称 -- postTypeName,帖子类型图标链接 -- postTypeImg
      *@return com.alibaba.fastjson.JSONObject

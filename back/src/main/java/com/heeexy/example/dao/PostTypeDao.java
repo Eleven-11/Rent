@@ -43,4 +43,11 @@ public interface PostTypeDao {
      * @return
      */
     int countPostType(JSONObject jsonObject);
+
+    /**
+     * @description 帖子八大类型排序
+     * @param jsonObject
+     * @return void
+     **/
+    void sortPostType(JSONObject jsonObject);
 }

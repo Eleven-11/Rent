@@ -22,7 +22,7 @@
         <img :src="scope.row.advImg" style="width: 200px; height: 100px;"/>
       </template>
     </el-table-column>
-    <el-table-column align="center" label="排序时间" prop="sortTime" width="100" v-if="true"></el-table-column>
+    <el-table-column align="center" label="排序时间" prop="sortTime" width="100" v-if="false"></el-table-column>
     <el-table-column fixed="right" align="center" width="400" label="管理" v-if="true">
       <template slot-scope="scope">
         <el-tooltip content="编辑" placement="bottom">

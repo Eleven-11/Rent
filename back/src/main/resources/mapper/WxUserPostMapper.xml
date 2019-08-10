@@ -24,7 +24,9 @@
             m.TOTAL_COLLECTION  collection,
             m.FEE               fee,
             m.IS_LOWER_SHELF    isLowerShelf,
-            m.ACTIVE_TIME       activeTimes
+            m.ACTIVE_TIME       activeTimes,
+            m.CHECK_IN_TIME     checkInTime,
+            m.CHECK_OUT_TIME    checkOutTime,
         FROM
           t_wx_user u,
           t_post_base m,
@@ -88,7 +90,9 @@
         m.MIN_PRICE         minPrice,
         m.MAX_PRICE         maxPrice,
         m.PHONE             phone,
-        m.FEE               fee
+        m.FEE               fee,
+        m.CHECK_IN_TIME     checkInTime,
+        m.CHECK_OUT_TIME    checkOutTime
         FROM
         t_post_base m,
         t_post_type f

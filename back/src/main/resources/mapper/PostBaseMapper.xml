@@ -26,6 +26,8 @@
         m.TOTAL_COLLECTION  collection,
         m.FEE               fee,
         m.ACTIVE_TIME       activeTime,
+        m.CHECK_IN_TIME     checkInTime,
+        m.CHECK_OUT_TIME    checkOutTime,
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
         FROM
         t_wx_user u,
@@ -93,6 +95,12 @@
         <if test="isMall != null and isMall != ''">
             IS_MALL,
         </if>
+        <if test="checkInTime != null and checkInTime != ''">
+            CHECK_IN_TIME,
+        </if>
+        <if test="checkOutTime != null and checkOutTime != ''">
+            CHECK_OUT_TIME,
+        </if>
             ACTIVE_TIME,
             CREATE_TIME,
             FEE
@@ -122,6 +130,12 @@
         </if>
         <if test="isMall != null and isMall != ''">
             #{isMall},
+        </if>
+        <if test="checkInTime != null and checkInTime != ''">
+            #{checkInTime},
+        </if>
+        <if test="checkOutTime != null and checkOutTime != ''">
+            #{checkOutTime},
         </if>
             NOW(),
             NOW(),
@@ -153,6 +167,8 @@
         m.IS_LOWER_SHELF    isLowerShelf,
         m.IS_MALL           isMall,
         m.IS_SUB            isSub,
+        m.CHECK_IN_TIME     checkInTime,
+        m.CHECK_OUT_TIME    checkOutTime,
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
         FROM
         t_wx_user u,
@@ -199,7 +215,7 @@
             ,browse DESC
         </if>
     </select>
-
+    <!--修改帖子浏览量点赞量-->
     <update id="updatePostBase">
         UPDATE t_post_base
         SET IS_DEL=0
@@ -222,6 +238,8 @@
         m.ID                postId,
         m.USER_ID           userId,
         DATE_FORMAT(m.CREATE_TIME,'%Y-%m-%d %T')       createTime,
+        m.CHECK_IN_TIME     checkInTime,
+        m.CHECK_OUT_TIME    checkOutTime,
         m.CONTENT           content
         FROM
         t_wx_user u,
@@ -268,6 +286,8 @@
         m.TOTAL_COLLECTION  collection,
         m.FEE               fee,
         m.ACTIVE_TIME       activeTime,
+        m.CHECK_IN_TIME     checkInTime,
+        m.CHECK_OUT_TIME    checkOutTime,
         m.IS_MALL           isMall,
         m.IS_SUB            isSub,
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow

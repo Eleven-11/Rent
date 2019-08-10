@@ -37,5 +37,12 @@ public interface PostTypeService {
      */
     JSONObject insertPostType(JSONObject jsonObject);
 
+    /**
+     * @description 帖子八大类型排序
+     * @param jsonObject
+     * @return
+     **/
+    JSONObject sortPostType(JSONObject jsonObject);
+
 
 }
