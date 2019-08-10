@@ -22,7 +22,7 @@
         <img :src="scope.row.advImg" style="width: 200px; height: 100px;"/>
       </template>
     </el-table-column>
-    <el-table-column align="center" label="排序时间" prop="sortTime" width="100" v-if="false"></el-table-column>
+    <el-table-column align="center" label="排序时间" prop="sortTime" width="100" v-if="true"></el-table-column>
     <el-table-column fixed="right" align="center" width="400" label="管理" v-if="true">
       <template slot-scope="scope">
         <el-tooltip content="编辑" placement="bottom">
@@ -30,6 +30,8 @@
         </el-tooltip>
 
         <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
+        <el-button type="primary" icon="up" @click="sortAdvImg(scope.$index-1,scope.$index)" size="mini" v-if="(scope.$index)!=0">上移</el-button>
+        <el-button type="primary" icon="down" @click="sortAdvImg(scope.$index,scope.$index+1)"size="mini"v-if="(scope.$index)!=list.length-1">下移</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -76,22 +78,22 @@
             create: '新建'
           },
           listQuery: {
-            title:'',
+            title: '',
             pageNum: 1,//页码
             pageRow: 50,//每页条数
           },
-          advBanner:{
-            advId:'',
-            advTitle:'',
-            advImg:''
-        },
-          newAdvBanner:{
-            advId:'',
-            advTitle:'',
-            advImg:''
+          advBanner: {
+            advId: '',
+            advTitle: '',
+            advImg: ''
           },
-          dialogFormVisible:false,
-          dialogStatus:'create',
+          newAdvBanner: {
+            advId: '',
+            advTitle: '',
+            advImg: ''
+          },
+          dialogFormVisible: false,
+          dialogStatus: 'create',
 
         }
       },
@@ -103,7 +105,7 @@
           'advId'
         ])
       },
-      methods:{
+      methods: {
         getAdvImgList() {
           this.listLoading = true;
           this.api({
@@ -131,7 +133,7 @@
           //表格序号
           return (this.listQuery.pageNum - 1) * this.listQuery.pageRow + $index + 1
         },
-        beforeUpload (file) {
+        beforeUpload(file) {
           const isJPG = file.type === 'image/jpeg';
           const isLt2M = file.size / 1024 / 1024 < 2;
 
@@ -159,7 +161,7 @@
           this.dialogStatus = "create";
           this.dialogFormVisible = true;
         },
-        updateAdvBanner(formName){
+        updateAdvBanner(formName) {
 
           this.$refs[formName].validate((valid) => {
             if (valid) {
@@ -167,12 +169,13 @@
               this.api({
                 url: "/advBanner/updateDelAdvImg",
                 method: "post",
-                params:this.advBanner
+                params: this.advBanner
               }).then(() => {
                 let msg = "修改成功";
                 //隐藏面板
                 this.dialogFormVisible = false;
-                this.$message({message: msg, type: 'success', duration: 1 * 1000,
+                this.$message({
+                  message: msg, type: 'success', duration: 1 * 1000,
                   onClose: () => {
                     //刷新列表
                     this.getAdvImgList();
@@ -188,9 +191,9 @@
         /**
          * 删除条目
          */
-        showDelete($index){
+        showDelete($index) {
           let advBanner = this.list[$index];
-          this.advBanner.advId= advBanner.advId;
+          this.advBanner.advId = advBanner.advId;
 
           this.$confirm('此操作将永久删除该文件,如需回复需联系管理员, 是否继续?', '提示', {
             confirmButtonText: '确定',
@@ -201,7 +204,7 @@
             this.api({
               url: "/advBanner/updateDelAdvImg",
               method: "post",
-              params:this.advBanner
+              params: this.advBanner
             }).then(data => {
               this.$message({
                 type: 'success',
@@ -237,8 +240,46 @@
             console.log("修改成功")
           })
         },
-
-      }
+        /*广告栏图片排序*/
+        sortAdvImg($formerIndex, $laterIndex) {
+          let formerAdv = this.list[$formerIndex];
+          let laterAdv = this.list[$laterIndex];
+          this.api({
+            url: "/advBanner/sortAdvImg",
+            method: "post",
+            params: {
+              formerAdvId: formerAdv.advId,
+              laterAdvId:laterAdv.advId,
+              formerSortTime: this.formatter(formerAdv.sortTime, 'yyyy-MM-dd hh:mm:ss'),
+              laterSortTime: this.formatter(laterAdv.sortTime, 'yyyy-MM-dd hh:mm:ss')
+            }
+          }).then(() => {
+            console.log(params)
+            console.log("hello")
+          })
+        },
+        formatter(thistime, fmt) {
+          let $this = new Date(thistime)
+          let o = {
+            'M+': $this.getMonth() + 1,
+            'd+': $this.getDate(),
+            'h+': $this.getHours(),
+            'm+': $this.getMinutes(),
+            's+': $this.getSeconds(),
+            'q+': Math.floor(($this.getMonth() + 3) / 3),
+            'S': $this.getMilliseconds()
+          }
+          if (/(y+)/.test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, ($this.getFullYear() + '').substr(4 - RegExp.$1.length))
+          }
+          for (var k in o) {
+            if (new RegExp('(' + k + ')').test(fmt)) {
+              fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+            }
+          }
+          return fmt
+        }
+      },
     }
 </script>
 

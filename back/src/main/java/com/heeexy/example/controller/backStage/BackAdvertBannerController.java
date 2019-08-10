@@ -74,7 +74,7 @@ public class BackAdvertBannerController {
      *                 末行图片排序时间 - laterSortTime
      * @return com.alibaba.fastjson.JSONObject
      **/
-    @PostMapping("/updateAdvImg")
+    @PostMapping("/sortAdvImg")
     public JSONObject sortAdvImgList(HttpServletRequest request){
         return adverBannerService.sortAdvImgList(CommonUtil.request2Json(request));
     }

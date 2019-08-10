@@ -7,7 +7,7 @@
         ID advId,
         ADVERT_TITLE advTitle,
         IMG_URL advImg,
-        SORT_TIME sortTime
+        DATE_FORMAT(SORT_TIME, '%Y-%m-%d %T') sortTime
         FROM t_advert_banner a
         WHERE a.IS_DEL=0
         ORDER BY SORT_TIME
