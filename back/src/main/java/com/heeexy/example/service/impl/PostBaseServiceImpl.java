@@ -83,6 +83,7 @@ public class PostBaseServiceImpl implements PostBaseService {
                 {
                     return CommonUtil.errorJson(ErrorEnum.WX_807);
                 }
+                System.out.println(jsonObject.get("content"));
                 postBaseDao.insertPostBase(jsonObject);
                 //判断是否有上传图片集合
                 if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {

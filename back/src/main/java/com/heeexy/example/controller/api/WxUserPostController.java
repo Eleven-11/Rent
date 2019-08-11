@@ -41,6 +41,7 @@ public class WxUserPostController {
         } catch (WxPageException e) {
             return CommonUtil.errorJson(ErrorEnum.WX_900);
         }catch (Exception e){
+            e.printStackTrace();
             return CommonUtil.errorJson(ErrorEnum.E_405);
         }
     }
