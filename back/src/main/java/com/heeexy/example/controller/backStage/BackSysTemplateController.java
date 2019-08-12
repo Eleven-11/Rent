@@ -41,7 +41,7 @@ public class BackSysTemplateController {
      **/
     @GetMapping("/getTemplateList")
     public JSONObject getTemplateList(HttpServletRequest request){
-        return sysTemplateService.getSysTemplateList(CommonUtil.request2Json(request));
+        return sysTemplateService.getTemplateList(CommonUtil.request2Json(request));
     }
 
     /**
