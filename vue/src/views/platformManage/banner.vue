@@ -30,8 +30,8 @@
         </el-tooltip>
 
         <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
-        <el-button type="primary" icon="up" @click="sortAdvImg(scope.$index-1,scope.$index)" size="mini" v-if="(scope.$index)!=0">上移</el-button>
-        <el-button type="primary" icon="down" @click="sortAdvImg(scope.$index,scope.$index+1)"size="mini"v-if="(scope.$index)!=list.length-1">下移</el-button>
+        <el-button type="primary" icon="up" @click="sortAdvImg(scope.$index-1,scope.$index)" v-if="(scope.$index)!=0">↑</el-button>
+        <el-button type="primary" icon="down" @click="sortAdvImg(scope.$index,scope.$index+1)" v-if="(scope.$index)!=list.length-1">↓</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -126,7 +126,8 @@
             method: "post",
             params: this.newAdvBanner
           }).then(data => {
-            console.log(data);
+            this.dialogFormVisible = false
+            this.getAdvImgList()
           })
         },
         getIndex($index) {
@@ -210,7 +211,7 @@
                 type: 'success',
                 message: '删除成功!'
               });
-              this.getNoticeTemplateList();
+              this.getAdvImgList();
             })
 
           }).catch(() => {
@@ -254,8 +255,7 @@
               laterSortTime: this.formatter(laterAdv.sortTime, 'yyyy-MM-dd hh:mm:ss')
             }
           }).then(() => {
-            console.log(params)
-            console.log("hello")
+            this.getAdvImgList()
           })
         },
         formatter(thistime, fmt) {
