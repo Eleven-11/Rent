@@ -39,6 +39,7 @@ public class VisitorServiceImpl implements VisitorService {
          * createTime     创建时间
          */
         try{
+            //TODO 首次不授权以游客身份登录
             JSONObject sys = new JSONObject();
             sys.put("targetId",visitorId);
             sys.put("content","游客用户第一次登陆");

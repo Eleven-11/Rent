@@ -30,8 +30,8 @@
           </el-tooltip>
 
           <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
-          <el-button type="primary" icon="up" @click="sortPostType(scope.$index-1,scope.$index)" size="mini" v-if="(scope.$index)!=0">上移</el-button>
-          <el-button type="primary" icon="down" @click="sortPostType(scope.$index,scope.$index+1)"size="mini"v-if="(scope.$index)!=list.length-1">下移</el-button>
+          <el-button type="primary" icon="up" @click="sortPostType(scope.$index-1,scope.$index)"  v-if="(scope.$index)!=0">↑</el-button>
+          <el-button type="primary" icon="down" @click="sortPostType(scope.$index,scope.$index+1)" v-if="(scope.$index)!=list.length-1">↓</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -126,8 +126,8 @@
           method: "post",
           params: this.newPostType
         }).then(data => {
-          console.log(params)
-          console.log(data);
+          this.dialogFormVisible = false
+          this.getPostTypelist()
         })
       },
       getIndex($index) {
@@ -149,12 +149,6 @@
       handleAvatarSuccess(res, file) {
         this.postTypeImg = URL.createObjectURL(file.raw);
         this.newPostType.postTypeImg = res;
-        console.log(this.postTypeImg)
-        console.log(res);
-        //this.imageUrl = URL.createObjectURL(file.raw);
-        //console.log(this.imageUrl)
-        // this.tempUser.categoriesImg = this.imageUrl;
-        // alert(this.tempUser.categoriesImg);
       },
       showCreate() {
         //显示新增对话框
@@ -178,11 +172,12 @@
               this.dialogFormVisible = false;
               this.$message({
                 message: msg, type: 'success', duration: 1 * 1000,
-                onClose: () => {
-                  //刷新列表
-                  this.getPostTypelist();
-                }
+                // onClose: () => {
+                //   //刷新列表
+                //   this.getPostTypelist();
+                // }
               })
+              this.getPostTypelist()
             })
           } else {
             let msg = "请填写必填项";
@@ -212,7 +207,7 @@
               type: 'success',
               message: '删除成功!'
             });
-            this.getNoticeTemplateList();
+            this.getPostTypelist()
           })
 
         }).catch(() => {
@@ -239,7 +234,7 @@
           method: "post",
           params: this.newPostType
         }).then(() => {
-          console.log("修改成功")
+          this.getPostTypelist()
         })
       },
       /*帖子类型排序*/
@@ -256,8 +251,7 @@
             laterSortTime: this.formatter(laterPostType.sortTime, 'yyyy-MM-dd hh:mm:ss')
           }
         }).then(() => {
-          console.log(params)
-          console.log("hello")
+          this.getPostTypelist()
         })
       },
       formatter(thistime, fmt) {

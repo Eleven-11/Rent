@@ -40,7 +40,7 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
             return CommonUtil.errorJson(ErrorEnum.E_30001);
         }
         advertBannerDao.insertAdvImg(jsonObject);
-        return CommonUtil.successJson("添加成功，刷新后查看");
+        return CommonUtil.successJson();
     }
 
     /**
@@ -55,7 +55,7 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
             return CommonUtil.errorJson(ErrorEnum.E_90003);
         }
         advertBannerDao.updateDelAdvImg(jsonObject);
-        return CommonUtil.successJson("操作成功");
+        return CommonUtil.successJson();
     }
 
     /**
@@ -66,7 +66,7 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
     @Override
     public JSONObject updateAdvImg(JSONObject jsonObject) {
         advertBannerDao.updateAdvImg(jsonObject);
-        return CommonUtil.successJson("操作成功！刷新后查看！");
+        return CommonUtil.successJson();
 
     }
 
@@ -78,7 +78,7 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
     @Override
     public JSONObject sortAdvImgList(JSONObject jsonObject) {
         advertBannerDao.sortAdvImgList(jsonObject);
-        return CommonUtil.successJson("操作成功！刷新后查看！");
+        return CommonUtil.successJson();
 
     }
 }

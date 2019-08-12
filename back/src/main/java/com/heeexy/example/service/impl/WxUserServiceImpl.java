@@ -68,6 +68,7 @@ public class  WxUserServiceImpl implements WxUserService {
          * createTime     创建时间
          */
         try{
+            //TODO 微信用户第一次授权
             JSONObject sys = new JSONObject();
             sys.put("targetId",userId);
             sys.put("content","微信用户第一次授权");

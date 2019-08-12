@@ -54,7 +54,7 @@ public class PostTypeServiceImpl implements PostTypeService {
     @Override
     public JSONObject sortPostType(JSONObject jsonObject) {
        postTypeDao.sortPostType(jsonObject);
-       return CommonUtil.successJson("修改成功，请刷新后查看");
+       return CommonUtil.successJson();
     }
 
 
@@ -68,7 +68,7 @@ public class PostTypeServiceImpl implements PostTypeService {
         CommonUtil.fillPageParam(jsonObject);
         System.out.println(jsonObject.toJSONString());
         postTypeDao.updatePostTypeById(jsonObject);
-        return CommonUtil.successJson("操作成功！请刷新后查看");
+        return CommonUtil.successJson();
     }
 
     /**
@@ -81,7 +81,7 @@ public class PostTypeServiceImpl implements PostTypeService {
         CommonUtil.fillPageParam(jsonObject);
         System.out.println(jsonObject.toJSONString());
         postTypeDao.updateDelPostTypeById(jsonObject);
-        return CommonUtil.successJson("操作成功！请刷新后查看");
+        return CommonUtil.successJson();
     }
 
 

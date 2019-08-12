@@ -16,7 +16,7 @@
         FROM t_user_information i,
              t_wx_user u
         WHERE i.IS_DEL = 0
-          AND i.RECEIVE_ID = #{receiveId}
+          AND i.RECEIVE_ID = #{userId}
           AND i.CREATE_TIME > #{flagTime}
           AND u.USER_ID = i.START_ID
         ORDER BY i.CREATE_TIME DESC
