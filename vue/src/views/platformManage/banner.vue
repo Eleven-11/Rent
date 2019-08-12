@@ -35,6 +35,17 @@
       </template>
     </el-table-column>
   </el-table>
+
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="listQuery.pageNum"
+      :page-size="listQuery.pageRow"
+      :total="totalCount"
+      :page-sizes="[10, 20, 50, 100]"
+      layout="total, sizes, prev, pager, next, jumper">
+    </el-pagination>
+
     <el-dialog v-model="newAdvBanner" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form class="small-space" :model="advBanner" label-position="left" label-width="80px"
                style='width: 300px; margin-left:50px;'>
@@ -78,7 +89,6 @@
             create: '新建'
           },
           listQuery: {
-            title: '',
             pageNum: 1,//页码
             pageRow: 50,//每页条数
           },
@@ -278,6 +288,26 @@
             }
           }
           return fmt
+        },
+        handleSizeChange(val) {
+          //改变每页数量
+          this.listQuery.pageRow = val
+          this.handleFilter();
+        },
+        handleCurrentChange(val) {
+          //改变页码
+          this.listQuery.pageNum = val
+          this.getAdvImgList();
+        },
+
+        handleFilter() {
+          //查询事件
+          this.listQuery.pageNum = 1
+          this.getAdvImgList()
+        },
+        getIndex($index) {
+          //表格序号
+          return (this.listQuery.pageNum - 1) * this.listQuery.pageRow + $index + 1
         }
       },
     }

@@ -33,7 +33,7 @@ public class BackAdvertBannerController {
      **/
     @GetMapping("/getAdvImgList")
     public JSONObject getAdvImgList(HttpServletRequest request){
-        return adverBannerService.getAdvImgList(CommonUtil.request2Json(request));
+        return adverBannerService.getBackAdvImgList(CommonUtil.request2Json(request));
     }
     /**
      * @description 后台管理：新增广告栏图片
