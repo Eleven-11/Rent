@@ -104,7 +104,7 @@ public class PostBaseServiceImpl implements PostBaseService {
     @Override
     public JSONObject updateOnShelf(JSONObject jsonObject) {
         postBaseDao.updateOnShelf(jsonObject);
-        return CommonUtil.successJson("修改成功，刷新后查看");
+        return CommonUtil.successJson();
     }
 
     /**

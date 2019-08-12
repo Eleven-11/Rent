@@ -131,4 +131,5 @@ public class WxUserPostServiceImpl implements WxUserPostService {
         postInfo.add(0,jo);
         return CommonUtil.successJson(postInfo);
     }
+
 }
