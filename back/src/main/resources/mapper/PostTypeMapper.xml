@@ -16,6 +16,7 @@
         ) g
 
     </select>
+
     <select id="getPostTypeList" resultType="com.alibaba.fastjson.JSONObject">
     SELECT
         a.ID postTypeId,
@@ -29,6 +30,28 @@
     ORDER BY sortTime
     LIMIT 8
     </select>
+
+    <select id="getBackPostTypeList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            a.ID postTypeId,
+            a.TYPE_IMTG_URL postTypeImg,
+            a.TYPE_NAME postTypeName,
+            a.SORT_TIME sortTime
+        FROM
+          t_post_type a
+        WHERE
+          a.IS_DEL=0
+        ORDER BY sortTime
+        LIMIT #{offSet}, #{pageRow}
+    </select>
+    <select id="countBackPostType" resultType="Integer">
+        SELECT count(1)
+        FROM
+          t_post_type a
+        WHERE
+          a.IS_DEL=0
+    </select>
+
     <insert id="insertPostType" useGeneratedKeys="true" keyProperty="postTypeId">
     INSERT t_post_type (
         TYPE_IMTG_URL,
