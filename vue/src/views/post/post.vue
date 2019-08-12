@@ -48,7 +48,7 @@
       :current-page="listQuery.pageNum"
       :page-size="listQuery.pageRow"
       :total="totalCount"
-      :page-sizes="[10, 20, 50, 100]"
+      :page-sizes="[5, 10, 20, 50, 100]"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
@@ -115,9 +115,6 @@
     },
     created() {
       this.getList();
-      if (this.hasPerm('user:add') || this.hasPerm('user:update')) {
-        this.getAllRoles();
-      }
     },
     computed: {
       ...mapGetters([
@@ -146,16 +143,6 @@
           }
         }
         return fmt
-      },
-
-
-      getAllRoles() {
-        this.api({
-          url: "/user/getAllRoles",
-          method: "get"
-        }).then(data => {
-          this.roles = data.list;
-        })
       },
       getList() {
         //查询列表

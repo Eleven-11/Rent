@@ -72,7 +72,8 @@ public class NavigationTopServiceImpl implements NavigationTopService {
         List<JSONObject> navigationTopList = new ArrayList<>();
         for (int i=0;i<topJsonObject.size();i++)
         {
-            JSONObject navigationTop = (JSONObject) postBaseDao.getPostBaseList(topJsonObject.get(i));
+            //FIXME 自行测试，有的方法别乱复用
+            JSONObject navigationTop = (JSONObject) postBaseDao.getTopPostBaseList(topJsonObject.get(i));
             navigationTopList.add(navigationTop);
         }
         return navigationTopList;
