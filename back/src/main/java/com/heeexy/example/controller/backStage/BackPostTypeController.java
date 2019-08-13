@@ -29,8 +29,21 @@ public class BackPostTypeController {
      */
     @GetMapping("/getPostTypelist")
     public JSONObject getPostTypeList(HttpServletRequest request) {
-        return postTypeService.getPostTypeList(CommonUtil.request2Json(request));
+        return postTypeService.getBackPostTypeList(CommonUtil.request2Json(request));
 
+    }
+
+    /**
+     * @description 后台管理：对广告栏图片进行编辑
+     * @param request  首行类型id - formerTypeId
+     *                 末行图片id - laterTypeId
+     *                 首行图片排序时间 - formerSortTime
+     *                 末行图片排序时间 - laterSortTime
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @PostMapping("/sortPostType")
+    public JSONObject sortPostType(HttpServletRequest request){
+        return postTypeService.sortPostType(CommonUtil.request2Json(request));
     }
 
     /**

@@ -60,7 +60,7 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/error", "anon");
 
 //		filterChainDefinitionMap.put("/**", "anon");
-//		filterChainDefinitionMap.put("/**", "authc");
+		/*filterChainDefinitionMap.put("/**", "authc");*/
 
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return shiroFilterFactoryBean;

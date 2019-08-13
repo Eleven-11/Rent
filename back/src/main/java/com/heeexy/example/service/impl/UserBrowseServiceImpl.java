@@ -38,9 +38,12 @@ public class UserBrowseServiceImpl implements UserBrowseService {
         List<JSONObject> userBrowsePostList=new ArrayList<>();
         for (int i=0;i<userBrowsePostIds.size();i++){
             JSONObject userBrowsePost = postBaseDao.getWxUserPostInfo(userBrowsePostIds.get(i));
-            userBrowsePostList.add(userBrowsePost);
+            //当浏览的帖子已删除或其余情况导致获取到空值，则不返回该条记录
+            if(userBrowsePost!=null){
+                userBrowsePostList.add(userBrowsePost);
+            }
         }
-        int count = userBrowsePostIds.size();
+        int count = userBrowsePostList.size();
         return CommonUtil.successPage(jsonObject,userBrowsePostList,count);
     }
     /**

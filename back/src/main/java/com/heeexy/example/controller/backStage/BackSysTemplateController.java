@@ -35,6 +35,16 @@ public class BackSysTemplateController {
     }
 
     /**
+     * @description 获取消息列表
+     * @param request
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @GetMapping("/getTemplateList")
+    public JSONObject getTemplateList(HttpServletRequest request){
+        return sysTemplateService.getTemplateList(CommonUtil.request2Json(request));
+    }
+
+    /**
      * @description 添加系统消息模板
      * @param request 模板标题 - sysTempTitle，模板内容 - sysTempContent
      * @return 系统消息模板id - sysTempId

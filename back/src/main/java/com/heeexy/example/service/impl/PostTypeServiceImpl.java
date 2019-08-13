@@ -33,6 +33,14 @@ public class PostTypeServiceImpl implements PostTypeService {
         return CommonUtil.successPage(jsonObject, list, count);
     }
 
+    @Override
+    public JSONObject getBackPostTypeList(JSONObject jsonObject) {
+        CommonUtil.fillPageParam(jsonObject);
+        int count = postTypeDao.countBackPostType(jsonObject);
+        List<JSONObject> list = postTypeDao.getBackPostTypeList(jsonObject);
+        return CommonUtil.successPage(jsonObject, list, count);
+    }
+
     /**
      * 添加帖子类型信息
      * @param jsonObject
@@ -51,6 +59,12 @@ public class PostTypeServiceImpl implements PostTypeService {
         }
     }
 
+    @Override
+    public JSONObject sortPostType(JSONObject jsonObject) {
+       postTypeDao.sortPostType(jsonObject);
+       return CommonUtil.successJson();
+    }
+
 
     /**
      * 根据id对帖子的类型进行修改
@@ -62,7 +76,7 @@ public class PostTypeServiceImpl implements PostTypeService {
         CommonUtil.fillPageParam(jsonObject);
         System.out.println(jsonObject.toJSONString());
         postTypeDao.updatePostTypeById(jsonObject);
-        return CommonUtil.successJson("操作成功！请刷新后查看");
+        return CommonUtil.successJson();
     }
 
     /**
@@ -75,7 +89,7 @@ public class PostTypeServiceImpl implements PostTypeService {
         CommonUtil.fillPageParam(jsonObject);
         System.out.println(jsonObject.toJSONString());
         postTypeDao.updateDelPostTypeById(jsonObject);
-        return CommonUtil.successJson("操作成功！请刷新后查看");
+        return CommonUtil.successJson();
     }
 
 

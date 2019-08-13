@@ -43,5 +43,14 @@ public class BackWxUserController {
     }
 
 
+    /**
+     * 其他页面使用的查询用户
+     */
+    @GetMapping("/queryUser")
+    public JSONObject queryUser(HttpServletRequest request) {
+        return wxUserService.queryUser(CommonUtil.request2Json(request));
+    }
+
+
 
 }

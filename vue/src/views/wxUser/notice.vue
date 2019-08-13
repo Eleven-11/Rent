@@ -13,12 +13,8 @@
         <el-form-item>消息类型：</el-form-item>
         <el-form-item>
           <el-select v-model="listQuery.group" placeholder="全部消息">
-            <el-option
-              v-for="item in optionGroup"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-              :disabled="item.disabled">
+            <el-option v-for="item in optionGroup" :key="item.value" :label="item.label"
+              :value="item.value" :disabled="item.disabled">
             </el-option>
           </el-select>
         </el-form-item>
@@ -28,7 +24,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="success" icon="plus" @click="showCreate">发送消息</el-button>
+          <el-button type="success" icon="plus" @click="showSend">发送消息</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -40,8 +36,7 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <!--<el-table-column align="center" label="sysInformationId" prop="sysInformationId" v-if="false"></el-table-column>-->
-      <!--<el-table-column align="center" label="targetId" prop="targetId" v-if="false"></el-table-column>-->
+
       <el-table-column align="center" prop="targetNickName" label="接收人" width="200">
 
         <template slot-scope="scope">
@@ -50,6 +45,7 @@
         </template>
 
       </el-table-column>
+
       <el-table-column align="center" prop="content" label="内容"  min-width="300"></el-table-column>
       <el-table-column align="center" prop="createTime" label="发送时间" width="200" ></el-table-column>
 
@@ -58,6 +54,7 @@
           <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
         </template>
       </el-table-column>
+
     </el-table>
 
     <el-pagination
@@ -76,17 +73,45 @@
 
       <el-form class="small-space" :model="sysInformation" :rules="rules" ref="sysInformation" label-position="left" label-width="80px"
                style='width: 400px; margin-left:50px;'>
-        <el-form-item label="模版名称" prop="targetNickName">
-          <el-input type="text" v-model="sysInformation.targetNickName"></el-input>
+        <el-form-item label="是否群发" prop="hasGroup">
+          <el-switch
+            v-model="sysInformation.hasGroup"
+            active-color="#13ce66"
+            inactive-color="#ff4949" @change="selectGroup($event)">
+          </el-switch>
         </el-form-item>
-        <el-form-item label="模版内容" prop="content">
+
+        <el-form-item v-if="!sysInformation.hasGroup" label="发送人">
+          <el-autocomplete v-model="queryUser.nickName" :fetch-suggestions="querySearchAsync"
+            placeholder="请输入内容" @select="handleSelect" :trigger-on-focus="false">
+            <i class="el-icon-edit el-input__icon" slot="suffix">
+            </i>
+          </el-autocomplete>
+        </el-form-item>
+
+        <el-form-item v-if="false" label="发送人ID" prop="targetId">
+          <el-input placeholder="不可输入内容" v-model="sysInformation.targetId" :disabled="true">
+          </el-input>
+        </el-form-item>
+
+        <el-form-item label="选择模版">
+          <el-select v-model="sysTempName" placeholder="全部消息"
+                    @change="selectTemp($event)">
+            <el-option v-for="item in optionTemplate" :key="item.sysTempId" :label="item.sysTempTitle"
+                       :value="item" :disabled="item.disabled">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="消息内容" prop="content">
           <el-input type="textarea" :rows="6" v-model="sysInformation.content"></el-input>
         </el-form-item>
+
       </el-form>
 
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeForm('sysInformation')">取 消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="success" @click="createSysTemplate('sysInformation')">创 建</el-button>
+        <el-button type="success" @click="sendSysTemplate('sysInformation')">发 送</el-button>
       </div>
     </el-dialog>
   </div>
@@ -94,14 +119,13 @@
 
 <script>
   import {mapGetters} from 'vuex'
-
   export default {
     name: "sysInformation",
 
     data() {
       return {
         rules:{
-          targetNickName :[{required: true, message: '请输入模版名称', trigger: 'blur'}],
+          targetNickName :[{required: true, message: '请选择发送人', trigger: 'blur'}],
           content :[{required: true, message: '请输入模版内容', trigger: 'blur'}]
         },
         optionGroup: [{
@@ -114,6 +138,13 @@
           value: 0,
           label: '全部消息'
         }],
+        optionTemplate:[{
+          isGuide: '',
+          sysTempContent: '',
+          sysTempId: '',
+          sysTempTitle: '',
+        }],
+        sysTempName:'',
         totalCount: 0, //分页组件--数据总条数
         list: [],//表格的数据
         listLoading: false,//数据加载等待动画
@@ -124,25 +155,31 @@
           pageRow: 50,//每页条数
         },
         roles: [],//角色列表
-        dialogStatus: 'create',
+        dialogStatus: 'send',
         dialogFormVisible: false,
         dialogMessage:'',
         textMap: {
-          update: '编辑',
-          create: '新建'
+          send: '发送消息'
         },
         //设置数据模版
         sysInformation: {
+          templateId:'',
           sysInformationId: '',
           targetId:'',
           targetNickName: '',
           content: '',
+          hasGroup:true,  //是否群发
           createTime:''
-        }
+        },
+        queryUser: {
+          nickName:''
+        },
       }
     },
     created() {
       this.getList();
+      //模版下拉框
+      this.getTemplateList();
     },
     computed: {
       ...mapGetters([
@@ -151,6 +188,25 @@
     },
     methods:{
 
+      /**
+       * 获取模版列表
+       */
+      getTemplateList(){
+        this.api({
+          url: "/sysTemplate/getTemplateList",
+          method: "get",
+          params: '',
+        }).then(data => {
+          this.optionTemplate = data.list
+        })
+      },
+      /**
+       * 模版选中后触发
+       */
+      selectTemp($event){
+        this.sysTempName = $event.sysTempTitle;
+        this.sysInformation.content = $event.sysTempContent;
+      },
       /**
        * 获取消息模版列表
        */
@@ -188,29 +244,77 @@
         return (this.listQuery.pageNum - 1) * this.listQuery.pageRow + $index + 1
       },
       /**
-       * 创建模版 - 对话框
+       * 发送消息 - 对话框
        */
-      showCreate() {
+      showSend() {
         //显示新增对话框
         this.sysInformation.content = "";
         this.sysInformation.targetNickName = "";
-        this.dialogStatus = "create";
+        this.sysInformation.hasGroup = true;
+        this.sysInformation.targetId = "system_info";
+        this.sysTempName = "";
+        this.dialogStatus = "send";
         this.dialogFormVisible = true;
       },
-
       /**
-       * 添加模版 - 功能
+       * 选择是否群发
        */
-      createOperation(formName) {
+      selectGroup($event){
+        if ($event){
+          this.sysInformation.targetId = "system_info";
+        }else{
+          this.sysInformation.targetId = "";
+        }
+      },
+      /**
+       * 后台查询角色
+       */
+      querySearchAsync(queryString, cb){
+
+        if (queryString && queryString.length <= 50) {
+          this.queryUser.nickName = queryString;
+          this.sysInformation.targetId = '';
+          this.api({
+            url: "/bkWxUser/queryUser",
+            method: "get",
+            params: this.queryUser
+          }).then(res => {
+            var result = [];
+            if (res.list && res.list.length > 0){
+              result = res.list;
+            }else{
+              result.push({
+                wxUserId: '',
+                value: '未搜索到结果！'
+              })
+            }
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => {
+              cb(result);
+            }, 3000 * Math.random());
+          }).catch(_ => {});
+        }
+      },
+      /**
+       * 选中查询的角色
+       */
+      handleSelect(item){
+        console.log(item)
+        this.sysInformation.targetId = item.wxUserId;
+      },
+      /**
+       * 发送消息 - 功能
+       */
+      sendSysTemplate(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.listLoading = true;
             this.api({
-              url: "/sysTemplate/insertSysTemplate",
+              url: "/backInfor/send",
               method: "post",
               params: this.sysInformation
             }).then(() => {
-              let msg = "创建成功";
+              let msg = "发送成功";
               //隐藏面板
               this.dialogFormVisible = false;
               this.$message({message: msg, type: 'success', duration: 1 * 1000,
@@ -240,7 +344,7 @@
         }).then(() => {
 
           this.api({
-            url: "/sysTemplate/updateDelTemplate",
+            url: "/backInfor/del",
             method: "post",
             params:this.sysInformation
           }).then(data => {
@@ -271,27 +375,6 @@
       closeDialog(){
         // 点击关闭 数据重置
         this.$refs['sysInformation'].clearValidate();
-      },
-      formatter(thistime, fmt) {
-        let $this = new Date(thistime)
-        let o = {
-          'M+': $this.getMonth() + 1,
-          'd+': $this.getDate(),
-          'h+': $this.getHours(),
-          'm+': $this.getMinutes(),
-          's+': $this.getSeconds(),
-          'q+': Math.floor(($this.getMonth() + 3) / 3),
-          'S': $this.getMilliseconds()
-        }
-        if (/(y+)/.test(fmt)) {
-          fmt = fmt.replace(RegExp.$1, ($this.getFullYear() + '').substr(4 - RegExp.$1.length))
-        }
-        for (var k in o) {
-          if (new RegExp('(' + k + ')').test(fmt)) {
-            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
-          }
-        }
-        return fmt
       }
     }
   }

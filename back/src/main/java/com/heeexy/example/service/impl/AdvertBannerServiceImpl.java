@@ -8,6 +8,8 @@ import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @ClassName AdvertBannerServiceImpl
  * @Description 广告栏图片相关操作
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class AdvertBannerServiceImpl implements AdverBannerService {
     @Autowired
     private AdvertBannerDao advertBannerDao;
+
     /**
      * @description 获取广告栏图片列表
      * @param jsonObject
@@ -30,14 +33,30 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
     }
 
     /**
+     * 后台获取广告列表
+     * @param jsonObject
+     * @return
+     */
+    @Override
+    public JSONObject getBackAdvImgList(JSONObject jsonObject) {
+        CommonUtil.fillPageParam(jsonObject);
+        int count = advertBannerDao.countAdvImg(jsonObject);
+        List<JSONObject> list = advertBannerDao.getBackAdvImgList(jsonObject);
+        return CommonUtil.successPage(jsonObject, list, count);
+    }
+
+    /**
      * @description 后台管理：新增广告图片
      * @param jsonObject
      * @return com.alibaba.fastjson.JSONObject
      **/
     @Override
     public JSONObject insertAdvImg(JSONObject jsonObject) {
+        if (advertBannerDao.getAdvImg(jsonObject).size()==5){
+            return CommonUtil.errorJson(ErrorEnum.E_30001);
+        }
         advertBannerDao.insertAdvImg(jsonObject);
-        return CommonUtil.successJson(jsonObject.get("advId"));
+        return CommonUtil.successJson();
     }
 
     /**
@@ -52,7 +71,7 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
             return CommonUtil.errorJson(ErrorEnum.E_90003);
         }
         advertBannerDao.updateDelAdvImg(jsonObject);
-        return CommonUtil.successJson("操作成功");
+        return CommonUtil.successJson();
     }
 
     /**
@@ -63,7 +82,19 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
     @Override
     public JSONObject updateAdvImg(JSONObject jsonObject) {
         advertBannerDao.updateAdvImg(jsonObject);
-        return CommonUtil.successJson("操作成功！刷新后查看！");
+        return CommonUtil.successJson();
+
+    }
+
+    /**
+     * @description 对广告栏图片进行排序
+     * @param jsonObject
+     * @return void
+     **/
+    @Override
+    public JSONObject sortAdvImgList(JSONObject jsonObject) {
+        advertBannerDao.sortAdvImgList(jsonObject);
+        return CommonUtil.successJson();
 
     }
 }

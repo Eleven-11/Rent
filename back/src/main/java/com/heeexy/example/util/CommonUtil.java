@@ -1,7 +1,6 @@
 package com.heeexy.example.util;
 
 import com.alibaba.fastjson.JSONObject;
-import com.heeexy.example.common.enums.ReportType;
 import com.heeexy.example.config.exception.CommonJsonException;
 import com.heeexy.example.config.exception.WxPageException;
 import com.heeexy.example.util.constants.Constants;

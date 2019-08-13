@@ -10,7 +10,8 @@ import '@/icons' // icon
 import '@/permission' // 权限
 import {default as api} from './utils/api'
 import {hasPermission} from "./utils/hasPermission";
-import {removeToken} from '@/utils/auth'
+import {removeToken} from '@/utils/auth' // 初始化
+import echarts from 'echarts'// 应用统计图标工具
 removeToken();
 Vue.use(ElementUI, {locale})
 Vue.prototype.api = api

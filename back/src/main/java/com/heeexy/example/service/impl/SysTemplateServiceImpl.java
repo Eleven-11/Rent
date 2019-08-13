@@ -21,6 +21,7 @@ public class SysTemplateServiceImpl implements SysTemplateService {
     @Autowired
     private SysTemplateDao sysTemplateDao;
 
+
     /**
      * @description 获取系统消息模板列表
      * @param jsonObject
@@ -32,6 +33,17 @@ public class SysTemplateServiceImpl implements SysTemplateService {
         int count = sysTemplateDao.countSysTemplate(jsonObject);
         List<JSONObject> list = sysTemplateDao.getSysTemplateList(jsonObject);
         return CommonUtil.successPage(jsonObject, list, count);
+    }
+
+    /**
+     * @description 获取系统消息模板列表
+     * @param jsonObject
+     * @return java.util.List<net.sf.json.JSONObject>
+     **/
+    @Override
+    public JSONObject getTemplateList(JSONObject jsonObject) {
+        List<JSONObject> list = sysTemplateDao.getTemplateList(jsonObject);
+        return CommonUtil.successPage(list);
     }
 
     /**
@@ -53,7 +65,6 @@ public class SysTemplateServiceImpl implements SysTemplateService {
     @Override
     public JSONObject updateSysTemplate(JSONObject jsonObject) {
         //是否要设置成引导语
-        //FIXME 已有则覆盖之前多引导语
         if (jsonObject.get("isGuide")!=null && "1".equals(jsonObject.get("isGuide"))){
             //获取当前系统消息模板中是否存在引导语，若已存在则不允许修改
             if (sysTemplateDao.getGuideNum(jsonObject)==1){
@@ -61,7 +72,7 @@ public class SysTemplateServiceImpl implements SysTemplateService {
                 sysTemplateDao.updateDelGuide(jsonObject);
                 //将当前的模板设置为新的引导语
                 sysTemplateDao.updateSysTemplate(jsonObject);
-                return CommonUtil.successJson("修改成功");
+                return CommonUtil.successJson();
             }
             else {
                 sysTemplateDao.updateSysTemplate(jsonObject);

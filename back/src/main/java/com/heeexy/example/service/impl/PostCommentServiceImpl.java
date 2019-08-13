@@ -60,7 +60,7 @@ public class PostCommentServiceImpl implements PostCommentService {
             return CommonUtil.errorJson(ErrorEnum.WX_884);
         } else {
             postCommentDao.insertComment(jsonObject);
-            //FIXME 发送评论推送给关联的用户
+            //FIXME 发送评论推送给关联的用户,未测试
             send(jsonObject);
             return CommonUtil.successJson(jsonObject.get("commentId"));
         }

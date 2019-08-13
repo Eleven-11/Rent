@@ -11,6 +11,21 @@ public interface AdvertBannerDao {
      * @return 
      **/
     List<JSONObject> getAdvImg(JSONObject jsonObject);
+
+    /**
+     * @description 后台获取：获取广告栏图片
+     * @param
+     * @return
+     **/
+    List<JSONObject> getBackAdvImgList(JSONObject jsonObject);
+
+    /**
+     * 后台获取数据总条数
+     * @param jsonObject
+     * @return
+     */
+    Integer countAdvImg(JSONObject jsonObject);
+
     /**
      * @description 新增广告栏图片信息
      * @param
@@ -29,5 +44,12 @@ public interface AdvertBannerDao {
      * @return
      **/
     void updateAdvImg(JSONObject jsonObject);
+
+    /**
+     * @description 对广告栏图片进行排序
+     * @param jsonObject
+     * @return void
+     **/
+    void sortAdvImgList(JSONObject jsonObject);
 
 }

@@ -7,11 +7,30 @@
         ID advId,
         ADVERT_TITLE advTitle,
         IMG_URL advImg,
-        SORT_TIME sortTime
-        FROM t_advert_banner a
-        WHERE a.IS_DEL=0
-        ORDER BY SORT_TIME DESC
+        DATE_FORMAT(SORT_TIME, '%Y-%m-%d %T') sortTime
+        FROM t_advert_banner
+        WHERE IS_DEL=0
+        ORDER BY SORT_TIME
     </select>
+
+    <select id="getBackAdvImgList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        ID advId,
+        ADVERT_TITLE advTitle,
+        IMG_URL advImg,
+        DATE_FORMAT(SORT_TIME, '%Y-%m-%d %T') sortTime
+        FROM t_advert_banner
+        WHERE IS_DEL=0
+        ORDER BY SORT_TIME
+        LIMIT #{offSet}, #{pageRow}
+    </select>
+
+    <select id="countAdvImg" resultType="java.lang.Integer">
+        SELECT count(0)
+        FROM t_advert_banner
+        WHERE IS_DEL=0
+    </select>
+
     <insert id="insertAdvImg" useGeneratedKeys="true" keyProperty="advId">
         INSERT INTO t_advert_banner (
             ADVERT_TITLE,
@@ -27,11 +46,14 @@
                 NOW()
             )
     </insert>
+
+
     <update id="updateDelAdvImg">
         update t_advert_banner
         set IS_DEL=1
         where ID =#{advId}
     </update>
+
     <update id="updateAdvImg">
         update t_advert_banner
         set IS_DEL=0
@@ -42,5 +64,11 @@
             ,IMG_URL=#{advImg}
         </if>
         where ID=#{advId}
+    </update>
+    <update id="sortAdvImgList">
+        START TRANSACTION;
+        UPDATE t_advert_banner SET SORT_TIME =#{laterSortTime} WHERE ID = #{formerAdvId};
+        UPDATE t_advert_banner SET SORT_TIME =#{formerSortTime} WHERE ID = #{laterAdvId};
+        COMMIT;
     </update>
 </mapper>

@@ -33,7 +33,7 @@ public class BackAdvertBannerController {
      **/
     @GetMapping("/getAdvImgList")
     public JSONObject getAdvImgList(HttpServletRequest request){
-        return adverBannerService.getAdvImgList(CommonUtil.request2Json(request));
+        return adverBannerService.getBackAdvImgList(CommonUtil.request2Json(request));
     }
     /**
      * @description 后台管理：新增广告栏图片
@@ -65,6 +65,18 @@ public class BackAdvertBannerController {
     @PostMapping("/updateAdvImg")
     public JSONObject updateAdvImg(HttpServletRequest request){
         return adverBannerService.updateAdvImg(CommonUtil.request2Json(request));
+    }
+    /**
+     * @description 后台管理：对广告栏图片进行编辑
+     * @param request  首行图片id - formerAdvId
+     *                 末行图片id - laterAdvId
+     *                 首行图片排序时间 - formerSortTime
+     *                 末行图片排序时间 - laterSortTime
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @PostMapping("/sortAdvImg")
+    public JSONObject sortAdvImgList(HttpServletRequest request){
+        return adverBannerService.sortAdvImgList(CommonUtil.request2Json(request));
     }
     
 }

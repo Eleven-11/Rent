@@ -91,7 +91,7 @@ public class UserResonateServiceImpl implements UserResonateService {
                 return CommonUtil.successJson(jo);
             } else {
                 userResonateDao.insertPostLike(jsonObject);
-                //FIXME 如果是第一次点赞，发送推送给用户
+                //FIXME 如果是第一次点赞，发送推送给用户,未测试
                 send(jsonObject);
                 JSONObject jo = new JSONObject();
                 jo.put("likeStatus",userResonateDao.getLikeStatus(jsonObject)==0?1:0);
@@ -116,9 +116,12 @@ public class UserResonateServiceImpl implements UserResonateService {
         for (int i=0;i<userLikePostIds.size();i++){
             //根据帖子id获取具体信息
             JSONObject userLikePost = postBaseDao.getWxUserPostInfo(userLikePostIds.get(i));
-            userLikePostList.add(userLikePost);
+            //当点赞的帖子已删除等情况导致获取到空值，则不返回该条记录
+            if (userLikePost!=null) {
+                userLikePostList.add(userLikePost);
+            }
         }
-        int count = userLikePostIds.size();
+        int count = userLikePostList.size();
         return CommonUtil.successPage(jsonObject,userLikePostList,count);
     }
 

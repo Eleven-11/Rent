@@ -27,4 +27,24 @@ public interface WxUserPostDao {
      * @return int
      **/
     int updateOnShelf(JSONObject jsonObject);
+
+    /**
+     * @description 获取帖子上下架状态
+     * @param jsonObject
+     * @return int
+     **/
+    int getIfOnShelf(JSONObject jsonObject);
+    /**
+     * @description 修改帖子信息
+     * @param jsonObject
+     * @return void
+     **/
+    void updatePost(JSONObject jsonObject);
+
+    /**
+     * @description 获取要编辑的帖子基本信息
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject getUpdatePostBaseInfo(JSONObject jsonObject);
 }

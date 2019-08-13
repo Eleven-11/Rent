@@ -7,7 +7,8 @@
     SELECT
         a.ID postTypeId,
         a.TYPE_IMTG_URL postTypeImg,
-        a.TYPE_NAME postTypeName
+        a.TYPE_NAME postTypeName,
+        a.SORT_TIME sortTime
     FROM
 	  t_post_type a
     WHERE
@@ -15,26 +16,53 @@
         ) g
 
     </select>
+
     <select id="getPostTypeList" resultType="com.alibaba.fastjson.JSONObject">
     SELECT
         a.ID postTypeId,
         a.TYPE_IMTG_URL postTypeImg,
-        a.TYPE_NAME postTypeName
+        a.TYPE_NAME postTypeName,
+        a.SORT_TIME sortTime
     FROM
 	  t_post_type a
     WHERE
       a.IS_DEL=0
+    ORDER BY sortTime
     LIMIT 8
     </select>
+
+    <select id="getBackPostTypeList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            a.ID postTypeId,
+            a.TYPE_IMTG_URL postTypeImg,
+            a.TYPE_NAME postTypeName,
+            a.SORT_TIME sortTime
+        FROM
+          t_post_type a
+        WHERE
+          a.IS_DEL=0
+        ORDER BY sortTime
+        LIMIT #{offSet}, #{pageRow}
+    </select>
+    <select id="countBackPostType" resultType="Integer">
+        SELECT count(1)
+        FROM
+          t_post_type a
+        WHERE
+          a.IS_DEL=0
+    </select>
+
     <insert id="insertPostType" useGeneratedKeys="true" keyProperty="postTypeId">
     INSERT t_post_type (
         TYPE_IMTG_URL,
         TYPE_NAME,
-        CREATE_TIME
-    )
+        CREATE_TIME,
+        SORT_TIME
+        )
     VALUES(
         #{postTypeImg},
         #{postTypeName},
+        NOW(),
         NOW()
 		)
     </insert>
@@ -47,9 +75,6 @@
         <if test="postTypeImg !=null and postTypeImg !=''">
             ,a.TYPE_IMTG_URL = #{postTypeImg}
         </if>
-        <if test="postTypeCreateTime !=null and postTypeCreateTime !='' ">
-            ,a.CREATE_TIME = DATE_FORMAT(#{postTypeCreateTime},'%Y.%m.%d %T')
-        </if>
         WHERE
         a.ID = #{postTypeId}
     </update>
@@ -58,6 +83,12 @@
     SET a.IS_DEL = 1
     WHERE
         a.ID = #{postTypeId}
+    </update>
+    <update id="sortPostType">
+        START TRANSACTION;
+        UPDATE t_post_type SET SORT_TIME =#{laterSortTime} WHERE ID = #{formerTypeId};
+        UPDATE t_post_type SET SORT_TIME =#{formerSortTime} WHERE ID = #{laterTypeId};
+        COMMIT;
     </update>
 
 </mapper>
