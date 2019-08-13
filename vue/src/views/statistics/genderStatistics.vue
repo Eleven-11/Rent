@@ -1,164 +1,338 @@
 <template>
-  <div class="app-container">
-    <div class="div-body">
-      <div class="gender-bar">
-        <div id="main" style="width: 930px;height: 240px;"></div>
-      </div>
-    </div>
+  <div style="background-color: #F2f2f2;padding-bottom: 50px">
+    <el-row class="header-container">
+      <div class="header-title">性别统计</div>
+    </el-row>
+    <el-row class="panel">
+      <el-col :span="8" class="panel-tab">
+        <div class="panel-container">
+          <div class="panel-title">全部</div>
+          <div class="panel-num">{{all}}</div>
+        </div>
+      </el-col>
+      <el-col :span="8" class="panel-tab">
+        <div class="panel-container" style="background-color: #f073aa;">
+          <div class="panel-title">女</div>
+          <div class="panel-num">{{female}}</div>
+        </div>
+      </el-col>
+      <el-col :span="8" class="panel-tab">
+        <div class="panel-container" style="background-color: #7ba7ff;">
+          <div class="panel-title">男</div>
+          <div class="panel-num">{{man}}</div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row class="panel">
+      <el-col>
+        <div class="sum-gender">
+          <div class="statistics-title">总性别统计</div>
+          <div style="text-align: center">
+              <div id="totalEchart" style="height: 240px;"></div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
+    <el-row class="panel">
+      <el-col>
+        <div class="month-gender">
+          <div class="statistics-title">月性别统计</div>
+          <div style="text-align: center">
+            <div id="monthEchart" style="height: 350px;"></div>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
+
 </template>
 
 <script>
   import echarts from 'echarts'
-
-    export default {
-        name: "genderStatistics",
-        data () {
-          return {
-            charts: '',
-            opinion:['直接访问','邮件营销','联盟广告','视频广告','搜索引擎'],
-            opinionData:[
-              {value:335, name:'直接访问'},
-              {value:310, name:'邮件营销'},
-              {value:234, name:'联盟广告'},
-              {value:135, name:'视频广告'},
-              {value:1548, name:'搜索引擎'}
-            ]
-          }
+  export default {
+    name: "genderStatistics",
+    data () {
+      return {
+        all: 2000,
+        female: 1000,
+        man: 1000,
+        total:{
+          man:[320],
+          women:[291]
         },
-
-        mounted(){
-          this.$nextTick(function() {
-            this.getEchartData1('main')
-          })
-        },
-
-        methods: {
-          getEchartData1(id) {
-              this.charts = echarts.init(document.getElementById(id))
-              this.charts.setOption({
-                show: true,
-                backgroundColor: '#ffffff',
-                title: {
-                  top: '20px',
-                  left: '3%',
-                  text: '总性别统计'
-                },
-                tooltip: {
-                  trigger: 'axis',
-                  position: function (point, params, dom, rect, size) {
-                    // 固定在顶部
-                    return [point[0], '50%'];
-                  },
-                  confine: true ,
-                  axisPointer: {
-                    type: 'shadow',
-                    shadowStyle:{
-                      shadowOffseY: '20px'
-                      // shadowBlur: 1
-                    }
-                  }
-                },
-                legend: {
-                  bottom:10,
-                  itemWidth: 10,
-                  itemHeight: 10,
-                  data: ['男', '女']
-                },
-                grid: {
-                  show:true,
-                  borderColor: '#ffffff',
-                  backgroundColor: '#ffffff',
-                  height: '140px',
-                  top: '60px',
-                  left: '5%',
-                  right: '4%',
-                  // bottom: '3%',
-                  containLabel: true
-                },
-                xAxis: {
-                  type: 'value',
-                  axisTick:{
-                    show: false
-                  },
-                  axisLine: {
-                    show: false
-                  },
-                  splitLine:{
-                    lineStyle:{
-                      type: 'dashed',
-                    }
-                  },
-                  boundaryGap: [0, 0.01]
-                },
-                yAxis: {
-                  type: 'category',
-                  boundaryGap: false,
-                  axisLine: {
-                    show: true,
-                    lineStyle:{
-                      color: "#999999"
-                    }
-                  },
-                  axisLabel:{
-                    show: true,
-                    color:'#333'
-                  },
-                  data: ['全部']
-                },
-                series: [
-
-                  {
-                    name: '男',
-                    type: 'bar',
-                    barWidth: '28px',
-                    color: '#6699ff',
-                    data: [18203]
-
-                  },
-                  {
-                    name: '女',
-                    type: 'bar',
-                    barWidth: '28px',
-                    barGap: '14%',
-                    color: '#ff6699',
-                    data: [19325]
-
-                  }
-                ]
-              })
-            }
+        month:{
+          man:[99,19,29,39,19,28,91,19,19,28,61,16],
+          women:[22,32,19,32,49,29,39,10,49,29,39,40],
+          month:["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
         }
+      }
+    },
+
+    mounted(){
+      this.$nextTick(function() {
+        this.getTotalEchart('totalEchart')
+        this.getMonthEchart('monthEchart')
+      })
+    },
+
+    methods: {
+      getTotalEchart(id) {
+        this.charts = echarts.init(document.getElementById(id))
+        this.charts.setOption({
+          show: true,
+          backgroundColor: '#ffffff',
+          tooltip: {
+            trigger: 'axis',
+            position: function (point, params, dom, rect, size) {
+              return [point[0], '26%']; // 固定在顶部
+            },
+            confine: true ,
+            axisPointer: {
+              type: 'shadow',
+              shadowStyle:{shadowOffseY: '20px'}
+            }
+          },
+          legend: {
+            bottom:'10%',
+            itemWidth: 10,
+            itemHeight: 10,
+            data: ['男', '女']
+          },
+          grid: {
+            show:true,
+            borderColor: '#ffffff',
+            backgroundColor: '#ffffff',
+            top: '7%',
+            left: '4%',
+            right: '6%',
+            containLabel: true
+          },
+          xAxis: {
+            type: 'value',
+            axisTick:{show: false},
+            axisLine: {show: false},
+            splitLine:{
+              lineStyle:{type: 'dashed'}
+            },
+            boundaryGap: [0, 0.01]
+          },
+          yAxis: {
+            type: 'category',
+            boundaryGap: false,
+            axisLine: {
+              show: true,
+              lineStyle:{color: "#ccc"}
+            },
+            axisLabel:{
+              show: true,
+              color:'#333'
+            },
+            data: ['全部']
+          },
+          series: [
+            {
+              name: '男',
+              type: 'bar',
+              barWidth: '28px',
+              color: '#7ba7ff',
+              data: this.total.women
+            }, {
+              name: '女',
+              type: 'bar',
+              barWidth: '28px',
+              barGap: '6%',
+              color: '#f073aa',
+              data: this.total.women
+            }
+          ]
+        })
+      },
+      // get month echart
+      getMonthEchart(id) {
+        this.charts = echarts.init(document.getElementById(id))
+        this.charts.setOption({
+          show: true,
+          backgroundColor: '#ffffff',
+          tooltip: {
+            trigger: 'axis',
+            // position: function (point, params, dom, rect, size) {
+            //   return [point[0], '50%'];
+            // },
+            confine: true ,
+            axisPointer: {
+              type: 'shadow',
+              shadowStyle:{
+                shadowOffseY: '20px'
+              }
+            }
+          },
+          legend: {
+            bottom:'8%',
+            itemWidth: 10,
+            itemHeight: 10,
+            data: ['男', '女']
+          },
+          grid: {
+            show:true,
+            borderColor: '#ffffff',
+            backgroundColor: '#ffffff',
+            top: '10%',
+            left: '4%',
+            right: '6%',
+            containLabel: true
+          },
+          xAxis: {
+            offset:8,
+            type: 'value',
+            axisTick:{show: false},
+            axisLine: {show: false},
+            splitLine:{
+              lineStyle:{
+                type: 'dashed',
+              }
+            },
+            boundaryGap: [0, 0.01]
+          },
+          yAxis: {
+            type: 'category',
+            boundaryGap: false,
+            axisTick: {
+              interval: 0,
+            },
+            axisLine: {
+              show: true,
+              symbol:'Array',
+              symbolSize:[1,22],
+              lineStyle:{
+                height: '300px',
+                color: "#ccc"
+              }
+            },
+            axisLabel:{
+              show: true,
+              color:'#333'
+            },
+            data: this.month.month
+          },
+          series: [
+            {
+              name: '男',
+              type: 'bar',
+              barWidth: 5,
+              color: '#7ba7ff',
+              data: this.month.man
+            }, {
+              name: '女',
+              type: 'bar',
+              barGap: '1%',
+              barWidth: 5,
+              color: '#f073aa',
+              data: this.month.women
+            }
+          ]
+        })
+      }
+
+
     }
+  }
 
 </script>
 
 <style scoped>
-  .div-body{
-    background-color: #d3dce6;
-  }
-
   .gender-bar{
-    width: 1000px;
-    height: 250px;
+    /*width: 930px;*/
+    /*height: 240px;*/
     background-color: #FFF;
     margin-left: 45px;
     margin-right: 45px;
   }
 
-  #u7_div {
-    border-width:0px;
-    position:absolute;
-    left:0px;
-    top:0px;
-    width:320px;
-    height:150px;
-    background:inherit;
-    background-color:rgba(102, 153, 255, 1);
-    border:none;
-    border-radius:10px;
-    -moz-box-shadow:none;
-    -webkit-box-shadow:none;
-    box-shadow:none;
+  .header-container {
+    height: 60px;
+    background-color: #797979;
+    padding-left: 100px;
+  }
+
+  .header-title::before {
+    display: inline-block;
+    content: '';
+    width: 6px;
+    height: 20px;
+    background-color: #0079FE;
+    line-height: 60px;
+    vertical-align: text-bottom;
+    margin-right: 8px;
+  }
+
+  .header-title {
+    color: #FFF;
+    font-size: 18px;
+    line-height: 60px;
+    font-weight: bold;
+    display: inline-block;
+  }
+
+  .panel {
+    padding: 50px 100px 0;
+
+  }
+
+  .panel-tab {
+    padding: 0 10px;
+
+  }
+
+  .panel-tab:first-child {
+    padding-left: 0;
+    padding-right: 20px;
+  }
+
+  .panel-tab:last-child {
+    padding-right: 0px;
+    padding-left: 20px;
+  }
+
+  .panel-container {
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+    background-color: #FFCC66;
+    border-radius: 10px;
+    color: #FFF;
+  }
+
+  .panel-title {
+    font-size: 20px;
+    padding: 0 0 10px 0;
+    font-weight: bold;
+  }
+
+  .panel-num {
+    font-size: 36px;
+
+  }
+
+  .sum-gender {
+    min-height: 250px;
+    background-color: #fff;
+    border: 1px solid rgba(215, 215, 215, 1);
+  }
+
+  .month-gender {
+    min-height: 390px;
+    background-color: #fff;
+    border: 1px solid rgba(215, 215, 215, 1);
+  }
+
+  .statistics-title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #515151;
+    padding: 20px 0 0 30px;
   }
 </style>
