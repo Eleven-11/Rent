@@ -3,8 +3,37 @@
     <div class="filter-container">
       <el-form>
         <el-form-item>
-          <el-button type="primary" icon="plus" v-if="hasPerm('user:add')" @click="showCreate">添加
-          </el-button>
+          <div class="demo-input-suffix" style="float: left">
+            昵称：
+            <el-input placeholder="请输入内容" style="width: 400px;" v-model="nickname"></el-input>
+            最近活跃时间：
+          </div>
+          <div class="block" style="float: left">
+            <el-date-picker
+              v-model="daterange"
+              type="daterange"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              :default-time="['00:00:00', '23:59:59']">
+            </el-date-picker>
+            <el-select
+              v-model="value"
+              multiple
+              filterable
+              remote
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="remoteMethod"
+              :loading="loading">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <el-button type="primary" icon="plus" v-if="true" @click="getList">查询</el-button>
+          </div>
         </el-form-item>
       </el-form>
     </div>
@@ -21,7 +50,7 @@
           <img :src="scope.row.posterAvatar" style="width: 60px; height: 60px;"/>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="帖子Id" prop="postId" width="90"></el-table-column>
+      <el-table-column align="center" label="帖子Id" prop="postId" width="90" v-if="false"></el-table-column>
       <el-table-column align="center" label="帖子创建时间" prop="createTime" width="220"></el-table-column>
       <el-table-column align="center" label="地址" prop="address"  width="120"></el-table-column>
       <el-table-column align="center" label="帖子内容" prop="content" width="200" ></el-table-column>
@@ -32,54 +61,71 @@
       <el-table-column align="center" label="评论数量" prop="comments" ></el-table-column>
       <el-table-column align="center" label="点赞数量" prop="likes" ></el-table-column>
       <el-table-column align="center" label="中介费" prop="fee" ></el-table-column>
+      <el-table-column align="center" label="发帖人id" prop="userId" v-if="false"></el-table-column>
+      <el-table-column align="center" label="是否删除" prop="isDel" v-if="true"></el-table-column>
       <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220" ></el-table-column>
+      <el-table-column align="center" label="上架状态" prop="isLowerShelf" width="220" ></el-table-column>
       <el-table-column align="center" label="管理" width="220">
         <template slot-scope="scope">
-          <el-button type="primary" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
-          <el-button type="danger" icon="delete" v-if="scope.row.userId!=userId "
-                     @click="removeUser(scope.$index)">删除
+          <el-button type="info" plain icon="delete"  size="mini" v-if="list[scope.$index].isLowerShelf == '上架'"
+                     @click="setOnShelf(scope.$index)">下架
           </el-button>
-        </template>
+          <el-button type="primary" plain icon="delete"  size="mini" v-if="list[scope.$index].isLowerShelf == '下架'"
+                     @click="setOnShelf(scope.$index)">上架
+          </el-button>
+          <el-button type="primary" plain  size="mini" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
+          <el-button type="danger" plain icon="delete" size="mini" v-if="list[scope.$index].isDel == '未删除'"
+                   @click="removePost(scope.$index)">删除
+          </el-button>
+          <el-button type="success" plain size="mini" icon="delete" v-else
+                   @click="recoverPost(scope.$index)">恢复
+          </el-button>
+          <el-popover
+            placement="bottom"
+            width="300"
+            v-model="visible"
+            trigger="manual">
+            <div style="text-align: right; margin: 0">
+              <p style="font-min-size: xx-small">限制用户后该用户将不能使用（发布、评论、私信、点赞功能），但可以浏览帖子和关注其他用户，您确定要限制该用户么？</p>
+              <el-date-picker
+                v-model="resEndTime"
+                type="datetime"
+                placeholder="选择禁言时间">
+              </el-date-picker>
+              <el-button size="mini" type="primary" @click="visible=false">取消</el-button>
+              <el-button type="primary" size="mini" @click="insertWxUserRes(scope.$index)">确定</el-button>
+            </div>
+            <el-button  slot="reference" type="danger" plain icon="delete" size="mini" @click="scope.visible = !visible">封禁</el-button>
+          </el-popover>
+      </template>
       </el-table-column>
     </el-table>
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="listQuery.pageNum"
-      :page-size="listQuery.pageRow"
+      :current-page="gridData.pageNum"
+      :page-size="gridData.pageRow"
       :total="totalCount"
-      :page-sizes="[5, 10, 20, 50, 100]"
+      :page-sizes="[10, 20, 50, 100]"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form class="small-space" :model="tempPost" label-position="left" label-width="80px"
                style='width: 300px; margin-left:50px;'>
-        <el-form-item label="帖子内容">
-          <el-input type="text" v-model="tempPost.content" placeholder="不填则表示不修改">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="联系方式">
-          <el-input type="text" v-model="tempPost.phone" placeholder="不填则表示不修改">
-          </el-input>
-        </el-form-item>
         <el-form-item label="浏览量" >
-          <el-input type="text" v-model="tempPost.browse" placeholder="不填则表示不修改">
+          <el-input type="text" v-model="tempPost.devBrowse" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
         <el-form-item label="点赞量" >
-          <el-input type="text" v-model="tempPost.likes" placeholder="不填则表示不修改">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="地址" >
-          <el-input type="text" v-model="tempPost.address" placeholder="不填则表示不修改">
+          <el-input type="text" v-model="tempPost.devLike" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="success" @click="createUser">创 建</el-button>
-        <el-button type="primary" v-else @click="updateUser">修 改</el-button>
+        <!--<el-button v-if="dialogStatus=='create'" type="success" @click="createUser">创 建</el-button>-->
+        <el-button type="primary" @click="updateUser">修 改</el-button>
       </div>
     </el-dialog>
   </div>
@@ -96,7 +142,27 @@
         listQuery: {
           pageNum: 1,//页码
           pageRow: 50,//每页条数
+          nickname:this.nickname,
+          startTime:'',
+          endTime:'',
+          typeId:this.typeId
         },
+        gridData: [{
+          totalCount: 0,//分页组件--数据总条数
+          pageNum: 1,//页码
+          pageRow: 50,//每页条数
+          /*poster: '',
+          content: '',
+          image: '',
+          collTime: '',
+          sortTime:'',
+          follows: '',
+          fans: '',
+          postId:''*/
+        }],
+        daterange: [new Date(2018, 16, 24, 10, 10), new Date()],
+        visible:false,
+        resEndTime:'',
         roles: [],//角色列表
         dialogStatus: 'create',
         dialogFormVisible: false,
@@ -109,7 +175,12 @@
           phone: '',
           browse: '',
           likes: '',
-          address: ''
+          address: '',
+          userId:'',
+          devBrowse:'',
+          devLike:'',
+          postId:'',
+          isDel:''
         }
       }
     },
@@ -144,14 +215,43 @@
         }
         return fmt
       },
+      remoteMethod(query) {
+        if (query !== '') {
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+            this.options = this.list.filter(item => {
+              return item.label.toLowerCase()
+                .indexOf(query.toLowerCase()) > -1;
+            });
+          }, 200);
+        } else {
+          this.options = [];
+        }
+      },
+
+      getAllRoles() {
+        this.api({
+          url: "/user/getAllRoles",
+          method: "get"
+        }).then(data => {
+          this.roles = data.list;
+        })
+      },
       getList() {
         //查询列表
         this.listLoading = true;
+        this.listQuery.nickname = this.nickname
+        if(this.daterange!=null){
+          this.listQuery.startTime = this.formatter(this.daterange[0], 'yyyy-MM-dd hh:mm:ss')
+          this.listQuery.endTime = this.formatter(this.daterange[1], 'yyyy-MM-dd hh:mm:ss')
+        }
         this.api({
           url: "/postBase/getPostBaseList",
           method: "get",
           params: this.listQuery
         }).then(data => {
+          console.log(this.listQuery)
           this.listLoading = false;
           this.list = data.list;
           for (var i =0 ;i<this.list.length; i++){
@@ -166,8 +266,19 @@
             }else{
               this.list[i].fee = '有中介费'
             }
+            if (this.list[i].isDel == '0') {
+              this.list[i].isDel = '未删除'
+            }else{
+              this.list[i].isDel = '已删除'
+            }
+            if (this.list[i].isLowerShelf == '0') {
+              this.list[i].isLowerShelf = '下架'
+            }else{
+              this.list[i].isLowerShelf = '上架'
+            }
             this.list[i].createTime = this.formatter(this.list[i].createTime,'yyyy-MM-dd hh:mm:ss')
             this.list[i].activeTime = this.formatter(this.list[i].activeTime,'yyyy-MM-dd hh:mm:ss')
+            this.list[i].content = this.list[i].content.substring(0,38)
           }
           this.totalCount = data.totalCount;
         })
@@ -208,6 +319,7 @@
         this.tempPost.browse = user.browse;
         this.tempPost.likes = user.likes;
         this.tempPost.address = user.address;
+        this.tempPost.postId = user.postId;
         this.tempPost.deleteStatus = '1';
         this.dialogStatus = "update"
         this.dialogFormVisible = true
@@ -228,9 +340,9 @@
         //修改用户信息
         let _vue = this;
         this.api({
-          url: "/user/updateUser",
+          url: "/postBase/updatePostDev",
           method: "post",
-          data: this.tempPost
+          params: this.tempPost
         }).then(() => {
           let msg = "修改成功";
           this.dialogFormVisible = false
@@ -247,24 +359,68 @@
           })
         })
       },
-      removeUser($index) {
+      removePost($index) {
         let _vue = this;
-        this.$confirm('确定删除此用户?', '提示', {
+        this.$confirm('确定删除该帖子?', '提示', {
           confirmButtonText: '确定',
           showCancelButton: false,
           type: 'warning'
         }).then(() => {
           let user = _vue.list[$index];
-          user.deleteStatus = '2';
+          //user.deleteStatus = '2';
           _vue.api({
-            url: "/user/updateUser",
+            url: "/postBase/updateDelPost",
             method: "post",
-            data: user
-          }).then(() => {
-            _vue.getList()
-          }).catch(() => {
-            _vue.$message.error("删除失败")
+            params: user
           })
+      }).then(() => {
+          _vue.getList()
+        }).catch(() => {
+          _vue.$message.error("删除失败")
+        })
+      },
+      recoverPost($index) {
+        let _vue = this;
+        this.$confirm('确定恢复该帖子?', '提示', {
+          confirmButtonText: '确定',
+          showCancelButton: true,
+          type: 'warning'
+        }).then(() => {
+          let post = _vue.list[$index];
+          //post.deleteStatus = '0';
+          _vue.api({
+            url: "/postBase/recoverPost",
+            method: "post",
+            params: post
+          })
+        }).then((res) => {
+          _vue.getList()
+          vue.$message.success("恢复成功")
+
+        }).catch(() => {
+          _vue.$message.error("恢复失败")
+        })
+      },
+      setOnShelf($index) {
+        let _vue = this;
+        this.$confirm('是否确定更改帖子上架状态?', '提示', {
+          confirmButtonText: '确定',
+          showCancelButton: true,
+          type: 'warning'
+        }).then(() => {
+          let post = _vue.list[$index];
+          //post.deleteStatus = '0';
+          _vue.api({
+            url: "/postBase/updateOnShelf",
+            method: "post",
+            params: post
+          })
+        }).then((res) => {
+          _vue.getList()
+          _vue.$message.success("设置成功")
+        }).catch((res) => {
+          console.log(res)
+          _vue.$message.error("设置失败")
         })
       },
 

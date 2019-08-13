@@ -107,7 +107,7 @@
         )
         VALUES
             (
-            #{posterId},
+            #{userId},
             #{typeId},
             #{content},
         <if test="minPrice != null and minPrice != 0">
@@ -145,6 +145,7 @@
     <select id="getPostBaseList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
         u.WX_NICK_NAME      poster,
+        u.USER_ID           userId,
         u.WX_GENDER         posterGender,
         u.WX_AVATAR_URL     posterAvatar,
         f.TYPE_NAME         typeName,
@@ -156,9 +157,9 @@
         m.MIN_PRICE         minPrice,
         m.MAX_PRICE         maxPrice,
         m.PHONE             phone,
-        m.TOTAL_BROWSE      browse,
+        m.TOTAL_BROWSE+m.DEV_BROWSE      browse,
         m.TOTAL_COMMENTS    comments,
-        m.TOTAL_RESONATE    likes,
+        m.TOTAL_RESONATE+m.DEV_RESONATE    likes,
         m.DEV_BROWSE        devBrowse,
         m.DEV_RESONATE      devLike,
         m.TOTAL_COLLECTION  collection,
@@ -169,6 +170,7 @@
         m.IS_SUB            isSub,
         m.CHECK_IN_TIME     checkInTime,
         m.CHECK_OUT_TIME    checkOutTime,
+        m.IS_DEL            isDel,
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
         FROM
         t_wx_user u,
@@ -407,12 +409,13 @@
             t_post_base a
         WHERE
             DAY (a.CREATE_TIME) = DAY (NOW())
-        AND a.USER_ID = #{posterId}
+        AND a.USER_ID = #{userId}
     </select>
     <update id="updateOnShelf">
         UPDATE t_post_base
-        SET IS_DEL=0,IS_LOWER_SHELF=#{isLowerShelf}
+        SET IS_LOWER_SHELF=IF(IS_LOWER_SHELF=1,0,1)
         WHERE ID = #{postId}
+
     </update>
     <update id="updateDelPost">
         BEGIN;
@@ -426,9 +429,15 @@
         COMMIT;
     </update>
     <update id="updateDeletedPost">
+        BEGIN;
         UPDATE t_post_base
         SET IS_DEL = 0
-        WHERE ID =#{postId}
+        WHERE ID =#{postId};
+        UPDATE t_comment
+        SET IS_DEL = 0
+        WHERE
+        POST_ID = #{postId};
+        COMMIT;
     </update>
 
 </mapper>

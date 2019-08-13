@@ -82,6 +82,7 @@
     <select id="getUpdatePostBaseInfo" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
         f.TYPE_NAME         typeName,
+        f.ID                typeId,
         m.ID                postId,
         m.CREATE_TIME       createTime,
         m.ADDRESS           address,
@@ -90,6 +91,8 @@
         m.MIN_PRICE         minPrice,
         m.MAX_PRICE         maxPrice,
         m.PHONE             phone,
+        m.IS_SUB            isSub,
+        m.IS_MALL           isMall,
         m.FEE               fee,
         m.CHECK_IN_TIME     checkInTime,
         m.CHECK_OUT_TIME    checkOutTime

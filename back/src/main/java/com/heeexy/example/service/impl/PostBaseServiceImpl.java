@@ -74,7 +74,6 @@ public class PostBaseServiceImpl implements PostBaseService {
 //        String postId = UUIDUtils.getUUID();
 //        jsonObject.put("postId", postId);
         //用户处于禁言状态时
-        System.out.println(jsonObject);
         if (userRestrictDao.getResStatus(jsonObject) == 1) {
             return CommonUtil.errorJson(ErrorEnum.WX_884);
         } else {
@@ -104,7 +103,7 @@ public class PostBaseServiceImpl implements PostBaseService {
     @Override
     public JSONObject updateOnShelf(JSONObject jsonObject) {
         postBaseDao.updateOnShelf(jsonObject);
-        return CommonUtil.successJson("修改成功，刷新后查看");
+        return CommonUtil.successJson();
     }
 
     /**
