@@ -128,7 +128,6 @@
         this.api({
           url: "/postType/getPostTypelist",
           method: "get",
-          params: this.dialogFormVisible
         }).then(data => {
           this.listLoading = false;
           this.list = data.list;

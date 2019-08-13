@@ -1,14 +1,24 @@
 package com.heeexy.example.controller;
 
+import com.alibaba.fastjson.JSONObject;
+import com.heeexy.example.service.PostLabelService;
+import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.FileNameUtils;
+import com.heeexy.example.util.constants.ErrorEnum;
+import org.apache.commons.collections.map.LinkedMap;
+import org.apache.poi.ss.usermodel.CellType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
+import org.apache.poi.xssf.usermodel.*;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Map;
 
 /**
  * @author Lingling
@@ -19,6 +29,8 @@ import java.io.IOException;
 @RequestMapping("/file")
 public class FileUploadController {
 
+    @Autowired
+    private PostLabelService postLabelService;
     /**
      * 文件上传
      * @param
@@ -66,5 +78,50 @@ public class FileUploadController {
             return srcUrl;
 
         }
+    }
+
+    @RequestMapping(value = "/importLabel")
+    @ResponseBody
+    public JSONObject imporLabel(@RequestParam("file")MultipartFile file) throws IOException{
+
+        InputStream is ;
+        if(!file.getOriginalFilename().endsWith(".xlsx")||file.isEmpty()==true){
+            return CommonUtil.errorJson(ErrorEnum.E_10001);
+        }
+        try{
+            is = file.getInputStream();
+            XSSFWorkbook workbook = new XSSFWorkbook(is);
+            XSSFSheet sheet = workbook.getSheetAt(0);
+
+            //excel格式第一行为标题行
+            XSSFRow titleRow = sheet.getRow(0);
+            for(int rowIndex = 1 ; rowIndex < sheet.getPhysicalNumberOfRows() ; rowIndex++ ){
+                //获取当前行
+                XSSFRow currentRow = sheet.getRow(rowIndex);
+                if(currentRow == null){
+                    continue;
+                }
+                //一行为一个标签对象
+                Map<String,Object> labelItem = new LinkedMap();
+                for(int cellIndex = 0 ; cellIndex < currentRow.getPhysicalNumberOfCells(); cellIndex++){
+                    if(currentRow.getCell(cellIndex).getCellType()== CellType.NUMERIC){
+                        labelItem.put(titleRow.getCell(cellIndex).toString(),(int)currentRow.getCell(cellIndex).getNumericCellValue());
+                        continue;
+                    }
+                    labelItem.put(titleRow.getCell(cellIndex).toString(),currentRow.getCell(cellIndex).toString());
+                }
+                JSONObject label  = new JSONObject(labelItem);
+                postLabelService.insertPostLabel(label);
+            }
+
+
+
+        }catch (Exception e){
+            return CommonUtil.errorJson(ErrorEnum.E_400);
+
+        }
+
+
+        return CommonUtil.successJson("导入成功");
     }
 }
