@@ -5,7 +5,29 @@
         <el-form-item>
           <el-button type="primary" icon="plus" @click="showCreate">添加
           </el-button>
+          <el-upload
+            class="avatar-uploader"
+            :action="api/file/upload"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeAvatarUpload">
+            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+
+          <el-upload
+            class="upload-demo"
+            ref="upload"
+            action="importLabel"
+            :on-preview="api/file/importLabel"
+            :on-remove="handleRemove"
+            :auto-upload="false">
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">导入帖子标签</el-button>
+            <div slot="tip" class="el-upload__tip">只能上传xlsx文件，且不超过500kb</div>
+          </el-upload>
         </el-form-item>
+
       </el-form>
     </div>
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
@@ -27,65 +49,201 @@
       </el-submenu>
     </el-menu>
     <div class="line"></div>
-    <!--<el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="listQuery.pageNum"
-      :page-size="listQuery.pageRow"
-      :total="totalCount"
-      :page-sizes="[10, 20, 50, 100]"
-      layout="total, sizes, prev, pager, next, jumper">
-    </el-pagination>
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form class="small-space" :model="tempUser" label-position="left" label-width="80px"
-               style='width: 300px; margin-left:50px;'>
-        <el-form-item label="用户名" required v-if="dialogStatus=='create'">
-          <el-input type="text" v-model="tempUser.username">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="密码" v-if="dialogStatus=='create'" required>
-          <el-input type="password" v-model="tempUser.password">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="新密码" v-else>
-          <el-input type="password" v-model="tempUser.password" placeholder="不填则表示不修改">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="角色" required>
-          <el-select v-model="tempUser.roleId" placeholder="请选择">
-            <el-option
-              v-for="item in roles"
-              :key="item.roleId"
-              :label="item.roleName"
-              :value="item.roleId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="昵称" required>
-          <el-input type="text" v-model="tempUser.nickname">
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button v-if="dialogStatus=='create'" type="success" @click="createUser">创 建</el-button>
-        <el-button type="primary" v-else @click="updateUser">修 改</el-button>
+      <el-table :data="tableData" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
+                  highlight-current-row>
+          <el-table-column align="center" label="序号" width="80">
+            <template slot-scope="scope">
+              <span v-text="getIndex(scope.$index)"> </span>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="id" prop="postLabelId" v-if="false" style="width: 60px;"></el-table-column>
+          <el-table-column align="center" label="标签名" prop="labelContent"  width="220" style="width: 60px;"></el-table-column>
+          <el-table-column label="图片" min-width="20%"  align="center">
+            <!-- 图片的显示 -->
+            <template   slot-scope="scope" >
+              <img :src="scope.row.labelImg"  min-width="70" height="70"/>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="管理" width="220">
+            <template slot-scope="scope">
+              <el-button type="primary" icon="edit" @click="updatePostType(scope.$index)">修改</el-button>
+              <el-button type="danger" icon="delete" v-if="scope.row.postLabelId!=postLabelId "
+                         @click="deletePostType(scope.$index)">删除
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page="listQuery.pageNum"
+          :page-size="listQuery.pageRow"
+          :total="totalCount"
+          :page-sizes="[10, 20, 50, 100]"
+          layout="total, sizes, prev, pager, next, jumper">
+        </el-pagination>
+    <el-dialog v-model="newPostLabel" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+          <el-form class="small-space" :model="postType" label-position="left" label-width="80px"
+                   style='width: 300px; margin-left:50px;'>
+            <el-form-item label="类型名称" required v-if="dialogStatus=='create'">
+              <el-input type="text" v-model="postLabel.labelContent">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="类型图标" required v-if="dialogStatus=='create'">
+            <el-upload
+              class="avatar-uploader"
+              :action="api/file/upload"
+              :show-file-list="false"
+              :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload">
+              <img v-if="imageUrl" :src="imageUrl" class="avatar">
+              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            </el-upload>
+            </el-form-item>
+          </el-form>
+          <div slot="footer" class="dialog-footer">
+            <el-button @click="dialogFormVisible = false">取 消</el-button>
+            <el-button v-if="dialogStatus=='create'" type="success" @click="insertPostType">创 建</el-button>
+            <el-button type="primary" v-else @click="updateUser">修 改</el-button>
+          </div>
+        </el-dialog>
       </div>
-    </el-dialog>-->
-  </div>
-</template>
-<script>
-  export default {
-    data() {
-      return {
-        activeIndex: '1',
-        activeIndex2: '1'
-      };
-    },
-    methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
+    </template>
+    <script>
+      import {mapGetters} from 'vuex'
+
+      export default {
+        data() {
+          return {
+            totalCount: 0, //分页组件--数据总条数
+            tableData: [],//表格的数据
+            listLoading: false,//数据加载等待动画
+            listQuery: {
+              pageNum: 1,//页码
+              pageRow: 50,//每页条数
+            },
+            roles: [],//角色列表
+            dialogStatus: 'create',
+            dialogFormVisible: false,
+            textMap: {
+              update: '编辑',
+              create: '新建'
+            },
+            postLabel: {
+              postLabelId: '',
+              labelContent: '',
+              labelImg: ''
+
+            },
+            newPostLabel:{
+              labelImg:'',
+              postTypeCreateTime:'',
+              labelContent:''
+            },
+            imageUrl:''
+          }
+        },
+        created() {
+          this.getPostTypeList();
+          /*if (this.hasPerm('user:add') || this.hasPerm('user:update')) {
+            this.getAllRoles();
+          }*/
+        },
+        computed: {
+          ...mapGetters([
+            'postLabelId'
+          ])
+        },
+        methods: {
+          getPostTypeList() {
+            console.log("正在获取参数")
+            this.listLoading = true;
+            this.api({
+              url: "/postLabel/getPostLabelList",
+              method: "get",
+            }).then(data => {
+              console.log("获取了数据")
+              console.log(data)
+              this.listLoading = false;
+               this.tableData = data.list;
+              // this.totalCount = data.totalCount;
+            })
+          },
+          submitUpload() {
+            this.$refs.upload.submit();
+          },
+          handleAvatarSuccess(res, file) {
+            this.imageUrl = URL.createObjectURL(file.raw);
+            this.dialogFormVisible.imageUrl = this.imageUrl;
+            console.log(this.dialogFormVisible.imageUrl);
+            //this.imageUrl = URL.createObjectURL(file.raw);
+            //console.log(this.imageUrl)
+            // this.tempUser.categoriesImg = this.imageUrl;
+            // alert(this.tempUser.categoriesImg);
+          },
+          beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+              this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+              this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+          },
+          insertPostType() {
+            let newPostLabel = this.newPostLabel;
+            newPostLabel.labelImg = this.imageUrl;
+            console.log(newPostLabel.labelImg);
+            newPostLabel.labelContent = this.postType.labelContent;
+
+
+            this.listLoading = true;
+            this.api({
+              url: "/postType/insertPostType",
+              method: "post",
+              params: newPostLabel
+            }).then(() => {
+              console.log("插入成功！")
+            })
+          },
+          handleSizeChange(val) {
+            //改变每页数量
+            this.listQuery.pageRow = val
+            this.handleFilter();
+          },
+          handleCurrentChange(val) {
+            //改变页码
+            this.listQuery.pageNum = val
+            this.getList();
+          },
+          handleFilter() {
+            //查询事件
+            this.listQuery.pageNum = 1
+            this.getList()
+          },
+          getIndex($index) {
+            //表格序号
+            return (this.listQuery.pageNum - 1) * this.listQuery.pageRow + $index + 1
+          },
+          showCreate() {
+            //显示新增对话框
+            this.postLabel.postLabelId = "";
+            this.postLabel.labelImg = "";
+            this.postLabel.labelContent = "";
+            this.dialogStatus = "create"
+            this.dialogFormVisible = true
+          },
+          showUpdate($index) {
+            let postLabel = this.list[$index];
+            this.postLabel.labelContent = postLabel.labelContent;
+            this.postLabel.labelImg = postLabel.labelImg;
+            this.postLabel.postLabelId = postLabel.postLabelId
+            this.dialogStatus = "update"
+            this.dialogFormVisible = true
+          }
+        }
       }
-    }
-  }
-</script>
+      </script>

@@ -224,7 +224,7 @@
         let laterPost = this.gridData[$laterIndex];
         this.api({
           url: "/userCollection/sortUserColl",
-          method: "get",
+          method: "post",
           params: {
             formerPostId:formerPost.postId,
             laterPostId:laterPost.postId,

@@ -16,7 +16,7 @@ public interface PostLabelService {
      * @param jsonObject
      * @return
      */
-    List<JSONObject> getPostLabelList(JSONObject jsonObject);
+    JSONObject getPostLabelList(JSONObject jsonObject);
 
     /**
      * 添加帖子标签

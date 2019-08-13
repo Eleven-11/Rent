@@ -4,7 +4,7 @@
       <el-form>
         <el-form-item>
           <div class="demo-input-suffix" style="float: left">
-            昵称：
+            发帖人：
             <el-input placeholder="请输入内容" style="width: 400px;" v-model="nickname"></el-input>
             最近活跃时间：
           </div>
@@ -16,20 +16,12 @@
               end-placeholder="结束日期"
               :default-time="['00:00:00', '23:59:59']">
             </el-date-picker>
-            <el-select
-              v-model="value"
-              multiple
-              filterable
-              remote
-              reserve-keyword
-              placeholder="请输入关键词"
-              :remote-method="remoteMethod"
-              :loading="loading">
+            <el-select v-model="selector" filterable placeholder="请选择类型" @change="selectTemp($event)">
               <el-option
                 v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+                :key="item.postTypeId"
+                :label="item.postTypeName"
+                :value="item.postTypeId">
               </el-option>
             </el-select>
             <el-button type="primary" icon="plus" v-if="true" @click="getList">查询</el-button>
@@ -65,6 +57,7 @@
       <el-table-column align="center" label="是否删除" prop="isDel" v-if="true"></el-table-column>
       <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220" ></el-table-column>
       <el-table-column align="center" label="上架状态" prop="isLowerShelf" width="220" ></el-table-column>
+      <el-table-column align="center" label="禁言状态" prop="ifRes" width="220" v-if="false" ></el-table-column>
       <el-table-column align="center" label="管理" width="220">
         <template slot-scope="scope">
           <el-button type="info" plain icon="delete"  size="mini" v-if="list[scope.$index].isLowerShelf == '上架'"
@@ -75,7 +68,7 @@
           </el-button>
           <el-button type="primary" plain  size="mini" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
           <el-button type="danger" plain icon="delete" size="mini" v-if="list[scope.$index].isDel == '未删除'"
-                   @click="removePost(scope.$index)">删除
+                     placement="bottom"  @click="removePost(scope.$index)">删除
           </el-button>
           <el-button type="success" plain size="mini" icon="delete" v-else
                    @click="recoverPost(scope.$index)">恢复
@@ -83,8 +76,20 @@
           <el-popover
             placement="bottom"
             width="300"
-            v-model="visible"
-            trigger="manual">
+            v-model="list[scope.$index].fvisible"
+            trigger="click">
+            <div style="text-align: right; margin: 0">
+              <p style="font-min-size: xx-small">是否解除该用户禁言?</p>
+              <el-button size="mini" type="primary" @click="fvisible=false">取消</el-button>
+              <el-button type="primary" size="mini" @click="endWxUserRes(scope.$index)">确定</el-button>
+            </div>
+            <el-button  slot="reference" type="success" plain v-if="list[scope.$index].ifRes == 1" icon="delete" size="mini" @click="list[scope.$index].fvisible = true">解禁</el-button>
+          </el-popover>
+          <el-popover
+            placement="bottom"
+            width="300"
+            v-model="list[scope.$index].visible"
+            trigger="click">
             <div style="text-align: right; margin: 0">
               <p style="font-min-size: xx-small">限制用户后该用户将不能使用（发布、评论、私信、点赞功能），但可以浏览帖子和关注其他用户，您确定要限制该用户么？</p>
               <el-date-picker
@@ -95,7 +100,7 @@
               <el-button size="mini" type="primary" @click="visible=false">取消</el-button>
               <el-button type="primary" size="mini" @click="insertWxUserRes(scope.$index)">确定</el-button>
             </div>
-            <el-button  slot="reference" type="danger" plain icon="delete" size="mini" @click="scope.visible = !visible">封禁</el-button>
+            <el-button  slot="reference" type="danger" plain v-else icon="delete" size="mini" @click="list[scope.$index].visible = true">封禁</el-button>
           </el-popover>
       </template>
       </el-table-column>
@@ -139,13 +144,18 @@
         totalCount: 0, //分页组件--数据总条数
         list: [],//表格的数据
         listLoading: false,//数据加载等待动画
+        manage:'',
         listQuery: {
           pageNum: 1,//页码
           pageRow: 50,//每页条数
           nickname:this.nickname,
           startTime:'',
           endTime:'',
-          typeId:this.typeId
+          typeId:''
+        },
+        resQuery:{
+          userId:'',
+          resEndTime:'',
         },
         gridData: [{
           totalCount: 0,//分页组件--数据总条数
@@ -159,6 +169,13 @@
           follows: '',
           fans: '',
           postId:''*/
+        }],
+        selector:'',
+        options:[{
+          postTypeId:'',
+          postTypeName:'',
+          postTypeImg:''
+
         }],
         daterange: [new Date(2018, 16, 24, 10, 10), new Date()],
         visible:false,
@@ -186,6 +203,7 @@
     },
     created() {
       this.getList();
+      this.getPostTypeList();
     },
     computed: {
       ...mapGetters([
@@ -193,6 +211,17 @@
       ])
     },
     methods: {
+      /**
+       * 模版选中后触发
+       */
+      selectTemp($event){
+        console.log($event)
+        this.listQuery.typeId = $event
+        // this.selector = $event.selector.postTypeName;
+        // console.log(this.selector)
+        // this.listQuery.typeId = $event.postTypeId;
+        // console.log(this.listQuery.typeId)
+      },
       //时间搓转化
       formatter(thistime, fmt) {
         let $this = new Date(thistime)
@@ -215,19 +244,19 @@
         }
         return fmt
       },
-      remoteMethod(query) {
-        if (query !== '') {
-          this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            this.options = this.list.filter(item => {
-              return item.label.toLowerCase()
-                .indexOf(query.toLowerCase()) > -1;
-            });
-          }, 200);
-        } else {
-          this.options = [];
-        }
+      getPostTypeList() {
+        this.api({
+          url: "/postType/getPostTypelist",
+          method: "get"
+        }).then(data => {
+          console.log(data)
+          this.options = data.list;
+          /*this.selector.key = this.options.postTypeId;
+          this.selector.value = this.options.postTypeName;
+          this.options.add("HDKSH");
+          this.options.add("DHJSKHF")*/
+        })
+
       },
 
       getAllRoles() {
@@ -423,6 +452,39 @@
           _vue.$message.error("设置失败")
         })
       },
+      insertWxUserRes($index) {
+        let _vue = this;
+        this.visible = false
+        if(this.resEndTime==null){
+          _vue.$message.error("请输入禁言结束时间");
+        }
+        else {
+          this.resQuery.userId = list[$index].userId;
+          this.resQuery.resEndTime = this.formatter(this.resEndTime, 'yyyy-MM-dd hh:mm:ss')
+        }
+        this.api({
+          url: "/userRes/insertWxUserRes",
+          method: "post",
+          params:this.resQuery
+        }).then(data => {
+
+          _vue.getList();
+          console.log(params)
+        })
+        },
+      endWxUserRes($index) {
+        let _vue = this;
+        this.resQuery.userId = _vue.list[$index].userId;
+        this.fvisible = false
+        this.api({
+          url: "/userRes/updateDelWxUserRes",
+          method: "post",
+          params:this.resQuery
+        }).then(data => {
+          _vue.getList();
+          console.log(params)
+        })
+      }
 
     }
   }

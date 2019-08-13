@@ -29,7 +29,7 @@ public class WxPostLabelController {
      * @return com.alibaba.fastjson.JSONObject
      **/
     @GetMapping("/getPostLabelList")
-    public List<JSONObject> getPostLabel(HttpServletRequest request){
+    public JSONObject getPostLabel(HttpServletRequest request){
         return postLabelService.getPostLabelList(CommonUtil.request2Json(request));
     }
 }

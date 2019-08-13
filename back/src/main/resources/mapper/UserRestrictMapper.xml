@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.UserRestrictDao">
     <insert id="insertWxUserRes">
-        INSERT INTO t_user_operation_restrict (USER_ID,RESTRICT_STATUS,RESTRICT_END_TIME)
+        INSERT INTO t_user_operation_restrict (USER_ID,RESTRICT_STATE,RESTRICT_END_TIME)
         VALUES
             (
                 #{userId},
