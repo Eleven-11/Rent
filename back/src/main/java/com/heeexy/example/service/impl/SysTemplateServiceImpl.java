@@ -72,7 +72,7 @@ public class SysTemplateServiceImpl implements SysTemplateService {
                 sysTemplateDao.updateDelGuide(jsonObject);
                 //将当前的模板设置为新的引导语
                 sysTemplateDao.updateSysTemplate(jsonObject);
-                return CommonUtil.successJson("修改成功");
+                return CommonUtil.successJson();
             }
             else {
                 sysTemplateDao.updateSysTemplate(jsonObject);
