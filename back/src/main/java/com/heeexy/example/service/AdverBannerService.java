@@ -4,11 +4,18 @@ import com.alibaba.fastjson.JSONObject;
 
 public interface AdverBannerService {
     /**
-     * @description 获取广告栏图片
+     * @description 前端获取广告栏图片
      * @param
      * @return
      **/
     JSONObject getAdvImgList(JSONObject jsonObject);
+
+    /**
+     * @description 后台获取广告栏图片列表
+     * @param
+     * @return
+     **/
+    JSONObject getBackAdvImgList(JSONObject jsonObject);
     /**
      * @description 新增广告栏图片信息
      * @param

@@ -8,9 +8,27 @@
         ADVERT_TITLE advTitle,
         IMG_URL advImg,
         DATE_FORMAT(SORT_TIME, '%Y-%m-%d %T') sortTime
-        FROM t_advert_banner a
-        WHERE a.IS_DEL=0
+        FROM t_advert_banner
+        WHERE IS_DEL=0
         ORDER BY SORT_TIME
+    </select>
+
+    <select id="getBackAdvImgList" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+        ID advId,
+        ADVERT_TITLE advTitle,
+        IMG_URL advImg,
+        DATE_FORMAT(SORT_TIME, '%Y-%m-%d %T') sortTime
+        FROM t_advert_banner
+        WHERE IS_DEL=0
+        ORDER BY SORT_TIME
+        LIMIT #{offSet}, #{pageRow}
+    </select>
+
+    <select id="countAdvImg" resultType="java.lang.Integer">
+        SELECT count(0)
+        FROM t_advert_banner
+        WHERE IS_DEL=0
     </select>
 
     <insert id="insertAdvImg" useGeneratedKeys="true" keyProperty="advId">

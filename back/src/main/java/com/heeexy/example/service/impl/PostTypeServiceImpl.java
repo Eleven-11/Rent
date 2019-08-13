@@ -33,6 +33,14 @@ public class PostTypeServiceImpl implements PostTypeService {
         return CommonUtil.successPage(jsonObject, list, count);
     }
 
+    @Override
+    public JSONObject getBackPostTypeList(JSONObject jsonObject) {
+        CommonUtil.fillPageParam(jsonObject);
+        int count = postTypeDao.countBackPostType(jsonObject);
+        List<JSONObject> list = postTypeDao.getBackPostTypeList(jsonObject);
+        return CommonUtil.successPage(jsonObject, list, count);
+    }
+
     /**
      * 添加帖子类型信息
      * @param jsonObject

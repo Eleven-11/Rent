@@ -20,6 +20,13 @@ public interface PostBaseDao {
     List<JSONObject> getPostBaseList(JSONObject jsonObject);
 
     /**
+     * 获取模块icing的帖子列表
+     * @param jsonObject
+     * @return
+     */
+    List<JSONObject> getTopPostBaseList(JSONObject jsonObject);
+
+    /**
      * 计算获取帖子列表的总条数（用于前端分页）
      * @param jsonObject
      * @return

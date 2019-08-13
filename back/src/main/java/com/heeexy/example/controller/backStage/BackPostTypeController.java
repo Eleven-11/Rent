@@ -29,7 +29,7 @@ public class BackPostTypeController {
      */
     @GetMapping("/getPostTypelist")
     public JSONObject getPostTypeList(HttpServletRequest request) {
-        return postTypeService.getPostTypeList(CommonUtil.request2Json(request));
+        return postTypeService.getBackPostTypeList(CommonUtil.request2Json(request));
 
     }
 

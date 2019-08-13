@@ -17,6 +17,13 @@ public interface PostTypeService {
     JSONObject getPostTypeList(JSONObject jsonObject);
 
     /**
+     * 后台管理：获取帖子类型列表
+     * @param jsonObject
+     * @return
+     */
+    JSONObject getBackPostTypeList(JSONObject jsonObject);
+
+    /**
      * 根据id对图标的名称和图标进行修改
      * @param jsonObject
      * @return

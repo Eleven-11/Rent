@@ -8,6 +8,8 @@ import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @ClassName AdvertBannerServiceImpl
  * @Description 广告栏图片相关操作
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class AdvertBannerServiceImpl implements AdverBannerService {
     @Autowired
     private AdvertBannerDao advertBannerDao;
+
     /**
      * @description 获取广告栏图片列表
      * @param jsonObject
@@ -27,6 +30,19 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
     @Override
     public JSONObject getAdvImgList(JSONObject jsonObject) {
         return CommonUtil.successPage(advertBannerDao.getAdvImg(jsonObject));
+    }
+
+    /**
+     * 后台获取广告列表
+     * @param jsonObject
+     * @return
+     */
+    @Override
+    public JSONObject getBackAdvImgList(JSONObject jsonObject) {
+        CommonUtil.fillPageParam(jsonObject);
+        int count = advertBannerDao.countAdvImg(jsonObject);
+        List<JSONObject> list = advertBannerDao.getBackAdvImgList(jsonObject);
+        return CommonUtil.successPage(jsonObject, list, count);
     }
 
     /**

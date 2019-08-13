@@ -10,6 +10,13 @@ public interface SysTemplateService {
      **/
     JSONObject getSysTemplateList(JSONObject jsonObject);
 
+
+    /**
+     * @description 获取系统消息模板列表
+     * @param jsonObject
+     * @return java.util.List<net.sf.json.JSONObject>
+     **/
+    JSONObject getTemplateList(JSONObject jsonObject);
     /**
      * @description 添加系统消息模板
      * @param jsonObject
