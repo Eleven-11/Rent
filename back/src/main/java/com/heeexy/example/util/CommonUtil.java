@@ -188,7 +188,7 @@ public class CommonUtil {
 		int pageRow = paramObject.getIntValue("pageRow");
 		pageRow = pageRow == 0 ? defaultPageRow : pageRow;
 		paramObject.put("offSet", (pageNum - 1) * pageRow);
-		paramObject.put("pageRow", pageRow * pageNum);
+		paramObject.put("pageRow", pageRow);
 		paramObject.put("pageNum", pageNum);
 		//删除此参数,防止前端传了这个参数,pageHelper分页插件检测到之后,拦截导致SQL错误
 		paramObject.remove("pageSize");

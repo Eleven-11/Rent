@@ -107,7 +107,7 @@
         )
         VALUES
             (
-            #{posterId},
+            #{userId},
             #{typeId},
             #{content},
         <if test="minPrice != null and minPrice != 0">
@@ -409,7 +409,7 @@
             t_post_base a
         WHERE
             DAY (a.CREATE_TIME) = DAY (NOW())
-        AND a.USER_ID = #{posterId}
+        AND a.USER_ID = #{userId}
     </select>
     <update id="updateOnShelf">
         UPDATE t_post_base

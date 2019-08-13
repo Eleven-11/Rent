@@ -1,5 +1,42 @@
 <template>
   <div class="app-container">
+    <div class="filter-container">
+      <el-form>
+        <el-form-item>
+          <div class="demo-input-suffix" style="float: left">
+            昵称：
+            <el-input placeholder="请输入内容" style="width: 400px;" v-model="nickname"></el-input>
+            最近活跃时间：
+          </div>
+          <div class="block" style="float: left">
+            <el-date-picker
+              v-model="daterange"
+              type="daterange"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              :default-time="['00:00:00', '23:59:59']">
+            </el-date-picker>
+            <el-select
+              v-model="value"
+              multiple
+              filterable
+              remote
+              reserve-keyword
+              placeholder="请输入关键词"
+              :remote-method="remoteMethod"
+              :loading="loading">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+            <el-button type="primary" icon="plus" v-if="true" @click="getList">查询</el-button>
+          </div>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
               highlight-current-row>
       <el-table-column align="center" label="序号" width="60">
@@ -30,29 +67,46 @@
       <el-table-column align="center" label="上架状态" prop="isLowerShelf" width="220" ></el-table-column>
       <el-table-column align="center" label="管理" width="220">
         <template slot-scope="scope">
-        <el-button type="primary" icon="delete"  size="mini" v-if="list[scope.$index].isLowerShelf == '上架'"
+          <el-button type="info" plain icon="delete"  size="mini" v-if="list[scope.$index].isLowerShelf == '上架'"
                      @click="setOnShelf(scope.$index)">下架
-        </el-button>
-          <el-button type="primary" icon="delete"  size="mini" v-if="list[scope.$index].isLowerShelf == '下架'"
+          </el-button>
+          <el-button type="primary" plain icon="delete"  size="mini" v-if="list[scope.$index].isLowerShelf == '下架'"
                      @click="setOnShelf(scope.$index)">上架
           </el-button>
-        <el-button type="primary"  size="mini" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
-        <el-button type="danger" icon="delete" size="mini" v-if="list[scope.$index].isDel == '未删除'"
+          <el-button type="primary" plain  size="mini" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
+          <el-button type="danger" plain icon="delete" size="mini" v-if="list[scope.$index].isDel == '未删除'"
                    @click="removePost(scope.$index)">删除
-        </el-button>
-        <el-button type="success" size="mini" icon="delete" v-else
+          </el-button>
+          <el-button type="success" plain size="mini" icon="delete" v-else
                    @click="recoverPost(scope.$index)">恢复
-        </el-button>
+          </el-button>
+          <el-popover
+            placement="bottom"
+            width="300"
+            v-model="visible"
+            trigger="manual">
+            <div style="text-align: right; margin: 0">
+              <p style="font-min-size: xx-small">限制用户后该用户将不能使用（发布、评论、私信、点赞功能），但可以浏览帖子和关注其他用户，您确定要限制该用户么？</p>
+              <el-date-picker
+                v-model="resEndTime"
+                type="datetime"
+                placeholder="选择禁言时间">
+              </el-date-picker>
+              <el-button size="mini" type="primary" @click="visible=false">取消</el-button>
+              <el-button type="primary" size="mini" @click="insertWxUserRes(scope.$index)">确定</el-button>
+            </div>
+            <el-button  slot="reference" type="danger" plain icon="delete" size="mini" @click="scope.visible = !visible">封禁</el-button>
+          </el-popover>
       </template>
       </el-table-column>
     </el-table>
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="listQuery.pageNum"
-      :page-size="listQuery.pageRow"
+      :current-page="gridData.pageNum"
+      :page-size="gridData.pageRow"
       :total="totalCount"
-      :page-sizes="[5, 10, 20, 50, 100]"
+      :page-sizes="[10, 20, 50, 100]"
       layout="total, sizes, prev, pager, next, jumper">
     </el-pagination>
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
@@ -88,7 +142,27 @@
         listQuery: {
           pageNum: 1,//页码
           pageRow: 50,//每页条数
+          nickname:this.nickname,
+          startTime:'',
+          endTime:'',
+          typeId:this.typeId
         },
+        gridData: [{
+          totalCount: 0,//分页组件--数据总条数
+          pageNum: 1,//页码
+          pageRow: 50,//每页条数
+          /*poster: '',
+          content: '',
+          image: '',
+          collTime: '',
+          sortTime:'',
+          follows: '',
+          fans: '',
+          postId:''*/
+        }],
+        daterange: [new Date(2018, 16, 24, 10, 10), new Date()],
+        visible:false,
+        resEndTime:'',
         roles: [],//角色列表
         dialogStatus: 'create',
         dialogFormVisible: false,
@@ -141,7 +215,20 @@
         }
         return fmt
       },
-
+      remoteMethod(query) {
+        if (query !== '') {
+          this.loading = true;
+          setTimeout(() => {
+            this.loading = false;
+            this.options = this.list.filter(item => {
+              return item.label.toLowerCase()
+                .indexOf(query.toLowerCase()) > -1;
+            });
+          }, 200);
+        } else {
+          this.options = [];
+        }
+      },
 
       getAllRoles() {
         this.api({
@@ -154,11 +241,17 @@
       getList() {
         //查询列表
         this.listLoading = true;
+        this.listQuery.nickname = this.nickname
+        if(this.daterange!=null){
+          this.listQuery.startTime = this.formatter(this.daterange[0], 'yyyy-MM-dd hh:mm:ss')
+          this.listQuery.endTime = this.formatter(this.daterange[1], 'yyyy-MM-dd hh:mm:ss')
+        }
         this.api({
           url: "/postBase/getPostBaseList",
           method: "get",
           params: this.listQuery
         }).then(data => {
+          console.log(this.listQuery)
           this.listLoading = false;
           this.list = data.list;
           for (var i =0 ;i<this.list.length; i++){

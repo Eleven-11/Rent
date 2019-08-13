@@ -59,7 +59,7 @@
                 </template>
               </el-table-column>
             </el-table>
-            <el-pagination
+            <!--<el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
               :current-page="gridData.pageNum"
@@ -67,7 +67,7 @@
               :total="totalCount"
               :page-sizes="[10, 20, 50, 100]"
               layout="total, sizes, prev, pager, next, jumper">
-            </el-pagination>
+            </el-pagination>-->
 
           <el-button type="primary" v-if="scope.row.wxUserId!=wxUserId" @click="getUserCollList(scope.$index)" slot="reference" size="mini" round plain>收藏帖子</el-button>
           </el-popover>
@@ -129,8 +129,8 @@
           nickname: this.nickname,
           pageNum: 1,//页码
           pageRow: 50,//每页条数
-          startTime:'11',
-          endTime:'111'
+          startTime:'',
+          endTime:''
         },
         /*        roles: [],//角色列表*/
         dialogStatus: 'create',
