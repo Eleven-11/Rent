@@ -3,6 +3,10 @@ spring:
       url: jdbc:mysql://localhost:3306/example?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
       username: root
       password: root
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 mybatis:
    mapperLocations: classpath:/mapper/*.xml
 #http配置服务
@@ -13,4 +17,7 @@ http:
  connectionRequestTimeout: 500 #从连接池中获取到连接的最长时间
  socketTimeout: 10000 #数据传输的最长时间
  staleConnectionCheckEnabled: true #提交请求前测试连接是否可用
+
+
+
 
