@@ -5,22 +5,14 @@
         <el-form-item>
           <el-button type="primary" icon="plus" @click="showCreate">添加
           </el-button>
-          <el-upload
-            class="avatar-uploader"
-            :action="api/file/upload"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
 
           <el-upload
             class="upload-demo"
             ref="upload"
-            action="importLabel"
-            :on-preview="api/file/importLabel"
+            action="http://localhost:8080/file/importLabel"
+            :on-preview="handlePreview"
             :on-remove="handleRemove"
+            :file-list="fileList"
             :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">导入帖子标签</el-button>
@@ -31,7 +23,12 @@
       </el-form>
     </div>
     <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1">家用设备</el-menu-item>
+      <el-submenu index="1">
+        <template slot="title">家用设备</template>
+        <el-menu-item index="1-1">WIFI</el-menu-item>
+        <el-menu-item index="1-2">吹风机</el-menu-item>
+        <el-menu-item index="1-3">洗漱用品</el-menu-item>
+      </el-submenu>
       <el-submenu index="2">
         <template slot="title">热门商圈</template>
         <el-menu-item index="2-1">集美区</el-menu-item>
@@ -115,13 +112,26 @@
       export default {
         data() {
           return {
+            fileList:[], //上传的文件
             totalCount: 0, //分页组件--数据总条数
             tableData: [],//表格的数据
             listLoading: false,//数据加载等待动画
+            labelParentId:0,
             listQuery: {
               pageNum: 1,//页码
               pageRow: 50,//每页条数
             },
+            MenuParent:[],
+            ParentNode:{
+             labelContent:'',
+              labelId:'',
+
+              childNode:{
+               labelContent:'',
+                labelId:''
+              }
+            }
+            ,
             roles: [],//角色列表
             dialogStatus: 'create',
             dialogFormVisible: false,
@@ -145,6 +155,7 @@
         },
         created() {
           this.getPostTypeList();
+          this.loadParentMenu();
           /*if (this.hasPerm('user:add') || this.hasPerm('user:update')) {
             this.getAllRoles();
           }*/
@@ -156,21 +167,39 @@
         },
         methods: {
           getPostTypeList() {
-            console.log("正在获取参数")
             this.listLoading = true;
             this.api({
               url: "/postLabel/getPostLabelList",
               method: "get",
             }).then(data => {
-              console.log("获取了数据")
+              console.log("获取了数据");
               console.log(data)
               this.listLoading = false;
                this.tableData = data.list;
-              // this.totalCount = data.totalCount;
+               this.totalCount = data.totalCount;
+            })
+          },
+          loadParentMenu(){
+            this.listloading = false;
+            this.api({
+              url: "/postLabel/getPostLabelList",
+              method: "get",
+              params:this.labelParentId
+            }).then(data=>{
+              console.log(this.labelParentId)
+              console.log(data)
             })
           },
           submitUpload() {
-            this.$refs.upload.submit();
+              console.log("进入上传方法");
+              this.$refs.upload.submit();
+          },
+          handleRemove(file, fileList) {
+            console.log(file, fileList);
+          },
+          handlePreview(file) {
+            console.log("上传前数据处理")
+            console.log(file);
           },
           handleAvatarSuccess(res, file) {
             this.imageUrl = URL.createObjectURL(file.raw);
@@ -193,6 +222,10 @@
             }
             return isJPG && isLt2M;
           },
+          handleSelect(key, keyPath){
+            console.log("菜单监听启动");
+            console.log(key,keyPath);
+          },
           insertPostType() {
             let newPostLabel = this.newPostLabel;
             newPostLabel.labelImg = this.imageUrl;
@@ -209,6 +242,7 @@
               console.log("插入成功！")
             })
           },
+
           handleSizeChange(val) {
             //改变每页数量
             this.listQuery.pageRow = val
@@ -236,6 +270,7 @@
             this.dialogStatus = "create"
             this.dialogFormVisible = true
           },
+
           showUpdate($index) {
             let postLabel = this.list[$index];
             this.postLabel.labelContent = postLabel.labelContent;

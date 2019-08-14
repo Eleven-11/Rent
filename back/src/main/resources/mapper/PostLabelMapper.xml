@@ -32,6 +32,9 @@
             t_post_label a
         WHERE
             a.IS_DEL = 0
+        <if test="labelParentId =null and labelParentId =''">
+            AND a.PARENT_ID !=0
+        </if>
         <if test="labelParentId !=null and labelParentId !=''">
             AND a.PARENT_ID = #{labelParentId}
         </if>
