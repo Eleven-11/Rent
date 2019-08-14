@@ -77,6 +77,26 @@
     },
 
     methods: {
+
+      getTotalData(){
+        this.api({
+          url: "/statistics/genderByAll",
+          method: "get",
+          params:this.noticeTemplate
+        }).then(data => {
+
+        })
+      },
+      getMonthData(){
+        this.api({
+          url: "/statistics/genderByMonth",
+          method: "post",
+          params:this.noticeTemplate
+        }).then(data => {
+
+        })
+      },
+
       getTotalEchart(id) {
         this.charts = echarts.init(document.getElementById(id))
         this.charts.setOption({

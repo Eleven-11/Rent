@@ -11,11 +11,8 @@
     <select id="getGenderByMonth" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
          count(t_wx_user.WX_GENDER) count,
-        --  CONCAT(YEAR(CREATE_TIME),'-',MONTH(CREATE_TIME)) AS createTime,
          t_date.cmonth
-        FROM
-         (
-                    <!-- 构造当前日期之前6个月的时间表 -->
+        FROM(
           SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 5 MONTH),'%Y-%m') AS cmonth
           UNION ALL
             SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 4 MONTH),'%Y-%m') AS cmonth
@@ -28,10 +25,8 @@
             UNION ALL
           SELECT DATE_FORMAT(CURDATE(),'%Y-%m') AS cmonth
          ) t_date
-         LEFT JOIN t_wx_user ON DATE_FORMAT(t_wx_user.create_time,'%Y-%m') = t_date.cmonth
-        WHERE t_wx_user.WX_GENDER =#{gender}
-        GROUP BY
-         t_date.cmonth
+         LEFT JOIN t_wx_user ON DATE_FORMAT(t_wx_user.create_time,'%Y-%m') = t_date.cmonth AND t_wx_user.WX_GENDER =#{gender}
+        GROUP BY t_date.cmonth
     </select>
     <select id="getPostCommentByWeek" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
