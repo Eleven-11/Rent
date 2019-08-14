@@ -6,24 +6,32 @@
           <div class="demo-input-suffix" style="float: left">
             发帖人：
             <el-input placeholder="请输入内容" style="width: 400px;" v-model="nickname"></el-input>
-            最近活跃时间：
           </div>
+            帖子类型：
+          <el-select v-model="selector" style="width: 400px;" filterable placeholder="请选择类型" @change="selectTemp($event)">
+            <el-option
+              v-for="item in options"
+              :key="item.postTypeId"
+              :label="item.postTypeName"
+              :value="item.postTypeId">
+            </el-option>
+          </el-select>
           <div class="block" style="float: left">
+            活跃时间：
             <el-date-picker
               v-model="daterange"
               type="daterange"
               start-placeholder="开始日期"
               end-placeholder="结束日期"
+              style="width: 400px;"
               :default-time="['00:00:00', '23:59:59']">
             </el-date-picker>
-            <el-select v-model="selector" filterable placeholder="请选择类型" @change="selectTemp($event)">
-              <el-option
-                v-for="item in options"
-                :key="item.postTypeId"
-                :label="item.postTypeName"
-                :value="item.postTypeId">
-              </el-option>
-            </el-select>
+            <div class="demo-input-suffix" style="float: left">
+              关键词：
+              <el-input placeholder="请输入查询关键词" style="width: 400px;" v-model="keyword"></el-input>
+            </div>
+
+
             <el-button type="primary" icon="plus" v-if="true" @click="getList">查询</el-button>
           </div>
         </el-form-item>
@@ -43,7 +51,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="帖子Id" prop="postId" width="90" v-if="false"></el-table-column>
-      <el-table-column align="center" label="帖子创建时间" prop="createTime" width="220"></el-table-column>
+      <el-table-column align="center" label="发布时间" prop="createTime" width="220"></el-table-column>
       <el-table-column align="center" label="地址" prop="address"  width="120"></el-table-column>
       <el-table-column align="center" label="帖子内容" prop="content" width="200" ></el-table-column>
       <el-table-column align="center" label="最低价" prop="minPrice" ></el-table-column>
@@ -56,8 +64,8 @@
       <el-table-column align="center" label="发帖人id" prop="userId" v-if="false"></el-table-column>
       <el-table-column align="center" label="是否删除" prop="isDel" v-if="true"></el-table-column>
       <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220" ></el-table-column>
-      <el-table-column align="center" label="上架状态" prop="isLowerShelf" width="220" ></el-table-column>
-      <el-table-column align="center" label="禁言状态" prop="ifRes" width="220" v-if="false" ></el-table-column>
+      <el-table-column align="center" label="上架状态" prop="isLowerShelf" width="220" v-if="false"></el-table-column>
+      <el-table-column align="center" label="禁言状态" prop="ifRes" width="220" v-if="true" ></el-table-column>
       <el-table-column align="center" label="管理" width="220">
         <template slot-scope="scope">
           <el-button type="info" plain icon="delete"  size="mini" v-if="list[scope.$index].isLowerShelf == '上架'"
@@ -80,7 +88,7 @@
             trigger="click">
             <div style="text-align: right; margin: 0">
               <p style="font-min-size: xx-small">是否解除该用户禁言?</p>
-              <el-button size="mini" type="primary" @click="fvisible=false">取消</el-button>
+              <el-button size="mini" type="primary" @click="list[scope.$index].fvisible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="endWxUserRes(scope.$index)">确定</el-button>
             </div>
             <el-button  slot="reference" type="success" plain v-if="list[scope.$index].ifRes == 1" icon="delete" size="mini" @click="list[scope.$index].fvisible = true">解禁</el-button>
@@ -97,10 +105,10 @@
                 type="datetime"
                 placeholder="选择禁言时间">
               </el-date-picker>
-              <el-button size="mini" type="primary" @click="visible=false">取消</el-button>
+              <el-button size="mini" type="primary" @click="list[scope.$index].visible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="insertWxUserRes(scope.$index)">确定</el-button>
             </div>
-            <el-button  slot="reference" type="danger" plain v-else icon="delete" size="mini" @click="list[scope.$index].visible = true">封禁</el-button>
+            <el-button  slot="reference" type="danger" plain v-if="list[scope.$index].ifRes == 0" icon="delete" size="mini" @click="list[scope.$index].visible = true">封禁</el-button>
           </el-popover>
       </template>
       </el-table-column>
@@ -151,7 +159,8 @@
           nickname:this.nickname,
           startTime:'',
           endTime:'',
-          typeId:''
+          typeId:'',
+          keyword:''
         },
         resQuery:{
           userId:'',
@@ -271,6 +280,7 @@
         //查询列表
         this.listLoading = true;
         this.listQuery.nickname = this.nickname
+        this.listQuery.keyword = this.keyword
         if(this.daterange!=null){
           this.listQuery.startTime = this.formatter(this.daterange[0], 'yyyy-MM-dd hh:mm:ss')
           this.listQuery.endTime = this.formatter(this.daterange[1], 'yyyy-MM-dd hh:mm:ss')
@@ -280,9 +290,9 @@
           method: "get",
           params: this.listQuery
         }).then(data => {
-          console.log(this.listQuery)
           this.listLoading = false;
           this.list = data.list;
+          console.log(this.list)
           for (var i =0 ;i<this.list.length; i++){
             if (this.list[i].minPrice == '' || this.list[i].minPrice == 'null' ||this.list[i].minPrice == 0) {
               this.list[i].minPrice = '无最低价'
@@ -424,7 +434,7 @@
           })
         }).then((res) => {
           _vue.getList()
-          vue.$message.success("恢复成功")
+          //_vue.$message.success("恢复成功")
 
         }).catch(() => {
           _vue.$message.error("恢复失败")
@@ -454,12 +464,12 @@
       },
       insertWxUserRes($index) {
         let _vue = this;
-        this.visible = false
+        _vue.list[$index].visible = false
         if(this.resEndTime==null){
           _vue.$message.error("请输入禁言结束时间");
         }
         else {
-          this.resQuery.userId = list[$index].userId;
+          this.resQuery.userId = _vue.list[$index].userId;
           this.resQuery.resEndTime = this.formatter(this.resEndTime, 'yyyy-MM-dd hh:mm:ss')
         }
         this.api({
@@ -467,22 +477,27 @@
           method: "post",
           params:this.resQuery
         }).then(data => {
-
+          console.log(this.resQuery)
           _vue.getList();
-          console.log(params)
+        }).catch(err => {
+          console.log(err)
+          _vue.getList();
         })
         },
       endWxUserRes($index) {
         let _vue = this;
         this.resQuery.userId = _vue.list[$index].userId;
-        this.fvisible = false
+        _vue.list[$index].fvisible = false
         this.api({
           url: "/userRes/updateDelWxUserRes",
           method: "post",
           params:this.resQuery
         }).then(data => {
+          console.log(this.resQuery)
           _vue.getList();
-          console.log(params)
+        }).catch(err =>{
+          console.log(err)
+          _vue.getList();
         })
       }
 

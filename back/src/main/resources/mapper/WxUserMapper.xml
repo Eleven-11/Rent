@@ -44,9 +44,10 @@
         DEV_FANS        devFans,
         DATE_FORMAT(CREATE_TIME, '%Y-%m-%d %T')    createTime,
         DATE_FORMAT(UPDATE_TIME, '%Y-%m-%d %T')    updateTime,
-        (SELECT COUNT(0)FROM t_user_follow a WHERE a.FOLLOW_ID =#{userId} and IS_DEL =0) fans,
-        (SELECT COUNT(0)FROM t_user_follow a WHERE a.FAN_ID =#{userId} AND IS_DEL =0) followers,
-        (SELECT COUNT(0) FROM t_post_base WHERE USER_ID =#{userId} AND IS_DEL =0) releaseNum
+        ((SELECT COUNT(0) FROM t_user_follow a WHERE a.FOLLOW_ID =wxUserId and IS_DEL =0)+DEV_FANS) fans,
+        (SELECT COUNT(0) FROM t_user_follow a WHERE a.FAN_ID =wxUserId AND IS_DEL =0) followers,
+        (SELECT COUNT(0) FROM t_post_base WHERE USER_ID =wxUserId AND IS_DEL =0) releaseNum,
+        (SELECT IF((SELECT RESTRICT_STATE FROM t_user_operation_restrict WHERE USER_ID = wxUserId AND RESTRICT_END_TIME > NOW())=1,1,0)) ifRes
         FROM
         t_wx_user
         <where>

@@ -172,7 +172,7 @@
         m.CHECK_OUT_TIME    checkOutTime,
         m.IS_DEL            isDel,
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow,
-        (SELECT RESTRICT_STATE  FROM t_user_operation_restrict WHERE USER_ID = u.USER_ID AND RESTRICT_END_TIME > NOW()) ifRes
+        (SELECT IF((SELECT RESTRICT_STATE FROM t_user_operation_restrict WHERE USER_ID = u.USER_ID AND RESTRICT_END_TIME > NOW())=1,1,0)) ifRes
         FROM
         t_wx_user u,
         t_post_base m,
