@@ -68,47 +68,58 @@
         }
       }
     },
-
-    mounted(){
-      this.$nextTick(function() {
-        this.getTotalEchart('totalEchart')
-        this.getMonthEchart('monthEchart')
-      })
+    created(){
+      this.getTotalData()
+      this.getMonthData()
     },
+
+    // mounted(){
+    //   this.$nextTick(function() {
+    //     this.getTotalEchart('totalEchart')
+    //     this.getMonthEchart('monthEchart')
+    //   })
+    // },
 
     methods: {
 
       getTotalData(){
         this.all = 0
+        this.total.man = []
+        this.total.women = []
         this.api({
           url: "/statistics/genderByAll",
           method: "get",
-          params:this.noticeTemplate
+          params:this.man
         }).then(data => {
-          for (var item in data.list){
-            this.all += item.count
-            if (gender == 1){
-              this.man = item.count
-            }else if (gender == 2){
-              this.female = item.count
+          for ( var i = 0 ; i < data.length ; i++){
+            var item = data[i]
+            this.all += Number.parseInt(item.count)
+            if (item.gender === 1){
+              this.man = Number.parseInt(item.count)
+              this.total.man.push(Number.parseInt(item.count))
+            }else if (item.gender === 2){
+              this.female = Number.parseInt(item.count)
+              this.total.women.push(Number.parseInt(item.count))
             }
           }
+          this.getTotalEchart('totalEchart')
         })
       },
       getMonthData(){
-        this.month.man.clean()
-        this.month.women.clean()
-        this.month.month.clean()
+        this.month.man = []
+        this.month.women = []
+        this.month.month = []
         this.api({
           url: "/statistics/genderByMonth",
           method: "get",
-          params:this.noticeTemplate
+          params:this.man
         }).then(data => {
           for (var i = 0;i < 6;i++){
             this.month.man.push(data.man[i].count)
             this.month.women.push(data.women[i].count)
             this.month.month.push(data.women[i].month)
           }
+          this.getMonthEchart('monthEchart')
         })
       },
 
@@ -171,7 +182,7 @@
               type: 'bar',
               barWidth: '28px',
               color: '#7ba7ff',
-              data: this.total.women
+              data: this.total.man
             }, {
               name: '女',
               type: 'bar',

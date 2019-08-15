@@ -34,7 +34,7 @@
         SELECT
             COUNT(0) commentNum,
             POST_ID postId,
-            a.content
+            a.content contnet
         FROM
             t_comment
         LEFT JOIN t_post_base a ON t_comment.POST_ID = a.ID
@@ -50,7 +50,7 @@
         SELECT
             COUNT(0) commentNum,
             POST_ID postId,
-            a.content
+            a.content content
         FROM
             t_comment
         LEFT JOIN t_post_base a ON t_comment.POST_ID = a.ID
@@ -117,7 +117,7 @@
         SELECT
             COUNT(0) collectNum,
             POST_ID postId,
-            a.content
+            a.content content
         FROM
             t_user_collection
         LEFT JOIN t_post_base a ON t_user_collection.POST_ID = a.ID
@@ -133,7 +133,7 @@
         SELECT
             COUNT(0) collectNum,
             POST_ID postId,
-            a.content
+            a.content content
         FROM
             t_user_collection
         LEFT JOIN t_post_base a ON t_user_collection.POST_ID = a.ID
@@ -150,7 +150,7 @@
         SELECT
             COUNT(0) likeNum,
             TARGET_ID postId,
-            a.content
+            a.content content
         FROM
             t_user_resonate
         LEFT JOIN t_post_base a ON t_user_resonate.TARGET_ID = a.ID
@@ -226,7 +226,7 @@
         SELECT
             COUNT(FAN_ID) fans,
             FOLLOW_ID follower,
-            a.WX_NICK_NAME
+            a.WX_NICK_NAME name
         FROM
             t_user_follow
         LEFT JOIN t_wx_user a ON t_user_follow.FOLLOW_ID = a.USER_ID
@@ -243,7 +243,7 @@
         SELECT
             COUNT(FAN_ID) fans,
             FOLLOW_ID follower,
-            a.WX_NICK_NAME
+            a.WX_NICK_NAME name
         FROM
             t_user_follow
         LEFT JOIN t_wx_user a ON t_user_follow.FOLLOW_ID = a.USER_ID

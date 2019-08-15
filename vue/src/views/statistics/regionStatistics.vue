@@ -26,7 +26,7 @@
     <el-row class="panel" style="padding: 50px 100px 0;">
       <el-col>
         <div class=" sum-gender">
-          <div class="statistics-title">总性别统计</div>
+          <div class="statistics-title">地区浏览量年报表</div>
           <div style="text-align: center">报表数据内容</div>
         </div>
       </el-col>
