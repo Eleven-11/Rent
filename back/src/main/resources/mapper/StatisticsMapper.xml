@@ -3,7 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.StatisticsDao">
     <select id="getGenderByAll" resultType="com.alibaba.fastjson.JSONObject">
-        SELECT WX_GENDER,COUNT(0) count FROM t_wx_user
+        SELECT WX_GENDER gender,
+                COUNT(0) count
+        FROM t_wx_user
         GROUP BY WX_GENDER
         ORDER BY WX_GENDER
     </select>
@@ -11,11 +13,8 @@
     <select id="getGenderByMonth" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
          count(t_wx_user.WX_GENDER) count,
-        --  CONCAT(YEAR(CREATE_TIME),'-',MONTH(CREATE_TIME)) AS createTime,
-         t_date.cmonth
-        FROM
-         (
-                    <!-- 构造当前日期之前6个月的时间表 -->
+         t_date.cmonth month
+        FROM(
           SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 5 MONTH),'%Y-%m') AS cmonth
           UNION ALL
             SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 4 MONTH),'%Y-%m') AS cmonth
@@ -28,16 +27,14 @@
             UNION ALL
           SELECT DATE_FORMAT(CURDATE(),'%Y-%m') AS cmonth
          ) t_date
-         LEFT JOIN t_wx_user ON DATE_FORMAT(t_wx_user.create_time,'%Y-%m') = t_date.cmonth
-        WHERE t_wx_user.WX_GENDER =#{gender}
-        GROUP BY
-         t_date.cmonth
+         LEFT JOIN t_wx_user ON DATE_FORMAT(t_wx_user.create_time,'%Y-%m') = t_date.cmonth AND t_wx_user.WX_GENDER =#{gender}
+        GROUP BY t_date.cmonth
     </select>
     <select id="getPostCommentByWeek" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             COUNT(0) commentNum,
             POST_ID postId,
-            a.content
+            a.content contnet
         FROM
             t_comment
         LEFT JOIN t_post_base a ON t_comment.POST_ID = a.ID
@@ -53,7 +50,7 @@
         SELECT
             COUNT(0) commentNum,
             POST_ID postId,
-            a.content
+            a.content content
         FROM
             t_comment
         LEFT JOIN t_post_base a ON t_comment.POST_ID = a.ID
@@ -120,7 +117,7 @@
         SELECT
             COUNT(0) collectNum,
             POST_ID postId,
-            a.content
+            a.content content
         FROM
             t_user_collection
         LEFT JOIN t_post_base a ON t_user_collection.POST_ID = a.ID
@@ -136,7 +133,7 @@
         SELECT
             COUNT(0) collectNum,
             POST_ID postId,
-            a.content
+            a.content content
         FROM
             t_user_collection
         LEFT JOIN t_post_base a ON t_user_collection.POST_ID = a.ID
@@ -153,7 +150,7 @@
         SELECT
             COUNT(0) likeNum,
             TARGET_ID postId,
-            a.content
+            a.content content
         FROM
             t_user_resonate
         LEFT JOIN t_post_base a ON t_user_resonate.TARGET_ID = a.ID
@@ -187,8 +184,8 @@
             b.REGION region,
             t_date.cmonth
         FROM
-            t_post_base a
-        LEFT JOIN t_post_region b ON a.ADDRESS LIKE CONCAT('%', b.region, '%')
+            t_post_region b
+        LEFT JOIN t_post_base a ON a.ADDRESS LIKE CONCAT('%', b.region, '%')
         LEFT JOIN t_user_browse c ON a.ID = c.POST_ID
         LEFT JOIN(
                     SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 5 MONTH),'%Y-%m') AS cmonth
@@ -215,21 +212,19 @@
             COUNT(c.USER_ID) browse,
             b.REGION region
         FROM
-            t_post_base a
-        LEFT JOIN t_post_region b ON a.ADDRESS LIKE CONCAT('%', b.region, '%')
+            t_post_region b
+        LEFT JOIN t_post_base a ON a.ADDRESS LIKE CONCAT('%', b.region, '%')
         LEFT JOIN t_user_browse c ON a.ID = c.POST_ID
         AND c.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 7 day)
         AND NOW()
         AND c.IS_DEL = 0
-        GROUP BY
-            b.REGION
-
+        GROUP BY b.REGION
     </select>
     <select id="getUserFollowByMonth" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             COUNT(FAN_ID) fans,
             FOLLOW_ID follower,
-            a.WX_NICK_NAME
+            a.WX_NICK_NAME name
         FROM
             t_user_follow
         LEFT JOIN t_wx_user a ON t_user_follow.FOLLOW_ID = a.USER_ID
@@ -246,7 +241,7 @@
         SELECT
             COUNT(FAN_ID) fans,
             FOLLOW_ID follower,
-            a.WX_NICK_NAME
+            a.WX_NICK_NAME name
         FROM
             t_user_follow
         LEFT JOIN t_wx_user a ON t_user_follow.FOLLOW_ID = a.USER_ID
