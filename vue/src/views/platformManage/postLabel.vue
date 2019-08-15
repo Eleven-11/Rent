@@ -7,7 +7,7 @@
           </el-button>
           <el-upload
             class="avatar-uploader"
-            :action="api/file/upload"
+            :action="api/file/importLabel"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload">

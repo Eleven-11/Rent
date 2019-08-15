@@ -28,7 +28,7 @@
     SELECT
         m.WX_NICK_NAME followNickname,
         m.USER_ID followId,
-        m.WX_AVATAR_URL fanAvatar,
+        m.WX_AVATAR_URL followAvatar,
         m.WX_GENDER followGender,
         (SELECT IFNULL((SELECT ID FROM t_user_follow u WHERE u.FAN_ID =#{wxUserId} AND u.FOLLOW_ID = followId),'0')) isFollow
     FROM

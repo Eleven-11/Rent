@@ -43,7 +43,7 @@ service.interceptors.response.use(
         type: 'success',
         duration: 3 * 1000
       })
-      return Promise.reject(res)
+      return Promise.resolve(res);// reject => catch resolve => then
     }else {
       Message({
         message: res.msg,

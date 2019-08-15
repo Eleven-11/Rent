@@ -98,6 +98,7 @@ public class FileUploadController {
             for(int rowIndex = 1 ; rowIndex < sheet.getPhysicalNumberOfRows() ; rowIndex++ ){
                 //获取当前行
                 XSSFRow currentRow = sheet.getRow(rowIndex);
+                System.out.println(currentRow);
                 if(currentRow == null){
                     continue;
                 }
@@ -111,6 +112,7 @@ public class FileUploadController {
                     labelItem.put(titleRow.getCell(cellIndex).toString(),currentRow.getCell(cellIndex).toString());
                 }
                 JSONObject label  = new JSONObject(labelItem);
+                System.out.println(label);
                 postLabelService.insertPostLabel(label);
             }
 
