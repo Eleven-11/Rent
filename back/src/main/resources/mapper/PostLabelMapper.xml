@@ -32,12 +32,10 @@
             t_post_label a
         WHERE
             a.IS_DEL = 0
-        <if test="labelParentId =null and labelParentId =''">
-            AND a.PARENT_ID !=0
-        </if>
         <if test="labelParentId !=null and labelParentId !=''">
             AND a.PARENT_ID = #{labelParentId}
         </if>
+
         <!--<if test="labelParentContent !=null and labelParentContent!=''">
             AND a.PARENT_ID = (SELECT b.ID FROM t_post_label b WHERE b.content = #{labelParentContent})
         </if>-->
@@ -47,7 +45,7 @@
         ORDER BY labelParentId
     </select>
     <insert id="insertPostLabel" useGeneratedKeys="true" keyProperty="postLabelId">
-        INSERT INTO t_post_label (parent_id, content)
+        INSERT INTO t_post_label (parent_id, content,type_img_url)
         VALUES
         <foreach collection="contents" item="item" index="index" separator=",">
         (
@@ -62,7 +60,7 @@
                     WHERE
                         t_post_label.CONTENT = #{parentContent}
                 ) m),
-                #{item}
+                #{item},#{TYPE_IMG_URL}
         )
         </foreach>
     </insert>
