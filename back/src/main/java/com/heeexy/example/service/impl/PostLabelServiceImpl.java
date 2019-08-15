@@ -30,6 +30,7 @@ public class PostLabelServiceImpl implements PostLabelService {
     @Override
     public JSONObject getPostLabelList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
+        System.out.println(jsonObject);
         int count = postLabelDao.countPostLabel(jsonObject);
         List<JSONObject> list = postLabelDao.getPostLabelList(jsonObject);
         return CommonUtil.successPage(jsonObject, list, count);
@@ -73,7 +74,7 @@ public class PostLabelServiceImpl implements PostLabelService {
     @Override
     public JSONObject updateDelPostLabel(JSONObject jsonObject) {
         //CommonUtil.fillPageParam(jsonObject);
-        //System.out.println(jsonObject.toJSONString());
+        System.out.println(jsonObject.toJSONString());
         if(jsonObject.get("postLabelId")==null||jsonObject.get("postLabelId")=="")
         {
             return CommonUtil.errorJson(ErrorEnum.E_90003);
