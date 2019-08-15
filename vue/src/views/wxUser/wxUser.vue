@@ -49,10 +49,10 @@
                   <img :src="scope.row.image" style="width: 60px; height: 60px;"/>
                 </template>
               </el-table-column>
-              <el-table-column width="150" property="collTime" label="收藏时间"></el-table-column>
-              <el-table-column width="150" property="sortTime" label="排序时间" v-if="false"></el-table-column>
+              <el-table-column width="155" property="collTime" label="收藏时间"></el-table-column>
+              <el-table-column width="155" property="sortTime" label="排序时间" v-if="false"></el-table-column>
               <el-table-column align="center" label="帖子ID" prop="postId" style="width: 20px;" v-if="false"></el-table-column>
-              <el-table-column align="center" label="管理" width="270" >
+              <el-table-column align="center" label="管理" width="250" >
                 <template slot-scope="scope">
                   <el-button type="primary" icon="up" @click="updateUserColl(scope.$index-1,scope.$index)" size="mini" v-if="(scope.$index)!=0">上移</el-button>
                   <el-button type="primary" icon="down" @click="updateUserColl(scope.$index,scope.$index+1)"size="mini"v-if="(scope.$index)!=gridData.length-1">下移</el-button>
@@ -117,7 +117,7 @@
             <el-button type="primary" size="mini" @click="endWxUserRes(scope.$index)">确定</el-button>
             <el-button type="success" @click="list[scope.$index].visible = true" v-if="list[scope.$index].ifRes == 1" slot="reference" size="mini" round plain>解除限制</el-button>
           </el-popover>
-          <el-dialog v-model="newWxUser" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+          <el-dialog v-model="newWxUser" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" >
             <el-form class="small-space" :model="wxUser" label-position="left" label-width="80px"
                      style='width: 300px; margin-left:50px;'>
               <el-form-item label="粉丝量">
@@ -127,7 +127,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
               <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button v-if="dialogStatus=='update'" type="success" @click="updateUserDev(scope.$index)">修 改</el-button>
+              <el-button v-if="dialogStatus=='update'" type="success" @click="updateUserDev">修 改</el-button>
             </div>
           </el-dialog>
 
@@ -180,7 +180,10 @@
           createTime: '',
           updateTime: ''
         },
-        wxUser:'',
+        wxUser:{
+          userId:'',
+          devFans:'',
+        },
         textMap: {
           update: '编辑',
           create: '新建'
@@ -295,16 +298,21 @@
         })
       },
       /*修改用户粉丝量*/
-      updateUserDev($index) {
-        console.log("1231")
-        console.log($index)
-        this.newWxUser.userId = this.list[$index].wxUserId;
+      updateUserDev(formName) {
+        this.newWxUser.userId = this.wxUser.userId
+        console.log(this.newWxUser)
+        this.listLoading = true;
         this.api({
           url: "/bkWxUser/updateWxUserInfo",
           method: "post",
           params: this.newWxUser
         }).then(() => {
-          this.dialogFormVisible = false
+          let msg = "修改成功";
+          //隐藏面板
+          this.dialogFormVisible = false;
+          this.$message({
+            message: msg, type: 'success', duration: 1 * 1000,
+          })
           this.getWxUserList()
         })
       },
@@ -425,12 +433,13 @@
       showUpdate($index) {
         /*表格数据填充*/
         let wxUser = this.list[$index];
-        this.tempWxUser.wxUserId = wxUser.wxUserId;
-        this.tempWxUser.nickname = wxUser.username;
+        this.wxUser.userId = wxUser.wxUserId;
+        this.wxUser.devFans = wxUser.devFans;
+        /*this.tempWxUser.nickname = wxUser.username;
         this.tempWxUser.gender = wxUser.nickname;
         this.tempWxUser.region = wxUser.roleId;
         this.tempWxUser.createTime = wxUser.createTime;
-        this.tempWxUser.updateTime = wxUser.updateTime;
+        this.tempWxUser.updateTime = wxUser.updateTime;*/
         this.dialogStatus = "update"
         this.dialogFormVisible = true
       },

@@ -29,7 +29,7 @@ export const asyncRouterMap = [
   {
     path: '/sys',
     component: Layout,
-    redirect: '/sys/',
+    redirect: '/sys/user',
     name: '系统管理',
     meta: {title: '系统管理', icon: 'sys'},
     children: [
@@ -55,7 +55,7 @@ export const asyncRouterMap = [
   {
     path: '/wxUser',
     component: Layout,
-    redirect: '/wxUser/',
+    redirect: '/wxUser/wxUser',
     name: '用户管理',
     meta: {title: '用户管理', icon: 'wxUser'},
     children: [
@@ -81,7 +81,7 @@ export const asyncRouterMap = [
   {
     path: '/platformManage',
     component: Layout,
-    redirect: '/platformManage/',
+    redirect: '/platformManage/banner',
     name: '平台管理',
     meta: {title: '平台管理', icon: 'platformManage'},
     children: [
@@ -121,7 +121,7 @@ export const asyncRouterMap = [
   {
     path: '/post',
     component: Layout,
-    redirect: '/post/',
+    redirect: '/post/top',
     name: '帖子管理',
     meta: {title: '帖子管理', icon: 'post'},
     children: [
@@ -154,7 +154,7 @@ export const asyncRouterMap = [
   {
     path: '/statistics',
     component: Layout,
-    redirect: '/statistics/',
+    redirect: '/statistics/genderStatistics',
     name: '数据统计',
     meta: {title: '数据统计', icon: 'statistics'},
     children: [

@@ -216,7 +216,7 @@
         LIMIT #{offSet}, #{pageRow}
     </select>
 
-    <select id="getTopPostBaseList" resultType="com.alibaba.fastjson.JSONObject">
+    <select id="getTopPostBase" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
         u.WX_NICK_NAME      poster,
         u.WX_GENDER         posterGender,
@@ -240,10 +240,7 @@
         m.ACTIVE_TIME       activeTime,
         m.IS_LOWER_SHELF    isLowerShelf,
         m.IS_MALL           isMall,
-        m.IS_SUB            isSub,
-        m.CHECK_IN_TIME     checkInTime,
-        m.CHECK_OUT_TIME    checkOutTime,
-        (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID =#{userId} AND u.FOLLOW_ID=m.USER_ID),'0') ) isFollow
+        m.IS_SUB            isSub
         FROM
         t_wx_user u,
         t_post_base m,

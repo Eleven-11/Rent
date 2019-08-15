@@ -72,8 +72,8 @@ public class NavigationTopServiceImpl implements NavigationTopService {
         List<JSONObject> navigationTopList = new ArrayList<>();
         for (int i=0;i<topJsonObject.size();i++)
         {
-            //FIXME 自行测试，有的方法别乱复用
-            JSONObject navigationTop = (JSONObject) postBaseDao.getTopPostBaseList(topJsonObject.get(i));
+            JSONObject navigationTop = postBaseDao.getTopPostBase(topJsonObject.get(i));
+            navigationTop.put("navigationTitle",topJsonObject.get(i).get("navigationTitle"));
             navigationTopList.add(navigationTop);
         }
         return navigationTopList;
@@ -88,5 +88,15 @@ public class NavigationTopServiceImpl implements NavigationTopService {
     public JSONObject updateNavigationTop(JSONObject jsonObject) {
         navigationTopDao.updateNavigationTop(jsonObject);
         return CommonUtil.successJson("修改成功，刷新后查看！");
+    }
+
+    /**
+     * @description 获取置顶模块列表
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @Override
+    public JSONObject getNavigationTitle(JSONObject jsonObject) {
+        return CommonUtil.successJson(navigationDao.getNavigationTitle(jsonObject));
     }
 }
