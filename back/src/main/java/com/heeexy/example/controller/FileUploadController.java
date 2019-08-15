@@ -7,6 +7,7 @@ import com.heeexy.example.util.FileNameUtils;
 import com.heeexy.example.util.constants.ErrorEnum;
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Hyperlink;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -83,6 +84,7 @@ public class FileUploadController {
     @RequestMapping(value = "/importLabel")
     @ResponseBody
     public JSONObject imporLabel(@RequestParam("file")MultipartFile file) throws IOException{
+        System.out.println("调用后台导入接口");
 
         InputStream is ;
         if(!file.getOriginalFilename().endsWith(".xlsx")||file.isEmpty()==true){
@@ -110,7 +112,9 @@ public class FileUploadController {
                         continue;
                     }
                     labelItem.put(titleRow.getCell(cellIndex).toString(),currentRow.getCell(cellIndex).toString());
+
                 }
+
                 JSONObject label  = new JSONObject(labelItem);
                 System.out.println(label);
                 postLabelService.insertPostLabel(label);

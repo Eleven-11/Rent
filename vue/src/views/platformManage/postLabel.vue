@@ -5,22 +5,15 @@
         <el-form-item>
           <el-button type="primary" icon="plus" @click="showCreate">添加
           </el-button>
-          <el-upload
-            class="avatar-uploader"
-            :action="api/file/importLabel"
-            :show-file-list="false"
-            :on-success="handleAvatarSuccess"
-            :before-upload="beforeAvatarUpload">
-            <img v-if="imageUrl" :src="imageUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-          </el-upload>
 
           <el-upload
             class="upload-demo"
             ref="upload"
-            action="importLabel"
-            :on-preview="api/file/importLabel"
+            action="http://localhost:8080/file/importLabel"
+            :on-preview="handlePreview"
             :on-remove="handleRemove"
+            :file-list="fileList"
+            accept=".xlsx"
             :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">导入帖子标签</el-button>
@@ -30,22 +23,12 @@
 
       </el-form>
     </div>
-    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect">
-      <el-menu-item index="1">家用设备</el-menu-item>
-      <el-submenu index="2">
-        <template slot="title">热门商圈</template>
-        <el-menu-item index="2-1">集美区</el-menu-item>
-        <el-menu-item index="2-2">思明区</el-menu-item>
-        <el-menu-item index="2-3">湖里区</el-menu-item>
-        <el-menu-item index="2-4">海沧区</el-menu-item>
-        <el-menu-item index="2-5">翔安区</el-menu-item>
-        <el-menu-item index="2-6">同安区</el-menu-item>
-      </el-submenu>
-      <el-submenu index="3">
-        <template slot="title">地铁周边</template>
-        <el-menu-item index="3-1">地铁1号线</el-menu-item>
-        <el-menu-item index="3-2">地铁2号线</el-menu-item>
-        <el-menu-item index="3-3">地铁3号线</el-menu-item>
+    <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" >
+      <el-submenu  v-for="item in MenuParent":key="item.postLabelId" :index="item.postLabelId" >
+        <template slot="title">{{item.labelContent}}</template>
+        <el-menu-item :index="child.postLabelId" v-for="child in item.children":key="child.postLabelId"  v-if="child.children!=null">{{child.labelContent}}</el-menu-item>
+        <el-menu-item :index="item.postLabelId" v-for="(child,index) in item.children":key="child.postLabelId"  v-if="child.children==null&&index<1">{{item.labelContent}}</el-menu-item>
+
       </el-submenu>
     </el-menu>
     <div class="line"></div>
@@ -115,13 +98,18 @@
       export default {
         data() {
           return {
+            fileList:[], //上传的文件
             totalCount: 0, //分页组件--数据总条数
             tableData: [],//表格的数据
             listLoading: false,//数据加载等待动画
+            ParentId:{
+              labelParentId:0
+            },
             listQuery: {
               pageNum: 1,//页码
               pageRow: 50,//每页条数
             },
+            MenuParent:[],
             roles: [],//角色列表
             dialogStatus: 'create',
             dialogFormVisible: false,
@@ -145,6 +133,7 @@
         },
         created() {
           this.getPostTypeList();
+          this.loadParentMenu();
           /*if (this.hasPerm('user:add') || this.hasPerm('user:update')) {
             this.getAllRoles();
           }*/
@@ -156,21 +145,82 @@
         },
         methods: {
           getPostTypeList() {
-            console.log("正在获取参数")
             this.listLoading = true;
             this.api({
               url: "/postLabel/getPostLabelList",
               method: "get",
             }).then(data => {
-              console.log("获取了数据")
+              console.log("获取了数据");
               console.log(data)
               this.listLoading = false;
                this.tableData = data.list;
-              // this.totalCount = data.totalCount;
+               this.totalCount = data.totalCount;
+            })
+          },
+          loadParentMenu(){
+            this.listloading = false;
+            this.api({
+              url: "/postLabel/getPostLabelList",
+              method: "get",
+              // params: this.ParentId
+            }).then(data=>{
+              var list = data.list;
+              function listToTree(postLabelId,labelParentId,list){
+                function exists(list, parentId){
+                  for(var i=0; i<list.length; i++){
+
+                    if (list[i].postLabelId == parentId){return true;}
+                  }
+                  console.log("222")
+                  return false;
+                }
+                var nodes = [];
+                // get the top level nodes
+                for(var i=0; i<list.length; i++){
+                  var row = list[i];
+                  if (!exists(list, row.labelParentId)){
+                    nodes.push(row);
+                  }
+                }
+
+                var toDo = [];
+                for(var i=0; i<nodes.length; i++){
+                  toDo.push(nodes[i]);
+                }
+                while(toDo.length){
+                  var node = toDo.shift();    // the parent node
+                  // get the children nodes
+                  for(var i=0; i<list.length; i++){
+                    var row = list[i];
+                    if (row.labelParentId == node.postLabelId){
+                      //var child = {id:row.id,text:row.name};
+                      if (node.children){
+                        node.children.push(row);
+                      } else {
+                        node.children = [row];
+                      }
+                      toDo.push(row);
+                    }
+                  }
+                }
+                return nodes;
+              }
+              // console.log(JSON.stringify(listToTree("postLabelId","labelParentId",list)));
+              var list = listToTree("postLabelId","labelParentId",list);
+              this.MenuParent = list;
+              console.log(this.MenuParent);
             })
           },
           submitUpload() {
-            this.$refs.upload.submit();
+              console.log("进入上传方法");
+              this.$refs.upload.submit();
+          },
+          handleRemove(file, fileList) {
+            console.log(file, fileList);
+          },
+          handlePreview(file) {
+            console.log("上传前数据处理")
+            console.log(file);
           },
           handleAvatarSuccess(res, file) {
             this.imageUrl = URL.createObjectURL(file.raw);
@@ -193,6 +243,10 @@
             }
             return isJPG && isLt2M;
           },
+          handleSelect(key, keyPath){
+            console.log("菜单监听启动");
+            console.log(key,keyPath);
+          },
           insertPostType() {
             let newPostLabel = this.newPostLabel;
             newPostLabel.labelImg = this.imageUrl;
@@ -209,6 +263,7 @@
               console.log("插入成功！")
             })
           },
+
           handleSizeChange(val) {
             //改变每页数量
             this.listQuery.pageRow = val
@@ -236,6 +291,7 @@
             this.dialogStatus = "create"
             this.dialogFormVisible = true
           },
+
           showUpdate($index) {
             let postLabel = this.list[$index];
             this.postLabel.labelContent = postLabel.labelContent;
