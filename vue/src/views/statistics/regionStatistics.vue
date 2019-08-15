@@ -10,19 +10,19 @@
     <el-row>
       <el-col>
         <div class="panel">
-          <el-tabs  v-model="activeName" tab-position="top"
+          <el-tabs  v-model="activeName" tab-position="top" @tab-click="clickTab"
                     style="background-color: #fff;padding: 0 10px 0;border-radius: 10px;border: 1px solid rgba(215, 215, 215, 1) ;">
             <el-tab-pane name="first" label="浏览量排名" style="min-height: 380px" :disabled="true"></el-tab-pane>
-            <el-tab-pane label="总计" name="sum" style="min-height: 380px">
-              <div id="regionTotalEchart" style="height: 380px;"></div>
+            <el-tab-pane label="总计" name="sum" style="min-height: 380px" :lazy="true">
+              <div ref="c_sum" id="regionTotalEchart" style="height: 380px;"></div>
             </el-tab-pane>
 
-            <el-tab-pane label="周统计" name="week" style="min-height: 380px">
-              <div id="regionWeekEchart" style="height: 380px;"></div>
+            <el-tab-pane label="周统计" name="week" style="min-height: 380px" :lazy="true">
+              <div  ref="c_week" id="regionWeekEchart" style="height: 380px;"></div>
             </el-tab-pane>
 
-            <el-tab-pane label="月统计" name="month" style="min-height: 380px">
-              <div id="regionMonthEchart" style="height: 380px;"></div>
+            <el-tab-pane label="月统计" name="month" style="min-height: 380px" :lazy="true">
+              <div ref="c_month" id="regionMonthEchart" style="height: 380px;"></div>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -42,6 +42,7 @@
 
 <script>
   import echarts from 'echarts'
+
   export default {
     name: "regionStatistics",
     data(){
@@ -50,6 +51,8 @@
         // chartWeek:echarts.init(document.getElementById("regionWeekEchart")),
         // chartMonth:echarts.init(document.getElementById("regionMonthEchart")),
         activeName:'sum',
+        tabItem:'tab-sum',
+        chartMap:[],
         regionTotalNameList:[],
         regionTotalValueList:[],
         regionWeekNameList:[],
@@ -61,18 +64,17 @@
 
     created(){
       this.getAllData();
+      // this.getMonthData();
     },
     // mounted(){
-    //   this.$nextTick(function() {
-    //     this.getRegionEchart('regionEchart')
-    //   })
+    //   this.getAllData();
+    //   this.getMonthData();
     // },
-
     methods: {
-
       getAllData(){
-        this.regionWeekNameList = [];
-        this.regionWeekValueList = [];
+        let _this = this;
+        _this.regionWeekNameList = [];
+        _this.regionWeekValueList = [];
         this.api({
           url: "/statistics/postRegionByWeek",
           method: "get",
@@ -80,34 +82,53 @@
         }).then(data => {
           console.log(data);
           for (var i = 0 ; i < data.length; i ++){
-            this.regionWeekNameList.push(data[i].region);
-            this.regionWeekValueList.push(data[i].browse);
+            _this.regionWeekNameList.push(data[i].region);
+            _this.regionWeekValueList.push(data[i].browse);
           }
-          this.getRegionEchart('regionWeekEchart',this.regionWeekNameList,this.regionWeekValueList);
-          this.getRegionEchart('regionTotalEchart',this.regionWeekNameList,this.regionWeekValueList);
-        })
+          _this.getRegionEchart('regionTotalEchart',_this.regionWeekNameList,_this.regionWeekValueList);
+         })
+      },
 
-        this.regionMonthNameList = [];
-        this.regionMonthValueList = [];
+      getWeekData(){
+        let _this = this;
+        _this.regionWeekNameList = [];
+        _this.regionWeekValueList = [];
         this.api({
+          url: "/statistics/postRegionByWeek",
+          method: "get",
+          params:this.man
+        }).then(data => {
+          console.log(data);
+          for (var i = 0 ; i < data.length; i ++){
+            _this.regionWeekNameList.push(data[i].region);
+            _this.regionWeekValueList.push(data[i].browse);
+          }
+          _this.getRegionEchart('regionWeekEchart',_this.regionWeekNameList,_this.regionWeekValueList);
+        })
+      },
+
+      getMonthData(){
+        let _this = this;
+        _this.regionMonthNameList = [];
+        _this.regionMonthValueList = [];
+        _this.api({
           url: "/statistics/postRegionByMonth",
           method: "get",
           params:this.man
         }).then(data => {
           console.log(data);
           for (var i = 0 ; i < data.length; i ++){
-            this.regionMonthNameList.push(data[i].region);
-            this.regionMonthValueList.push(data[i].browse);
+            _this.regionMonthNameList.push(data[i].region);
+            _this.regionMonthValueList.push(data[i].browse);
           }
-          this.getRegionEchart('regionMonthEchart',this.regionMonthNameList,this.regionMonthValueList);
+          _this.getRegionEchart('regionMonthEchart',_this.regionMonthNameList,_this.regionMonthValueList);
         })
-
       },
-
-
       getRegionEchart(id,names,values) {
-        this.charts = echarts.init(document.getElementById(id))
-        this.charts.setOption({
+        // this.charts = echarts.init(document.getElementById(id))
+        let myChart = echarts.init(document.getElementById(id));
+        this.chartMap[id] = myChart;
+        let option = {
           show: true,
           backgroundColor: '#ffffff',
           tooltip: {
@@ -153,14 +174,82 @@
             data: names
           },
           series: [{
-              name: '男',
-              type: 'bar',
-              barWidth: 26,
-              color: '#46a1ff',
-              data: values
+            name: '男',
+            type: 'bar',
+            barWidth: 26,
+            color: '#46a1ff',
+            data: values
+          }]
+        }
+        myChart.setOption(option);
+      },
+
+      getRegionEchart(id,names,values) {
+        let myChart = echarts.init(document.getElementById(id));
+        let option = {
+          show: true,
+          backgroundColor: '#ffffff',
+          tooltip: {
+            trigger: 'axis',
+            confine: true ,
+            axisPointer: {
+              type: 'shadow',
+              shadowStyle:{shadowOffseY: '20px'}
             }
-          ]
-        })
+          },
+          grid: {
+            show:true,
+            borderColor: '#ffffff',
+            backgroundColor: '#ffffff',
+            top: '10%',
+            left: '2%',
+            right: '6%',
+            containLabel: true
+          },
+          xAxis: {
+            offset:24,
+            type: 'value',
+            axisTick:{show: false},
+            axisLine: {show: false,},
+            splitLine:{
+              lineStyle:{ type: 'dashed',}
+            },
+          },
+          yAxis: {
+            type: 'category',
+            boundaryGap: false,
+            axisTick: {interval: 0,},
+            axisLine: {
+              show: true,
+              symbol:'Array',
+              symbolSize:[1,44],
+              lineStyle:{color: "#ccc"}
+            },
+            axisLabel:{
+              show: true,
+              color:'#333'
+            },
+            data: names
+          },
+          series: [{
+            name: '男',
+            type: 'bar',
+            barWidth: 26,
+            color: '#46a1ff',
+            data: values
+          }]
+        }
+        myChart.setOption(option);
+      },
+      clickTab($event){
+        let _this = this;
+        let id = event.target.getAttribute('id');
+        this.tabItem = id;
+       if (id === "tab-week"){
+          _this.getWeekData();
+        }else if (id === "tab-month"){
+          _this.getMonthData();
+        }
       }
     }
   }
