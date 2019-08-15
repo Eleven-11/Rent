@@ -15,15 +15,15 @@
           <span v-text="getIndex(scope.$index)"> </span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="id" prop="postTypeId" v-if="false"></el-table-column>
+      <el-table-column align="center" label="id" prop="postTypeId" v-if="false" width="300"></el-table-column>
       <el-table-column align="center" prop="postTypeName" label="类型名称" width="200"></el-table-column>
       <el-table-column align="center" prop="postTypeImg" label="类型图片" width="500">
         <template slot-scope="scope">
-          <img :src="scope.row.postTypeImg" style="width: 200px; height: 100px;"/>
+          <img :src="scope.row.postTypeImg" style="width: 100px; height: 100px;"/>
         </template>
       </el-table-column>
       <el-table-column align="center" label="排序时间" prop="sortTime" width="100" v-if="false"></el-table-column>
-      <el-table-column align="center" width="400" label="管理" v-if="true">
+      <el-table-column align="center" width="550" label="管理" v-if="true">
         <template slot-scope="scope">
           <el-tooltip content="编辑" placement="bottom">
             <el-button type="warning" icon="el-icon-edit" @click="showUpdate(scope.$index)"></el-button>
