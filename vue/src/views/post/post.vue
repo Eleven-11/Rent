@@ -166,12 +166,6 @@
           </el-input>
         </el-form-item>
 
-        <!--<el-checkbox :indeterminate="isIndeterminate" v-if="dialogStatus ='top'" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-        <div style="margin: 15px 0;"></div>
-        <el-checkbox-group v-if="dialogStatus ='top'"v-model="checkedTitles" @change="handleCheckedTitleChange">
-          <el-checkbox v-for="navigationTopTitle in navigationTopTitles" :label="navigationTopTitle" :key="navigationTopId">{{navigationTopTitle}}</el-checkbox>
-        </el-checkbox-group>-->
-
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
