@@ -6,9 +6,9 @@
     <el-row class="panel">
       <el-col :span="12" class="panel-tab">
         <div>
-          <el-tabs v-model="likeActiveName" :tab-position="top"
+          <el-tabs v-model="likeActiveName" tab-position="top"
                    style="background-color: #fff;padding: 0 10px 0;border-radius: 10px;border: 1px solid rgba(215, 215, 215, 1) ;">
-            <el-tab-pane name="first" label="浏览量排名" style="min-height: 380px" disabled="false"></el-tab-pane>
+            <el-tab-pane name="first" label="浏览量排名" style="min-height: 380px" :disabled="true"></el-tab-pane>
             <el-tab-pane label="总计" name="likeSum" style="min-height: 380px">
               <ProcessTitle v-for="(item,index) in browseWeekList" :key="index" color="#67C23A" no="2" max="10000" cur="8000" content="用户"></ProcessTitle>
             </el-tab-pane>
@@ -26,9 +26,9 @@
 
       <el-col :span="12" class="panel-tab">
         <div>
-          <el-tabs v-model="commentActiveName" :tab-position="top"
+          <el-tabs v-model="commentActiveName" tab-position="top"
                    style="background-color: #fff;padding: 0 10px 0;border-radius: 10px;border: 1px solid rgba(215, 215, 215, 1) ;">
-            <el-tab-pane name="first" label="评论排行" style="min-height: 380px" disabled="false"></el-tab-pane>
+            <el-tab-pane name="first" label="评论排行" style="min-height: 380px" :disabled="true"></el-tab-pane>
             <el-tab-pane label="总计" name="commentSum" style="min-height: 380px">
               <ProcessTitle v-for="(item,index) in commentWeekList" :key="index" color="#ff6666" :no="index+1" :max="commentWeekMax" :cur="item.commentNum" :content="item.content"></ProcessTitle>
             </el-tab-pane>
@@ -48,9 +48,9 @@
     <el-row class="panel">
       <el-col>
         <div>
-          <el-tabs v-model="collectActiveName" :tab-position="top"
+          <el-tabs v-model="collectActiveName" tab-position="top"
                    style="background-color: #fff;padding: 0 10px 0;border-radius: 10px;border: 1px solid rgba(215, 215, 215, 1) ;">
-            <el-tab-pane name="first" label="收藏排行" style="min-height: 380px" disabled="false"></el-tab-pane>
+            <el-tab-pane name="first" label="收藏排行" style="min-height: 380px" :disabled="true"></el-tab-pane>
             <el-tab-pane label="总计" name="collectSum" style="min-height: 380px">
               <div class="sum_panel_container">
                 <div class="sum_panel">

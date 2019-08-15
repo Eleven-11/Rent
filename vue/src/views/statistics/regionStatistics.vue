@@ -10,14 +10,20 @@
     <el-row>
       <el-col>
         <div class="panel">
-          <el-tabs  v-model="activeName" :tab-position="top"
+          <el-tabs  v-model="activeName" tab-position="top"
                     style="background-color: #fff;padding: 0 10px 0;border-radius: 10px;border: 1px solid rgba(215, 215, 215, 1) ;">
-            <el-tab-pane name="first" label="浏览量排名" style="min-height: 380px" disabled="false"></el-tab-pane>
+            <el-tab-pane name="first" label="浏览量排名" style="min-height: 380px" :disabled="true"></el-tab-pane>
             <el-tab-pane label="总计" name="sum" style="min-height: 380px">
-              <div id="regionEchart" style="height: 380px;"></div>
+              <div id="regionTotalEchart" style="height: 380px;"></div>
             </el-tab-pane>
-            <el-tab-pane label="周统计" name="week" style="min-height: 380px">周排行</el-tab-pane>
-            <el-tab-pane label="月统计" name="month" style="min-height: 380px">月排行</el-tab-pane>
+
+            <el-tab-pane label="周统计" name="week" style="min-height: 380px">
+              <div id="regionWeekEchart" style="height: 380px;"></div>
+            </el-tab-pane>
+
+            <el-tab-pane label="月统计" name="month" style="min-height: 380px">
+              <div id="regionMonthEchart" style="height: 380px;"></div>
+            </el-tab-pane>
           </el-tabs>
         </div>
       </el-col>
@@ -40,18 +46,66 @@
     name: "regionStatistics",
     data(){
       return {
-        activeName:'sum'
+        // chartTotal:echarts.init(document.getElementById("regionWeekEchart")),
+        // chartWeek:echarts.init(document.getElementById("regionWeekEchart")),
+        // chartMonth:echarts.init(document.getElementById("regionMonthEchart")),
+        activeName:'sum',
+        regionTotalNameList:[],
+        regionTotalValueList:[],
+        regionWeekNameList:[],
+        regionWeekValueList:[],
+        regionMonthNameList:[],
+        regionMonthValueList:[]
       }
     },
 
-    mounted(){
-      this.$nextTick(function() {
-        this.getRegionEchart('regionEchart')
-      })
+    created(){
+      this.getAllData();
     },
+    // mounted(){
+    //   this.$nextTick(function() {
+    //     this.getRegionEchart('regionEchart')
+    //   })
+    // },
 
     methods: {
-      getRegionEchart(id) {
+
+      getAllData(){
+        this.regionWeekNameList = [];
+        this.regionWeekValueList = [];
+        this.api({
+          url: "/statistics/postRegionByWeek",
+          method: "get",
+          params:this.man
+        }).then(data => {
+          console.log(data);
+          for (var i = 0 ; i < data.length; i ++){
+            this.regionWeekNameList.push(data[i].region);
+            this.regionWeekValueList.push(data[i].browse);
+          }
+          this.getRegionEchart('regionWeekEchart',this.regionWeekNameList,this.regionWeekValueList);
+          this.getRegionEchart('regionTotalEchart',this.regionWeekNameList,this.regionWeekValueList);
+        })
+
+        this.regionMonthNameList = [];
+        this.regionMonthValueList = [];
+        this.api({
+          url: "/statistics/postRegionByMonth",
+          method: "get",
+          params:this.man
+        }).then(data => {
+          console.log(data);
+          for (var i = 0 ; i < data.length; i ++){
+            this.regionMonthNameList.push(data[i].region);
+            this.regionMonthValueList.push(data[i].browse);
+          }
+          this.getRegionEchart('regionMonthEchart',this.regionMonthNameList,this.regionMonthValueList);
+        })
+
+      },
+
+
+      getRegionEchart(id,names,values) {
         this.charts = echarts.init(document.getElementById(id))
         this.charts.setOption({
           show: true,
@@ -96,14 +150,14 @@
               show: true,
               color:'#333'
             },
-            data: ["湖里区","集美区","思明区","海沧区","同安区","翔安区"]
+            data: names
           },
           series: [{
               name: '男',
               type: 'bar',
               barWidth: 26,
               color: '#46a1ff',
-              data: [99,19,29,39,19,28]
+              data: values
             }
           ]
         })

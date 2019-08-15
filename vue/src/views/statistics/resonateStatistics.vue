@@ -9,9 +9,20 @@
           <el-tabs v-model="activeName" tab-position="top"
                    style="background-color: #fff;padding: 0 10px 0;border-radius: 10px;border: 1px solid rgba(215, 215, 215, 1) ;">
             <el-tab-pane name="first" label="用户关注排名" style="min-height: 380px" :disabled="true"></el-tab-pane>
-            <!--<el-tab-pane label="总计" name="sum" style="min-height: 380px"></el-tab-pane>-->
+            <el-tab-pane label="总计" name="sum" style="min-height: 380px">
+              <div class="sum_panel_container">
+                <div class="sum_panel">
+                  <ProcessTitle v-for="(item,index) in weekLeftList" :key="index" color="#ff6666" :no="index+1" :max="weekMax" :cur="item.fans" :content="item.name">
+                  </ProcessTitle>
+                </div>
+                <div class="sum_panel">
+                  <ProcessTitle v-for="(item,index) in weekRightList" :key="index" color="#ff6666" :no="index+6" :max="weekMax" :cur="item.fans" :content="item.name">
+                  </ProcessTitle>
+                </div>
+              </div>
+            </el-tab-pane>
 
-            <el-tab-pane label="周排行" name="sum" style="min-height: 380px">
+            <el-tab-pane label="周排行" name="week" style="min-height: 380px">
               <div class="sum_panel_container">
                 <div class="sum_panel">
                   <ProcessTitle v-for="(item,index) in weekLeftList" :key="index" color="#ff6666" :no="index+1" :max="weekMax" :cur="item.fans" :content="item.name">

@@ -184,8 +184,8 @@
             b.REGION region,
             t_date.cmonth
         FROM
-            t_post_base a
-        LEFT JOIN t_post_region b ON a.ADDRESS LIKE CONCAT('%', b.region, '%')
+            t_post_region b
+        LEFT JOIN t_post_base a ON a.ADDRESS LIKE CONCAT('%', b.region, '%')
         LEFT JOIN t_user_browse c ON a.ID = c.POST_ID
         LEFT JOIN(
                     SELECT DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 5 MONTH),'%Y-%m') AS cmonth
@@ -212,15 +212,13 @@
             COUNT(c.USER_ID) browse,
             b.REGION region
         FROM
-            t_post_base a
-        LEFT JOIN t_post_region b ON a.ADDRESS LIKE CONCAT('%', b.region, '%')
+            t_post_region b
+        LEFT JOIN t_post_base a ON a.ADDRESS LIKE CONCAT('%', b.region, '%')
         LEFT JOIN t_user_browse c ON a.ID = c.POST_ID
         AND c.CREATE_TIME BETWEEN DATE_SUB(NOW(), INTERVAL 7 day)
         AND NOW()
         AND c.IS_DEL = 0
-        GROUP BY
-            b.REGION
-
+        GROUP BY b.REGION
     </select>
     <select id="getUserFollowByMonth" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
