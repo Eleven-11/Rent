@@ -34,16 +34,16 @@
       <el-table-column align="center" prop="sysTempTitle" label="模版名称" width="150"></el-table-column>
       <el-table-column align="center" prop="sysTempContent" label="模版内容"  min-width="300"></el-table-column>
       <el-table-column align="center" prop="isGuide" label="模版类型" width="150" >
-        <!--<template slot-scope="scope">
-          <el-tag type="success" v-if="scope.row.isGuide=1">引导语模版</el-tag>
-          <el-tag type="primary" v-if="scope.row.isGuide=0">一般模版</el-tag>
-        </template>-->
+        <template slot-scope="scope">
+          <el-tag type="success" v-if="scope.row.isGuide===1">引导语模版</el-tag>
+          <el-tag type="primary" v-else>一般模版</el-tag>
+        </template>
       </el-table-column>
-
+      
 
       <el-table-column fixed="right" align="center" width="250" label="管理" v-if="hasPerm('article:update')">
         <template slot-scope="scope">
-          <el-tooltip v-if="scope.row.isGuide=1" content="取消引导语" placement="bottom">
+          <el-tooltip v-if="scope.row.isGuide===1" content="取消引导语" placement="bottom">
             <el-button type="info" icon="el-icon-info" @click="cancelGuide(scope.$index)"></el-button>
           </el-tooltip>
           <el-tooltip v-else content="设置为引导语" placement="bottom">
@@ -146,8 +146,8 @@
         this.api({
           url: "/sysTemplate/getSysTemplateList",
           method: "get",
+          params: this.listQuery
         }).then(data => {
-          console.log(data)
           this.listLoading = false;
           this.list = data.list;
           this.totalCount = data.totalCount;
