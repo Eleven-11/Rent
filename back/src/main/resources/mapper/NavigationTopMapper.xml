@@ -16,6 +16,7 @@
         SET POST_ID = #{postId}
         WHERE ID =#{topPostId}
     </update>
+
     <select id="getNavigationTopList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             a.NAVIGATION_ID navigationId,

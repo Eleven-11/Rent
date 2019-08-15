@@ -36,9 +36,6 @@ public class  WxUserServiceImpl implements WxUserService {
         CommonUtil.fillPageParam(jsonObject);
         int count = wxUserDao.countWxUser(jsonObject);
         List<JSONObject> list = wxUserDao.getWxUserList(jsonObject);
-        System.out.println("emmm");
-        System.out.println(list);
-        System.out.println("hhhhh");
 
         for (int i=0;i<list.size();i++){
             StringBuffer sb = new StringBuffer("");
