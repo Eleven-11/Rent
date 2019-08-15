@@ -125,66 +125,6 @@
         })
       },
       getRegionEchart(id,names,values) {
-        // this.charts = echarts.init(document.getElementById(id))
-        let myChart = echarts.init(document.getElementById(id));
-        this.chartMap[id] = myChart;
-        let option = {
-          show: true,
-          backgroundColor: '#ffffff',
-          tooltip: {
-            trigger: 'axis',
-            confine: true ,
-            axisPointer: {
-              type: 'shadow',
-              shadowStyle:{shadowOffseY: '20px'}
-            }
-          },
-          grid: {
-            show:true,
-            borderColor: '#ffffff',
-            backgroundColor: '#ffffff',
-            top: '10%',
-            left: '2%',
-            right: '6%',
-            containLabel: true
-          },
-          xAxis: {
-            offset:24,
-            type: 'value',
-            axisTick:{show: false},
-            axisLine: {show: false,},
-            splitLine:{
-              lineStyle:{ type: 'dashed',}
-            },
-          },
-          yAxis: {
-            type: 'category',
-            boundaryGap: false,
-            axisTick: {interval: 0,},
-            axisLine: {
-              show: true,
-              symbol:'Array',
-              symbolSize:[1,44],
-              lineStyle:{color: "#ccc"}
-            },
-            axisLabel:{
-              show: true,
-              color:'#333'
-            },
-            data: names
-          },
-          series: [{
-            name: '男',
-            type: 'bar',
-            barWidth: 26,
-            color: '#46a1ff',
-            data: values
-          }]
-        }
-        myChart.setOption(option);
-      },
-
-      getRegionEchart(id,names,values) {
         let myChart = echarts.init(document.getElementById(id));
         let option = {
           show: true,
@@ -232,7 +172,7 @@
             data: names
           },
           series: [{
-            name: '男',
+            name: '发帖数',
             type: 'bar',
             barWidth: 26,
             color: '#46a1ff',
