@@ -28,6 +28,7 @@ public class BackPostCommentController {
      * @description 获取帖子评论列表
      * @param request 帖子id-postId
      * @return 帖子评论列表：
+     *              评论id - commentId，
      *             评论内容-content,
      *             评论创建时间-createTime,
      *             评论者昵称-startNickname,

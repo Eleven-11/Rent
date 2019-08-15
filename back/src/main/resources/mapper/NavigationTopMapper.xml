@@ -20,18 +20,20 @@
     <select id="getNavigationTopList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             a.NAVIGATION_ID navigationId,
+            b.Title         navigationTitle,
             a.POST_ID postId,
             a.ID topPostId,
             a.CREATE_TIME createTime
         FROM
-            t_navigation_top a
+            t_navigation_top a,t_navigation b
         WHERE
-            IS_DEL=0
+            a.IS_DEL=0
+            AND a.NAVIGATION_ID = b.ID
         <if test="navigationId != null and navigationId !=''">
-            AND NAVIGATION_ID = #{navigationId}
+            AND a.NAVIGATION_ID = #{navigationId}
         </if>
         <if test="postId != null and postId !=''">
-            AND POST_ID = #{postId}
+            AND a.POST_ID = #{postId}
         </if>
     </select>
 </mapper>

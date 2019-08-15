@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.NavigationTopService;
 import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,9 +38,19 @@ public class BackNavigationTopController {
      * @param
      * @return
      **/
-    @PostMapping("/getNavigationTopList")
+    @GetMapping("/getNavigationTopList")
     public JSONObject getNavigationTopList(HttpServletRequest request){
         return CommonUtil.successJson(navigationTopService.getNavigationTopList(CommonUtil.request2Json(request)));
+    }
+
+    /**
+     * @description 获取置顶模块列表
+     * @param
+     * @return
+     **/
+    @GetMapping("/getNavigationTitle")
+    public JSONObject getNavigationTitle(HttpServletRequest request){
+        return CommonUtil.successJson(navigationTopService.getNavigationTitle(CommonUtil.request2Json(request)));
     }
     /**
      * @description 更新导航栏置顶帖子信息

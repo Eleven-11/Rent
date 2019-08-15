@@ -24,7 +24,7 @@ public interface PostBaseDao {
      * @param jsonObject
      * @return
      */
-    List<JSONObject> getTopPostBaseList(JSONObject jsonObject);
+    JSONObject getTopPostBase(JSONObject jsonObject);
 
     /**
      * 计算获取帖子列表的总条数（用于前端分页）
