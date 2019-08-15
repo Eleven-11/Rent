@@ -68,6 +68,35 @@
       <el-table-column align="center" label="禁言状态" prop="ifRes" width="220" v-if="true" ></el-table-column>
       <el-table-column align="center" label="管理" width="220">
         <template slot-scope="scope">
+          <el-popover
+            placement="right"
+            width="730"
+            trigger="click">
+            <el-table :data="commentData">
+              <el-table-column fixed="left" align="center" label="序号" width="80">
+                <template slot-scope="scope">
+                  <span v-text="getIndex(scope.$index)"> </span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="评论id" prop="commentId" v-if="false"></el-table-column>
+
+              <el-table-column align="center" prop="startNickname" label="昵称" width="200"></el-table-column>
+              <el-table-column align="center" prop="startImg" label="头像" width="100">
+                <template slot-scope="scope">
+                  <img :src="scope.row.startImg" style="width: 60px; height: 60px;"/>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="receiveNickname" label="被回复人昵称" width="200"></el-table-column>
+              <el-table-column align="center" prop="receiveImg" label="被回复人头像" width="150">
+                <template slot-scope="scope">
+                  <img :src="scope.row.receiveImg == null ? 'http://192.168.1.7:8080/image/static/1565848267.png':  scope.row.receiveImg" style="width: 60px; height: 60px;"/>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="content" label="内容" width="200"></el-table-column>
+              <el-table-column align="center" label="评论时间" prop="createTime" width="155" v-if="true"></el-table-column>
+            </el-table>
+            <el-button type="primary" @click="getPostCommentList(scope.$index)" slot="reference" size="mini" plain>评论</el-button>
+          </el-popover>
           <el-button type="info" plain icon="delete"  size="mini" v-if="list[scope.$index].isLowerShelf == '上架'"
                      @click="setOnShelf(scope.$index)">下架
           </el-button>
@@ -80,6 +109,9 @@
           </el-button>
           <el-button type="success" plain size="mini" icon="delete" v-else
                    @click="recoverPost(scope.$index)">恢复
+          </el-button>
+          <el-button type="success" plain size="mini" icon="delete" v-else
+                     @click="setOnTop(scope.$index)">置顶
           </el-button>
           <el-popover
             placement="bottom"
@@ -126,13 +158,19 @@
       <el-form class="small-space" :model="tempPost" label-position="left" label-width="80px"
                style='width: 300px; margin-left:50px;'>
         <el-form-item label="浏览量" >
-          <el-input type="text" v-model="tempPost.devBrowse" placeholder="不填则表示不修改">
+          <el-input type="text"v-if="dialogStatus ='update'" v-model="tempPost.devBrowse" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
         <el-form-item label="点赞量" >
-          <el-input type="text" v-model="tempPost.devLike" placeholder="不填则表示不修改">
+          <el-input type="text" v-if="dialogStatus ='update'" v-model="tempPost.devLike" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
+
+        <!--<el-checkbox :indeterminate="isIndeterminate" v-if="dialogStatus ='top'" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+        <div style="margin: 15px 0;"></div>
+        <el-checkbox-group v-if="dialogStatus ='top'"v-model="checkedTitles" @change="handleCheckedTitleChange">
+          <el-checkbox v-for="navigationTopTitle in navigationTopTitles" :label="navigationTopTitle" :key="navigationTopId">{{navigationTopTitle}}</el-checkbox>
+        </el-checkbox-group>-->
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -160,7 +198,8 @@
           startTime:'',
           endTime:'',
           typeId:'',
-          keyword:''
+          keyword:'',
+          postId:''
         },
         resQuery:{
           userId:'',
@@ -170,15 +209,15 @@
           totalCount: 0,//分页组件--数据总条数
           pageNum: 1,//页码
           pageRow: 50,//每页条数
-          /*poster: '',
-          content: '',
-          image: '',
-          collTime: '',
-          sortTime:'',
-          follows: '',
-          fans: '',
-          postId:''*/
         }],
+        checkAll: false,
+        navigationTopTitles:[{
+          navigationTopId:'',
+          navigationTopTitle:''
+        }],
+        checkedTitles:[],
+        // titles: navigationTopTitles,
+        isIndeterminate: true,
         selector:'',
         options:[{
           postTypeId:'',
@@ -193,9 +232,11 @@
         dialogStatus: 'create',
         dialogFormVisible: false,
         textMap: {
+          top:'置顶',
           update: '编辑',
           create: '新建用户'
         },
+        commentData:[],
         tempPost: {
           content: '',
           phone: '',
@@ -253,6 +294,26 @@
         }
         return fmt
       },
+      getPostCommentList($index) {
+        this.listLoading = false;
+        this.listQuery.postId = this.list[$index].postId;
+        this.api({
+          url: "/postComment/getCommentList",
+          method: "get",
+          params: this.listQuery
+        }).then(data => {
+          this.listLoading = false;
+          this.commentData = data.list;
+          for (var i =0 ;i<this.commentData.length; i++){
+            this.commentData[i].createTime =  this.formatter(this.commentData[i].createTime, 'yyyy-MM-dd hh:mm:ss')
+            if(this.commentData[i].receiveNickname =='null' && this.commentData[i].receiveImg =='null')
+            {
+              this.commentData[i].receiveNickname ='';
+              this.commentData[i].receiveImg ='';
+            }
+          }
+        })
+      },
       getPostTypeList() {
         this.api({
           url: "/postType/getPostTypelist",
@@ -268,7 +329,17 @@
 
       },
 
-      getAllRoles() {
+      getNavigationTitle(){
+        this.api({
+          url: "/navigationTop/getNavigationTitle",
+          method: "get"
+        }).then(data => {
+          console.log(data)
+          this.navigationTopTitles = data.list;
+        });
+      },
+
+      getAllRoles(){
         this.api({
           url: "/user/getAllRoles",
           method: "get"
@@ -363,6 +434,11 @@
         this.dialogStatus = "update"
         this.dialogFormVisible = true
         console.log( this.tempPost)
+      },
+      setOnTop($index) {
+        this.dialogStatus = "top";
+        this.dialogFormVisible = true
+        this.getNavigationTitle();
       },
       createUser() {
         //添加新用户
@@ -461,6 +537,15 @@
           console.log(res)
           _vue.$message.error("设置失败")
         })
+      },
+      handleCheckAllChange(val) {
+        this.checkedTitles = val? navigationTopTitles:[];
+        this.isIndeterminate = false;
+      },
+      handleCheckedTitleChange(value) {
+        let checkedCount = value.length;
+        this.checkAll = checkedCount === this.navigationTopTitles.length;
+        this.isIndeterminate = checkedCount > 0 && checkedCount < this.navigationTopTitles.length;
       },
       insertWxUserRes($index) {
         let _vue = this;

@@ -23,4 +23,11 @@ public interface NavigationTopService {
      * @return
      **/
     JSONObject updateNavigationTop(JSONObject jsonObject);
+
+    /**
+     * @description 获取置顶模块列表
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject getNavigationTitle(JSONObject jsonObject);
 }

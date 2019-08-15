@@ -23,7 +23,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="排序时间" prop="sortTime" width="100" v-if="false"></el-table-column>
-      <el-table-column fixed="right" align="center" width="400" label="管理" v-if="true">
+      <el-table-column align="center" width="400" label="管理" v-if="true">
         <template slot-scope="scope">
           <el-tooltip content="编辑" placement="bottom">
             <el-button type="warning" icon="el-icon-edit" @click="showUpdate(scope.$index)"></el-button>
@@ -173,9 +173,9 @@
           if (valid) {
             this.listLoading = true;
             this.api({
-              url: "/postType/updateDelPostType",
+              url: "/postType/updatePostType",
               method: "post",
-              params: this.postType
+              params: this.newPostType
             }).then(() => {
               let msg = "修改成功";
               //隐藏面板

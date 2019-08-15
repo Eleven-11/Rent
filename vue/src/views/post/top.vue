@@ -1,11 +1,312 @@
 <template>
-    
+  <div class="app-container">
+  <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
+            highlight-current-row>
+    <el-table-column align="center" label="序号" width="60">
+      <template slot-scope="scope">
+        <span v-text="getIndex(scope.$index)"> </span>
+      </template>
+    </el-table-column>
+    <el-table-column align="center" label="发帖人" prop="poster" width="100"></el-table-column>
+    <el-table-column align="center" label="发帖人头像" prop="posterAvatar"  width="100">
+      <template slot-scope="scope">
+        <img :src="scope.row.posterAvatar" style="width: 60px; height: 60px;"/>
+      </template>
+    </el-table-column>
+    <el-table-column align="center" label="帖子Id" prop="postId" width="90" v-if="false"></el-table-column>
+    <el-table-column align="center" label="发布时间" prop="createTime" width="220"></el-table-column>
+    <el-table-column align="center" label="地址" prop="address"  width="120"></el-table-column>
+    <el-table-column align="center" label="帖子内容" prop="content" width="200" ></el-table-column>
+    <el-table-column align="center" label="最低价" prop="minPrice" ></el-table-column>
+    <el-table-column align="center" label="最高价" prop="maxPrice" ></el-table-column>
+    <el-table-column align="center" label="联系方式" prop="phone" width="160"></el-table-column>
+    <el-table-column align="center" label="浏览量" prop="browse" ></el-table-column>
+    <el-table-column align="center" label="评论数量" prop="comments" ></el-table-column>
+    <el-table-column align="center" label="点赞数量" prop="likes" ></el-table-column>
+    <el-table-column align="center" label="中介费" prop="fee" ></el-table-column>
+    <el-table-column align="center" label="发帖人id" prop="userId" v-if="false"></el-table-column>
+    <el-table-column align="center" label="置顶模块" prop="navigationTitle"></el-table-column>
+    <!--<el-table-column align="center" label="是否删除" prop="isDel" v-if="true"></el-table-column>-->
+    <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220" ></el-table-column>
+    <!--<el-table-column align="center" label="上架状态" prop="isLowerShelf" width="220" v-if="false"></el-table-column>-->
+    <!--<el-table-column align="center" label="禁言状态" prop="ifRes" width="220" v-if="true" ></el-table-column>-->
+    <!--<el-table-column fixed="right" align="center" width="400" label="管理" v-if="true">
+      <template slot-scope="scope">
+        <el-tooltip content="编辑" placement="bottom">
+          <el-button type="warning" icon="el-icon-edit" @click="showUpdate(scope.$index)"></el-button>
+        </el-tooltip>
+
+        <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
+        <el-button type="primary" icon="up" @click="sortAdvImg(scope.$index-1,scope.$index)" v-if="(scope.$index)!=0">↑</el-button>
+        <el-button type="primary" icon="down" @click="sortAdvImg(scope.$index,scope.$index+1)" v-if="(scope.$index)!=list.length-1">↓</el-button>
+      </template>
+    </el-table-column>-->
+  </el-table>
+
+<!--  <el-pagination
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+    :current-page="listQuery.pageNum"
+    :page-size="listQuery.pageRow"
+    :total="totalCount"
+    :page-sizes="[10, 20, 50, 100]"
+    layout="total, sizes, prev, pager, next, jumper">
+  </el-pagination>-->
+
+  <!--<el-dialog v-model="newAdvBanner" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+    <el-form class="small-space" :model="advBanner" label-position="left" label-width="80px"
+             style='width: 300px; margin-left:50px;'>
+      <el-form-item label="广告标题">
+        <el-input type="text" v-model="newAdvBanner.advTitle">
+        </el-input>
+      </el-form-item>
+      <el-form-item label="广告图片" v-model="newAdvBanner.advImg">
+        <el-upload
+          class="avatar-uploader"
+          action="api/file/upload"
+          :show-file-list="false"
+          :before-upload="beforeUpload"
+          :on-success="handleAvatarSuccess">
+          <img :src="advImg" class="avatar">
+          <i  class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogFormVisible = false">取 消</el-button>
+      <el-button v-if="dialogStatus=='update'" type="success" @click="updateAdvBanner">修 改</el-button>
+      <el-button v-if="dialogStatus=='create'" type="success" @click="insertAdvImg">创 建</el-button>
+    </div>
+  </el-dialog>-->
+  </div>
+
 </template>
 
 <script>
-    export default {
-        name: "top"
+  import {mapGetters} from 'vuex'
+  export default {
+    name: "banner",
+    data() {
+      return {
+        totalCount: 0, //分页组件--数据总条数
+        list: [],//表格的数据
+        listLoading: false,//数据加载等待动画
+        textMap: {
+          update: '编辑',
+          create: '新建'
+        },
+        listQuery: {
+          pageNum: 1,//页码
+          pageRow: 50,//每页条数
+        },
+        advBanner: {
+          advId: '',
+          advTitle: '',
+          advImg: ''
+        },
+        newAdvBanner: {
+          advId: '',
+          advTitle: '',
+          advImg: ''
+        },
+        dialogFormVisible: false,
+        dialogStatus: 'create',
+
+      }
+    },
+    created() {
+      this.getNavigationTopList();
+    },
+    computed: {
+      ...mapGetters([
+        'advId'
+      ])
+    },
+    methods: {
+      getNavigationTopList() {
+        this.listLoading = true;
+        this.api({
+          url: "/navigationTop/getNavigationTopList",
+          method: "get",
+          params: this.listQuery
+        }).then(data => {
+          console.log(data)
+          this.listLoading = false;
+          this.list = data;
+          for (var i =0 ;i<this.list.length; i++){
+            this.list[i].createTime = this.formatter(this.list[i].createTime,'yyyy-MM-dd hh:mm:ss')
+            this.list[i].activeTime = this.formatter(this.list[i].activeTime,'yyyy-MM-dd hh:mm:ss')
+          }
+          this.totalCount = data.totalCount;
+          this.listQuery.title = "";
+        })
+      },
+      getIndex($index) {
+        //表格序号
+        return (this.listQuery.pageNum - 1) * this.listQuery.pageRow + $index + 1
+      },
+      beforeUpload(file) {
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      },
+      handleAvatarSuccess(res, file) {
+        this.advImg = URL.createObjectURL(file.raw);
+        this.newAdvBanner.advImg = res;
+        console.log(res);
+        //this.imageUrl = URL.createObjectURL(file.raw);
+        //console.log(this.imageUrl)
+        // this.tempUser.categoriesImg = this.imageUrl;
+        // alert(this.tempUser.categoriesImg);
+      },
+      showCreate() {
+        //显示新增对话框
+        this.newAdvBanner.advTitle = "";
+        this.newAdvBanner.advImg = "";
+        this.dialogStatus = "create";
+        this.dialogFormVisible = true;
+      },
+      /**
+       * 删除条目
+       */
+      showDelete($index) {
+        let advBanner = this.list[$index];
+        this.advBanner.advId = advBanner.advId;
+
+        this.$confirm('此操作将永久删除该文件,如需回复需联系管理员, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+
+          this.api({
+            url: "/advBanner/updateDelAdvImg",
+            method: "post",
+            params: this.advBanner
+          }).then(data => {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            });
+            this.getAdvImgList();
+          })
+
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });
+        });
+      },
+      showUpdate($index) {
+        let advBanner = this.list[$index];
+        this.newAdvBanner.advId = advBanner.advId;
+        this.newAdvBanner.advTitle = advBanner.advTitle;
+        this.newAdvBanner.advImg = advBanner.advImg;
+        this.dialogStatus = "update";
+        this.dialogFormVisible = true;
+
+
+      },
+      updateAdvBanner() {
+        let advBanner = this;
+        this.api({
+          url: "/advBanner/updateAdvImg",
+          method: "post",
+          params: this.newAdvBanner
+        }).then(() => {
+          console.log("修改成功")
+        })
+      },
+      /*广告栏图片排序*/
+      sortAdvImg($formerIndex, $laterIndex) {
+        let formerAdv = this.list[$formerIndex];
+        let laterAdv = this.list[$laterIndex];
+        this.api({
+          url: "/advBanner/sortAdvImg",
+          method: "post",
+          params: {
+            formerAdvId: formerAdv.advId,
+            laterAdvId:laterAdv.advId,
+            formerSortTime: this.formatter(formerAdv.sortTime, 'yyyy-MM-dd hh:mm:ss'),
+            laterSortTime: this.formatter(laterAdv.sortTime, 'yyyy-MM-dd hh:mm:ss')
+          }
+        }).then(() => {
+          this.getAdvImgList()
+        })
+      },
+      formatter(thistime, fmt) {
+        let $this = new Date(thistime)
+        let o = {
+          'M+': $this.getMonth() + 1,
+          'd+': $this.getDate(),
+          'h+': $this.getHours(),
+          'm+': $this.getMinutes(),
+          's+': $this.getSeconds(),
+          'q+': Math.floor(($this.getMonth() + 3) / 3),
+          'S': $this.getMilliseconds()
+        }
+        if (/(y+)/.test(fmt)) {
+          fmt = fmt.replace(RegExp.$1, ($this.getFullYear() + '').substr(4 - RegExp.$1.length))
+        }
+        for (var k in o) {
+          if (new RegExp('(' + k + ')').test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+          }
+        }
+        return fmt
+      },
+      handleSizeChange(val) {
+        //改变每页数量
+        this.listQuery.pageRow = val
+        this.handleFilter();
+      },
+      handleCurrentChange(val) {
+        //改变页码
+        this.listQuery.pageNum = val
+        this.getAdvImgList();
+      },
+
+      handleFilter() {
+        //查询事件
+        this.listQuery.pageNum = 1
+        this.getAdvImgList()
+      },
+      getIndex($index) {
+        //表格序号
+        return (this.listQuery.pageNum - 1) * this.listQuery.pageRow + $index + 1
+      }
+    },
+    //时间搓转化
+    formatter(thistime, fmt) {
+      let $this = new Date(thistime)
+      let o = {
+        'M+': $this.getMonth() + 1,
+        'd+': $this.getDate(),
+        'h+': $this.getHours(),
+        'm+': $this.getMinutes(),
+        's+': $this.getSeconds(),
+        'q+': Math.floor(($this.getMonth() + 3) / 3),
+        'S': $this.getMilliseconds()
+      }
+      if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, ($this.getFullYear() + '').substr(4 - RegExp.$1.length))
+      }
+      for (var k in o) {
+        if (new RegExp('(' + k + ')').test(fmt)) {
+          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length)))
+        }
+      }
+      return fmt
     }
+  }
 </script>
 
 <style scoped>

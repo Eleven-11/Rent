@@ -30,7 +30,7 @@
         m.USER_ID followId,
         m.WX_AVATAR_URL followAvatar,
         m.WX_GENDER followGender,
-        (SELECT IFNULL((SELECT ID FROM t_user_follow u WHERE u.FAN_ID =#{wxUserId} AND u.FOLLOW_ID = followId),'0')) isFollow
+        (SELECT IF((SELECT ID FROM t_user_follow u WHERE u.FAN_ID =#{wxUserId} AND u.FOLLOW_ID = followId) = null,'1','0')) isFollow
     FROM
         t_wx_user m,
         t_user_follow u

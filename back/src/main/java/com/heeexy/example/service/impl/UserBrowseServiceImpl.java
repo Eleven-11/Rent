@@ -53,8 +53,7 @@ public class UserBrowseServiceImpl implements UserBrowseService {
      **/
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public JSONObject insertUserBrowse(JSONObject jsonObject) {
-        synchronized(this){
+    public synchronized JSONObject insertUserBrowse(JSONObject jsonObject) {
             if(userBrowseDao.getBrowseStatus(jsonObject) != null){
                 userBrowseDao.updateUserBrowse(jsonObject);
                 return CommonUtil.successJson();
@@ -64,7 +63,6 @@ public class UserBrowseServiceImpl implements UserBrowseService {
                 return CommonUtil.successJson("插入成功");
 
             }
-        }
     }
 
     @Override
