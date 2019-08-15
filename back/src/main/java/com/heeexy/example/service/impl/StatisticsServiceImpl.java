@@ -7,6 +7,8 @@ import com.heeexy.example.util.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @ClassName StatisticsServiceImpl
  * @Description
@@ -26,7 +28,14 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public JSONObject getGenderByMonth(JSONObject jsonObject) {
-        return CommonUtil.successJson(statisticsDao.getGenderByMonth(jsonObject));
+        jsonObject.put("gender",1);
+        List<JSONObject> manList = statisticsDao.getGenderByMonth(jsonObject);
+        jsonObject.put("gender",2);
+        List<JSONObject> womenList = statisticsDao.getGenderByMonth(jsonObject);
+        JSONObject jo = new JSONObject();
+        jo.put("women", womenList);
+        jo.put("man", manList);
+        return CommonUtil.successJson(jo);
     }
 
     @Override

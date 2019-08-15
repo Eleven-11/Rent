@@ -53,9 +53,9 @@
     name: "genderStatistics",
     data () {
       return {
-        all: 2000,
-        female: 1000,
-        man: 1000,
+        all: 0,
+        female: 0,
+        man: 0,
         total:{
           man:[320],
           women:[291]
@@ -79,21 +79,36 @@
     methods: {
 
       getTotalData(){
+        this.all = 0
         this.api({
           url: "/statistics/genderByAll",
           method: "get",
           params:this.noticeTemplate
         }).then(data => {
-
+          for (var item in data.list){
+            this.all += item.count
+            if (gender == 1){
+              this.man = item.count
+            }else if (gender == 2){
+              this.female = item.count
+            }
+          }
         })
       },
       getMonthData(){
+        this.month.man.clean()
+        this.month.women.clean()
+        this.month.month.clean()
         this.api({
           url: "/statistics/genderByMonth",
-          method: "post",
+          method: "get",
           params:this.noticeTemplate
         }).then(data => {
-
+          for (var i = 0;i < 6;i++){
+            this.month.man.push(data.man[i].count)
+            this.month.women.push(data.women[i].count)
+            this.month.month.push(data.women[i].month)
+          }
         })
       },
 
