@@ -47,7 +47,7 @@
         ORDER BY postLabelId
     </select>
     <insert id="insertPostLabel" useGeneratedKeys="true" keyProperty="postLabelId">
-        INSERT INTO t_post_label (parent_id, content,type_img_url)
+        INSERT INTO t_post_label (parent_id, content,type_img_url,fix_show)
         VALUES
         <foreach collection="contents" item="item" index="index" separator=",">
         (
@@ -62,7 +62,7 @@
                     WHERE
                         t_post_label.CONTENT = #{parentContent}
                 ) m),
-                #{item},#{TYPE_IMG_URL}
+                #{item},#{TYPE_IMG_URL},#{FIX_SHOW}
         )
         </foreach>
     </insert>
