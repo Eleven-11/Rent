@@ -42,7 +42,7 @@
         <if test="labelTypeId != null and labelTypeId !=''">
             AND a.TYPE = #{labelTypeId}
         </if>
-        ORDER BY labelParentId
+        ORDER BY postLabelId
     </select>
     <insert id="insertPostLabel" useGeneratedKeys="true" keyProperty="postLabelId">
         INSERT INTO t_post_label (parent_id, content,type_img_url)

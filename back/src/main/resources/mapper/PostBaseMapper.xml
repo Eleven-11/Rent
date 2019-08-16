@@ -248,6 +248,7 @@
         WHERE
         m.TYPE_ID = f.ID
         AND u.USER_ID = m.USER_ID
+        AND m.ID = #{postId}
         <if test="isDel != null and isDel !=''">
             AND m.IS_DEL = #{isDel}
         </if>
@@ -259,9 +260,6 @@
         </if>
         <if test="isMall !=null and isMall !=''">
             AND m.IS_MALL = #{isMall}
-        </if>
-        <if test="postId !=null and postId !=''">
-            AND m.ID = #{postId}
         </if>
         <if test="nickname != null and nickname != ''">
             AND u.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{nickname}),'%')
@@ -368,6 +366,9 @@
         AND u.USER_ID = m.USER_ID
         AND m.IS_LOWER_SHELF = '0'
         AND m.IS_DEL = '0'
+        <if test="navigationId != null and navigationId != ''">
+            AND m.IS_TOP = 0
+        </if>
         <if test="typeId !=null and typeId !=''">
             AND m.TYPE_ID = #{typeId}
         </if>

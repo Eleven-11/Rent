@@ -30,4 +30,11 @@ public interface NavigationTopService {
      * @return com.alibaba.fastjson.JSONObject
      **/
     JSONObject getNavigationTitle(JSONObject jsonObject);
+
+    /**
+     * @description 对置顶帖子进行排序
+     * @param jsonObject
+     * @return
+     **/
+    JSONObject sortNavigationTop(JSONObject jsonObject);
 }

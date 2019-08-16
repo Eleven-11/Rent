@@ -61,4 +61,14 @@ public class BackNavigationTopController {
     public JSONObject updateNavigationTop(HttpServletRequest request){
         return navigationTopService.updateNavigationTop(CommonUtil.request2Json(request));
     }
+    /**
+     * @description 对置顶帖子进行排序
+     * @param  request 首行帖子id - formerNavId，末行帖子id
+     *                 首行帖子排序时间-formerSortTime，末行帖子排序时间 - laterSortTime
+     * @return
+     **/
+    @PostMapping("/sortNavigationTop")
+    public JSONObject sortNavigationTop(HttpServletRequest request){
+        return navigationTopService.sortNavigationTop(CommonUtil.request2Json(request));
+    }
 }

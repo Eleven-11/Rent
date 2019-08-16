@@ -9,6 +9,7 @@ import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,6 +36,7 @@ public class NavigationTopServiceImpl implements NavigationTopService {
      * @return com.alibaba.fastjson.JSONObject
      **/
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public JSONObject insertNavigationTop(JSONObject jsonObject) {
         //将传进来的导航栏id字符串分割成数组
         List<String> navigationIds = Arrays.asList(jsonObject.get("navigationIds").toString().split(","));
@@ -98,5 +100,16 @@ public class NavigationTopServiceImpl implements NavigationTopService {
     @Override
     public JSONObject getNavigationTitle(JSONObject jsonObject) {
         return CommonUtil.successJson(navigationDao.getNavigationTitle(jsonObject));
+    }
+
+    /**
+     * @description 对置顶帖子进行排序
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @Override
+    public JSONObject sortNavigationTop(JSONObject jsonObject) {
+        navigationTopDao.sortNavigationTop(jsonObject);
+        return CommonUtil.successJson();
     }
 }
