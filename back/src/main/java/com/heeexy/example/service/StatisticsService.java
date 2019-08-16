@@ -114,5 +114,13 @@ public interface StatisticsService {
      * @param jsonObject
      * @return com.alibaba.fastjson.JSONObject
      **/
-    JSONObject getUserFollowByWeek(JSONObject jsonObject );
+    JSONObject getUserFollowByWeek(JSONObject jsonObject);
+
+    /**
+     * 获取价格的所有折线数据
+     * @param jsonObject
+     * @return
+     */
+    JSONObject getAllPriceLineData(JSONObject jsonObject);
+
 }

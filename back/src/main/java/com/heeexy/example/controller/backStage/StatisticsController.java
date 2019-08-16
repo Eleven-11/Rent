@@ -129,4 +129,11 @@ public class StatisticsController {
         return statisticsService.getPostRegionByMonth(CommonUtil.request2Json(request));
     }
 
+    @GetMapping("/priceLineData")
+    public JSONObject getAllPriceLineData(HttpServletRequest request) {
+        // 帖子地区按月查看统计，根据帖子的真实浏览量做排名；可查看其他月的数据，形成年报表
+        return statisticsService.getAllPriceLineData(CommonUtil.request2Json(request));
+    }
+
+
 }

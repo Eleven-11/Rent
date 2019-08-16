@@ -7,6 +7,16 @@ import java.util.List;
 public interface StatisticsDao {
 
     /**
+     * 最低价格计算折线图
+     * @param jsonObject
+     * type null = all
+     *      week = nowWeekData
+     *      month = nowNonthData
+     * @return
+     */
+    List<JSONObject> getPriceLineData(JSONObject jsonObject);
+
+    /**
      * @description 性别统计 总
      * @param jsonObject
      * @return java.util.List<com.alibaba.fastjson.JSONObject>

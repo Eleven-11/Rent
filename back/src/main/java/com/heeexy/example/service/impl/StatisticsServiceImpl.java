@@ -108,4 +108,18 @@ public class StatisticsServiceImpl implements StatisticsService {
     public JSONObject getUserFollowByWeek(JSONObject jsonObject) {
         return CommonUtil.successJson(statisticsDao.getUserFollowByWeek(jsonObject));
     }
+
+    @Override
+    public JSONObject getAllPriceLineData(JSONObject jsonObject) {
+//        List<JSONObject> allList = statisticsDao.getPriceLineData(jsonObject);
+//        jsonObject.put("type","week");
+//        List<JSONObject> weekList = statisticsDao.getPriceLineData(jsonObject);
+//        jsonObject.put("type","month");
+//        List<JSONObject> monthList = statisticsDao.getPriceLineData(jsonObject);
+//        jsonObject.put("allList",allList);
+//        jsonObject.put("weekList",weekList);
+//        jsonObject.put("monthList",monthList);
+        List<JSONObject> list = statisticsDao.getPriceLineData(jsonObject);
+        return CommonUtil.successPage(list);
+    }
 }

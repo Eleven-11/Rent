@@ -86,7 +86,8 @@
         AND NOW()
         AND a.IS_DEL = 0
         ORDER BY
-            MIN_PRICE</select>
+            MIN_PRICE
+    </select>
     <select id="getPostMaxPriceByMonth" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             a.CONTENT content,
@@ -253,5 +254,71 @@
             FOLLOW_ID
         ORDER BY
             fans DESC
+    </select>
+    <select id="getPriceLineData" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT u.xName     name,
+            case
+                WHEN x.minNum is null THEN 0
+                ELSE x.minNum
+                END  minNum,
+            case
+                WHEN y.maxNum is null THEN 0
+                ELSE y.maxNum
+                END  maxNum
+        FROM (
+            SELECT '1.500以下' AS xName UNION ALL
+            SELECT '2.500-1000' AS xName UNION ALL
+            SELECT '3.1000-1500' AS xName UNION ALL
+            SELECT '4.1500-2000' AS xName UNION ALL
+            SELECT '5.2000-2500' AS xName UNION ALL
+            SELECT '6.2500-3000' AS xName UNION ALL
+            SELECT '7.3000-3500' AS xName UNION ALL
+            SELECT '8.3500-4000' AS xName UNION ALL
+            SELECT '9.4000以上' AS xName ) as u
+        LEFT JOIN (SELECT
+            ELT(INTERVAL(t_post_base.MIN_PRICE,0,500,1000,1500,2000,2500,3000,3500,4000),
+            '1.500以下',
+            '2.500-1000',
+            '3.1000-1500',
+            '4.1500-2000',
+            '5.2000-2500',
+            '6.2500-3000',
+            '7.3000-3500',
+            '8.3500-4000',
+            '9.4000以上') as xName,
+            COUNT(0) as minNum
+                FROM t_post_base
+            <where>
+                <if test="type != null and type != '' and  type == 'week'">
+                    week(t_post_base.CREATE_TIME) = week(now())
+                </if>
+                <if test="type != null and type != '' and  type == 'month'">
+                    DATE_FORMAT(t_post_base.CREATE_TIME,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')
+                </if>
+            </where>
+            GROUP BY xName) x on u.xName = x.xName
+        LEFT JOIN (SELECT
+            ELT(INTERVAL(t_post_base.MAX_PRICE,0,500,1000,1500,2000,2500,3000,3500,4000),
+            '1.500以下',
+            '2.500-1000',
+            '3.1000-1500',
+            '4.1500-2000',
+            '5.2000-2500',
+            '6.2500-3000',
+            '7.3000-3500',
+            '8.3500-4000',
+            '9.4000以上') as xName,
+            COUNT(0) as maxNum
+            FROM t_post_base
+            <where>
+                <if test="type != null and type != '' and  type == 'week'">
+                    week(t_post_base.CREATE_TIME) = week(now())
+                </if>
+                <if test="type != null and type != '' and type == 'month'">
+                    DATE_FORMAT(t_post_base.CREATE_TIME,'%Y-%m')=DATE_FORMAT(NOW(),'%Y-%m')
+                </if>
+            </where>
+            GROUP BY xName) y on y.xName = u.xName
+        ORDER BY u.xName
     </select>
 </mapper>

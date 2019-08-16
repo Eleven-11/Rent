@@ -94,12 +94,19 @@
     <el-row class="panel">
       <el-col>
         <div>
-          <el-tabs v-model="priceActiveName" :tab-position="top"
+          <el-tabs v-model="priceActiveName" tab-position="top" @tab-click="clickTab"
                    style="background-color: #fff;padding: 0 10px 0;border-radius: 10px;border: 1px solid rgba(215, 215, 215, 1) ;">
-            <el-tab-pane name="first" label="价位统计" style="min-height: 380px" disabled="false"></el-tab-pane>
-            <el-tab-pane label="总计" name="priceSum" style="min-height: 380px">总计</el-tab-pane>
-            <el-tab-pane label="周统计" name="priceWeek" style="min-height: 380px"></el-tab-pane>
-            <el-tab-pane label="月统计" name="priceMonth" style="min-height: 380px"></el-tab-pane>
+            <el-tab-pane name="first" label="价位统计" style="min-height: 380px" :disabled="true"></el-tab-pane>
+            <el-tab-pane label="总计" name="priceSum" style="min-height: 380px" :lazy="true">
+              <div  id="allPriceEchart" style="height: 380px;"></div>
+            </el-tab-pane>
+            <el-tab-pane label="周统计" name="priceWeek" style="min-height: 380px" :lazy="true">
+              <div  id="weekPriceEchart" style="height: 380px;"></div>
+            </el-tab-pane>
+
+            <el-tab-pane label="月统计" name="priceMonth" style="min-height: 380px" :lazy="true">
+              <div  id="monthPriceEchart" style="height: 380px;"></div>
+            </el-tab-pane>
           </el-tabs>
         </div>
       </el-col>
@@ -110,7 +117,7 @@
 
 <script>
   import ProcessTitle from './ProcessTitle';
-
+  import echarts from 'echarts'
   export default {
     name: "postStatistics",
     components:{
@@ -118,6 +125,9 @@
     },
     data() {
       return {
+        listQuery: {
+          type: ''
+        },
         likeActiveName: 'likeSum',
         commentActiveName: 'commentSum',
         priceActiveName: 'priceSum',
@@ -146,7 +156,16 @@
         collectionMonthLeftList:[],
         collectionTotalRightList:[],
         collectionWeekRightList:[],
-        collectionMonthRightList:[]
+        collectionMonthRightList:[],
+
+        allPriceList:[],
+        weekPriceList:[],
+        monthPriceList:[],
+
+        xName:['0-10', '10-20', '20-30', '30-40', '40-50', '50-60', '60-70'
+          , '70-80', '80-90', '90-100', '以上'],
+
+        weekData:[15,10,19,30,40],
 
       }
     },
@@ -154,9 +173,24 @@
       this.getLikeData();
       this.getCommentData();
       this.getCollectionData();
+      this.getAllData();
     },
+    mounted(){
 
+    },
     methods: {
+      // getPriceLineData(){
+      //   let _this = this;
+      //   this.api({
+      //     url: "/statistics/priceLineData",
+      //     method: "get",
+      //   }).then(data => {
+      //     _this.allPriceList = data.allList;
+      //     _this.weekPriceList = data.weekList;
+      //     _this.monthPriceList = data.monthList;
+      //     this.getAllData();
+      //   })
+      // },
       getLikeData() {
         this.browseWeekMax = 1;
         this.api({
@@ -236,7 +270,7 @@
         })
       },
 
-      getCollectionData(){
+      getCollectionData() {
         this.collectionWeekMax = 1;
         this.api({
           url: "/statistics/postCollectByWeek",
@@ -253,8 +287,8 @@
               data.push({content: "暂无数据", collectNum: 0, postId: "-1"});
             }
           }
-          this.collectionWeekLeftList = data.slice(0,5);
-          this.collectionWeekRightList = data.slice(5,10);
+          this.collectionWeekLeftList = data.slice(0, 5);
+          this.collectionWeekRightList = data.slice(5, 10);
         })
 
         this.collectionMonthMax = 1;
@@ -273,11 +307,148 @@
               data.push({content: "暂无数据", collectNum: 0, postId: "-1"});
             }
           }
-          this.collectionMonthLeftList = data.slice(0,5);
-          this.collectionMonthRightList = data.slice(5,10);
+          this.collectionMonthLeftList = data.slice(0, 5);
+          this.collectionMonthRightList = data.slice(5, 10);
         })
-      }
+      },
 
+      getAllData(){
+        let _this = this;
+        _this.listQuery.type = '';
+        this.api({
+          url: "/statistics/priceLineData",
+          method: "get",
+          params:_this.listQuery
+        }).then(data => {
+          _this.allPriceList = data.list;
+          this.dataToEchart('allPriceEchart',this.allPriceList);
+        })
+
+      },
+      getWeekData(){
+        let _this = this;
+        _this.listQuery.type = 'week';
+        this.api({
+          url: "/statistics/priceLineData",
+          method: "get",
+          params:_this.listQuery
+        }).then(data => {
+          _this.weekPriceList = data.list;
+          this.dataToEchart('weekPriceEchart',this.weekPriceList);
+        })
+      },
+      getMonthData(){
+        let _this = this;
+        _this.listQuery.type = 'month';
+        this.api({
+          url: "/statistics/priceLineData",
+          method: "get",
+          params:_this.listQuery
+        }).then(data => {
+          _this.monthPriceList = data.list;
+          this.dataToEchart('monthPriceEchart',this.monthPriceList);
+        })
+      },
+      //处理数据变成图像
+      dataToEchart(id,data){
+        let nameList = [];
+        let minList = [];
+        let maxList = [];
+        let min = 0;
+        let max = 0;
+        for (let i = 0 ; i < data.length; i++){
+          nameList.push(data[i].name.substring(data[i].name.indexOf('.')));
+          minList.push(data[i].minNum);
+          maxList.push(data[i].maxNum);
+          min = min < data[i].minNum ? min : data[i].minNum;
+          min = min < data[i].maxNum ? min : data[i].maxNum;
+          max = max > data[i].minNum ? max : data[i].minNum;
+          max = max > data[i].maxNum ? max : data[i].maxNum;
+        }
+        this.getValueEchart(id,nameList,minList,maxList,min,max)
+      },
+      //id,names,values
+      getValueEchart(id,names,minData,maxData,min,max) {
+        let myChart = echarts.init(document.getElementById(id));
+        let option = {
+          show: true,
+          backgroundColor: '#ffffff',
+          grid: {
+            show:true,
+            borderColor: '#ffffff',
+            backgroundColor: '#ffffff',
+            top: '6%',
+            left: '3%',
+            right: '3%',
+            bottom:'8%',
+            containLabel: true
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer:{
+              type:'none'
+            }
+          },
+          xAxis: {
+            type: 'category',
+            data: names,
+            boundaryGap: true,
+            axisLine: {
+              show: true,
+              lineStyle:{width:1, color: "#ccc"}
+            },
+            axisTick:{alignWithLabel:true},
+            axisLabel:{color:'#111',},
+            splitLine:{show:false}
+          },
+          yAxis: {
+            type: 'value',
+            boundaryGap: false,
+            axisLine: {
+              show: false,
+              lineStyle:{color: "#ccc"}
+            },
+            axisTick:{show: false, },
+            splitLine:{
+              lineStyle:{type: 'dashed'}
+            },
+            axisLabel:{show: true, color:'#111'},
+            min:min,
+            max:max
+          },
+          series: [{
+            type: 'line',
+            symbol:'circle',
+            symbolSize: 9,
+            data: minData,
+            itemStyle:{
+              color:'#1890ff',
+              borderWidth:1,
+              borderColor:'#fff',
+            },
+            animation:false,
+            emphasis:{
+              itemStyle:{
+                shadowBlur:4,
+                shadowColor :'rgba(0, 20, 255, 0.9)',
+                opacity:1
+              }
+            }
+          }]
+        }
+        myChart.setOption(option);
+      },
+      clickTab($event){
+        let id = event.target.getAttribute('id');
+        console.log(id);
+        if (id == "tab-priceWeek"){
+          console.log('111')
+          this.getWeekData();
+        }else if (id == "tab-priceMonth"){
+          console.log('2222')
+          this.getMonthData();
+        }
+      }
     }
   }
 </script>

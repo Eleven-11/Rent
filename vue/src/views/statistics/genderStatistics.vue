@@ -68,7 +68,7 @@
         }
       }
     },
-    created(){
+    mounted(){
       this.getTotalData()
       this.getMonthData()
     },
