@@ -34,7 +34,7 @@
         SELECT
             COUNT(0) commentNum,
             POST_ID postId,
-            a.content contnet
+            LEFT(a.content,15) contnet
         FROM t_comment
         LEFT JOIN t_post_base a ON t_comment.POST_ID = a.ID
         WHERE t_comment.IS_DEL =0
@@ -45,7 +45,7 @@
         SELECT
             COUNT(0) commentNum,
             POST_ID postId,
-            a.content contnet
+            LEFT(a.content,15) contnet
         FROM
             t_comment
         LEFT JOIN t_post_base a ON t_comment.POST_ID = a.ID
@@ -61,7 +61,7 @@
         SELECT
             COUNT(0) commentNum,
             POST_ID postId,
-            a.content content
+            LEFT(a.content,15) content
         FROM
             t_comment
         LEFT JOIN t_post_base a ON t_comment.POST_ID = a.ID
@@ -75,7 +75,7 @@
     </select>
     <select id="getPostMinPriceByMonth" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
-            a.CONTENT content,
+            LEFT(a.content,15) content,
             a.MIN_PRICE minPrice
         FROM
             t_post_base a
@@ -88,7 +88,7 @@
     </select>
     <select id="getPostMinPriceByWeek" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
-            a.CONTENT content,
+            LEFT(a.content,15) content,
             a.MIN_PRICE minPrice
         FROM
             t_post_base a
@@ -101,7 +101,7 @@
     </select>
     <select id="getPostMaxPriceByMonth" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
-            a.CONTENT content,
+            LEFT(a.content,15) content,
             a.MAX_PRICE maxPrice
         FROM
             t_post_base a
@@ -114,7 +114,7 @@
     </select>
     <select id="getPostMaxPriceByWeek" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
-            a.CONTENT content,
+            LEFT(a.content,15) content,
             a.MAX_PRICE maxPrice
         FROM
             t_post_base a
@@ -129,7 +129,7 @@
         SELECT
             COUNT(0) collectNum,
             POST_ID postId,
-            a.content content
+            LEFT(a.content,15) content
         FROM t_user_collection
         LEFT JOIN t_post_base a ON t_user_collection.POST_ID = a.ID
         WHERE t_user_collection.IS_DEL = 0
@@ -141,7 +141,7 @@
         SELECT
             COUNT(0) collectNum,
             POST_ID postId,
-            a.content content
+            LEFT(a.content,15) content
         FROM
             t_user_collection
         LEFT JOIN t_post_base a ON t_user_collection.POST_ID = a.ID
@@ -157,7 +157,7 @@
         SELECT
             COUNT(0) collectNum,
             POST_ID postId,
-            a.content content
+            LEFT(a.content,15) content
         FROM
             t_user_collection
         LEFT JOIN t_post_base a ON t_user_collection.POST_ID = a.ID
@@ -174,7 +174,7 @@
         SELECT
             COUNT(0) likeNum,
             TARGET_ID postId,
-            a.content content
+            LEFT(a.content,15) content
         FROM t_user_resonate
         LEFT JOIN t_post_base a ON t_user_resonate.TARGET_ID = a.ID
         WHERE t_user_resonate.IS_DEL =0
@@ -186,7 +186,7 @@
         SELECT
             COUNT(0) likeNum,
             TARGET_ID postId,
-            a.content content
+            LEFT(a.content,15) content
         FROM
             t_user_resonate
         LEFT JOIN t_post_base a ON t_user_resonate.TARGET_ID = a.ID
@@ -202,7 +202,7 @@
         SELECT
             COUNT(0) likeNum,
             TARGET_ID postId,
-            a.content
+            LEFT(a.content,15)
         FROM
             t_user_resonate
         LEFT JOIN t_post_base a ON t_user_resonate.TARGET_ID = a.ID

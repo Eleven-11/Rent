@@ -77,6 +77,7 @@
       ProcessTitle
     },
     created() {
+      this.getAllData();
       this.getWeekData();
       this.getMonthData();
     },
