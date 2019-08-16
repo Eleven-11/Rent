@@ -48,7 +48,7 @@ public class PostLabelServiceImpl implements PostLabelService {
         if (jsonObject.get("contents") != null && !StringUtils.isEmpty(jsonObject.get("contents"))) {
             jsonObject.put("contents", Arrays.asList(jsonObject.get("contents").toString().split(",")));
             postLabelDao.insertPostLabel(jsonObject);
-            return CommonUtil.successJson(jsonObject.get("postLabelId"));
+            return CommonUtil.successJson("添加标签成功");
         }
         return CommonUtil.errorJson(ErrorEnum.E_90003);
     }
