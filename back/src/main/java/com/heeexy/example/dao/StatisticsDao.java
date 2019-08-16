@@ -74,6 +74,13 @@ public interface StatisticsDao {
     List<JSONObject> getPostLikeByMonth(JSONObject jsonObject);
 
     /**
+     * @description 帖子收藏量总统计
+     * @param jsonObject
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    List<JSONObject> getPostCollectAll(JSONObject jsonObject);
+
+    /**
      * @description 帖子收藏量按周统计
      * @param jsonObject
      * @return java.util.List<com.alibaba.fastjson.JSONObject>
@@ -93,6 +100,20 @@ public interface StatisticsDao {
      * @return java.util.List<com.alibaba.fastjson.JSONObject>
      **/
     List<JSONObject> getPostCommentByWeek(JSONObject jsonObject);
+
+    /**
+     * @description 帖子评论总统计
+     * @param jsonObject
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    List<JSONObject> getPostCommentAll(JSONObject jsonObject);
+
+    /**
+     * @description 帖子点赞量总统计
+     * @param jsonObject
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    List<JSONObject> getPostLikeAll(JSONObject jsonObject);
 
     /**
      * @description 帖子点赞量按周统计
@@ -116,6 +137,13 @@ public interface StatisticsDao {
     List<JSONObject> getPostRegionByWeek(JSONObject jsonObject);
 
     /**
+     * @description 帖子地区浏览量按总统计
+     * @param jsonObject
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    List<JSONObject> getPostRegionAll(JSONObject jsonObject);
+
+    /**
      * @description 用户关注数量按月统计
      * @param jsonObject
      * @return java.util.List<com.alibaba.fastjson.JSONObject>
@@ -128,4 +156,12 @@ public interface StatisticsDao {
      * @return java.util.List<com.alibaba.fastjson.JSONObject>
      **/
     List<JSONObject> getUserFollowByWeek(JSONObject jsonObject );
+
+    /**
+     * @description 用户关注数量总统计
+     * @param jsonObject
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    List<JSONObject> getUserFollowAll(JSONObject jsonObject );
+
 }

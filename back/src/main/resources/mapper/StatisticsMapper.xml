@@ -30,6 +30,17 @@
          LEFT JOIN t_wx_user ON DATE_FORMAT(t_wx_user.create_time,'%Y-%m') = t_date.cmonth AND t_wx_user.WX_GENDER =#{gender}
         GROUP BY t_date.cmonth
     </select>
+    <select id="getPostCommentAll" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(0) commentNum,
+            POST_ID postId,
+            a.content contnet
+        FROM t_comment
+        LEFT JOIN t_post_base a ON t_comment.POST_ID = a.ID
+        WHERE t_comment.IS_DEL =0
+        GROUP BY POST_ID
+        ORDER BY commentNum DESC
+    </select>
     <select id="getPostCommentByWeek" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             COUNT(0) commentNum,
@@ -114,6 +125,18 @@
         ORDER BY
             maxPrice
     </select>
+    <select id="getPostCollectAll" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(0) collectNum,
+            POST_ID postId,
+            a.content content
+        FROM t_user_collection
+        LEFT JOIN t_post_base a ON t_user_collection.POST_ID = a.ID
+        WHERE t_user_collection.IS_DEL = 0
+        GROUP BY POST_ID
+        ORDER BY collectNum DESC
+    </select>
+
     <select id="getPostCollectByWeek" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             COUNT(0) collectNum,
@@ -145,6 +168,18 @@
         GROUP BY
             POST_ID
         ORDER BY collectNum DESC
+    </select>
+
+    <select id="getPostLikeAll" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(0) likeNum,
+            TARGET_ID postId,
+            a.content content
+        FROM t_user_resonate
+        LEFT JOIN t_post_base a ON t_user_resonate.TARGET_ID = a.ID
+        WHERE t_user_resonate.IS_DEL =0
+        GROUP BY TARGET_ID
+        ORDER BY likeNum DESC
     </select>
 
     <select id="getPostLikeByWeek" resultType="com.alibaba.fastjson.JSONObject">
@@ -221,6 +256,17 @@
         AND c.IS_DEL = 0
         GROUP BY b.REGION
     </select>
+    <select id="getPostRegionAll" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(c.USER_ID) browse,
+            b.REGION region
+        FROM
+            t_post_region b
+        LEFT JOIN t_post_base a ON a.ADDRESS LIKE CONCAT('%', b.region, '%')
+        LEFT JOIN t_user_browse c ON a.ID = c.POST_ID
+        AND c.IS_DEL = 0
+        GROUP BY b.REGION
+    </select>
     <select id="getUserFollowByMonth" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             COUNT(FAN_ID) fans,
@@ -237,6 +283,17 @@
             FOLLOW_ID
         ORDER BY
             fans DESC
+    </select>
+    <select id="getUserFollowAll" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT
+            COUNT(FAN_ID) fans,
+            FOLLOW_ID follower,
+            a.WX_NICK_NAME name
+        FROM t_user_follow
+        LEFT JOIN t_wx_user a ON t_user_follow.FOLLOW_ID = a.USER_ID
+        WHERE t_user_follow.IS_DEL = 0
+        GROUP BY FOLLOW_ID
+        ORDER BY fans DESC
     </select>
     <select id="getUserFollowByWeek" resultType="com.alibaba.fastjson.JSONObject">
         SELECT

@@ -70,6 +70,11 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    public JSONObject getPostCollectAll(JSONObject jsonObject) {
+        return CommonUtil.successJson(statisticsDao.getPostCollectAll(jsonObject));
+    }
+
+    @Override
     public JSONObject getPostCollectByWeek(JSONObject jsonObject) {
         return CommonUtil.successJson(statisticsDao.getPostCollectByWeek(jsonObject));
     }
@@ -82,6 +87,17 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public JSONObject getPostCommentByWeek(JSONObject jsonObject) {
         return CommonUtil.successJson(statisticsDao.getPostCommentByWeek(jsonObject));
+    }
+
+    @Override
+    public JSONObject getPostCommentAll(JSONObject jsonObject) {
+        return CommonUtil.successJson(statisticsDao.getPostCommentAll(jsonObject));
+    }
+
+
+    @Override
+    public JSONObject getPostLikeAll(JSONObject jsonObject) {
+        return CommonUtil.successJson(statisticsDao.getPostLikeAll(jsonObject));
     }
 
     @Override
@@ -100,6 +116,12 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
+    public JSONObject getPostRegionAll(JSONObject jsonObject) {
+        return CommonUtil.successJson(statisticsDao.getPostRegionAll(jsonObject));
+    }
+
+
+    @Override
     public JSONObject getUserFollowByMonth(JSONObject jsonObject) {
         return CommonUtil.successJson(statisticsDao.getUserFollowByMonth(jsonObject));
     }
@@ -107,6 +129,11 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public JSONObject getUserFollowByWeek(JSONObject jsonObject) {
         return CommonUtil.successJson(statisticsDao.getUserFollowByWeek(jsonObject));
+    }
+
+    @Override
+    public JSONObject getUserFollowAll(JSONObject jsonObject) {
+        return CommonUtil.successJson(statisticsDao.getUserFollowAll(jsonObject));
     }
 
     @Override

@@ -44,6 +44,12 @@ public class StatisticsController {
         //统计用户性别，月性别统计
         return statisticsService.getGenderByMonth(CommonUtil.request2Json(request));
     }
+
+    @GetMapping("/postLikeAll")
+    public JSONObject postLikeAllStatistic(HttpServletRequest request) {
+        //统计周 帖子的点赞排名
+        return statisticsService.getPostLikeAll(CommonUtil.request2Json(request));
+    }
     
     @GetMapping("/postLikeByWeek")
     public JSONObject postLikeByWeekStatistic(HttpServletRequest request) {
@@ -56,17 +62,29 @@ public class StatisticsController {
         //统计月 帖子的点赞排名
         return statisticsService.getPostLikeByMonth(CommonUtil.request2Json(request));
     }
-    
+
     @GetMapping("/postCommentByWeek")
     public JSONObject postCommentByWeekStatistic(HttpServletRequest request) {
         //统计周 帖子的评论排名
         return statisticsService.getPostCommentByWeek(CommonUtil.request2Json(request));
     }
-    
+
+    @GetMapping("/postCommentAll")
+    public JSONObject postCommentAlltatistic(HttpServletRequest request) {
+        //统计周 帖子的评论排名
+        return statisticsService.getPostCommentAll(CommonUtil.request2Json(request));
+    }
+
     @GetMapping("/postCommentByMonth")
     public JSONObject postCommentByMonthStatistic(HttpServletRequest request) {
         //统计月 帖子的评论排名
         return statisticsService.getPostCommentByMonth(CommonUtil.request2Json(request));
+    }
+
+    @GetMapping("/postCollectAll")
+    public JSONObject postCollectAllStatistic(HttpServletRequest request) {
+        //统计周/月 帖子的收藏排名
+        return statisticsService.getPostCollectAll(CommonUtil.request2Json(request));
     }
     
     @GetMapping("/postCollectByWeek")
@@ -98,11 +116,17 @@ public class StatisticsController {
         //统计周最高价位统计折线图（5 - 10 - 15 - 20）
         return statisticsService.getPostMaxPriceByWeek(CommonUtil.request2Json(request));
     }
-    
+
     @GetMapping("/postMaxPriceByMonth")
     public JSONObject postMaxPriceByMonthStatistic(HttpServletRequest request) {
         //统计月最低价位统计折线图（5 - 10 - 15 - 20）
         return statisticsService.getPostMaxPriceByMonth(CommonUtil.request2Json(request));
+    }
+
+    @GetMapping("/userFollowAll")
+    public JSONObject userFollowAllStatistic(HttpServletRequest request) {
+        //统计总 用户的关注排名
+        return statisticsService.getUserFollowAll(CommonUtil.request2Json(request));
     }
     
     @GetMapping("/userFollowByWeek")
@@ -128,6 +152,13 @@ public class StatisticsController {
         // 帖子地区按月查看统计，根据帖子的真实浏览量做排名；可查看其他月的数据，形成年报表
         return statisticsService.getPostRegionByMonth(CommonUtil.request2Json(request));
     }
+
+    @GetMapping("/postRegionAll")
+    public JSONObject getPostRegionAll(HttpServletRequest request) {
+        // 地区帖子总统计，根据帖子的真实浏览量做排名
+        return statisticsService.getPostRegionAll(CommonUtil.request2Json(request));
+    }
+
 
     @GetMapping("/priceLineData")
     public JSONObject getAllPriceLineData(HttpServletRequest request) {

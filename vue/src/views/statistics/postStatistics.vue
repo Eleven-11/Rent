@@ -10,15 +10,15 @@
                    style="background-color: #fff;padding: 0 10px 0;border-radius: 10px;border: 1px solid rgba(215, 215, 215, 1) ;">
             <el-tab-pane name="first" label="浏览量排名" style="min-height: 380px" :disabled="true"></el-tab-pane>
             <el-tab-pane label="总计" name="likeSum" style="min-height: 380px">
-              <ProcessTitle v-for="(item,index) in browseWeekList" :key="index" color="#67C23A" no="2" max="10000" cur="8000" content="用户"></ProcessTitle>
+              <ProcessTitle v-for="(item,index) in likeTotalList" :key="index" color="#67C23A" :no="index+1" :max="likeTotalMax" :cur="item.likeNum" :content="item.content"></ProcessTitle>
             </el-tab-pane>
 
             <el-tab-pane label="周排行" name="week" style="min-height: 380px">
-              <ProcessTitle v-for="(item,index) in browseWeekList" :key="index" color="#ff6666" :no="index+1" :max="browseWeekMax" :cur="item.likeNum" :content="item.content"></ProcessTitle>
+              <ProcessTitle v-for="(item,index) in likeWeekList" :key="index" color="#ff6666" :no="index+1" :max="likeWeekMax" :cur="item.likeNum" :content="item.content"></ProcessTitle>
             </el-tab-pane>
 
             <el-tab-pane label="月排行" name="month" style="min-height: 380px">
-              <ProcessTitle v-for="(item,index) in browseMonthList" :key="index" color="#ff6666" :no="index+1" :max="browseMonthMax" :cur="item.likeNum" :content="item.content"></ProcessTitle>
+              <ProcessTitle v-for="(item,index) in likeMonthList" :key="index" color="#ff6666" :no="index+1" :max="likeMonthMax" :cur="item.likeNum" :content="item.content"></ProcessTitle>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -30,7 +30,7 @@
                    style="background-color: #fff;padding: 0 10px 0;border-radius: 10px;border: 1px solid rgba(215, 215, 215, 1) ;">
             <el-tab-pane name="first" label="评论排行" style="min-height: 380px" :disabled="true"></el-tab-pane>
             <el-tab-pane label="总计" name="commentSum" style="min-height: 380px">
-              <ProcessTitle v-for="(item,index) in commentWeekList" :key="index" color="#ff6666" :no="index+1" :max="commentWeekMax" :cur="item.commentNum" :content="item.content"></ProcessTitle>
+              <ProcessTitle v-for="(item,index) in commentTotalList" :key="index" color="#ff6666" :no="index+1" :max="commentTotalMax" :cur="item.commentNum" :content="item.content"></ProcessTitle>
             </el-tab-pane>
 
             <el-tab-pane label="周排行" name="commentWeek" style="min-height: 380px">
@@ -54,10 +54,10 @@
             <el-tab-pane label="总计" name="collectSum" style="min-height: 380px">
               <div class="sum_panel_container">
                 <div class="sum_panel">
-                  <ProcessTitle v-for="(item,index) in collectionMonthLeftList" :key="index" color="#ff6666" :no="index+1" :max="collectionMonthMax" :cur="item.collectNum" :content="item.content"></ProcessTitle>
+                  <ProcessTitle v-for="(item,index) in collectionTotalLeftList" :key="index" color="#ff6666" :no="index+1" :max="collectionTotalMax" :cur="item.collectNum" :content="item.content"></ProcessTitle>
                 </div>
                 <div class="sum_panel">
-                  <ProcessTitle v-for="(item,index) in collectionMonthRightList" :key="index" color="#ff6666" :no="index+6" :max="collectionMonthMax" :cur="item.collectNum" :content="item.content"></ProcessTitle>
+                  <ProcessTitle v-for="(item,index) in collectionTotalRightList" :key="index" color="#ff6666" :no="index+6" :max="collectionTotalMax" :cur="item.collectNum" :content="item.content"></ProcessTitle>
                 </div>
               </div>
             </el-tab-pane>
@@ -133,12 +133,12 @@
         priceActiveName: 'priceSum',
         collectActiveName: "collectSum",
 
-        browseTotalMax: 1,
-        browseWeekMax: 1,
-        browseMonthMax: 1,
-        browseTotalList:[],
-        browseWeekList:[],
-        browseMonthList:[],
+        likeTotalMax: 1,
+        likeWeekMax: 1,
+        likeMonthMax: 1,
+        likeTotalList:[],
+        likeWeekList:[],
+        likeMonthList:[],
 
         commentTotalMax: 1,
         commentWeekMax: 1,
@@ -179,20 +179,28 @@
 
     },
     methods: {
-      // getPriceLineData(){
-      //   let _this = this;
-      //   this.api({
-      //     url: "/statistics/priceLineData",
-      //     method: "get",
-      //   }).then(data => {
-      //     _this.allPriceList = data.allList;
-      //     _this.weekPriceList = data.weekList;
-      //     _this.monthPriceList = data.monthList;
-      //     this.getAllData();
-      //   })
-      // },
       getLikeData() {
-        this.browseWeekMax = 1;
+
+        this.likeTotalMax = 1;
+        this.api({
+          url: "/statistics/postLikeAll",
+          method: "get",
+        }).then(data => {
+          let size = data.length;
+          size = size > 10 ? 10 : size;
+          if (size > 1) {
+            this.likeTotalMax = data[0].likeNum;
+          }
+          //补足显示
+          if (size < 10) {
+            for (let i = size; i < 10; i++) {
+              data.push({content: "暂无数据", likeNum: 0, postId: "-1"});
+            }
+          }
+          this.likeTotalList = data.slice(0, 10);
+        })
+
+        this.likeWeekMax = 1;
         this.api({
           url: "/statistics/postLikeByWeek",
           method: "get",
@@ -200,7 +208,7 @@
           let size = data.length;
           size = size > 10 ? 10 : size;
           if (size > 1) {
-            this.browseWeekMax = data[0].likeNum;
+            this.likeWeekMax = data[0].likeNum;
           }
           //补足显示
           if (size < 10) {
@@ -208,10 +216,10 @@
               data.push({content: "暂无数据", likeNum: 0, postId: "-1"});
             }
           }
-          this.browseWeekList = data.slice(0, 10);
+          this.likeWeekList = data.slice(0, 10);
         })
 
-        this.browseMonthMax = 1;
+        this.likeMonthMax = 1;
         this.api({
           url: "/statistics/postLikeByMonth",
           method: "get",
@@ -219,7 +227,7 @@
           let size = data.length;
           size = size > 10 ? 10 : size;
           if (size > 1) {
-            this.browseMonthMax = data[0].likeNum;
+            this.likeMonthMax = data[0].likeNum;
           }
           //补足显示
           if (size < 10) {
@@ -227,10 +235,30 @@
               data.push({content: "暂无数据", likeNum: 0, postId: "-1"});
             }
           }
-          this.browseMonthList = data.slice(0, 10);
+          this.likeMonthList = data.slice(0, 10);
         })
       },
       getCommentData(){
+        this.commentTotalMax = 1;
+        this.api({
+          url: "/statistics/postCommentAll",
+          method: "get",
+        }).then(data => {
+          let size = data.length;
+          size = size > 10 ? 10 : size;
+          if (size > 1) {
+            this.commentTotalMax = data[0].commentNum;
+          }
+          //补足显示
+          if (size < 10) {
+            for (let i = size; i < 10; i++) {
+              data.push({content: "暂无数据", commentNum: 0, postId: "-1"});
+            }
+          }
+          this.commentTotalList = data.slice(0, 10);
+        })
+
+
         this.commentWeekMax = 1;
         this.api({
           url: "/statistics/postCommentByWeek",
@@ -271,6 +299,26 @@
       },
 
       getCollectionData() {
+        this.collectionTotalMax = 1;
+        this.api({
+          url: "/statistics/postCollectAll",
+          method: "get",
+        }).then(data => {
+          let size = data.length;
+          size = size > 10 ? 10 : size;
+          if (size > 1) {
+            this.collectionTotalMax = data[0].collectNum;
+          }
+          //补足显示
+          if (size < 10) {
+            for (let i = size; i < 10; i++) {
+              data.push({content: "暂无数据", collectNum: 0, postId: "-1"});
+            }
+          }
+          this.collectionTotalLeftList = data.slice(0, 5);
+          this.collectionTotalRightList = data.slice(5, 10);
+        })
+
         this.collectionWeekMax = 1;
         this.api({
           url: "/statistics/postCollectByWeek",
@@ -357,7 +405,7 @@
         let min = 0;
         let max = 0;
         for (let i = 0 ; i < data.length; i++){
-          nameList.push(data[i].name.substring(data[i].name.indexOf('.')));
+          nameList.push(data[i].name.substring(data[i].name.indexOf('.')+1));
           minList.push(data[i].minNum);
           maxList.push(data[i].maxNum);
           min = min < data[i].minNum ? min : data[i].minNum;
@@ -417,6 +465,7 @@
             max:max
           },
           series: [{
+            name:'最低价格',
             type: 'line',
             symbol:'circle',
             symbolSize: 9,
@@ -431,6 +480,25 @@
               itemStyle:{
                 shadowBlur:4,
                 shadowColor :'rgba(0, 20, 255, 0.9)',
+                opacity:1
+              }
+            }
+          },{
+            name:'最高价格',
+            type: 'line',
+            symbol:'circle',
+            symbolSize: 9,
+            data: maxData,
+            itemStyle:{
+              color:'#ff6666',
+              borderWidth:1,
+              borderColor:'#fff',
+            },
+            animation:false,
+            emphasis:{
+              itemStyle:{
+                shadowBlur:4,
+                shadowColor :'rgba(255, 20, 0, 0.9)',
                 opacity:1
               }
             }

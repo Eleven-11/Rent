@@ -47,9 +47,6 @@
     name: "regionStatistics",
     data(){
       return {
-        // chartTotal:echarts.init(document.getElementById("regionWeekEchart")),
-        // chartWeek:echarts.init(document.getElementById("regionWeekEchart")),
-        // chartMonth:echarts.init(document.getElementById("regionMonthEchart")),
         activeName:'sum',
         tabItem:'tab-sum',
         chartMap:[],
@@ -63,29 +60,26 @@
     },
 
     created(){
-      this.getAllData();
-      // this.getMonthData();
     },
-    // mounted(){
-    //   this.getAllData();
-    //   this.getMonthData();
-    // },
+    mounted(){
+      this.getAllData();
+    },
     methods: {
       getAllData(){
         let _this = this;
-        _this.regionWeekNameList = [];
-        _this.regionWeekValueList = [];
+        _this.regionTotalNameList = [];
+        _this.regionTotalValueList = [];
         this.api({
-          url: "/statistics/postRegionByWeek",
+          url: "/statistics/postRegionAll",
           method: "get",
           params:this.man
         }).then(data => {
           console.log(data);
           for (var i = 0 ; i < data.length; i ++){
-            _this.regionWeekNameList.push(data[i].region);
-            _this.regionWeekValueList.push(data[i].browse);
+            _this.regionTotalNameList.push(data[i].region);
+            _this.regionTotalValueList.push(data[i].browse);
           }
-          _this.getRegionEchart('regionTotalEchart',_this.regionWeekNameList,_this.regionWeekValueList);
+          _this.getRegionEchart('regionTotalEchart',_this.regionTotalNameList,_this.regionTotalValueList);
          })
       },
 
