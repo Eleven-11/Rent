@@ -14,6 +14,9 @@
         SET IS_TOP = 1
         WHERE
         ID = #{postId};
+        UPDATE t_navigation
+        SET MAX_TOP_NUM = (SELECT COUNT(0) FROM t_navigation_top WHERE NAVIGATION_ID =#{navigationId} AND IS_DEL = 0)
+        WHERE ID = #{navigationId};
         COMMIT;
     </insert>
     <!--对置顶帖子进行排序-->

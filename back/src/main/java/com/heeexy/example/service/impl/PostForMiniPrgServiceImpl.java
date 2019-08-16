@@ -57,16 +57,18 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
         System.out.println(topJsonObject);
         //模块置顶帖子列表
         List<JSONObject> topPostBase = new ArrayList<>();
-        for (int i=0;i<topJsonObject.size();i++)
-        {
-            JSONObject navigationTop = postBaseDao.getTopPostBase(topJsonObject.get(i));
-            topPostBase.add(navigationTop);
+        if (!topJsonObject.isEmpty()){
+            for (int i=0;i<topJsonObject.size();i++)
+            {
+                JSONObject navigationTop = postBaseDao.getTopPostBase(topJsonObject.get(i));
+                topPostBase.add(navigationTop);
+            }
         }
         System.out.println(topPostBase);
         for (int i= 0;i<topPostBase.size();i++){
             postBaseList.add(topPostBase.get(i));
         }
-        //除置顶帖子意外以外的全部帖子列表
+        //除置顶帖子以外的全部帖子列表
         List<JSONObject> bottomPost = postBaseDao.getWxPostBaseList(jsonObject);
         for (int i=0;i<bottomPost.size();i++)
         {
