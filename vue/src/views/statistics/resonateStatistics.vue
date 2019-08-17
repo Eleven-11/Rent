@@ -12,11 +12,11 @@
             <el-tab-pane label="总计" name="sum" style="min-height: 380px">
               <div class="sum_panel_container">
                 <div class="sum_panel">
-                  <ProcessTitle v-for="(item,index) in weekLeftList" :key="index" color="#ff6666" :no="index+1" :max="weekMax" :cur="item.fans" :content="item.name">
+                  <ProcessTitle v-for="(item,index) in allLeftList" :key="index" color="#ff6666" :no="index+1" :max="allMax" :cur="item.fans" :content="item.name">
                   </ProcessTitle>
                 </div>
                 <div class="sum_panel">
-                  <ProcessTitle v-for="(item,index) in weekRightList" :key="index" color="#ff6666" :no="index+6" :max="weekMax" :cur="item.fans" :content="item.name">
+                  <ProcessTitle v-for="(item,index) in allRightList" :key="index" color="#ff6666" :no="index+6" :max="allMax" :cur="item.fans" :content="item.name">
                   </ProcessTitle>
                 </div>
               </div>
@@ -62,6 +62,9 @@
     data() {
       return {
         activeName: 'sum',
+        allMax:1,
+        allLeftList:[],
+        allRightList:[],
         weekMax:1,
         weekLeftList:[],
         weekRightList:[],
@@ -74,12 +77,35 @@
       ProcessTitle
     },
     created() {
+      this.getAllData();
       this.getWeekData();
       this.getMonthData();
     },
 
     methods:{
-
+//周数据查询
+      getAllData(){
+        this.allMax = 1;
+        this.api({
+          url: "/statistics/userFollowAll",
+          method: "get",
+          // params:this.man
+        }).then(data => {
+          let size = data.length;
+          size = size > 10 ? 10 : size;
+          if (size > 1){
+            this.allMax = data[0].fans;
+          }
+          //补足显示
+          if (size < 10 ){
+            for (let i = size ; i < 10 ; i ++){
+              data.push({name:"暂无数据",fans:0,follower:"-1"});
+            }
+          }
+          this.allLeftList = data.slice(0,5);
+          this.allRightList = data.slice(5,10);
+        })
+      },
       //周数据查询
       getWeekData(){
         this.weekMax = 1;

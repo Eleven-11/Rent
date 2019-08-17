@@ -61,6 +61,13 @@ public interface StatisticsService {
     JSONObject getPostLikeByMonth(JSONObject jsonObject);
 
     /**
+     * @description 帖子收藏量总统计
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject getPostCollectAll(JSONObject jsonObject);
+
+    /**
      * @description 帖子收藏量按周统计
      * @param jsonObject
      * @return com.alibaba.fastjson.JSONObject
@@ -80,6 +87,20 @@ public interface StatisticsService {
      * @return com.alibaba.fastjson.JSONObject
      **/
     JSONObject getPostCommentByWeek(JSONObject jsonObject);
+
+    /**
+     * @description 帖子评论按总统计
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject getPostCommentAll(JSONObject jsonObject);
+
+    /**
+     * @description 帖子点赞量总统计
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject getPostLikeAll(JSONObject jsonObject);
 
     /**
      * @description 帖子点赞量按周统计
@@ -103,6 +124,13 @@ public interface StatisticsService {
     JSONObject getPostRegionByWeek(JSONObject jsonObject);
 
     /**
+     * @description 帖子地区浏览量按总统计
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject getPostRegionAll(JSONObject jsonObject);
+
+    /**
      * @description 用户关注数量按月统计
      * @param jsonObject
      * @return com.alibaba.fastjson.JSONObject
@@ -110,9 +138,31 @@ public interface StatisticsService {
     JSONObject getUserFollowByMonth(JSONObject jsonObject);
 
     /**
+     * @description 用户关注数量总统计
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    JSONObject getUserFollowAll(JSONObject jsonObject);
+
+    /**
      * @description 用户关注数量按周统计
      * @param jsonObject
      * @return com.alibaba.fastjson.JSONObject
      **/
-    JSONObject getUserFollowByWeek(JSONObject jsonObject );
+    JSONObject getUserFollowByWeek(JSONObject jsonObject);
+
+    /**
+     * 获取价格的所有折线数据
+     * @param jsonObject
+     * @return
+     */
+    JSONObject getAllPriceLineData(JSONObject jsonObject);
+
+    /**
+     * 通过地名获取年度报表
+     * @param jsonObject
+     * @return
+     */
+    JSONObject getAnnualReportByRegion(JSONObject jsonObject);
+
 }

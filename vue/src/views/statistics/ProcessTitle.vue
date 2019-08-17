@@ -19,7 +19,7 @@
     props: ['no', 'content', 'max', 'cur', 'color'],
     methods: {
       format(percentage) {
-        return percentage === 100 ? '满' : `${percentage}%`;
+        return percentage === 100 ? '满' : `${Number(percentage).toFixed(2)}%`;
       }
     }
   }

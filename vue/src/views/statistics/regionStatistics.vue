@@ -33,7 +33,84 @@
       <el-col>
         <div class=" sum-gender">
           <div class="statistics-title">地区浏览量年报表</div>
-          <div style="text-align: center">报表数据内容</div>
+          <div style="text-align: center;padding: 15px 30px 30px 30px;">
+            <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
+                      highlight-current-row style="width: 100%;">
+              <el-table-column align="center" prop="region" label="地区/月份" min-width="90"></el-table-column>
+              <el-table-column align="center" prop="values[0]" label="1月" min-width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.values[0]==0"></span>
+                  <span v-else >{{scope.row.values[0]}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="values[1]" label="2月" min-width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.values[1]==0" ></span>
+                  <span v-else >{{scope.row.values[1]}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="values[2]" label="3月" min-width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.values[2]==0" ></span>
+                  <span v-else >{{scope.row.values[2]}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="values[3]" label="4月" min-width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.values[3]==0" ></span>
+                  <span v-else >{{scope.row.values[3]}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="values[4]" label="5月" min-width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.values[4]==0" ></span>
+                  <span v-else >{{scope.row.values[4]}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="values[5]" label="6月" min-width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.values[5]==0" ></span>
+                  <span v-else >{{scope.row.values[5]}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="values[6]" label="7月" min-width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.values[6]==0" ></span>
+                  <span v-else >{{scope.row.values[6]}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="values[7]" label="8月" min-width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.values[7]==0"></span>
+                  <span v-else>{{scope.row.values[7]}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="values[8]" label="9月" min-width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.values[8]==0" ></span>
+                  <span v-else >{{scope.row.values[8]}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="values[9]" label="10月" min-width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.values[9]==0" ></span>
+                  <span v-else >{{scope.row.values[9]}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="values[10]" label="11月" min-width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.values[10]==0" ></span>
+                  <span v-else >{{scope.row.values[10]}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" prop="values[11]" label="12月" min-width="70">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.values[11]==0" ></span>
+                  <span v-else >{{scope.row.values[11]}}</span>
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
         </div>
       </el-col>
     </el-row>
@@ -47,9 +124,8 @@
     name: "regionStatistics",
     data(){
       return {
-        // chartTotal:echarts.init(document.getElementById("regionWeekEchart")),
-        // chartWeek:echarts.init(document.getElementById("regionWeekEchart")),
-        // chartMonth:echarts.init(document.getElementById("regionMonthEchart")),
+        list:[],
+        listLoading:false,
         activeName:'sum',
         tabItem:'tab-sum',
         chartMap:[],
@@ -63,29 +139,46 @@
     },
 
     created(){
-      this.getAllData();
-      // this.getMonthData();
+
     },
-    // mounted(){
-    //   this.getAllData();
-    //   this.getMonthData();
-    // },
+    mounted(){
+      this.getAllData();
+      this.getAnnualReportByRegion();
+    },
     methods: {
-      getAllData(){
+      getAnnualReportByRegion(){
         let _this = this;
-        _this.regionWeekNameList = [];
-        _this.regionWeekValueList = [];
-        this.api({
-          url: "/statistics/postRegionByWeek",
+        _this.api({
+          url: "/statistics/annualReportByRegion",
           method: "get",
           params:this.man
         }).then(data => {
-          console.log(data);
-          for (var i = 0 ; i < data.length; i ++){
-            _this.regionWeekNameList.push(data[i].region);
-            _this.regionWeekValueList.push(data[i].browse);
+          for (let i = 0 ; i < data.list.length; i++){
+            // console.log(data.list[i]);
+            // console.log(data.list[i].values.browses.split(','));
+            let obj = {
+              region:data.list[i].region,
+              values:data.list[i].values.browses.split(',')
+            }
+            _this.list.push(obj);
           }
-          _this.getRegionEchart('regionTotalEchart',_this.regionWeekNameList,_this.regionWeekValueList);
+          console.log(_this.list)
+        })
+      },
+      getAllData(){
+        let _this = this;
+        _this.regionTotalNameList = [];
+        _this.regionTotalValueList = [];
+        this.api({
+          url: "/statistics/postRegionAll",
+          method: "get",
+          params:this.man
+        }).then(data => {
+          for (var i = 0 ; i < data.length; i ++){
+            _this.regionTotalNameList.push(data[i].region);
+            _this.regionTotalValueList.push(data[i].browse);
+          }
+          _this.getRegionEchart('regionTotalEchart',_this.regionTotalNameList,_this.regionTotalValueList);
          })
       },
 
@@ -98,7 +191,6 @@
           method: "get",
           params:this.man
         }).then(data => {
-          console.log(data);
           for (var i = 0 ; i < data.length; i ++){
             _this.regionWeekNameList.push(data[i].region);
             _this.regionWeekValueList.push(data[i].browse);
@@ -116,7 +208,6 @@
           method: "get",
           params:this.man
         }).then(data => {
-          console.log(data);
           for (var i = 0 ; i < data.length; i ++){
             _this.regionMonthNameList.push(data[i].region);
             _this.regionMonthValueList.push(data[i].browse);
@@ -141,13 +232,13 @@
             show:true,
             borderColor: '#ffffff',
             backgroundColor: '#ffffff',
-            top: '10%',
+            top: '5%',
             left: '2%',
             right: '6%',
+            bottom:'9%',
             containLabel: true
           },
           xAxis: {
-            offset:24,
             type: 'value',
             axisTick:{show: false},
             axisLine: {show: false,},
@@ -157,12 +248,10 @@
           },
           yAxis: {
             type: 'category',
-            boundaryGap: false,
-            axisTick: {interval: 0,},
+            boundaryGap: true,
+            axisTick: {interval: 0,alignWithLabel:true},
             axisLine: {
               show: true,
-              symbol:'Array',
-              symbolSize:[1,44],
               lineStyle:{color: "#ccc"}
             },
             axisLabel:{
