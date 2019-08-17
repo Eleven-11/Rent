@@ -83,14 +83,13 @@ public class PostBaseServiceImpl implements PostBaseService {
                         return CommonUtil.errorJson(ErrorEnum.WX_807);
                     }
                 }
-                System.out.println(jsonObject.get("content"));
                 postBaseDao.insertPostBase(jsonObject);
                 //判断是否有上传图片集合
                 if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
                     jsonObject.put("postImgList", Arrays.asList(jsonObject.get("postImgList").toString().split(",")));
                     postImgDao.insertPostImgList(jsonObject);
                 }
-                return CommonUtil.successJson("发布成功！");
+                return CommonUtil.successJson(jsonObject.get("postId"));
             }
             return CommonUtil.errorJson(ErrorEnum.E_30001);
         }

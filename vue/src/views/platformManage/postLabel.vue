@@ -49,9 +49,9 @@
           </el-table-column>
           <el-table-column align="center" label="管理" width="220">
             <template slot-scope="scope">
-              <el-button type="primary" icon="edit" @click="updatePostType(scope.$index)">修改</el-button>
+              <el-button type="primary" icon="edit" @click="updatePostType()">修改</el-button>
               <el-button type="danger" icon="delete" v-if="scope.row.postLabelId!=postLabelId "
-                         @click="deletePostType(scope.$index)">删除
+                         @click="isDeleteopen(scope.row.postLabelId)">删除
               </el-button>
             </template>
           </el-table-column>
@@ -66,13 +66,17 @@
           layout="total, sizes, prev, pager, next, jumper">
         </el-pagination>
     <el-dialog v-model="newPostLabel" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-          <el-form class="small-space" :model="postType" label-position="left" label-width="80px"
+          <el-form class="small-space" :model="postLabel" label-position="left" label-width="80px"
                    style='width: 300px; margin-left:50px;'>
-            <el-form-item label="类型名称" required v-if="dialogStatus=='create'">
+            <el-form-item label="标签名称" required v-if="dialogStatus=='create'">
               <el-input type="text" v-model="postLabel.labelContent">
               </el-input>
             </el-form-item>
-            <el-form-item label="类型图标" required v-if="dialogStatus=='create'">
+            <el-form-item label="上级标签" required v-if="dialogStatus=='create'">
+              <el-input type="text" v-model="postLabel.parentContent">
+              </el-input>
+            </el-form-item>
+            <el-form-item label="标签图标" required v-if="dialogStatus=='create'">
             <el-upload
               class="avatar-uploader"
               :action="api/file/upload"
@@ -120,13 +124,15 @@
             postLabel: {
               postLabelId: '',
               labelContent: '',
-              labelImg: ''
+              labelImg: '',
+              parentContent:''
 
             },
             newPostLabel:{
+              postLabelId:'',
+              contents:'',
               labelImg:'',
-              postTypeCreateTime:'',
-              labelContent:''
+              parentContent:''
             },
             imageUrl:''
           }
@@ -144,6 +150,7 @@
           ])
         },
         methods: {
+          //获取标签列表
           getPostTypeList() {
             this.listLoading = true;
             this.api({
@@ -157,6 +164,7 @@
                this.totalCount = data.totalCount;
             })
           },
+          //获取菜单
           loadParentMenu(){
             this.listloading = false;
             this.api({
@@ -211,8 +219,8 @@
               console.log(this.MenuParent);
             })
           },
+          //批量导入标签
           submitUpload() {
-              console.log("进入上传方法");
               this.$refs.upload.submit();
           },
           handleRemove(file, fileList) {
@@ -232,36 +240,46 @@
             // alert(this.tempUser.categoriesImg);
           },
           beforeAvatarUpload(file) {
-            const isJPG = file.type === 'image/jpeg';
             const isLt2M = file.size / 1024 / 1024 < 2;
 
-            if (!isJPG) {
-              this.$message.error('上传头像图片只能是 JPG 格式!');
-            }
+
             if (!isLt2M) {
               this.$message.error('上传头像图片大小不能超过 2MB!');
             }
-            return isJPG && isLt2M;
+            return  isLt2M;
           },
           handleSelect(key, keyPath){
             console.log("菜单监听启动");
-            console.log(key,keyPath);
+            this.ParentId.labelParentId=key;
+            console.log(this.ParentId.labelParentId);
+            this.api({
+              url:"/postLabel/getPostLabelList",
+              method:"get",
+              params:this.ParentId
+            }).then(data => {
+              console.log("获取了数据");
+              console.log(data)
+              this.listLoading = false;
+              this.tableData = data.list;
+              this.totalCount = data.totalCount;
+            })
           },
           insertPostType() {
             let newPostLabel = this.newPostLabel;
             newPostLabel.labelImg = this.imageUrl;
             console.log(newPostLabel.labelImg);
-            newPostLabel.labelContent = this.postType.labelContent;
-
-
+            newPostLabel.contents = this.postLabel.labelContent;
+            newPostLabel.parentContent = this.postLabel.parentContent;
             this.listLoading = true;
+            console.log(newPostLabel);
+
             this.api({
-              url: "/postType/insertPostType",
+              url: "/postLabel/insertPostLabel",
               method: "post",
               params: newPostLabel
-            }).then(() => {
-              console.log("插入成功！")
             })
+            this.dialogFormVisible = false;
+
           },
 
           handleSizeChange(val) {
@@ -283,6 +301,7 @@
             //表格序号
             return (this.listQuery.pageNum - 1) * this.listQuery.pageRow + $index + 1
           },
+
           showCreate() {
             //显示新增对话框
             this.postLabel.postLabelId = "";
@@ -299,6 +318,36 @@
             this.postLabel.postLabelId = postLabel.postLabelId
             this.dialogStatus = "update"
             this.dialogFormVisible = true
+          },
+          //确认框
+          isDeleteopen(labelId) {
+            this.$confirm('是否删除该标签?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+              this.deletePostLabel(labelId);
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+          }
+          ,
+          //删除方法
+          deletePostLabel(index){
+            this.postLabel.postLabelId = index
+            console.log(index);
+            this.api({
+              url:"/postLabel/updateDelPostLabel",
+              method:"get",
+              params:this.postLabel
+            })
           }
         }
       }

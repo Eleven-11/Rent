@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +37,9 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
     @Autowired
     private UserCollectionDao userCollectionDao;
 
+    @Autowired
+    private NavigationTopDao navigationTopDao;
+
     /**
      * 获取帖子信息
      * @param jsonObject
@@ -45,7 +49,57 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
     public JSONObject getPostInfo(JSONObject jsonObject) throws WxPageException {
         //处理分页数据
         CommonUtil.WxPageParam(jsonObject);
-        List<JSONObject> postBaseList = postBaseDao.getWxPostBaseList(jsonObject);
+        System.out.println(jsonObject);
+
+        List<JSONObject> postBaseList = new ArrayList<>();
+        //模块置顶帖子id列表
+        List<JSONObject> topJsonObject = navigationTopDao.getWxNavigationTopList(jsonObject);
+        System.out.println(topJsonObject);
+        //模块置顶帖子列表
+        List<JSONObject> topPostBase = new ArrayList<>();
+        if (!topJsonObject.isEmpty()){
+            for (int i=0;i<topJsonObject.size();i++)
+            {
+                JSONObject navigationTop = postBaseDao.getTopPostBase(topJsonObject.get(i));
+                topPostBase.add(navigationTop);
+            }
+        }
+        System.out.println(topPostBase);
+        for (int i= 0;i<topPostBase.size();i++){
+            postBaseList.add(topPostBase.get(i));
+        }
+        //除置顶帖子以外的全部帖子列表
+        List<JSONObject> bottomPost = postBaseDao.getWxPostBaseList(jsonObject);
+        for (int i=0;i<bottomPost.size();i++)
+        {
+            postBaseList.add(bottomPost.get(i));
+        }
+        /*System.out.println(bottomPost);
+        //判断是否为置顶帖子
+        if (!topPostBase.isEmpty()) {
+            for (int i = 0; i < bottomPost.size(); i++) {
+                int a = 0;
+                for (int j = 0; j < topPostBase.size(); j++) {
+                    if (bottomPost.get(i).get("postId") == topPostBase.get(j).get("postId")) {
+                        a=1;
+                        continue;
+                    }
+                }
+                if (a==0){
+                    postBaseList.add(bottomPost.get(i));
+                }
+            }
+        }
+        else{
+            for (int i= 0;i<bottomPost.size();i++){
+                postBaseList.add(bottomPost.get(i));
+            }
+        }*/
+        /*for (int i= 0;i<bottomPost.size();i++){
+            postBaseListCopy.add(bottomPost.get(i));
+        }
+        List<JSONObject> postBaseList = postBaseListCopy.stream().distinct().collect(Collectors.toList());*/
+        System.out.println(postBaseList);
         //循环帖子集合，做相应的数据处理
         for (JSONObject jo : postBaseList){
             //获取帖子评论列表

@@ -55,7 +55,6 @@ public class PostCommentServiceImpl implements PostCommentService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public JSONObject insertComment(JSONObject jsonObject) {
-        System.out.println(jsonObject);
         if (userRestrictDao.getResStatus(jsonObject) == 1) {
             return CommonUtil.errorJson(ErrorEnum.WX_884);
         } else {

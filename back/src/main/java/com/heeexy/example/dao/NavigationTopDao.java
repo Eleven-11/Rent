@@ -18,11 +18,18 @@ public interface NavigationTopDao {
     int insertNavigationTop(JSONObject jsonObject);
 
     /**
-     * @description 查询模块置顶帖子列表
+     * @description 后台：查询模块置顶帖子列表
      * @param
      * @return
      **/
     List<JSONObject> getNavigationTopList(JSONObject jsonObject);
+
+    /**
+     * @description 小程序：查询模块置顶帖子列表
+     * @param
+     * @return
+     **/
+    List<JSONObject> getWxNavigationTopList(JSONObject jsonObject);
 
     /**
      * @description 更新置顶帖子
@@ -30,6 +37,13 @@ public interface NavigationTopDao {
      * @return
      **/
     void updateNavigationTop(JSONObject jsonObject);
+
+    /**
+     * @description 对置顶帖子进行排序
+     * @param jsonObject
+     * @return void
+     **/
+    void sortNavigationTop(JSONObject jsonObject);
 
 
 

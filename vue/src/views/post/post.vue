@@ -65,7 +65,7 @@
       <el-table-column align="center" label="是否删除" prop="isDel" v-if="true"></el-table-column>
       <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220" ></el-table-column>
       <el-table-column align="center" label="上架状态" prop="isLowerShelf" width="220" v-if="false"></el-table-column>
-      <el-table-column align="center" label="禁言状态" prop="ifRes" width="220" v-if="true" ></el-table-column>
+      <el-table-column align="center" label="禁言状态" prop="ifRes" width="220" v-if="false" ></el-table-column>
       <el-table-column align="center" label="管理" width="220">
         <template slot-scope="scope">
           <el-popover
@@ -148,8 +148,8 @@
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="gridData.pageNum"
-      :page-size="gridData.pageRow"
+      :current-page="listQuery.pageNum"
+      :page-size="listQuery.pageRow"
       :total="totalCount"
       :page-sizes="[10, 20, 50, 100]"
       layout="total, sizes, prev, pager, next, jumper">
@@ -187,7 +187,7 @@
         manage:'',
         listQuery: {
           pageNum: 1,//页码
-          pageRow: 50,//每页条数
+          pageRow: 10,//每页条数
           nickname:this.nickname,
           startTime:'',
           endTime:'',
@@ -202,7 +202,7 @@
         gridData: [{
           totalCount: 0,//分页组件--数据总条数
           pageNum: 1,//页码
-          pageRow: 50,//每页条数
+          pageRow: 10,//每页条数
         }],
         checkAll: false,
         navigationTopTitles:[{

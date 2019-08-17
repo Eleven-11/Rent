@@ -63,7 +63,7 @@
           </el-popover>
           <el-popover
             placement="right"
-            width="180"
+            width="220"
             trigger="click">
             <el-table :data="fanData">
               <el-table-column width="80" property="fanNickname" label="昵称"></el-table-column>
