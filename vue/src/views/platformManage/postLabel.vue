@@ -392,7 +392,8 @@
              method:"post",
              params:newPostLabel
            })
-
+            this.dialogFormVisible = false;
+            this.getPostTypeList();
           }
         }
       }
