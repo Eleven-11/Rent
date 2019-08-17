@@ -44,7 +44,7 @@ public class BackNavigationTopController {
     }
 
     /**
-     * @description 获取置顶模块列表
+     * @description 获取置顶模块名称列表
      * @param
      * @return
      **/
@@ -70,5 +70,15 @@ public class BackNavigationTopController {
     @PostMapping("/sortNavigationTop")
     public JSONObject sortNavigationTop(HttpServletRequest request){
         return navigationTopService.sortNavigationTop(CommonUtil.request2Json(request));
+    }
+
+    /**
+     * @description 逻辑删除置顶帖子记录
+     * @param  request navigationId-置顶模块id，置顶帖子主键（navigationTop表主键）-topPostId
+     * @return
+     **/
+    @PostMapping("/updateDelNav")
+    public JSONObject updateDelNavigationTop(HttpServletRequest request){
+        return navigationTopService.updateDelNavigationTop(CommonUtil.request2Json(request));
     }
 }

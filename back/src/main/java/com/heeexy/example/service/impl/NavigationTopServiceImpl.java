@@ -75,7 +75,10 @@ public class NavigationTopServiceImpl implements NavigationTopService {
         for (int i=0;i<topJsonObject.size();i++)
         {
             JSONObject navigationTop = postBaseDao.getTopPostBase(topJsonObject.get(i));
+            navigationTop.put("navigationId",topJsonObject.get(i).get("navigationId"));
             navigationTop.put("navigationTitle",topJsonObject.get(i).get("navigationTitle"));
+            navigationTop.put("topPostId",topJsonObject.get(i).get("topPostId"));
+            navigationTop.put("sortTime",topJsonObject.get(i).get("sortTime"));
             navigationTopList.add(navigationTop);
         }
         return navigationTopList;
@@ -111,5 +114,17 @@ public class NavigationTopServiceImpl implements NavigationTopService {
     public JSONObject sortNavigationTop(JSONObject jsonObject) {
         navigationTopDao.sortNavigationTop(jsonObject);
         return CommonUtil.successJson();
+    }
+
+    /**
+     * @description 删除置顶帖子信息
+     * @param jsonObject
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public JSONObject updateDelNavigationTop(JSONObject jsonObject) {
+        navigationTopDao.updateDelNavigationTop(jsonObject);
+        return CommonUtil.successJson("已删除置顶信息");
     }
 }

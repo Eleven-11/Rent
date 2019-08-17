@@ -33,13 +33,25 @@
         WHERE ID =#{topPostId}
     </update>
 
+
+    <update id="updateDelNavigationTop">
+        BEGIN;
+        UPDATE t_navigation_top
+        SET IS_DEL = 1
+        WHERE ID =#{topPostId};
+        UPDATE t_navigation
+        SET MAX_TOP_NUM = (SELECT COUNT(0) FROM t_navigation_top WHERE NAVIGATION_ID =#{navigationId} AND IS_DEL = 0)
+        WHERE ID = #{navigationId};
+        COMMIT;
+    </update>
+
     <select id="getNavigationTopList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
             a.NAVIGATION_ID navigationId,
             b.Title         navigationTitle,
             a.POST_ID       postId,
             a.ID            topPostId,
-            a.CREATE_TIME   createTime
+            a.SORT_TIME     sortTime
         FROM
             t_navigation_top a,t_navigation b
         WHERE

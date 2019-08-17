@@ -45,6 +45,13 @@ public interface NavigationTopDao {
      **/
     void sortNavigationTop(JSONObject jsonObject);
 
+    /**
+     * @description 删除置顶帖子
+     * @param jsonObject
+     * @return void
+     **/
+    void updateDelNavigationTop(JSONObject jsonObject);
+
 
 
 }

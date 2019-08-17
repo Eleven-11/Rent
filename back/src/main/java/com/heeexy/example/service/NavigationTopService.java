@@ -37,4 +37,11 @@ public interface NavigationTopService {
      * @return
      **/
     JSONObject sortNavigationTop(JSONObject jsonObject);
+
+    /**
+     * @description 删除置顶帖子
+     * @param jsonObject
+     * @return void
+     **/
+    JSONObject updateDelNavigationTop(JSONObject jsonObject);
 }

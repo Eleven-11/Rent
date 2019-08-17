@@ -1,5 +1,20 @@
 <template>
   <div class="app-container">
+    <div class="filter-container">
+      <el-form>
+        <el-form-item>
+      请选择模块：
+      <el-select v-model="selector" style="width: 400px;" filterable placeholder="请选择模块" @change="selectTemp($event)">
+        <el-option
+          v-for="item in options"
+          :key="item.navigationId"
+          :label="item.navigationTitle"
+          :value="item.navigationId">
+        </el-option>
+      </el-select>
+        </el-form-item>
+      </el-form>
+    </div>
   <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
             highlight-current-row>
     <el-table-column align="center" label="序号" width="60">
@@ -25,22 +40,17 @@
     <el-table-column align="center" label="点赞数量" prop="likes" ></el-table-column>
     <el-table-column align="center" label="中介费" prop="fee" ></el-table-column>
     <el-table-column align="center" label="发帖人id" prop="userId" v-if="false"></el-table-column>
+    <el-table-column align="center" label="置顶模块id" prop="navigationId" v-if="true"></el-table-column>
     <el-table-column align="center" label="置顶模块" prop="navigationTitle"></el-table-column>
-    <!--<el-table-column align="center" label="是否删除" prop="isDel" v-if="true"></el-table-column>-->
+    <el-table-column align="center" label="主键" prop="topPostId" v-if="true"></el-table-column>
     <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220" ></el-table-column>
-    <!--<el-table-column align="center" label="上架状态" prop="isLowerShelf" width="220" v-if="false"></el-table-column>-->
-    <!--<el-table-column align="center" label="禁言状态" prop="ifRes" width="220" v-if="true" ></el-table-column>-->
-    <!--<el-table-column fixed="right" align="center" width="400" label="管理" v-if="true">
+    <el-table-column  align="center" width="400" label="管理" v-if="true">
       <template slot-scope="scope">
-        <el-tooltip content="编辑" placement="bottom">
-          <el-button type="warning" icon="el-icon-edit" @click="showUpdate(scope.$index)"></el-button>
-        </el-tooltip>
-
         <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
-        <el-button type="primary" icon="up" @click="sortAdvImg(scope.$index-1,scope.$index)" v-if="(scope.$index)!=0">↑</el-button>
-        <el-button type="primary" icon="down" @click="sortAdvImg(scope.$index,scope.$index+1)" v-if="(scope.$index)!=list.length-1">↓</el-button>
+        <el-button type="primary" icon="up" @click="sortNavigationTop(scope.$index-1,scope.$index)" v-if="(scope.$index)!=0">↑</el-button>
+        <el-button type="primary" icon="down" @click="sortNavigationTop(scope.$index,scope.$index+1)" v-if="(scope.$index)!=list.length-1">↓</el-button>
       </template>
-    </el-table-column>-->
+    </el-table-column>
   </el-table>
 
 <!--  <el-pagination
@@ -95,34 +105,39 @@
           update: '编辑',
           create: '新建'
         },
+        navigationTop:{
+          topPostId:'',//navigationTop表主键
+          navigationId:''//模块id
+        },
         listQuery: {
           pageNum: 1,//页码
           pageRow: 50,//每页条数
         },
-        advBanner: {
-          advId: '',
-          advTitle: '',
-          advImg: ''
-        },
-        newAdvBanner: {
-          advId: '',
-          advTitle: '',
-          advImg: ''
-        },
         dialogFormVisible: false,
         dialogStatus: 'create',
+        selector:'',
+        options:[{
+          navigationId:'',
+          navigationTitle:''
+        }],
 
       }
     },
     created() {
       this.getNavigationTopList();
+      this.getNavigationTitle();
     },
     computed: {
       ...mapGetters([
-        'advId'
+        'navigationId'
       ])
     },
     methods: {
+      selectTemp($event){
+        console.log($event)
+        this.listQuery.navigationId = $event
+        this.getNavigationTopList()
+      },
       getNavigationTopList() {
         this.listLoading = true;
         this.api({
@@ -141,44 +156,28 @@
           this.listQuery.title = "";
         })
       },
+      getNavigationTitle() {
+        this.api({
+          url: "/navigationTop/getNavigationTitle",
+          method: "get"
+        }).then(data => {
+          console.log("1231555")
+          console.log(data)
+          this.options = data.info;
+          console.log(this.options)
+        })
+      },
       getIndex($index) {
         //表格序号
         return (this.listQuery.pageNum - 1) * this.listQuery.pageRow + $index + 1
-      },
-      beforeUpload(file) {
-        const isJPG = file.type === 'image/jpeg';
-        const isLt2M = file.size / 1024 / 1024 < 2;
-
-        if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!');
-        }
-        if (!isLt2M) {
-          this.$message.error('上传头像图片大小不能超过 2MB!');
-        }
-        return isJPG && isLt2M;
-      },
-      handleAvatarSuccess(res, file) {
-        this.advImg = URL.createObjectURL(file.raw);
-        this.newAdvBanner.advImg = res;
-        console.log(res);
-        //this.imageUrl = URL.createObjectURL(file.raw);
-        //console.log(this.imageUrl)
-        // this.tempUser.categoriesImg = this.imageUrl;
-        // alert(this.tempUser.categoriesImg);
-      },
-      showCreate() {
-        //显示新增对话框
-        this.newAdvBanner.advTitle = "";
-        this.newAdvBanner.advImg = "";
-        this.dialogStatus = "create";
-        this.dialogFormVisible = true;
       },
       /**
        * 删除条目
        */
       showDelete($index) {
-        let advBanner = this.list[$index];
-        this.advBanner.advId = advBanner.advId;
+        let navigationTop = this.list[$index];
+        this.navigationTop.topPostId = navigationTop.topPostId;
+        this.navigationTop.navigationId = navigationTop.navigationId;
 
         this.$confirm('此操作将永久删除该文件,如需回复需联系管理员, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -187,15 +186,15 @@
         }).then(() => {
 
           this.api({
-            url: "/advBanner/updateDelAdvImg",
+            url: "/navigationTop/updateDelNav",
             method: "post",
-            params: this.advBanner
+            params: this.navigationTop
           }).then(data => {
             this.$message({
               type: 'success',
               message: '删除成功!'
             });
-            this.getAdvImgList();
+            this.getNavigationTopList();
           })
 
         }).catch(() => {
@@ -225,21 +224,21 @@
           console.log("修改成功")
         })
       },
-      /*广告栏图片排序*/
-      sortAdvImg($formerIndex, $laterIndex) {
-        let formerAdv = this.list[$formerIndex];
-        let laterAdv = this.list[$laterIndex];
+      /*置顶帖子排序*/
+      sortNavigationTop($formerIndex, $laterIndex) {
+        let formerNav = this.list[$formerIndex];
+        let laterNav = this.list[$laterIndex];
         this.api({
-          url: "/advBanner/sortAdvImg",
+          url: "/navigationTop/sortNavigationTop",
           method: "post",
           params: {
-            formerAdvId: formerAdv.advId,
-            laterAdvId:laterAdv.advId,
-            formerSortTime: this.formatter(formerAdv.sortTime, 'yyyy-MM-dd hh:mm:ss'),
-            laterSortTime: this.formatter(laterAdv.sortTime, 'yyyy-MM-dd hh:mm:ss')
+            formerNavId: formerNav.topPostId,
+            laterNavId:laterNav.topPostId,
+            formerSortTime: this.formatter(formerNav.sortTime, 'yyyy-MM-dd hh:mm:ss'),
+            laterSortTime: this.formatter(laterNav.sortTime, 'yyyy-MM-dd hh:mm:ss')
           }
         }).then(() => {
-          this.getAdvImgList()
+          this.getNavigationTopList()
         })
       },
       formatter(thistime, fmt) {
