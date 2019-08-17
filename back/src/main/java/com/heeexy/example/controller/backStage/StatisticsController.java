@@ -166,5 +166,11 @@ public class StatisticsController {
         return statisticsService.getAllPriceLineData(CommonUtil.request2Json(request));
     }
 
+    @GetMapping("/annualReportByRegion")
+    public JSONObject getAnnualReportByRegion(HttpServletRequest request) {
+        // 地区年报表，效率极低，谨慎使用
+        return statisticsService.getAnnualReportByRegion(CommonUtil.request2Json(request));
+    }
+
 
 }

@@ -138,15 +138,17 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public JSONObject getAllPriceLineData(JSONObject jsonObject) {
-//        List<JSONObject> allList = statisticsDao.getPriceLineData(jsonObject);
-//        jsonObject.put("type","week");
-//        List<JSONObject> weekList = statisticsDao.getPriceLineData(jsonObject);
-//        jsonObject.put("type","month");
-//        List<JSONObject> monthList = statisticsDao.getPriceLineData(jsonObject);
-//        jsonObject.put("allList",allList);
-//        jsonObject.put("weekList",weekList);
-//        jsonObject.put("monthList",monthList);
         List<JSONObject> list = statisticsDao.getPriceLineData(jsonObject);
         return CommonUtil.successPage(list);
     }
+
+    @Override
+    public JSONObject getAnnualReportByRegion(JSONObject jsonObject) {
+        List<JSONObject> list = statisticsDao.getPostRegionList(jsonObject);
+        for (JSONObject jo : list){
+            jo.put("values",statisticsDao.getAnnualReportByRegion(jo));
+        }
+        return CommonUtil.successPage(list);
+    }
+
 }

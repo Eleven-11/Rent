@@ -7,6 +7,22 @@ import java.util.List;
 public interface StatisticsDao {
 
     /**
+     * 获取帖子地区列表
+     * @param jsonObject
+     * @return
+     */
+    List<JSONObject> getPostRegionList(JSONObject jsonObject);
+
+    /**
+     * 根据地区名称获取年度报告
+     * 注意该查询使用 like 查询 - 并且没有使用索引，效率极低
+     * @param jsonObject
+     *        region 地区名称 必传
+     * @return
+     */
+    JSONObject getAnnualReportByRegion(JSONObject jsonObject);
+
+    /**
      * 最低价格计算折线图
      * @param jsonObject
      * type null = all

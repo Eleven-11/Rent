@@ -158,4 +158,11 @@ public interface StatisticsService {
      */
     JSONObject getAllPriceLineData(JSONObject jsonObject);
 
+    /**
+     * 通过地名获取年度报表
+     * @param jsonObject
+     * @return
+     */
+    JSONObject getAnnualReportByRegion(JSONObject jsonObject);
+
 }
