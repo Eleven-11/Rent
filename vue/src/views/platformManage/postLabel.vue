@@ -49,7 +49,7 @@
           </el-table-column>
           <el-table-column align="center" label="管理" width="220">
             <template slot-scope="scope">
-              <el-button type="primary" icon="edit" @click="updatePostType()">修改</el-button>
+              <el-button type="primary" icon="edit" @click="openUpdate(scope.row)">修改</el-button>
               <el-button type="danger" icon="delete" v-if="scope.row.postLabelId!=postLabelId "
                          @click="isDeleteopen(scope.row.postLabelId)">删除
               </el-button>
@@ -73,25 +73,49 @@
               </el-input>
             </el-form-item>
             <el-form-item label="上级标签" required v-if="dialogStatus=='create'">
-              <el-input type="text" v-model="postLabel.parentContent">
+              <el-input type="text" v-model="postLabel.parentContent" @blur="labelIsExit()">
               </el-input>
             </el-form-item>
             <el-form-item label="标签图标" required v-if="dialogStatus=='create'">
-            <el-upload
-              class="avatar-uploader"
-              :action="api/file/upload"
-              :show-file-list="false"
-              :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload">
-              <img v-if="imageUrl" :src="imageUrl" class="avatar">
-              <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-            </el-upload>
+              <el-upload
+                class="avatar-uploader"
+                action="api/file/upload"
+                :show-file-list="true"
+                :before-upload="beforeUpload"
+                :on-success="handleAvatarSuccess">
+                <img :src="labelImg" class="avatar">
+                <i  class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+            </el-form-item>
+            <el-form-item label="标签名称" required v-if="dialogStatus=='update'">
+              <el-input type="text" v-model="postLabel.labelContent" >{{postLabel.labelContent}}
+              </el-input>
+            </el-form-item>
+            <el-form-item label="APP显示" required v-if="dialogStatus=='update'">
+              <template>
+                <el-radio-group v-model="postLabel.labelShow">
+                  <el-radio :label="1">是(上部显示)</el-radio>
+                  <el-radio :label="2">是(下部显示)</el-radio>
+                  <el-radio :label="0">否</el-radio>
+                </el-radio-group>
+              </template>
+            </el-form-item>
+            <el-form-item label="标签图标" required v-if="dialogStatus=='update'">
+              <el-upload
+                class="avatar-uploader"
+                action="api/file/upload"
+                :show-file-list="true"
+                :before-upload="beforeUpload"
+                :on-success="handleImgSuccess">
+                <img :src="postLabel.labelImg" class="avatar">
+                <i  class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="dialogFormVisible = false">取 消</el-button>
             <el-button v-if="dialogStatus=='create'" type="success" @click="insertPostType">创 建</el-button>
-            <el-button type="primary" v-else @click="updateUser">修 改</el-button>
+            <el-button type="primary" v-else @click="updateLabel">修 改</el-button>
           </div>
         </el-dialog>
       </div>
@@ -125,10 +149,12 @@
               postLabelId: '',
               labelContent: '',
               labelImg: '',
-              parentContent:''
+              parentContent:'',
+              labelShow:''
 
             },
             newPostLabel:{
+              FIX_SHOW:'1',
               postLabelId:'',
               contents:'',
               labelImg:'',
@@ -230,24 +256,7 @@
             console.log("上传前数据处理")
             console.log(file);
           },
-          handleAvatarSuccess(res, file) {
-            this.imageUrl = URL.createObjectURL(file.raw);
-            this.dialogFormVisible.imageUrl = this.imageUrl;
-            console.log(this.dialogFormVisible.imageUrl);
-            //this.imageUrl = URL.createObjectURL(file.raw);
-            //console.log(this.imageUrl)
-            // this.tempUser.categoriesImg = this.imageUrl;
-            // alert(this.tempUser.categoriesImg);
-          },
-          beforeAvatarUpload(file) {
-            const isLt2M = file.size / 1024 / 1024 < 2;
 
-
-            if (!isLt2M) {
-              this.$message.error('上传头像图片大小不能超过 2MB!');
-            }
-            return  isLt2M;
-          },
           handleSelect(key, keyPath){
             console.log("菜单监听启动");
             this.ParentId.labelParentId=key;
@@ -266,7 +275,7 @@
           },
           insertPostType() {
             let newPostLabel = this.newPostLabel;
-            newPostLabel.labelImg = this.imageUrl;
+            // newPostLabel.labelImg = this.imageUrl;
             console.log(newPostLabel.labelImg);
             newPostLabel.contents = this.postLabel.labelContent;
             newPostLabel.parentContent = this.postLabel.parentContent;
@@ -279,8 +288,10 @@
               params: newPostLabel
             })
             this.dialogFormVisible = false;
+            this.getPostTypeList();
 
           },
+
 
           handleSizeChange(val) {
             //改变每页数量
@@ -310,12 +321,29 @@
             this.dialogStatus = "create"
             this.dialogFormVisible = true
           },
+          beforeUpload(file) {
+            const isPNG = file.type === 'image/png';
+            const isLt2M = file.size / 1024 / 1024 < 2;
 
-          showUpdate($index) {
-            let postLabel = this.list[$index];
-            this.postLabel.labelContent = postLabel.labelContent;
-            this.postLabel.labelImg = postLabel.labelImg;
-            this.postLabel.postLabelId = postLabel.postLabelId
+            if (!isPNG) {
+              this.$message.error('上传标签图片只能是 PNG 格式!');
+            }
+            if (!isLt2M) {
+              this.$message.error('上传标签图片大小不能超过 2MB!');
+            }
+            return isPNG && isLt2M;
+          },
+          handleAvatarSuccess(res, file) {
+            this.labelImg = URL.createObjectURL(file.raw);
+            this.newPostLabel.labelImg = res;
+          }
+          ,
+
+          openUpdate(row) {
+            // console.log("这里打印row")
+             console.log(row)
+              let postLabel = row;
+             this.postLabel = postLabel;
             this.dialogStatus = "update"
             this.dialogFormVisible = true
           },
@@ -337,6 +365,10 @@
                 message: '已取消删除'
               });
             });
+          },
+          //判断父标签是否存在
+          labelIsExit(){
+            console.log(this.postLabel.parentContent);
           }
           ,
           //删除方法
@@ -348,6 +380,19 @@
               method:"get",
               params:this.postLabel
             })
+          },
+          handleImgSuccess(res, file){
+            this.postLabel.labelImg = URL.createObjectURL(file.raw);
+            this.postLabel.labelImg = res;
+          },
+          updateLabel(){
+           let newPostLabel  = this.postLabel;
+           this.api({
+             url:"/postLabel/updatePostLabel",
+             method:"post",
+             params:newPostLabel
+           })
+
           }
         }
       }

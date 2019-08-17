@@ -42,6 +42,7 @@ public class FileUploadController {
     @RequestMapping(value = "/upload")
     @ResponseBody
     public String imgUpload(String type, MultipartHttpServletRequest multiReq) throws IOException {
+        System.out.println(type);
         MultipartFile file = multiReq.getFile("file");
         String originalFileName = file.getOriginalFilename();
         if("chat".equals(type)) {

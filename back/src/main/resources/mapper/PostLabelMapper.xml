@@ -62,13 +62,15 @@
                     WHERE
                         t_post_label.CONTENT = #{parentContent}
                 ) m),
-                #{item},#{TYPE_IMG_URL},#{FIX_SHOW}
+                #{item},#{labelImg},#{FIX_SHOW}
         )
         </foreach>
     </insert>
     <update id="updatePostLabel">
         UPDATE t_post_label a
-        SET a.CONTENT = #{content}
+        SET a.CONTENT = #{labelContent},
+            a.FIX_SHOW = #{labelShow},
+            a.TYPE_IMG_URL = #{labelImg}
         WHERE a.ID = #{postLabelId}
     </update>
     <update id="updateDelPostLabel">

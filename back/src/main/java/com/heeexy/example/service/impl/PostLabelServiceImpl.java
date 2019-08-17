@@ -60,8 +60,6 @@ public class PostLabelServiceImpl implements PostLabelService {
      */
     @Override
     public JSONObject updatePostLabel(JSONObject jsonObject) {
-        //CommonUtil.fillPageParam(jsonObject);
-        //System.out.println(jsonObject.toJSONString());
         postLabelDao.updatePostLabel(jsonObject);
         return CommonUtil.successJson("操作成功！请刷新后查看");
     }
