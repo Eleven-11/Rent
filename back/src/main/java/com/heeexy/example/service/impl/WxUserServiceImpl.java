@@ -2,11 +2,17 @@ package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.common.Const;
+import com.heeexy.example.config.shiro.token.LoginType;
+import com.heeexy.example.config.shiro.token.ShiroConfigToken;
 import com.heeexy.example.config.websocket.WebSocketServer;
 import com.heeexy.example.dao.WxUserDao;
 import com.heeexy.example.service.WxUserService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.UUIDUtils;
+import com.heeexy.example.util.constants.Constants;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

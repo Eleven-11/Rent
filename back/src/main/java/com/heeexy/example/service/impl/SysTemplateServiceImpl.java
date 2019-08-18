@@ -79,8 +79,7 @@ public class SysTemplateServiceImpl implements SysTemplateService {
                 sysTemplateDao.updateSysTemplate(jsonObject);
                 return CommonUtil.successJson();
             }
-        }
-        else {
+        } else {
             sysTemplateDao.updateSysTemplate(jsonObject);
             return CommonUtil.successJson();
         }

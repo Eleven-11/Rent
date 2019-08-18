@@ -49,7 +49,7 @@
       <el-table-column align="center" prop="content" label="内容"  min-width="300"></el-table-column>
       <el-table-column align="center" prop="createTime" label="发送时间" width="200" ></el-table-column>
 
-      <el-table-column fixed="right" align="center" width="100" label="管理" v-if="hasPerm('article:update')">
+      <el-table-column fixed="right" align="center" width="100" label="管理">
         <template slot-scope="scope">
           <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
         </template>

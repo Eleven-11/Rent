@@ -3,6 +3,7 @@ package com.heeexy.example.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserResonateService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,7 @@ public class WxUserResonateController {
      * @param request 条数（可选）-limit，帖子Id-postId
      * @return 帖子点赞列表：点赞人头像likeImg和昵称likeNickname
      **/
+    @RequiresPermissions("wx:like:userList")
     @GetMapping("/getPostLikeList")
     public JSONObject getPostLikeList(HttpServletRequest request){
         return userResonateService.getPostLikeList(CommonUtil.request2Json(request));
@@ -49,6 +51,7 @@ public class WxUserResonateController {
      * @param request 系统用户id-userId
      * @return
      **/
+    @RequiresPermissions("wx:like:postList")
     @GetMapping("/getUserLikeList")
     public JSONObject getUserLikePostList(HttpServletRequest request){
         return userResonateService.getUserLikePostList(CommonUtil.request2Json(request));

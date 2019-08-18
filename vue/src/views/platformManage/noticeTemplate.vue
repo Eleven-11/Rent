@@ -41,7 +41,7 @@
       </el-table-column>
       
 
-      <el-table-column fixed="right" align="center" width="250" label="管理" v-if="hasPerm('article:update')">
+      <el-table-column fixed="right" align="center" width="250" label="管理">
         <template slot-scope="scope">
           <el-tooltip v-if="scope.row.isGuide===1" content="取消引导语" placement="bottom">
             <el-button type="info" icon="el-icon-info" @click="cancelGuide(scope.$index)"></el-button>

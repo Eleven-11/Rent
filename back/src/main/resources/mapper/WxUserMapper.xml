@@ -137,7 +137,7 @@
 
     <!-- 校验用户是否存在 -->
     <select id="queryUser" resultType="com.alibaba.fastjson.JSONObject">
-        SELECT ID
+        SELECT u.*
         FROM t_wx_user u
         WHERE u.USER_ID = #{userId}
     </select>
