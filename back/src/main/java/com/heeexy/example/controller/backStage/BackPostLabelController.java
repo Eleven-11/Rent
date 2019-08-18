@@ -3,6 +3,7 @@ package com.heeexy.example.controller.backStage;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostLabelService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ public class BackPostLabelController {
      *         如编辑地铁1号线站点信息,parentContent为地铁一号线,contents为具体站点名称)
      *@return com.alibaba.fastjson.JSONObject
      */
+    @RequiresPermissions("postLabel:add:list")
     @PostMapping("/insertPostLabel")
     public JSONObject insertPostLabel(HttpServletRequest request) {
         JSONObject jsonObject =CommonUtil.request2Json(request);
@@ -41,6 +43,7 @@ public class BackPostLabelController {
      * @param request （父类标签id-labelParentId）
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("postLabel:list")
     @GetMapping("/getPostLabelList")
     public JSONObject getPostLabel(HttpServletRequest request){
         return postLabelService.getPostLabelList(CommonUtil.request2Json(request));
@@ -51,6 +54,7 @@ public class BackPostLabelController {
      *@param request(标签id --postLabelId 标签内容 -- content)
      *@return com.alibaba.fastjson.JSONObject
      */
+    @RequiresPermissions("postLabel:update")
     @PostMapping("/updatePostLabel")
     public JSONObject updatePostLabel(HttpServletRequest request) {
         return postLabelService.updatePostLabel(CommonUtil.request2Json(request));
@@ -61,6 +65,7 @@ public class BackPostLabelController {
      *@param request(标签id --postLabelId)
      *@return com.alibaba.fastjson.JSONObject
      */
+    @RequiresPermissions("postLabel:del")
     @GetMapping("/updateDelPostLabel")
     public JSONObject updateDelPostLabel(HttpServletRequest request) {
         return postLabelService.updateDelPostLabel(CommonUtil.request2Json(request));

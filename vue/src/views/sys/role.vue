@@ -64,7 +64,7 @@
                          style="width:80px;"
                          @click="checkAll(_index)">{{menu.menuName}}</el-button>
             </span>
-            <div style="display: inline-block;margin-left:20px;">
+            <div style="display: inline-block;margin-left:20px;width:800px;">
               <el-checkbox-group v-model="tempRole.permissions">
                 <el-checkbox v-for="perm in menu.permissions" :label="perm.id" @change="checkRequired(perm,_index)"
                              :key="perm.id">

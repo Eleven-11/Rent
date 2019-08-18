@@ -61,7 +61,7 @@ export const asyncRouterMap = [
     children: [
       {
         path: 'wxUser',
-        name: '小程序管理',
+        name: '微信用户',
         component: _import('wxUser/wxUser'),
         meta: {title: '小程序管理', icon: 'wxUserManage'},
         menu: 'wxUser'
@@ -87,7 +87,7 @@ export const asyncRouterMap = [
     children: [
       {
         path: 'banner',
-        name: '首页滚动栏',
+        name: '滚动栏',
         component: _import('platformManage/banner'),
         meta: {title: '首页滚动栏', icon: 'banner'},
         menu: 'banner'
@@ -119,9 +119,9 @@ export const asyncRouterMap = [
    * 帖子管理
    */
   {
-    path: '/post',
+    path: '/postManage',
     component: Layout,
-    redirect: '/post/top',
+    redirect: '/postManage/top',
     name: '帖子管理',
     meta: {title: '帖子管理', icon: 'post'},
     children: [

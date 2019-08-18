@@ -3,6 +3,7 @@ package com.heeexy.example.controller.backStage;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserCollectionService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +32,7 @@ public class BackUserCollectionController {
      *@param request (用户id--wxUserId)
      *@return 用户收藏帖子列表（包括发帖人poster、帖子内容content、帖子图片image、收藏时间collTime）
      */
+    @RequiresPermissions("wxUser:collection")
     @GetMapping("/getUserCollList")
     public JSONObject getUserCollList(HttpServletRequest request) {
         return userCollectionService.getUserCollList(CommonUtil.request2Json(request));
@@ -42,6 +44,7 @@ public class BackUserCollectionController {
      *              下面一条帖子的id--laterPostId，对应的排序时间laterSortTime
      *@return com.alibaba.fastjson.JSONObject
      */
+    @RequiresPermissions("wxUser:collection")
     @PostMapping("/sortUserColl")
     public JSONObject updateUserColl(HttpServletRequest request) {
         JSONObject jsonObject = CommonUtil.request2Json(request);

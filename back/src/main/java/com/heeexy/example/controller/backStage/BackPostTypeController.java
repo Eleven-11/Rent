@@ -3,6 +3,7 @@ package com.heeexy.example.controller.backStage;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostTypeService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ public class BackPostTypeController {
      *@param request
      *@return com.alibaba.fastjson.JSONObject
      */
+    @RequiresPermissions("postType:list")
     @GetMapping("/getPostTypelist")
     public JSONObject getPostTypeList(HttpServletRequest request) {
         return postTypeService.getBackPostTypeList(CommonUtil.request2Json(request));
@@ -41,6 +43,7 @@ public class BackPostTypeController {
      *                 末行图片排序时间 - laterSortTime
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("postType:sort")
     @PostMapping("/sortPostType")
     public JSONObject sortPostType(HttpServletRequest request){
         return postTypeService.sortPostType(CommonUtil.request2Json(request));
@@ -51,6 +54,7 @@ public class BackPostTypeController {
      *@param request(帖子类型名称 -- postTypeName,帖子类型图标链接 -- postTypeImg
      *@return com.alibaba.fastjson.JSONObject
      */
+    @RequiresPermissions("postType:add")
     @PostMapping("/insertPostType")
     public JSONObject insertPostType(HttpServletRequest request) {
         return postTypeService.insertPostType(CommonUtil.request2Json(request));
@@ -61,6 +65,7 @@ public class BackPostTypeController {
      *@param request(帖子类型id--postTypeId,帖子类型名称postTypeName,帖子类型图标postTypeImg
      *@return com.alibaba.fastjson.JSONObject
      */
+    @RequiresPermissions("postType:update")
     @PostMapping("/updatePostType")
     public JSONObject updatePostTypeById(HttpServletRequest request) {
         return postTypeService.updatePostTypeById(CommonUtil.request2Json(request));
@@ -71,6 +76,7 @@ public class BackPostTypeController {
      *@param request(帖子类型id--postTypeId)
      *@return com.alibaba.fastjson.JSONObject
      */
+    @RequiresPermissions("postType:del")
     @PostMapping("/updateDelPostType")
     public JSONObject updateDelPostTypeById(HttpServletRequest request) {
         return postTypeService.updateDelPostTypeById(CommonUtil.request2Json(request));

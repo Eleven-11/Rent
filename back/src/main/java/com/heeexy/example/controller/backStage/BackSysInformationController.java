@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.BackSysInformationService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,6 +31,7 @@ public class BackSysInformationController {
      * @param request
      * @return
      */
+    @RequiresPermissions("notice:list")
     @GetMapping("/list")
     public JSONObject getBackSysInforList(HttpServletRequest request) {
         return backSysInformationService.getBackSysInforList(CommonUtil.request2Json(request));
@@ -40,6 +42,7 @@ public class BackSysInformationController {
      * @param request
      * @return
      */
+    @RequiresPermissions("notice:send")
     @PostMapping("/send")
     public JSONObject sendMessage(HttpServletRequest request) {
         try {
@@ -55,6 +58,7 @@ public class BackSysInformationController {
      * @param request
      * @return
      */
+    @RequiresPermissions("notice:del")
     @PostMapping("/del")
     public JSONObject updateDel(HttpServletRequest request) {
         return backSysInformationService.updateDel(CommonUtil.request2Json(request));

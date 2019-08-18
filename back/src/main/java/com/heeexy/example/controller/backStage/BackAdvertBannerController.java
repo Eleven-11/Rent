@@ -32,6 +32,7 @@ public class BackAdvertBannerController {
      *          广告栏图片标题-advTitle
      *          广告栏图片链接-advImg
      **/
+    @RequiresPermissions("banner:list")
     @GetMapping("/getAdvImgList")
     public JSONObject getAdvImgList(HttpServletRequest request){
         return adverBannerService.getBackAdvImgList(CommonUtil.request2Json(request));
@@ -43,6 +44,7 @@ public class BackAdvertBannerController {
      *          广告图片链接-advImg
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("banner:add")
     @PostMapping("/insertAdvImg")
     public JSONObject insertAdvImg(HttpServletRequest request){
         return adverBannerService.insertAdvImg(CommonUtil.request2Json(request));
@@ -52,6 +54,7 @@ public class BackAdvertBannerController {
      * @param request （图片id-advId）
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("banner:del")
     @PostMapping("/updateDelAdvImg")
     public JSONObject updateDelAdvImg(HttpServletRequest request){
         return adverBannerService.updateDelAdvImg(CommonUtil.request2Json(request));
@@ -63,6 +66,7 @@ public class BackAdvertBannerController {
      *                 标题 - advTitle
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("banner:update")
     @PostMapping("/updateAdvImg")
     public JSONObject updateAdvImg(HttpServletRequest request){
         return adverBannerService.updateAdvImg(CommonUtil.request2Json(request));
@@ -75,6 +79,7 @@ public class BackAdvertBannerController {
      *                 末行图片排序时间 - laterSortTime
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("banner:sort")
     @PostMapping("/sortAdvImg")
     public JSONObject sortAdvImgList(HttpServletRequest request){
         return adverBannerService.sortAdvImgList(CommonUtil.request2Json(request));

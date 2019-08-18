@@ -24,7 +24,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="success" icon="plus" @click="showSend">发送消息</el-button>
+          <el-button v-if="hasPerm('notice:send')" type="success" icon="plus" @click="showSend">发送消息</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -51,7 +51,7 @@
 
       <el-table-column fixed="right" align="center" width="100" label="管理">
         <template slot-scope="scope">
-          <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
+          <el-button v-if="hasPerm('notice:del')" type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
         </template>
       </el-table-column>
 

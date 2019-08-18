@@ -3,6 +3,7 @@ package com.heeexy.example.controller.backStage;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.StatisticsService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +29,7 @@ public class StatisticsController {
      * @param request
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("statistics:gender:show")
     @GetMapping("/genderByAll")
     public JSONObject genderByAllStatistic(HttpServletRequest request) {
         //统计用户性别，总性别统计
@@ -39,6 +41,7 @@ public class StatisticsController {
      * @param request gender - 性别
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("statistics:gender:show")
     @GetMapping("/genderByMonth")
     public JSONObject genderByMonthStatistic(HttpServletRequest request) {
         //统计用户性别，月性别统计
@@ -50,6 +53,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:post:show")
     @GetMapping("/postLikeAll")
     public JSONObject postLikeAllStatistic(HttpServletRequest request) {
         //统计周 帖子的点赞排名
@@ -61,6 +65,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:post:show")
     @GetMapping("/postLikeByWeek")
     public JSONObject postLikeByWeekStatistic(HttpServletRequest request) {
         //统计周 帖子的点赞排名
@@ -72,6 +77,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:post:show")
     @GetMapping("/postLikeByMonth")
     public JSONObject postLikeByMonthStatistic(HttpServletRequest request) {
         //统计月 帖子的点赞排名
@@ -83,6 +89,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:post:show")
     @GetMapping("/postCommentAll")
     public JSONObject postCommentAlltatistic(HttpServletRequest request) {
         //统计周 帖子的评论排名
@@ -94,6 +101,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:post:show")
     @GetMapping("/postCommentByWeek")
     public JSONObject postCommentByWeekStatistic(HttpServletRequest request) {
         //统计周 帖子的评论排名
@@ -105,6 +113,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:post:show")
     @GetMapping("/postCommentByMonth")
     public JSONObject postCommentByMonthStatistic(HttpServletRequest request) {
         //统计月 帖子的评论排名
@@ -116,6 +125,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:post:show")
     @GetMapping("/postCollectAll")
     public JSONObject postCollectAllStatistic(HttpServletRequest request) {
         //统计周/月 帖子的收藏排名
@@ -127,6 +137,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:post:show")
     @GetMapping("/postCollectByWeek")
     public JSONObject postCollectByWeekStatistic(HttpServletRequest request) {
         //统计周/月 帖子的收藏排名
@@ -138,6 +149,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:post:show")
     @GetMapping("/postCollectByMonth")
     public JSONObject postCollectByMonthStatistic(HttpServletRequest request) {
         //统计周/月 帖子的收藏排名
@@ -149,6 +161,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:post:show")
     @GetMapping("/priceLineData")
     public JSONObject getAllPriceLineData(HttpServletRequest request) {
         // 帖子地区按月查看统计，根据帖子的真实浏览量做排名；可查看其他月的数据，形成年报表
@@ -185,6 +198,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:follow:show")
     @GetMapping("/userFollowAll")
     public JSONObject userFollowAllStatistic(HttpServletRequest request) {
         //统计总 用户的关注排名
@@ -196,6 +210,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:follow:show")
     @GetMapping("/userFollowByWeek")
     public JSONObject userFollowByWeekStatistic(HttpServletRequest request) {
         //统计周 用户的关注排名
@@ -207,6 +222,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:follow:show")
     @GetMapping("/userFollowByMonth")
     public JSONObject userFollowByMonthStatistic(HttpServletRequest request) {
         //统计月 用户的关注排名
@@ -218,6 +234,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:region:show")
     @GetMapping("/postRegionAll")
     public JSONObject getPostRegionAll(HttpServletRequest request) {
         // 地区帖子总统计，根据帖子的真实浏览量做排名
@@ -229,6 +246,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:region:show")
     @GetMapping("/postRegionByWeek")
     public JSONObject postRegionByWeekStatistic(HttpServletRequest request) {
         // 地区帖子按周查看统计，根据帖子的真实浏览量做排名
@@ -240,6 +258,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:region:show")
     @GetMapping("/postRegionByMonth")
     public JSONObject postRegionByMonthStatistic(HttpServletRequest request) {
         // 帖子地区按月查看统计，根据帖子的真实浏览量做排名；可查看其他月的数据，形成年报表
@@ -251,6 +270,7 @@ public class StatisticsController {
      * @param request
      * @return
      */
+    @RequiresPermissions("statistics:region:show")
     @GetMapping("/annualReportByRegion")
     public JSONObject getAnnualReportByRegion(HttpServletRequest request) {
         // 地区年报表，效率极低，谨慎使用
