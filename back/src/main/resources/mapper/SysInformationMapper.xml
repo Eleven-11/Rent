@@ -15,6 +15,7 @@
           AND i.TARGET_ID in (#{userId},'system_info')
           AND i.IS_DEL = 0
         ORDER BY i.CREATE_TIME DESC
+        limit #{pageNum}
     </select>
 
     <!-- 后台消息dao方法实现 -->

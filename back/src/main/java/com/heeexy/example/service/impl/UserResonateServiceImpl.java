@@ -47,7 +47,7 @@ public class UserResonateServiceImpl implements UserResonateService {
             List<JSONObject> list = userResonateDao.getPostLikeList(jsonObject);
             for (int i=0;i<list.size();i++){
                 if (list.get(i).get("likeImg")==null){
-                    list.get(i).put("likeImg","http://192.168.1.7:8080/image/static/default.png");
+                    list.get(i).put("likeImg","http://192.168.1.8:8080/image/static/default.png");
                 }
             }
             System.out.println("111");
@@ -60,7 +60,7 @@ public class UserResonateServiceImpl implements UserResonateService {
             List<JSONObject> list = userResonateDao.getPostLikeList(jsonObject);
             for (int i=0;i<list.size();i++){
                 if (list.get(i).get("likeImg")==null){
-                    list.get(i).put("likeImg","http://192.168.1.7:8080/image/static/default.png");
+                    list.get(i).put("likeImg","http://192.168.1.8:8080/image/static/default.png");
                 }
             }
             System.out.println("111");

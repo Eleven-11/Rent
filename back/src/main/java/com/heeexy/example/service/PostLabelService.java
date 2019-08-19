@@ -38,4 +38,6 @@ public interface PostLabelService {
      * @return
      */
     JSONObject updateDelPostLabel(JSONObject jsonObject);
+
+    JSONObject getLabelByContent(JSONObject jsonObject);
 }

@@ -71,4 +71,15 @@ public class BackPostLabelController {
         return postLabelService.updateDelPostLabel(CommonUtil.request2Json(request));
     }
 
+    /**
+     * @description 获取帖子标签列表
+     * @param request （父类标签id-labelParentId）
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    @RequiresPermissions("postLabel:list")
+    @GetMapping("/getLabelByContent")
+    public JSONObject getLabelByContent(HttpServletRequest request){
+        return postLabelService.getLabelByContent(CommonUtil.request2Json(request));
+    }
+
 }

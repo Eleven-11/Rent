@@ -43,4 +43,11 @@ public interface PostLabelDao {
      * @return
      */
     int countPostLabel(JSONObject jsonObject);
+
+    /**
+     * 获取帖子标签列表
+     * @param jsonObject
+     * @return
+     */
+    List<JSONObject> getLabelByContent(JSONObject jsonObject);
 }

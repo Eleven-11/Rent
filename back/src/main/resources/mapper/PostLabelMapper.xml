@@ -44,7 +44,9 @@
         <if test="labelTypeId != null and labelTypeId !=''">
             AND a.TYPE = #{labelTypeId}
         </if>
-        ORDER BY postLabelId
+            ORDER BY postLabelId
+            LIMIT ${offSet},${pageRow}
+
     </select>
     <insert id="insertPostLabel" useGeneratedKeys="true" keyProperty="postLabelId">
         INSERT INTO t_post_label (parent_id, content,type_img_url,fix_show)
@@ -78,5 +80,38 @@
         SET IS_DEL = 1
         WHERE ID = #{postLabelId}
     </update>
+
+    <select id="getLabelByContent" resultType="com.alibaba.fastjson.JSONObject">
+        <if test="labelContent != null and labelContent !=''">
+        SELECT
+            a.ID postLabelId,
+            a.PARENT_ID labelParentId,
+            a.CONTENT labelContent,
+            a.TYPE labelTypeId,
+            a.TYPE_IMG_URL labelImg,
+            a.SIZE labelSize,
+            a.FIX_SHOW labelShow
+        FROM
+            t_post_label a
+        WHERE
+            a.CONTENT like CONCAT('%',#{labelContent},'%')
+        </if>
+        <if test="realContent != null and realContent !=''">
+            SELECT
+            a.ID postLabelId,
+            a.PARENT_ID labelParentId,
+            a.CONTENT labelContent,
+            a.TYPE labelTypeId,
+            a.TYPE_IMG_URL labelImg,
+            a.SIZE labelSize,
+            a.FIX_SHOW labelShow
+            FROM
+            t_post_label a
+            WHERE
+            a.CONTENT = #{realContent}
+        </if>
+    </select>
+
+
 
 </mapper>
