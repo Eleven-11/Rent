@@ -141,6 +141,7 @@
 			AND u.USER_ID = c.START_ID
 			AND c.CREATE_TIME > #{flagTime}
 		ORDER BY c.CREATE_TIME DESC
+		limit #{pageNum}
     </select>
 
     <select id="getMessageDataById" resultType="com.alibaba.fastjson.JSONObject">

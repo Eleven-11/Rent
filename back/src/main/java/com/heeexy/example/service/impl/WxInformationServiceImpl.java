@@ -56,18 +56,27 @@ public class WxInformationServiceImpl implements WxInformationService {
      */
     @Override
     public JSONObject getSysInformation(JSONObject jsonObject) {
+        if (jsonObject.get("pageSize")==null){
+            jsonObject.put("pageSize",10);
+        }
         List<JSONObject> joList = sysInformationDao.getSysInforListByUserIdFlagTime(jsonObject);
         return CommonUtil.successPage(joList);
     }
 
     @Override
     public JSONObject getNewRes(JSONObject jsonObject) {
+        if (jsonObject.get("pageSize")==null){
+            jsonObject.put("pageSize",10);
+        }
         List<JSONObject> joList = userResonateDao.getNewResonateListByUserIdFlagTime(jsonObject);
         return CommonUtil.successPage(joList);
     }
 
     @Override
     public JSONObject getNewCom(JSONObject jsonObject) {
+        if (jsonObject.get("pageSize")==null){
+            jsonObject.put("pageSize",10);
+        }
         List<JSONObject> joList = postCommentDao.getNewCommentListByUserIdFlagTime(jsonObject);
         return CommonUtil.successPage(joList);
     }
