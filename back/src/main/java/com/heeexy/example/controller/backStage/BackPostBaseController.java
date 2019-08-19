@@ -3,6 +3,7 @@ package com.heeexy.example.controller.backStage;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostBaseService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,6 +52,7 @@ public class BackPostBaseController {
      *         活跃时间-activeTime,
      *         上下架情况-isLowerShelf
      **/
+    @RequiresPermissions("post:list")
     @GetMapping("/getPostBaseList")
     public JSONObject getPostBaseList(HttpServletRequest request) {
         return postBaseService.getPostBaseList(CommonUtil.request2Json(request));
@@ -61,6 +63,7 @@ public class BackPostBaseController {
      * @param request 帖子id-postId，帖子偏移浏览量-devBrowse，帖子偏移点赞量-devLike（修改哪个量传哪个）
      * @return
      */
+    @RequiresPermissions("post:update")
     @PostMapping("/updatePostDev")
     public JSONObject updatePostBase(HttpServletRequest request){
         return postBaseService.updatePostBase(CommonUtil.request2Json(request));
@@ -70,6 +73,7 @@ public class BackPostBaseController {
      * @param request 上下架帖子id - postId，上下架状态-isLowerShelf（上架0，下架1）
      * @return
      */
+    @RequiresPermissions("post:shelf")
     @PostMapping("/updateOnShelf")
     public JSONObject updateOnShelf(HttpServletRequest request){
         return postBaseService.updateOnShelf(CommonUtil.request2Json(request));
@@ -79,6 +83,7 @@ public class BackPostBaseController {
      * @param request 删除帖子id - postId
      * @return
      */
+    @RequiresPermissions("post:del")
     @PostMapping("/updateDelPost")
     public JSONObject updateDelPost(HttpServletRequest request){
         return postBaseService.updateDelPost(CommonUtil.request2Json(request));
@@ -88,6 +93,7 @@ public class BackPostBaseController {
      * @param request 被删除帖子id - postId
      * @return
      */
+    @RequiresPermissions("post:del")
     @PostMapping("/recoverPost")
     public JSONObject recoverPost(HttpServletRequest request){
         return postBaseService.recoverPost(CommonUtil.request2Json(request));

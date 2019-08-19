@@ -3,6 +3,7 @@ package com.heeexy.example.controller.backStage;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.SysTemplateService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ public class BackSysTemplateController {
      * @param request
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("noticeTemplate:list")
     @GetMapping("/getSysTemplateList")
     public JSONObject getSysTemplateList(HttpServletRequest request){
         return sysTemplateService.getSysTemplateList(CommonUtil.request2Json(request));
@@ -39,6 +41,7 @@ public class BackSysTemplateController {
      * @param request
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("notice:send")
     @GetMapping("/getTemplateList")
     public JSONObject getTemplateList(HttpServletRequest request){
         return sysTemplateService.getTemplateList(CommonUtil.request2Json(request));
@@ -49,6 +52,7 @@ public class BackSysTemplateController {
      * @param request 模板标题 - sysTempTitle，模板内容 - sysTempContent
      * @return 系统消息模板id - sysTempId
      **/
+    @RequiresPermissions("noticeTemplate:add")
     @PostMapping("/insertSysTemplate")
     public JSONObject insertSysTemplate(HttpServletRequest request){
         return sysTemplateService.insertSysTemplate(CommonUtil.request2Json(request));
@@ -60,6 +64,7 @@ public class BackSysTemplateController {
      *                是否为引导语 - isGuide（1为是，0为否），系统消息模板id - sysTempId
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("noticeTemplate:update")
     @PostMapping("/updateSysTemplate")
     public JSONObject updateSysTemplate(HttpServletRequest request){
         return sysTemplateService.updateSysTemplate(CommonUtil.request2Json(request));
@@ -70,6 +75,7 @@ public class BackSysTemplateController {
      * @param request 系统消息模板id - sysTempId
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("noticeTemplate:del")
     @PostMapping("/updateDelTemplate")
     public JSONObject updateDelTemplate(HttpServletRequest request){
         return sysTemplateService.updateDelTemplate(CommonUtil.request2Json(request));

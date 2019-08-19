@@ -2,6 +2,9 @@ package com.heeexy.example.config.shiro.realm;
 
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.config.shiro.token.LoginType;
+import com.heeexy.example.dao.UserRestrictDao;
+import com.heeexy.example.dao.VisitorDao;
+import com.heeexy.example.dao.WxUserDao;
 import com.heeexy.example.service.LoginService;
 import com.heeexy.example.util.constants.Constants;
 import org.apache.shiro.SecurityUtils;
@@ -27,7 +30,11 @@ public class WxUserRealm extends AuthorizingRealm {
     private Logger logger = LoggerFactory.getLogger(VueUserRealm.class);
 
     @Autowired
-    private LoginService loginService;
+    private WxUserDao wxUserDao;
+    @Autowired
+    private VisitorDao visitorDao;
+    @Autowired
+    private UserRestrictDao userRestrictDao;
 
 
     @Override
@@ -56,14 +63,32 @@ public class WxUserRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        String loginName = (String) token.getPrincipal();
-        // 获取用户密码
-        String password = new String((char[]) token.getCredentials());
-        JSONObject user = loginService.getUser(loginName, password);
+        String userId = (String) token.getPrincipal();
+        JSONObject jo = new JSONObject();
+        jo.put("userId",userId);
+        JSONObject user = wxUserDao.queryUser(jo);
+        //不是授权用户
         if (user == null) {
-            //没找到帐号
-            throw new UnknownAccountException();
+            user = visitorDao.queryUser(jo);
+            //不是游客
+            if (user == null){
+                //没找到帐号
+                throw new UnknownAccountException();
+            }else {
+                //权限级别 - 游客
+                user.put("type",LoginType.WX_MINI_VISITOR);
+            }
+        }else {
+            //判断是否受限
+            if(userRestrictDao.getResStatus(jo) == 1){
+                user.put("type", LoginType.WX_MINI_ASTRICT);
+            }else {
+                //权限级别 - 授权用户
+                user.put("type", LoginType.WX_MINI_LEGAL);
+            }
         }
+        user.put("username",userId);
+        user.put("password",userId);
         //交给AuthenticatingRealm使用CredentialsMatcher进行密码匹配，如果觉得人家的不好可以自定义实现
         SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(
                 user.getString("username"),

@@ -3,6 +3,7 @@ package com.heeexy.example.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostCommentService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,24 +25,6 @@ public class WxPostCommentController {
 
     @Autowired
     private PostCommentService postCommentService;
-
-    /**
-     * @description 添加用户评论信息
-     * @param request 帖子id-postId，评论发起人id-startId，评论接收人id-receiveId（当回复他人评论时不为空）
-     *        评论内容-content，评论创建时间（后端service层获取当前时间）
-     * @return 评论id（主键）-commentId
-     **/
-    @PostMapping("/insertComment")
-    public JSONObject insertComment(HttpServletRequest request) {
-        JSONObject jsonObject = CommonUtil.request2Json(request);
-
-        System.out.println(jsonObject);
-        if (jsonObject.get("receiveId")==null)
-        {
-            jsonObject.put("receiveId",null);
-        }
-        return postCommentService.insertComment(jsonObject);
-    }
 
     /**
      * @description 获取帖子评论列表
@@ -67,6 +50,7 @@ public class WxPostCommentController {
      * @param request 评论id-commentId
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("wx:comment:del")
     @PostMapping("/updateDelCommentById")
     public JSONObject updateDelCommentById(HttpServletRequest request) {
         return postCommentService.updateDelCommentById(CommonUtil.request2Json(request));
@@ -77,8 +61,28 @@ public class WxPostCommentController {
      * @param request 系统用户id-userId
      * @return
      **/
+    @RequiresPermissions("wx:comment:list")
     @GetMapping("/getUserComment")
     public JSONObject getUserComment(HttpServletRequest request){
         return postCommentService.getUserComment(CommonUtil.request2Json(request));
+    }
+
+    /**
+     * @description 添加用户评论信息
+     * @param request 帖子id-postId，评论发起人id-startId，评论接收人id-receiveId（当回复他人评论时不为空）
+     *        评论内容-content，评论创建时间（后端service层获取当前时间）
+     * @return 评论id（主键）-commentId
+     **/
+    @RequiresPermissions("wx:comment:add")
+    @PostMapping("/insertComment")
+    public JSONObject insertComment(HttpServletRequest request) {
+        JSONObject jsonObject = CommonUtil.request2Json(request);
+
+        System.out.println(jsonObject);
+        if (jsonObject.get("receiveId")==null)
+        {
+            jsonObject.put("receiveId",null);
+        }
+        return postCommentService.insertComment(jsonObject);
     }
 }

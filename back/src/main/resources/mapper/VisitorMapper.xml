@@ -2,6 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.VisitorDao">
+
+    <!-- 校验用户是否存在 -->
+    <select id="queryUser" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT v.*
+        FROM t_visitor v
+        WHERE v.USER_ID = #{userId}
+    </select>
+
+
     <insert id="insertVisitor" parameterType="com.alibaba.fastjson.JSONObject">
         INSERT into t_visitor(USER_ID,CREATE_TIME)
         VALUES(#{visitorId},now())

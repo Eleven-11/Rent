@@ -3,6 +3,7 @@ package com.heeexy.example.controller.backStage;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostCommentService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +39,7 @@ public class BackPostCommentController {
      *             被回复者头像（可能为null）-receiveImg,
      *             被回复者性别（可能为null）-receiveGender
      **/
+    @RequiresPermissions("comment:list")
     @GetMapping("/getCommentList")
     public JSONObject getCommentList(HttpServletRequest request) {
         System.out.println(CommonUtil.request2Json(request));
@@ -49,6 +51,7 @@ public class BackPostCommentController {
      * @param request 评论id-commentId
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("comment:del")
     @PostMapping("/updateDelCommentById")
     public JSONObject updateDelCommentById(HttpServletRequest request) {
         return postCommentService.updateDelCommentById(CommonUtil.request2Json(request));
@@ -58,6 +61,7 @@ public class BackPostCommentController {
      * @param request 系统用户id-userId
      * @return
      **/
+    //FIXME not use
     @GetMapping("/getUserComment")
     public JSONObject getUserComment(HttpServletRequest request){
         return postCommentService.getUserComment(CommonUtil.request2Json(request));

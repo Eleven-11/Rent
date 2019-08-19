@@ -3,6 +3,7 @@ package com.heeexy.example.controller.backStage;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserFollowService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ public class BackUserFollowController {
      *@param request (用户id--wxUserId)
      *@return 用户关注的所有关注者昵称列表（nickname）
      */
+    @RequiresPermissions("wxUser:follow")
     @GetMapping("/getUserFollowList")
     public JSONObject getUserFollowList(HttpServletRequest request) {
         return userFollowService.getUserFollowList(CommonUtil.request2Json(request));
@@ -36,6 +38,7 @@ public class BackUserFollowController {
      *@param request (用户id--wxUserId)
      *@return 关注指定用户的所有粉丝昵称列表（nickname）
      */
+    @RequiresPermissions("wxUser:follow")
     @GetMapping("/getUserFansList")
     public JSONObject getUserFansList(HttpServletRequest request) {
         return userFollowService.getUserFansList(CommonUtil.request2Json(request));

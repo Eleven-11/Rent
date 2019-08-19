@@ -3,6 +3,7 @@ package com.heeexy.example.controller.backStage;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.NavigationTopService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ public class BackNavigationTopController {
      * @param request 导航栏id列表 -- navigationIds，要置顶的帖子id -- postId
      * @return 置顶后生成的主键 -- topPostId
      **/
+    @RequiresPermissions("post:top")
     @PostMapping("/insertNavigationTop")
     public JSONObject insertNavigationTop(HttpServletRequest request){
         return navigationTopService.insertNavigationTop(CommonUtil.request2Json(request));
@@ -38,6 +40,7 @@ public class BackNavigationTopController {
      * @param
      * @return
      **/
+    @RequiresPermissions("top:list")
     @GetMapping("/getNavigationTopList")
     public JSONObject getNavigationTopList(HttpServletRequest request){
         return CommonUtil.successJson(navigationTopService.getNavigationTopList(CommonUtil.request2Json(request)));
@@ -48,6 +51,7 @@ public class BackNavigationTopController {
      * @param
      * @return
      **/
+    @RequiresPermissions("top:list")
     @GetMapping("/getNavigationTitle")
     public JSONObject getNavigationTitle(HttpServletRequest request){
         return CommonUtil.successJson(navigationTopService.getNavigationTitle(CommonUtil.request2Json(request)));
@@ -57,6 +61,7 @@ public class BackNavigationTopController {
      * @param
      * @return
      **/
+    @RequiresPermissions("top:update")
     @PostMapping("/updateNavigationTop")
     public JSONObject updateNavigationTop(HttpServletRequest request){
         return navigationTopService.updateNavigationTop(CommonUtil.request2Json(request));
@@ -67,6 +72,7 @@ public class BackNavigationTopController {
      *                 首行帖子排序时间-formerSortTime，末行帖子排序时间 - laterSortTime
      * @return
      **/
+    @RequiresPermissions("top:post:sort")
     @PostMapping("/sortNavigationTop")
     public JSONObject sortNavigationTop(HttpServletRequest request){
         return navigationTopService.sortNavigationTop(CommonUtil.request2Json(request));
@@ -77,6 +83,7 @@ public class BackNavigationTopController {
      * @param  request navigationId-置顶模块id，置顶帖子主键（navigationTop表主键）-topPostId
      * @return
      **/
+    @RequiresPermissions("top:post:del")
     @PostMapping("/updateDelNav")
     public JSONObject updateDelNavigationTop(HttpServletRequest request){
         return navigationTopService.updateDelNavigationTop(CommonUtil.request2Json(request));

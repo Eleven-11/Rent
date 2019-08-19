@@ -16,7 +16,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="success" icon="plus" @click="showCreate">添加模版</el-button>
+          <el-button v-if="hasPerm('noticeTemplate:add')" type="success" icon="plus" @click="showCreate">添加模版</el-button>
         </el-form-item>
       </el-form>
 
@@ -41,19 +41,19 @@
       </el-table-column>
       
 
-      <el-table-column fixed="right" align="center" width="250" label="管理" v-if="hasPerm('article:update')">
+      <el-table-column fixed="right" align="center" width="250" label="管理">
         <template slot-scope="scope">
-          <el-tooltip v-if="scope.row.isGuide===1" content="取消引导语" placement="bottom">
+          <el-tooltip v-if="scope.row.isGuide===1 && hasPerm('noticeTemplate:update')" content="取消引导语" placement="bottom">
             <el-button type="info" icon="el-icon-info" @click="cancelGuide(scope.$index)"></el-button>
           </el-tooltip>
-          <el-tooltip v-else content="设置为引导语" placement="bottom">
+          <el-tooltip v-else-if="hasPerm('noticeTemplate:update')" content="设置为引导语" placement="bottom">
             <el-button  type="success" icon="el-icon-info" @click="beGuide(scope.$index)"></el-button>
           </el-tooltip>
-          <el-tooltip content="编辑模版" placement="bottom">
+          <el-tooltip v-if="hasPerm('noticeTemplate:update')" content="编辑模版" placement="bottom">
             <el-button type="warning" icon="el-icon-edit" @click="showUpdate(scope.$index)"></el-button>
           </el-tooltip>
 
-          <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
+          <el-button v-if="hasPerm('noticeTemplate:del')" type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
         </template>
       </el-table-column>
     </el-table>

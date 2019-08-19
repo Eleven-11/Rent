@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-form>
         <el-form-item>
-          <el-button type="primary" icon="plus" @click="showCreate">添加
+          <el-button v-if="hasPerm('banner:add')" type="primary" icon="plus" @click="showCreate">添加
           </el-button>
         </el-form-item>
       </el-form>
@@ -25,13 +25,13 @@
     <el-table-column align="center" label="排序时间" prop="sortTime" width="100" v-if="false"></el-table-column>
     <el-table-column fixed="right" align="center" width="400" label="管理" v-if="true">
       <template slot-scope="scope">
-        <el-tooltip content="编辑" placement="bottom">
+        <el-tooltip v-if="hasPerm('banner:update')" content="编辑" placement="bottom">
           <el-button type="warning" icon="el-icon-edit" @click="showUpdate(scope.$index)"></el-button>
         </el-tooltip>
 
-        <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
-        <el-button type="primary" icon="up" @click="sortAdvImg(scope.$index-1,scope.$index)" v-if="(scope.$index)!=0">↑</el-button>
-        <el-button type="primary" icon="down" @click="sortAdvImg(scope.$index,scope.$index+1)" v-if="(scope.$index)!=list.length-1">↓</el-button>
+        <el-button v-if="hasPerm('banner:del')" type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
+        <el-button type="primary" icon="up" @click="sortAdvImg(scope.$index-1,scope.$index)" v-if="(scope.$index)!=0 && hasPerm('banner:sort')">↑</el-button>
+        <el-button type="primary" icon="down" @click="sortAdvImg(scope.$index,scope.$index+1)" v-if="(scope.$index)!=list.length-1 && hasPerm('banner:sort')">↓</el-button>
       </template>
     </el-table-column>
   </el-table>

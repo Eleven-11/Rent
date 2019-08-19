@@ -3,6 +3,7 @@ package com.heeexy.example.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserBrowseService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ public class WxUserBrowseController {
      * @param request 系统用户id-userId
      * @return
      **/
+    @RequiresPermissions("wx:browse:postList")
     @GetMapping("/getUserBrowseList")
     public JSONObject getUserBrowsePostList(HttpServletRequest request){
         return userBrowseService.getUserBrowsePostList(CommonUtil.request2Json(request));
@@ -38,6 +40,7 @@ public class WxUserBrowseController {
      * @param request 帖子id-postId
      * @return
      **/
+    @RequiresPermissions("wx:browse:userList")
     @GetMapping("/getPostBrowseList")
     public JSONObject getPostBrowseList(HttpServletRequest request){
         return userBrowseService.getPostBrowseList(CommonUtil.request2Json(request));

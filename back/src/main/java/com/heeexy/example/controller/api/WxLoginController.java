@@ -2,6 +2,7 @@ package com.heeexy.example.controller.api;
 
 import com.heeexy.example.service.HttpService;
 import com.heeexy.example.service.VisitorService;
+import com.heeexy.example.service.WxRealmService;
 import com.heeexy.example.service.WxUserService;
 import com.heeexy.example.util.AesCbcUtil;
 import com.heeexy.example.util.CommonUtil;
@@ -37,6 +38,9 @@ public class WxLoginController {
     private WxUserService wxUserService;
     @Autowired
     private VisitorService visitorService;
+
+    @Autowired
+    private WxRealmService wxRealmService;
     /**
      * 解密用户敏感数据
      *
@@ -56,7 +60,7 @@ public class WxLoginController {
             map.put("msg", "code 不能为空");
             return map;
         }
-        //////////////// 1、向微信服务器 使用登录凭证 code 获取 session_key 和 openid ////////////////
+        // 1、向微信服务器 使用登录凭证 code 获取 session_key 和 openid ////////////////
         //请求参数
         Map params = new HashMap();
         /*Properties pro = new Properties();
@@ -142,60 +146,54 @@ public class WxLoginController {
     public com.alibaba.fastjson.JSONObject login(HttpServletRequest request) {
         com.alibaba.fastjson.JSONObject jsonObject = CommonUtil.request2Json(request);
         System.out.println(jsonObject);
-        //创建session会话存储登录信息
-        HttpServletRequest r = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        HttpSession session = request.getSession();
-
 
         if (jsonObject.get("openId")!=null &&jsonObject.get("userId")==null) {
             //当用户已授权过但清除缓存（即无法获取userId）
             System.out.println(wxUserService.getAuthStatus(jsonObject));
             if(wxUserService.getAuthStatus(jsonObject)!=null){
                 com.alibaba.fastjson.JSONObject authJson = wxUserService.getAuthStatus(jsonObject);
-                //获取登录用户的userId
-                session.setAttribute("userId",authJson.get("userId"));
+                //认证并返回sessionId
+                authJson.put("sessionId", wxRealmService.wxLogin(authJson.getString("userId")));
                 return authJson;
-
             }
             //用户首次登录即授权
             else {
-
                 String userId = wxUserService.insertWxUser(jsonObject);
                 com.alibaba.fastjson.JSONObject authJson = new com.alibaba.fastjson.JSONObject();
                 authJson.put("userId",userId);
-                //获取登录用户的userId
-                session.setAttribute("userId",userId);
+                //认证并返回sessionId
+                authJson.put("sessionId", wxRealmService.wxLogin(userId));
                 return authJson;
             }
-        }
-
-        else if(jsonObject.get("openId")==null &&jsonObject.get("userId")==null){
-
+        } else if(jsonObject.get("openId")==null &&jsonObject.get("userId")==null){
             //首次登录未授权，执行插入游客信息操作
             String visitorId = visitorService.insertVisitor(jsonObject);
             com.alibaba.fastjson.JSONObject visitorJson = new com.alibaba.fastjson.JSONObject();
             visitorJson.put("userId",visitorId);
-            //获取登录用户的userId
-            session.setAttribute("userId",visitorId);
+            //认证并返回sessionId
+            visitorJson.put("sessionId", wxRealmService.wxLogin(visitorId));
             return visitorJson;
-        }
-        else if(jsonObject.get("openId")!=null&&jsonObject.get("userId")!=null){
-
+        } else if(jsonObject.get("openId")!=null&&jsonObject.get("userId")!=null){
             //首次登录未授权，获取游客信息userId，之后登录授权，此时执行插入微信用户信息操作
-            //获取登录用户的userId
-            session.setAttribute("userId",jsonObject.get("userId"));
             wxUserService.insertWxUser(jsonObject);
-            return CommonUtil.successJson(jsonObject.get("userId"));
-
-        }
-        else if(jsonObject.get("openId")==null&&jsonObject.get("userId")!=null){
-            //获取登录用户的userId
-            session.setAttribute("userId",jsonObject.get("userId"));
-            //以游客身份登录
-        }
-        else {
+            //认证并返回sessionId
+            jsonObject.put("seesionId",wxRealmService.wxLogin(jsonObject.getString("userId")));
+            return CommonUtil.successJson(jsonObject);
+        } else if(jsonObject.get("openId")==null&&jsonObject.get("userId")!=null){
+            //TODO 以游客身份登录?
+        } else {
             return CommonUtil.errorJson(ErrorEnum.E_400);
         }
         return null;
     }
+
+    /**
+     * 获取授权列表，并且将用户信息存放到session中
+     * @return
+     */
+    @PostMapping("/getInfo")
+    public com.alibaba.fastjson.JSONObject getInfo() {
+        return  wxRealmService.getInfo();
+    }
+
 }

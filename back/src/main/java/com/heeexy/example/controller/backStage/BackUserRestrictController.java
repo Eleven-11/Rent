@@ -3,6 +3,7 @@ package com.heeexy.example.controller.backStage;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserRestrictService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ public class BackUserRestrictController {
      *@param request 用户id - userId，限制结束时间 - resEndTime
      *@return com.alibaba.fastjson.JSONObject
      */
+    @RequiresPermissions("wxUser:astrict")
     @PostMapping("/insertWxUserRes")
     public JSONObject insertWxUserRes(HttpServletRequest request) {
         return userRestrictService.insertWxUserRes(CommonUtil.request2Json(request));
@@ -35,6 +37,7 @@ public class BackUserRestrictController {
      * @param request 用户id - userId
      * @return com.alibaba.fastjson.JSONObject
      **/
+    @RequiresPermissions("wxUser:astrict")
     @PostMapping("/updateDelWxUserRes")
     public JSONObject updateDelWxUserRes(HttpServletRequest request) {
         return userRestrictService.updateDelWxUserRes(CommonUtil.request2Json(request));
