@@ -201,6 +201,7 @@
             this.api({
               url: "/postLabel/getPostLabelList",
               method: "get",
+              params:this.listQuery,
             }).then(data => {
               console.log("获取了数据");
               console.log(data)
@@ -314,12 +315,14 @@
           handleSizeChange(val) {
             //改变每页数量
             this.listQuery.pageRow = val
-            this.handleFilter();
+            console.log(this.listQuery.pageRow)
+            this.getPostTypeList();
           },
           handleCurrentChange(val) {
             //改变页码
             this.listQuery.pageNum = val
-            this.getList();
+            console.log(this.listQuery.pageNum)
+            this.getPostTypeList();
           },
           handleFilter() {
             //查询事件

@@ -88,7 +88,6 @@ public class PostLabelServiceImpl implements PostLabelService {
     @Override
     public JSONObject getLabelByContent(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
-        System.out.println(jsonObject);
         List<JSONObject> list = postLabelDao.getLabelByContent(jsonObject);
         int listLength = list.size();
         return CommonUtil.successPage(jsonObject, list, listLength);
