@@ -80,4 +80,17 @@ public class PostLabelServiceImpl implements PostLabelService {
         postLabelDao.updateDelPostLabel(jsonObject);
         return CommonUtil.successJson("操作成功！请刷新后查看");
     }
+    /**
+     * 查询帖子标签，根据标签吗查询
+     * @param jsonObject
+     * @return
+     */
+    @Override
+    public JSONObject getLabelByContent(JSONObject jsonObject) {
+        CommonUtil.fillPageParam(jsonObject);
+        System.out.println(jsonObject);
+        List<JSONObject> list = postLabelDao.getLabelByContent(jsonObject);
+        int listLength = list.size();
+        return CommonUtil.successPage(jsonObject, list, listLength);
+    }
 }

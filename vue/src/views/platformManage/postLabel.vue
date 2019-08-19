@@ -20,6 +20,19 @@
             <div slot="tip" class="el-upload__tip">只能上传xlsx文件，且不超过500kb</div>
           </el-upload>
         </el-form-item>
+      </el-form>
+      <el-form class="small-space" inline >
+
+        <el-form-item>标签名称:</el-form-item>
+        <!--内容输入框-->
+        <el-form-item>
+          <el-input type="text" v-model="queryContent" placeholder="输入标签名称"/>
+        </el-form-item>
+
+        <!--搜索按钮-->
+        <el-form-item>
+          <el-button type="primary" class="el-icon-search" @click="getLabelByContent">搜索</el-button>
+        </el-form-item>
 
       </el-form>
     </div>
@@ -137,14 +150,20 @@
               pageNum: 1,//页码
               pageRow: 50,//每页条数
             },
+
             MenuParent:[],
             roles: [],//角色列表
+            queryContent:'',
             dialogStatus: 'create',
             dialogFormVisible: false,
             textMap: {
               update: '编辑',
               create: '新建'
             },
+            parentLabelContext:{
+              realContent:''
+            }
+            ,
             postLabel: {
               postLabelId: '',
               labelContent: '',
@@ -205,7 +224,6 @@
 
                     if (list[i].postLabelId == parentId){return true;}
                   }
-                  console.log("222")
                   return false;
                 }
                 var nodes = [];
@@ -369,6 +387,17 @@
           //判断父标签是否存在
           labelIsExit(){
             console.log(this.postLabel.parentContent);
+            this.parentLabelContext.realContent = this.postLabel.parentContent;
+            this.api({
+              url:"/postLabel/getLabelByContent",
+              method:"get",
+              params:this.parentLabelContext
+            }).then(data => {
+              var i = data.list.length;
+              if(i==0){
+                this.$message.error('父标签不存在');
+              }
+            })
           }
           ,
           //删除方法
@@ -394,6 +423,17 @@
            })
             this.dialogFormVisible = false;
             this.getPostTypeList();
+          },
+          getLabelByContent(){
+            this.postLabel.labelContent = this.queryContent;
+            this.api({
+              url:"/postLabel/getLabelByContent",
+              method:"get",
+              params:this.postLabel
+            }).then(data => {
+              this.tableData = data.list
+              this.totalCount = data.totalCount
+            })
           }
         }
       }
