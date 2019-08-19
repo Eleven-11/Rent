@@ -38,6 +38,7 @@ public class WxUserPostController {
     @GetMapping("/list")
     public JSONObject getWxUserPostList(HttpServletRequest request){
         try{
+            //FIXME 分页测试
             return wxUserPostService.getWxUserPostList(CommonUtil.request2Json(request));
         } catch (WxPageException e) {
             return CommonUtil.errorJson(ErrorEnum.WX_900);

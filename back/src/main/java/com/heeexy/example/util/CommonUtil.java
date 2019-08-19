@@ -214,8 +214,12 @@ public class CommonUtil {
 		try{
 			Integer pageNum = jsonObject.getInteger("pageNum") != null && jsonObject.getInteger("pageNum") > 1  ? jsonObject.getInteger("pageNum") : 1;
 			Integer pageSize = jsonObject.getInteger("pageSize") != null && jsonObject.getInteger("pageSize") > 1 ? jsonObject.getInteger("pageSize") : 10;
-			jsonObject.put("start",(pageNum - 1) * pageSize);
-			jsonObject.put("end", pageSize - 1);
+//			jsonObject.put("start",(pageNum - 1) * pageSize);
+//			jsonObject.put("end", pageSize - 1);
+			JSONObject jo = new JSONObject();
+			jo.put("pageRow", pageSize);
+			jo.put("pageNum", pageNum);
+			fillPageParam(jo);
 			return jsonObject;
 		}catch (Exception e){
 			//抛出自定义的分页异常

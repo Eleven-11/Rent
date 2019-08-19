@@ -41,7 +41,7 @@
           </if>
           AND m.IS_DEL = '0'
         ORDER BY m.CREATE_TIME DESC
-        LIMIT ${start},${end}
+        LIMIT #{offSet}, #{pageRow}
     </select>
 
     <!-- 查询帖子是否属于该用户（不包含逻辑删除） -->
