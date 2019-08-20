@@ -23,7 +23,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     @Override
     public JSONObject getGenderByAll(JSONObject jsonObject) {
-        System.out.println(statisticsDao.getGenderByAll(jsonObject));
         return CommonUtil.successJson(statisticsDao.getGenderByAll(jsonObject));
     }
 

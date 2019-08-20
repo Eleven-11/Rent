@@ -139,9 +139,9 @@
 						AND  ISNULL(c.RECEIVE_ID)
 						AND c.START_ID != p.USER_ID))
 			AND u.USER_ID = c.START_ID
-			AND c.CREATE_TIME > #{flagTime}
+			AND c.CREATE_TIME > DATE_FORMAT(#{flagTime}, '%Y-%m-%d %T')
 		ORDER BY c.CREATE_TIME DESC
-		limit #{pageNum}
+		limit #{pageRow}
     </select>
 
     <select id="getMessageDataById" resultType="com.alibaba.fastjson.JSONObject">

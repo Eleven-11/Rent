@@ -139,8 +139,8 @@
             AND p.ID = r.TARGET_ID
             AND p.USER_ID = #{userId}
             AND u.USER_ID = r.USER_ID
-            AND r.CREATE_TIME > #{flagTime}
-        limit #{pageNum}
+            AND r.CREATE_TIME > DATE_FORMAT(#{flagTime}, '%Y-%m-%d %T')
+        limit #{pageRow}
     </select>
 
     <!-- 获取点赞消息的消息内容实体 -->

@@ -46,7 +46,6 @@ public class UserCollectionServiceImpl implements UserCollectionService {
     @Transactional(rollbackFor = Exception.class)
     public JSONObject sortUserColl(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
-        System.out.println(jsonObject.toJSONString());
         userCollectionDao.sortUserColl(jsonObject);
         return CommonUtil.successJson("收藏成功");
     }
@@ -68,14 +67,12 @@ public class UserCollectionServiceImpl implements UserCollectionService {
             userCollectionDao.updateDelCollect(jsonObject);
             JSONObject jo = new JSONObject();
             jo.put("collectStatus",userCollectionDao.getCollectStatus(jsonObject)==0?1:0);
-            System.out.println(jo);
             return CommonUtil.successJson(jo);
         }
         else {
             userCollectionDao.insertUserCollection(jsonObject);
             JSONObject jo = new JSONObject();
             jo.put("collectStatus", userCollectionDao.getCollectStatus(jsonObject) == 0?1:0);
-            System.out.println(jo);
             return CommonUtil.successJson(jo);
         }
     }

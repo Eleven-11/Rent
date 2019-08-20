@@ -91,7 +91,6 @@ public class PostCommentServiceImpl implements PostCommentService {
         List<JSONObject> userCommentList =postCommentDao.getUserCommentList(jsonObject);
         List<JSONObject> userCommentPostList=new ArrayList<>();
         for (int i=0;i<userCommentList.size();i++){
-            System.out.println(userCommentList.get(i));
             JSONObject userCommentPost = postBaseDao.getWxUserPostInfo(userCommentList.get(i));
 
             //userCommentPost.put("postId",userCommentList.get(i).get("postId"));

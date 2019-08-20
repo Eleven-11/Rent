@@ -62,7 +62,6 @@ public class WxUserPostServiceImpl implements WxUserPostService {
             //获取帖子浏览用户列表
             List<JSONObject> postBrowseList = userBrowseDao.getPostBrowseList(jo);
 
-            System.out.println(postBrowseList);
             //没有头像的用户设置为默认头像
             for (int i=0;i<postLikeList.size();i++){
                 if (postLikeList.get(i).get("likeImg")==null){
@@ -83,8 +82,6 @@ public class WxUserPostServiceImpl implements WxUserPostService {
      **/
     @Override
     public JSONObject updateOnShelf(JSONObject jsonObject) {
-        System.out.println("aaaaaaaaa");
-        System.out.println(jsonObject);
         if (wxUserPostDao.queryPostByUserIdPostId(jsonObject)!=null){
             wxUserPostDao.updateOnShelf(jsonObject);
             return CommonUtil.successJson("修改成功");

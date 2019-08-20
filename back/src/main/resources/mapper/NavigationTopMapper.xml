@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.heeexy.example.dao.NavigationTopDao">
-    <insert id="insertNavigationTop" useGeneratedKeys="true" keyProperty="topPostId">
+    <insert id="insertNavigationTop">
         BEGIN;
         INSERT INTO t_navigation_top(
         NAVIGATION_ID,

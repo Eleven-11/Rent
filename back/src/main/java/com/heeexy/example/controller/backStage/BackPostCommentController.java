@@ -42,7 +42,6 @@ public class BackPostCommentController {
     @RequiresPermissions("comment:list")
     @GetMapping("/getCommentList")
     public JSONObject getCommentList(HttpServletRequest request) {
-        System.out.println(CommonUtil.request2Json(request));
         return postCommentService.getPostCommentList(CommonUtil.request2Json(request));
     }
 

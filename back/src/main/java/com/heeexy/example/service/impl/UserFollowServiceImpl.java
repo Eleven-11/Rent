@@ -30,7 +30,6 @@ public class UserFollowServiceImpl implements UserFollowService {
         CommonUtil.fillPageParam(jsonObject);
         int count = userFollowDao.countUserFollow(jsonObject);
         List<JSONObject> list = userFollowDao.getUserFollowList(jsonObject);
-        System.out.println(list);
         return CommonUtil.successPage(jsonObject, list, count);
     }
 
@@ -59,14 +58,12 @@ public class UserFollowServiceImpl implements UserFollowService {
             userFollowDao.updateDelFollow(jsonObject);
             JSONObject jo = new JSONObject();
             jo.put("followStatus",userFollowDao.getFollowStatus(jsonObject)==0?1:0);
-            System.out.println(jo);
             return CommonUtil.successJson(jo);
         }
         else {
             userFollowDao.insertUserFollow(jsonObject);
             JSONObject jo = new JSONObject();
             jo.put("followStatus",userFollowDao.getFollowStatus(jsonObject)==0?1:0);
-            System.out.println(jo);
             return CommonUtil.successJson(jo);
         }
     }

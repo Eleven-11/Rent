@@ -78,7 +78,6 @@ public class WxPostCommentController {
     public JSONObject insertComment(HttpServletRequest request) {
         JSONObject jsonObject = CommonUtil.request2Json(request);
 
-        System.out.println(jsonObject);
         if (jsonObject.get("receiveId")==null)
         {
             jsonObject.put("receiveId",null);

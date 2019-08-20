@@ -50,9 +50,7 @@ public class UserResonateServiceImpl implements UserResonateService {
                     list.get(i).put("likeImg","http://192.168.1.8:8080/image/static/default.png");
                 }
             }
-            System.out.println("111");
-            System.out.println(list);
-            System.out.println("222");
+
             return CommonUtil.successPage(jsonObject, list, (Integer) jsonObject.get("limit"));
         }
         else {
@@ -63,9 +61,6 @@ public class UserResonateServiceImpl implements UserResonateService {
                     list.get(i).put("likeImg","http://192.168.1.8:8080/image/static/default.png");
                 }
             }
-            System.out.println("111");
-            System.out.println(list);
-            System.out.println("222");
             return CommonUtil.successPage(jsonObject, list, count);
         }
     }
@@ -87,7 +82,6 @@ public class UserResonateServiceImpl implements UserResonateService {
                 userResonateDao.updateDelPostLike(jsonObject);
                 JSONObject jo = new JSONObject();
                 jo.put("likeStatus",userResonateDao.getLikeStatus(jsonObject)==0?1:0);
-                System.out.println(jo);
                 return CommonUtil.successJson(jo);
             } else {
                 userResonateDao.insertPostLike(jsonObject);
@@ -95,7 +89,6 @@ public class UserResonateServiceImpl implements UserResonateService {
                 send(jsonObject);
                 JSONObject jo = new JSONObject();
                 jo.put("likeStatus",userResonateDao.getLikeStatus(jsonObject)==0?1:0);
-                System.out.println(jo);
                 return CommonUtil.successJson(jo);
             }
         }

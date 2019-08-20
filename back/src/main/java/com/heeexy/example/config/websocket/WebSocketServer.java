@@ -71,7 +71,6 @@ public class WebSocketServer {
             openHeart = true;
             startHeart();
         }
-        //System.out.println("已连接:" + username + this.session);
     }
 
     /**
@@ -80,7 +79,6 @@ public class WebSocketServer {
      */
     @OnClose
     public void onClose() throws IOException {
-        //System.out.println("移除:" + username);
         clients.remove(username);
         subOnlineCount();
     }
@@ -92,10 +90,8 @@ public class WebSocketServer {
     public void onClose(String username) throws IOException {
         WebSocketServer server = clients.get(username);
         if (server.session.isOpen()) {
-            //System.out.println("手动关闭链接:" + username + server.session);
             server.session.close();
         }else {
-            //System.out.println("手动关闭链接（isOpen = false）:" + username + server.session);
         }
     }
 
@@ -122,12 +118,10 @@ public class WebSocketServer {
                             WebSocketServer toServer = clients.get(entry.getString("username"));
                             toServer.isHeart = true;
                         }
-                        //System.out.println(this.username + "：返回的心跳消息");
                         //是普通消息数据
                     } else if (info.getString("sendType").equals(Const.SEND_MESSAGE)) {
                         //获取消息对应实体
                         jsonObject = (JSONObject) info.get("entry");
-                        //System.out.println(jsonObject.getString("startId") + " to " + jsonObject.getString("receiveId") + ":" + jsonObject.getString("content"));
                         //判断是否有接受者
                         JSONObject u = new JSONObject();
                         u.put("userId", jsonObject.get("receiveId"));
@@ -179,7 +173,6 @@ public class WebSocketServer {
         //判断是否在线
         if (queryOnLine(to)){
             WebSocketServer toServer = clients.get(to);
-            //System.out.println(toServer.session);
             toServer.session.getAsyncRemote().sendText(
                      CommonUtil.sendParam(type, jsonObject).toJSONString());
         }
@@ -243,7 +236,6 @@ public class WebSocketServer {
                     item.isHeart = false;
                     //判断是否有链接
                     item.session.getAsyncRemote().sendText(message);
-                    //System.out.println(item.username + item.session + " to heart");
 
                 }
         }
@@ -299,7 +291,6 @@ public class WebSocketServer {
                     long timeMillins=System.currentTimeMillis();
                     for (WebSocketServer item : clients.values()) {
                         if (!item.isHeart && item.timeStr != 0 && timeMillins > item.timeStr){
-                            //System.out.println(item.username + item.session + " is die");
                             //关闭链接
                             item.onClose(item.username);
                         }

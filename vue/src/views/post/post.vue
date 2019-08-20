@@ -7,8 +7,9 @@
             发帖人：
             <el-input placeholder="请输入内容" style="width: 400px;" v-model="nickname"></el-input>
           </div>
-            帖子类型：
-          <el-select v-model="selector" style="width: 400px;" filterable placeholder="请选择类型" @change="selectTemp($event)">
+          帖子类型：
+          <el-select v-model="selector" style="width: 400px;" filterable placeholder="请选择类型"
+                     @change="selectTemp($event)">
             <el-option
               v-for="item in options"
               :key="item.postTypeId"
@@ -30,8 +31,6 @@
               关键词：
               <el-input placeholder="请输入查询关键词" style="width: 400px;" v-model="keyword"></el-input>
             </div>
-
-
             <el-button type="primary" icon="plus" v-if="true" @click="getList">查询</el-button>
           </div>
         </el-form-item>
@@ -45,28 +44,28 @@
         </template>
       </el-table-column>
       <el-table-column align="center" label="发帖人" prop="poster" width="100"></el-table-column>
-      <el-table-column align="center" label="发帖人头像" prop="posterAvatar"  width="100">
+      <el-table-column align="center" label="发帖人头像" prop="posterAvatar" width="100">
         <template slot-scope="scope">
           <img :src="scope.row.posterAvatar" style="width: 60px; height: 60px;"/>
         </template>
       </el-table-column>
       <el-table-column align="center" label="帖子Id" prop="postId" width="90" v-if="false"></el-table-column>
       <el-table-column align="center" label="发布时间" prop="createTime" width="220"></el-table-column>
-      <el-table-column align="center" label="地址" prop="address"  width="120"></el-table-column>
-      <el-table-column align="center" label="帖子内容" prop="content" width="200" ></el-table-column>
-      <el-table-column align="center" label="最低价" prop="minPrice" ></el-table-column>
-      <el-table-column align="center" label="最高价" prop="maxPrice" ></el-table-column>
+      <el-table-column align="center" label="地址" prop="address" width="120"></el-table-column>
+      <el-table-column align="center" label="帖子内容" show-overflow-tooltip prop="content" width="200"></el-table-column>
+      <el-table-column align="center" label="最低价" prop="minPrice"></el-table-column>
+      <el-table-column align="center" label="最高价" prop="maxPrice"></el-table-column>
       <el-table-column align="center" label="联系方式" prop="phone" width="160"></el-table-column>
-      <el-table-column align="center" label="浏览量" prop="browse" ></el-table-column>
-      <el-table-column align="center" label="评论数量" prop="comments" ></el-table-column>
-      <el-table-column align="center" label="点赞数量" prop="likes" ></el-table-column>
-      <el-table-column align="center" label="中介费" prop="fee" ></el-table-column>
+      <el-table-column align="center" label="浏览量" prop="browse"></el-table-column>
+      <el-table-column align="center" label="评论数量" prop="comments"></el-table-column>
+      <el-table-column align="center" label="点赞数量" prop="likes"></el-table-column>
+      <el-table-column align="center" label="中介费" prop="fee"></el-table-column>
       <el-table-column align="center" label="发帖人id" prop="userId" v-if="false"></el-table-column>
       <el-table-column align="center" label="是否删除" prop="isDel" v-if="true"></el-table-column>
-      <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220" ></el-table-column>
+      <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220"></el-table-column>
       <el-table-column align="center" label="上架状态" prop="isLowerShelf" width="220" v-if="false"></el-table-column>
-      <el-table-column align="center" label="禁言状态" prop="ifRes" width="220" v-if="false" ></el-table-column>
-      <el-table-column align="center" label="管理" width="220">
+      <el-table-column align="center" label="禁言状态" prop="ifRes" width="220" v-if="false"></el-table-column>
+      <el-table-column  align="center" label="管理" width="220">
         <template slot-scope="scope">
           <el-popover
             placement="right"
@@ -89,28 +88,31 @@
               <el-table-column align="center" prop="receiveNickname" label="被回复人昵称" width="200"></el-table-column>
               <el-table-column align="center" prop="receiveImg" label="被回复人头像" width="150">
                 <template slot-scope="scope">
-                  <img :src="scope.row.receiveImg == null ? 'http://192.168.1.8:8080/image/static/1565848267.png':  scope.row.receiveImg" style="width: 60px; height: 60px;"/>
+                  <img
+                    :src="scope.row.receiveImg == null ? 'http://192.168.1.8:8080/image/static/1565848267.png':  scope.row.receiveImg"
+                    style="width: 60px; height: 60px;"/>
                 </template>
               </el-table-column>
               <el-table-column align="center" prop="content" label="内容" width="200"></el-table-column>
               <el-table-column align="center" label="评论时间" prop="createTime" width="155" v-if="true"></el-table-column>
             </el-table>
-            <el-button type="primary" @click="getPostCommentList(scope.$index)" slot="reference" size="mini" plain>评论</el-button>
+            <el-button type="primary" @click="getPostCommentList(scope.$index)" slot="reference" size="mini" plain>评论
+            </el-button>
           </el-popover>
-          <el-button type="info" plain icon="delete"  size="mini" v-if="list[scope.$index].isLowerShelf == '上架'"
+          <el-button type="info" plain icon="delete" size="mini" v-if="list[scope.$index].isLowerShelf == '上架'"
                      @click="setOnShelf(scope.$index)">下架
           </el-button>
-          <el-button type="primary" plain icon="delete"  size="mini" v-if="list[scope.$index].isLowerShelf == '下架'"
+          <el-button type="primary" plain icon="delete" size="mini" v-if="list[scope.$index].isLowerShelf == '下架'"
                      @click="setOnShelf(scope.$index)">上架
           </el-button>
-          <el-button type="primary" plain  size="mini" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
+          <el-button type="primary" plain size="mini" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
           <el-button type="danger" plain icon="delete" size="mini" v-if="list[scope.$index].isDel == '未删除'"
-                     placement="bottom"  @click="removePost(scope.$index)">删除
+                     @click="removePost(scope.$index)">删除
           </el-button>
           <el-button type="success" plain size="mini" icon="delete" v-else
-                   @click="recoverPost(scope.$index)">恢复
+                     @click="recoverPost(scope.$index)">恢复
           </el-button>
-          <el-button type="success" plain size="mini" icon="delete" v-else
+          <el-button type="success" plain size="mini" icon="delete"
                      @click="setOnTop(scope.$index)">置顶
           </el-button>
           <el-popover
@@ -123,7 +125,9 @@
               <el-button size="mini" type="primary" @click="list[scope.$index].fvisible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="endWxUserRes(scope.$index)">确定</el-button>
             </div>
-            <el-button  slot="reference" type="success" plain v-if="list[scope.$index].ifRes == 1" icon="delete" size="mini" @click="list[scope.$index].fvisible = true">解禁</el-button>
+            <el-button slot="reference" type="success" plain v-if="list[scope.$index].ifRes == 1" icon="delete"
+                       size="mini" @click="list[scope.$index].fvisible = true">解禁
+            </el-button>
           </el-popover>
           <el-popover
             placement="bottom"
@@ -140,9 +144,11 @@
               <el-button size="mini" type="primary" @click="list[scope.$index].visible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="insertWxUserRes(scope.$index)">确定</el-button>
             </div>
-            <el-button  slot="reference" type="danger" plain v-if="list[scope.$index].ifRes == 0" icon="delete" size="mini" @click="list[scope.$index].visible = true">封禁</el-button>
+            <el-button slot="reference" type="danger" plain v-if="list[scope.$index].ifRes == 0" icon="delete"
+                       size="mini" @click="list[scope.$index].visible = true">封禁
+            </el-button>
           </el-popover>
-      </template>
+        </template>
       </el-table-column>
     </el-table>
     <el-pagination
@@ -157,11 +163,14 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form class="small-space" :model="tempPost" label-position="left" label-width="80px"
                style='width: 300px; margin-left:50px;'>
-        <el-form-item label="浏览量" >
-          <el-input type="text"v-if="dialogStatus ='update'" v-model="tempPost.devBrowse" placeholder="不填则表示不修改">
+        <el-form-item label="浏览量">
+          <el-input type="text" v-if="dialogStatus ='update'" v-model="tempPost.devBrowse" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
-        <el-form-item label="点赞量" >
+        <el-form-item>
+        </el-form-item>
+
+        <el-form-item label="点赞量">
           <el-input type="text" v-if="dialogStatus ='update'" v-model="tempPost.devLike" placeholder="不填则表示不修改">
           </el-input>
         </el-form-item>
@@ -172,6 +181,25 @@
         <!--<el-button v-if="dialogStatus=='create'" type="success" @click="createUser">创 建</el-button>-->
         <el-button type="primary" @click="updateUser">修 改</el-button>
       </div>
+    </el-dialog>
+    <el-dialog
+      title="提示"
+      :visible.sync="onTopDialog"
+      width="50%">
+      <el-form class="small-space" :model="topNav" label-position="left" label-width="80px"
+               style='width: 800px; margin-left:80px;'>
+        <el-checkbox-group
+          v-model="topNav.checkedNavs"
+        >
+          <el-checkbox v-for="nav in topNav.navigations" :label="nav.navigationId" :key="nav.navigationId">
+            {{nav.navigationTitle}}
+          </el-checkbox>
+        </el-checkbox-group>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="onTopDialog = false">取 消</el-button>
+    <el-button type="primary" @click="setPostOnTop">确 定</el-button>
+  </span>
     </el-dialog>
   </div>
 </template>
@@ -184,70 +212,83 @@
         totalCount: 0, //分页组件--数据总条数
         list: [],//表格的数据
         listLoading: false,//数据加载等待动画
-        manage:'',
+        manage: '',
         listQuery: {
           pageNum: 1,//页码
           pageRow: 10,//每页条数
-          nickname:this.nickname,
-          startTime:'',
-          endTime:'',
-          typeId:'',
-          keyword:'',
-          postId:''
+          nickname: this.nickname,
+          startTime: '',
+          endTime: '',
+          typeId: '',
+          keyword: '',
+          postId: ''
         },
-        resQuery:{
-          userId:'',
-          resEndTime:'',
+        resQuery: {
+          userId: '',
+          resEndTime: '',
         },
         gridData: [{
           totalCount: 0,//分页组件--数据总条数
           pageNum: 1,//页码
           pageRow: 10,//每页条数
         }],
-        checkAll: false,
-        navigationTopTitles:[{
-          navigationTopId:'',
-          navigationTopTitle:''
-        }],
-        checkedTitles:[],
-        // titles: navigationTopTitles,
-        isIndeterminate: true,
-        selector:'',
-        options:[{
-          postTypeId:'',
-          postTypeName:'',
-          postTypeImg:''
+        onTopDialog: false,
+
+        // navigations1:[],
+        topNav: {
+          checkedNavs: [],
+          navigations: [
+            {
+              navigationId: '',
+              navigationTitle: ''
+            }
+          ],
+        },
+        navParams:
+          {
+            postId: '',
+            checkedNavs: '',
+          },
+
+        selector: '',
+        options: [{
+          postTypeId: '',
+          postTypeName: '',
+          postTypeImg: ''
 
         }],
         daterange: [new Date(2018, 16, 24, 10, 10), new Date()],
-        visible:false,
-        resEndTime:'',
+        visible: false,
+        resEndTime: '',
         roles: [],//角色列表
         dialogStatus: 'create',
         dialogFormVisible: false,
         textMap: {
-          top:'置顶',
+          top: '置顶',
           update: '编辑',
           create: '新建用户'
         },
-        commentData:[],
+        nickname: '',
+        keyword: '',
+        commentData: [],
         tempPost: {
           content: '',
           phone: '',
           browse: '',
           likes: '',
           address: '',
-          userId:'',
-          devBrowse:'',
-          devLike:'',
-          postId:'',
-          isDel:''
+          userId: '',
+          devBrowse: '',
+          devLike: '',
+          postId: '',
+          isDel: ''
         }
       }
     },
     created() {
       this.getList();
       this.getPostTypeList();
+      // this.getNavigationTitle();
     },
     computed: {
       ...mapGetters([
@@ -258,7 +299,7 @@
       /**
        * 模版选中后触发
        */
-      selectTemp($event){
+      selectTemp($event) {
         console.log($event)
         this.listQuery.typeId = $event
         // this.selector = $event.selector.postTypeName;
@@ -298,12 +339,11 @@
         }).then(data => {
           this.listLoading = false;
           this.commentData = data.list;
-          for (var i =0 ;i<this.commentData.length; i++){
-            this.commentData[i].createTime =  this.formatter(this.commentData[i].createTime, 'yyyy-MM-dd hh:mm:ss')
-            if(this.commentData[i].receiveNickname =='null' && this.commentData[i].receiveImg =='null')
-            {
-              this.commentData[i].receiveNickname ='';
-              this.commentData[i].receiveImg ='';
+          for (var i = 0; i < this.commentData.length; i++) {
+            this.commentData[i].createTime = this.formatter(this.commentData[i].createTime, 'yyyy-MM-dd hh:mm:ss')
+            if (this.commentData[i].receiveNickname == 'null' && this.commentData[i].receiveImg == 'null') {
+              this.commentData[i].receiveNickname = '';
+              this.commentData[i].receiveImg = '';
             }
           }
         })
@@ -323,17 +363,17 @@
 
       },
 
-      getNavigationTitle(){
+      getNavigationTitle() {
         this.api({
           url: "/navigationTop/getNavigationTitle",
           method: "get"
         }).then(data => {
           console.log(data)
-          this.navigationTopTitles = data.list;
+          this.topNav.navigations = data.info;
         });
       },
 
-      getAllRoles(){
+      getAllRoles() {
         this.api({
           url: "/user/getAllRoles",
           method: "get"
@@ -346,7 +386,7 @@
         this.listLoading = true;
         this.listQuery.nickname = this.nickname
         this.listQuery.keyword = this.keyword
-        if(this.daterange!=null){
+        if (this.daterange != null) {
           this.listQuery.startTime = this.formatter(this.daterange[0], 'yyyy-MM-dd hh:mm:ss')
           this.listQuery.endTime = this.formatter(this.daterange[1], 'yyyy-MM-dd hh:mm:ss')
         }
@@ -358,31 +398,31 @@
           this.listLoading = false;
           this.list = data.list;
           console.log(this.list)
-          for (var i =0 ;i<this.list.length; i++){
-            if (this.list[i].minPrice == '' || this.list[i].minPrice == 'null' ||this.list[i].minPrice == 0) {
-              this.list[i].minPrice = '无最低价'
+          for (var i = 0; i < this.list.length; i++) {
+            if (this.list[i].minPrice == '' || this.list[i].minPrice == 'null' || this.list[i].minPrice == 0) {
+              this.list[i].minPrice = '无'
             }
-            if(this.list[i].maxPrice == ''|| this.list[i].maxPrice == 'null' ||this.list[i].maxPrice == 0){
-              this.list[i].maxPrice = '无最高价'
+            if (this.list[i].maxPrice == '' || this.list[i].maxPrice == 'null' || this.list[i].maxPrice == 0) {
+              this.list[i].maxPrice = '无'
             }
             if (this.list[i].fee == '0') {
-              this.list[i].fee = '无中介费'
-            }else{
-              this.list[i].fee = '有中介费'
+              this.list[i].fee = '无'
+            } else {
+              this.list[i].fee = '有'
             }
             if (this.list[i].isDel == '0') {
               this.list[i].isDel = '未删除'
-            }else{
+            } else {
               this.list[i].isDel = '已删除'
             }
             if (this.list[i].isLowerShelf == '0') {
               this.list[i].isLowerShelf = '下架'
-            }else{
+            } else {
               this.list[i].isLowerShelf = '上架'
             }
-            this.list[i].createTime = this.formatter(this.list[i].createTime,'yyyy-MM-dd hh:mm:ss')
-            this.list[i].activeTime = this.formatter(this.list[i].activeTime,'yyyy-MM-dd hh:mm:ss')
-            this.list[i].content = this.list[i].content.substring(0,38)
+            this.list[i].createTime = this.formatter(this.list[i].createTime, 'yyyy-MM-dd hh:mm:ss')
+            this.list[i].activeTime = this.formatter(this.list[i].activeTime, 'yyyy-MM-dd hh:mm:ss')
+            // this.list[i].content = this.list[i].content.substring(0,38)
           }
           this.totalCount = data.totalCount;
         })
@@ -427,11 +467,12 @@
         this.tempPost.deleteStatus = '1';
         this.dialogStatus = "update"
         this.dialogFormVisible = true
-        console.log( this.tempPost)
+        console.log(this.tempPost)
       },
       setOnTop($index) {
-        this.dialogStatus = "top";
-        this.dialogFormVisible = true
+        this.onTopDialog = true
+        let _vue = this.list[$index];
+        this.navParams.postId = _vue.postId
         this.getNavigationTitle();
       },
       createUser() {
@@ -468,6 +509,33 @@
           })
         })
       },
+      setPostOnTop() {
+
+         this.navParams.checkedNavs = this.topNav.checkedNavs.join();
+
+        console.log(this.navParams)
+        this.api({
+          url: "/navigationTop/insertNavigationTop",
+          method: "post",
+          params: this.navParams
+        }).then(() => {
+          console.log(this.navParams)
+          let msg = "修改成功";
+          this.onTopDialog = false
+          // if (this.userId === this.tempPost.userId) {
+          //   msg = '修改成功,部分信息重新登录后生效'
+          // }
+          this.$message({
+            message: msg,
+            type: 'success',
+            duration: 1 * 1000,
+            onClose: () => {
+              _vue.getList();
+            }
+          })
+        })
+
+      },
       removePost($index) {
         let _vue = this;
         this.$confirm('确定删除该帖子?', '提示', {
@@ -482,7 +550,7 @@
             method: "post",
             params: user
           })
-      }).then(() => {
+        }).then(() => {
           _vue.getList()
         }).catch(() => {
           _vue.$message.error("删除失败")
@@ -532,29 +600,19 @@
           _vue.$message.error("设置失败")
         })
       },
-      handleCheckAllChange(val) {
-        this.checkedTitles = val? navigationTopTitles:[];
-        this.isIndeterminate = false;
-      },
-      handleCheckedTitleChange(value) {
-        let checkedCount = value.length;
-        this.checkAll = checkedCount === this.navigationTopTitles.length;
-        this.isIndeterminate = checkedCount > 0 && checkedCount < this.navigationTopTitles.length;
-      },
       insertWxUserRes($index) {
         let _vue = this;
         _vue.list[$index].visible = false
-        if(this.resEndTime==null){
+        if (this.resEndTime == null) {
           _vue.$message.error("请输入禁言结束时间");
-        }
-        else {
+        } else {
           this.resQuery.userId = _vue.list[$index].userId;
           this.resQuery.resEndTime = this.formatter(this.resEndTime, 'yyyy-MM-dd hh:mm:ss')
         }
         this.api({
           url: "/userRes/insertWxUserRes",
           method: "post",
-          params:this.resQuery
+          params: this.resQuery
         }).then(data => {
           console.log(this.resQuery)
           _vue.getList();
@@ -562,7 +620,7 @@
           console.log(err)
           _vue.getList();
         })
-        },
+      },
       endWxUserRes($index) {
         let _vue = this;
         this.resQuery.userId = _vue.list[$index].userId;
@@ -570,11 +628,11 @@
         this.api({
           url: "/userRes/updateDelWxUserRes",
           method: "post",
-          params:this.resQuery
+          params: this.resQuery
         }).then(data => {
           console.log(this.resQuery)
           _vue.getList();
-        }).catch(err =>{
+        }).catch(err => {
           console.log(err)
           _vue.getList();
         })
