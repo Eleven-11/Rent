@@ -54,7 +54,7 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
         //加载列表时
         if (jsonObject.get("postId") == null) {
             //当加载的帖子列表为第一页时加载模块置顶的帖子
-            if (jsonObject.getInteger("start")==0) {
+            if (jsonObject.getInteger("pageNum")==1) {
                 //模块置顶帖子id列表
                 List<JSONObject> topJsonObject = navigationTopDao.getWxNavigationTopList(jsonObject);
                 System.out.println(topJsonObject);
@@ -76,31 +76,6 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             for (int i = 0; i < bottomPost.size(); i++) {
                 postBaseList.add(bottomPost.get(i));
             }
-        /*System.out.println(bottomPost);
-        //判断是否为置顶帖子
-        if (!topPostBase.isEmpty()) {
-            for (int i = 0; i < bottomPost.size(); i++) {
-                int a = 0;
-                for (int j = 0; j < topPostBase.size(); j++) {
-                    if (bottomPost.get(i).get("postId") == topPostBase.get(j).get("postId")) {
-                        a=1;
-                        continue;
-                    }
-                }
-                if (a==0){
-                    postBaseList.add(bottomPost.get(i));
-                }
-            }
-        }
-        else{
-            for (int i= 0;i<bottomPost.size();i++){
-                postBaseList.add(bottomPost.get(i));
-            }
-        }*/
-        /*for (int i= 0;i<bottomPost.size();i++){
-            postBaseListCopy.add(bottomPost.get(i));
-        }
-        List<JSONObject> postBaseList = postBaseListCopy.stream().distinct().collect(Collectors.toList());*/
             System.out.println(postBaseList);
             //循环帖子集合，做相应的数据处理
             for (JSONObject jo : postBaseList) {
