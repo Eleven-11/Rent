@@ -45,8 +45,9 @@
             AND a.TYPE = #{labelTypeId}
         </if>
             ORDER BY postLabelId
+        <if test="pageNum > 0">
             LIMIT ${offSet},${pageRow}
-
+        </if>
     </select>
     <insert id="insertPostLabel" useGeneratedKeys="true" keyProperty="postLabelId">
         INSERT INTO t_post_label (parent_id, content,type_img_url,fix_show)

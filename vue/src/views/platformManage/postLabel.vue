@@ -150,6 +150,9 @@
               pageNum: 1,//页码
               pageRow: 50,//每页条数
             },
+            listAll:{
+              pageNum:-1,
+            },
 
             MenuParent:[],
             roles: [],//角色列表
@@ -212,13 +215,17 @@
           },
           //获取菜单
           loadParentMenu(){
+            this.listQuery.pageNum = 1;
+            this.listQuery.pageRow = this.totalCount;
             this.listloading = false;
             this.api({
               url: "/postLabel/getPostLabelList",
               method: "get",
-              // params: this.ParentId
+              params:this.listAll
             }).then(data=>{
               var list = data.list;
+              console.log("原始菜单数据结构");
+              console.log(list);
               function listToTree(postLabelId,labelParentId,list){
                 function exists(list, parentId){
                   for(var i=0; i<list.length; i++){
@@ -261,6 +268,7 @@
               // console.log(JSON.stringify(listToTree("postLabelId","labelParentId",list)));
               var list = listToTree("postLabelId","labelParentId",list);
               this.MenuParent = list;
+              console.log("获取了菜单列表");
               console.log(this.MenuParent);
             })
           },
