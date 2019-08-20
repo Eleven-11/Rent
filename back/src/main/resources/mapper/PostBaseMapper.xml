@@ -396,8 +396,7 @@
         <if test="isPop != null">
             ,browse DESC
         </if>
-
-        LIMIT ${start},${end}
+        LIMIT #{offSet}, #{pageRow}
     </select>
 
     <!-- 判断用户今日发帖数量 去掉 AND a.IS_DEL = 0 -->
