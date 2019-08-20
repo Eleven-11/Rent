@@ -46,7 +46,7 @@
         </if>
             ORDER BY postLabelId
         <if test="pageNum > 0">
-            LIMIT ${offSet},${pageRow}
+            LIMIT #{offSet},#{pageRow}
         </if>
     </select>
     <insert id="insertPostLabel" useGeneratedKeys="true" keyProperty="postLabelId">
@@ -98,6 +98,20 @@
             a.CONTENT like CONCAT('%',#{labelContent},'%')
         </if>
         <if test="realContent != null and realContent !=''">
+            SELECT
+            a.ID postLabelId,
+            a.PARENT_ID labelParentId,
+            a.CONTENT labelContent,
+            a.TYPE labelTypeId,
+            a.TYPE_IMG_URL labelImg,
+            a.SIZE labelSize,
+            a.FIX_SHOW labelShow
+            FROM
+            t_post_label a
+            WHERE
+            a.CONTENT = #{realContent}
+        </if>
+        <if test="contents != null and contents !=''">
             SELECT
             a.ID postLabelId,
             a.PARENT_ID labelParentId,
