@@ -9,7 +9,7 @@
           <el-upload
             class="upload-demo"
             ref="upload"
-            action="http://localhost:8080/file/importLabel"
+            action="api/file/importLabel"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
             :file-list="fileList"
