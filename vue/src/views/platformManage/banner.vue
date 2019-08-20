@@ -57,12 +57,13 @@
           <el-upload
             class="avatar-uploader"
             action="api/file/upload"
-            :show-file-list="false"
+            limit="1"
             :before-upload="beforeUpload"
             :on-success="handleAvatarSuccess">
-            <img :src="advImg" class="avatar">
+            <img :src="advImg" style="width:200px " class="avatar">
             <i  class="el-icon-plus avatar-uploader-icon"></i>
           </el-upload>
+          <span style="color:red">图片大小不可超过2MB</span>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -104,7 +105,6 @@
           },
           dialogFormVisible: false,
           dialogStatus: 'create',
-
         }
       },
       created() {
@@ -130,13 +130,14 @@
           })
         },
         insertAdvImg() {
-          this.listLoading = true;
+          this.dialogFormVisible =false
+          // this.listLoading = true;
           this.api({
             url: "/advBanner/insertAdvImg",
             method: "post",
             params: this.newAdvBanner
           }).then(data => {
-            this.dialogFormVisible = false
+            // this.dialogFormVisible = false
             this.getAdvImgList()
           })
         },
@@ -145,16 +146,23 @@
           return (this.listQuery.pageNum - 1) * this.listQuery.pageRow + $index + 1
         },
         beforeUpload(file) {
-          const isJPG = file.type === 'image/jpeg';
+          const extension = file.type === 'image/jpeg'
+          const extension2 = file.type === 'image/jpg'
+          const extension3 = file.type === 'image/png'
+
+          if (!extension&&!extension2&&!extension3) {
+            this.$message.error('上传头像图片要为jpg、png格式!');
+          }
+          // const isSize = file.width<=654&&file.height<=270;
           const isLt2M = file.size / 1024 / 1024 < 2;
 
-          if (!isJPG) {
-            this.$message.error('上传头像图片只能是 JPG 格式!');
-          }
+          /*if (!isJPG) {
+            this.$message.error('上传头像图片要为jpg、png格式!');
+          }*/
           if (!isLt2M) {
             this.$message.error('上传头像图片大小不能超过 2MB!');
           }
-          return isJPG && isLt2M;
+          return isJPG&isLt2M;
         },
         handleAvatarSuccess(res, file) {
           this.advImg = URL.createObjectURL(file.raw);

@@ -40,9 +40,9 @@
     <el-table-column align="center" label="点赞数量" prop="likes" ></el-table-column>
     <el-table-column align="center" label="中介费" prop="fee" ></el-table-column>
     <el-table-column align="center" label="发帖人id" prop="userId" v-if="false"></el-table-column>
-    <el-table-column align="center" label="置顶模块id" prop="navigationId" v-if="true"></el-table-column>
+    <el-table-column align="center" label="置顶模块id" prop="navigationId" v-if="false"></el-table-column>
     <el-table-column align="center" label="置顶模块" prop="navigationTitle"></el-table-column>
-    <el-table-column align="center" label="主键" prop="topPostId" v-if="true"></el-table-column>
+    <el-table-column align="center" label="主键" prop="topPostId" v-if="false"></el-table-column>
     <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220" ></el-table-column>
     <el-table-column  align="center" width="400" label="管理" v-if="true">
       <template slot-scope="scope">
