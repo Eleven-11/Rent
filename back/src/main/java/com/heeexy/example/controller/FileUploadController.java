@@ -8,6 +8,7 @@ import com.heeexy.example.util.constants.ErrorEnum;
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Hyperlink;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -81,12 +82,12 @@ public class FileUploadController {
 
         }
     }
-
     @RequestMapping(value = "/importLabel")
     @ResponseBody
     public JSONObject imporLabel(@RequestParam("file")MultipartFile file) throws IOException{
         System.out.println("调用后台导入接口");
-
+        int insertCount = 0;
+        int updataCount = 0;
         InputStream is ;
         if(!file.getOriginalFilename().endsWith(".xlsx")||file.isEmpty()==true){
             return CommonUtil.errorJson(ErrorEnum.E_10001);
@@ -118,17 +119,23 @@ public class FileUploadController {
 
                 JSONObject label  = new JSONObject(labelItem);
                 System.out.println(label);
-                postLabelService.insertPostLabel(label);
+                JSONObject jo = postLabelService.getLabelByContent(label);
+                JSONObject info = (JSONObject) jo.get("info");
+                Integer totalCount = (Integer) info.get("totalCount");
+
+                if(totalCount==0){
+                    postLabelService.insertPostLabel(label);
+                    insertCount++;
+                }else{
+                    updataCount++;
+                }
+
             }
-
-
-
+            return CommonUtil.successJson("成功插入"+insertCount+"条个标签，"+updataCount+"个标签已存在");
         }catch (Exception e){
-            return CommonUtil.errorJson(ErrorEnum.E_400);
-
+            return CommonUtil.errorJson(ErrorEnum.E_10002);
         }
 
 
-        return CommonUtil.successJson("导入成功");
     }
 }
