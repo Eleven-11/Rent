@@ -32,6 +32,7 @@ public class PostLabelServiceImpl implements PostLabelService {
         CommonUtil.fillPageParam(jsonObject);
         int count = postLabelDao.countPostLabel(jsonObject);
         List<JSONObject> list = postLabelDao.getPostLabelList(jsonObject);
+        System.out.println(list);
         return CommonUtil.successPage(jsonObject, list, count);
 
     }
