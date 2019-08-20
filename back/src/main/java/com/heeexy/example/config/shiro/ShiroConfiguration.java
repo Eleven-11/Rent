@@ -38,7 +38,7 @@ public class ShiroConfiguration {
 		//Shiro的核心安全接口,这个属性是必须的
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 		Map<String, Filter> filterMap = new LinkedHashMap<>();
-		filterMap.put("authc", new AjaxPermissionsAuthorizationFilter());
+//		filterMap.put("authc", new AjaxPermissionsAuthorizationFilter());
 		shiroFilterFactoryBean.setFilters(filterMap);
 		/*定义shiro过滤链  Map结构
 		 * Map中key(xml中是指value值)的第一个'/'代表的路径是相对于HttpServletRequest.getContextPath()的值来的
@@ -60,7 +60,6 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/error", "anon");
 		filterChainDefinitionMap.put("/wxLogin/decodeUserInfo", "anon");
 		filterChainDefinitionMap.put("/wxLogin/login", "anon");
-		filterChainDefinitionMap.put("/wxPostLabel/**", "anon");
 
 		filterChainDefinitionMap.put("/**", "authc");
 
