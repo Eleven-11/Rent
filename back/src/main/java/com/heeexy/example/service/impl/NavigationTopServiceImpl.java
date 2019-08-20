@@ -39,8 +39,7 @@ public class NavigationTopServiceImpl implements NavigationTopService {
     @Transactional(rollbackFor = Exception.class)
     public JSONObject insertNavigationTop(JSONObject jsonObject) {
         //将传进来的导航栏id字符串分割成数组
-        List<String> navigationIds = Arrays.asList(jsonObject.get("navigationIds").toString().split(","));
-        System.out.println(navigationIds);
+        List<String> navigationIds = Arrays.asList(jsonObject.get("checkedNavs").toString().split(","));
         //添加置顶后返回的主键列表
         List<Integer> topPostId = new ArrayList<>();
         for (int i=0;i<navigationIds.size();i++) {
@@ -57,11 +56,9 @@ public class NavigationTopServiceImpl implements NavigationTopService {
             else {
                 navigationTopDao.insertNavigationTop(jsonObject);
                 navigationDao.updateTopNum(jsonObject);
-                System.out.println(jsonObject.get("topPostId"));
-                topPostId.add(i, Integer.valueOf(jsonObject.get("topPostId").toString()));
             }
         }
-        return CommonUtil.successJson(topPostId);
+        return CommonUtil.successJson();
     }
     /**
      * @description 获取模块置顶的帖子列表

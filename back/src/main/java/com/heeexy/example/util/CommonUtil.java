@@ -131,11 +131,10 @@ public class CommonUtil {
 						sb.append(",");
 					}
 					sb.append(pv[i]);
-//                    System.out.println(pv[i]);
+
 				}
 			}
 			requestJson.put(paramName, sb.toString());
-			System.out.println(sb.toString());
 		}
 		return requestJson;
 	}

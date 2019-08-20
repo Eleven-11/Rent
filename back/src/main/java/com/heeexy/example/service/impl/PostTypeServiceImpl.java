@@ -74,7 +74,6 @@ public class PostTypeServiceImpl implements PostTypeService {
     @Override
     public JSONObject updatePostTypeById(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
-        System.out.println(jsonObject.toJSONString());
         postTypeDao.updatePostTypeById(jsonObject);
         return CommonUtil.successJson();
     }
@@ -87,7 +86,6 @@ public class PostTypeServiceImpl implements PostTypeService {
     @Override
     public JSONObject updateDelPostTypeById(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
-        System.out.println(jsonObject.toJSONString());
         postTypeDao.updateDelPostTypeById(jsonObject);
         return CommonUtil.successJson();
     }

@@ -65,7 +65,6 @@ public class HttpService {
      */
     public String doGet(String url, Map<String, Object> params)
             throws URISyntaxException, ClientProtocolException, IOException {
-        System.out.println(params);
         // 定义请求的参数
         URI uri = null;
         if (params != null) {
@@ -86,20 +85,16 @@ public class HttpService {
         }
         // 设置请求参数
 //        httpGet.setConfig(this.requestConfig);
-        System.out.println(httpGet);
 
         // 请求的结果
         CloseableHttpResponse response = null;
         try {
             // 执行请求
             response = httpClient.execute(httpGet);
-            System.out.println(response);
             // 判断返回状态是否为200
             if (response.getStatusLine().getStatusCode() == 200) {
                 // 获取服务端返回的数据,并返回
-//                System.out.println(EntityUtils.toString(response.getEntity(), "UTF-8"));
                 return new String(EntityUtils.toByteArray(response.getEntity()),"UTF-8");
-//                return EntityUtils.toString(response.getEntity(), "UTF-8");
             }
         } finally {
             if (response != null) {

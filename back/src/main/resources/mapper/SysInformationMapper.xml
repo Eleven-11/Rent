@@ -11,11 +11,11 @@
           i.CONTENT             content,
           i.CREATE_TIME         createTime
         FROM t_sys_information i
-        WHERE i.CREATE_TIME > #{flagTime}
+        WHERE i.CREATE_TIME > DATE_FORMAT(#{flagTime}, '%Y-%m-%d %T')
           AND i.TARGET_ID in (#{userId},'system_info')
           AND i.IS_DEL = 0
         ORDER BY i.CREATE_TIME DESC
-        limit #{pageNum}
+        limit #{pageRow}
     </select>
 
     <!-- 后台消息dao方法实现 -->

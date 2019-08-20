@@ -5,7 +5,6 @@ import com.heeexy.example.config.shiro.token.LoginType;
 import com.heeexy.example.dao.UserRestrictDao;
 import com.heeexy.example.dao.VisitorDao;
 import com.heeexy.example.dao.WxUserDao;
-import com.heeexy.example.service.LoginService;
 import com.heeexy.example.util.constants.Constants;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;

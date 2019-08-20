@@ -34,7 +34,6 @@ public class BackPostLabelController {
     @PostMapping("/insertPostLabel")
     public JSONObject insertPostLabel(HttpServletRequest request) {
         JSONObject jsonObject =CommonUtil.request2Json(request);
-        System.out.println(jsonObject);
         return postLabelService.insertPostLabel(jsonObject);
     }
 

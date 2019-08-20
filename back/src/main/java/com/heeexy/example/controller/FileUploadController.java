@@ -42,7 +42,6 @@ public class FileUploadController {
     @RequestMapping(value = "/upload")
     @ResponseBody
     public String imgUpload(String type, MultipartHttpServletRequest multiReq) throws IOException {
-        System.out.println(type);
         MultipartFile file = multiReq.getFile("file");
         String originalFileName = file.getOriginalFilename();
         if("chat".equals(type)) {
@@ -59,7 +58,6 @@ public class FileUploadController {
             }
             file.transferTo(dir);
             String srcUrl = "http://192.168.1.8:8080/image/chat/" + newFileName;
-            System.out.println(srcUrl);
             return srcUrl;
         }
         else{
@@ -76,7 +74,6 @@ public class FileUploadController {
             }
             file.transferTo(dir);
             String srcUrl = "http://192.168.1.8:8080/image/static/" + newFileName;
-            System.out.println(srcUrl);
             return srcUrl;
 
         }
@@ -85,7 +82,6 @@ public class FileUploadController {
     @RequestMapping(value = "/importLabel")
     @ResponseBody
     public JSONObject imporLabel(@RequestParam("file")MultipartFile file) throws IOException{
-        System.out.println("调用后台导入接口");
 
         InputStream is ;
         if(!file.getOriginalFilename().endsWith(".xlsx")||file.isEmpty()==true){
@@ -101,7 +97,6 @@ public class FileUploadController {
             for(int rowIndex = 1 ; rowIndex < sheet.getPhysicalNumberOfRows() ; rowIndex++ ){
                 //获取当前行
                 XSSFRow currentRow = sheet.getRow(rowIndex);
-                System.out.println(currentRow);
                 if(currentRow == null){
                     continue;
                 }
@@ -117,7 +112,6 @@ public class FileUploadController {
                 }
 
                 JSONObject label  = new JSONObject(labelItem);
-                System.out.println(label);
                 postLabelService.insertPostLabel(label);
             }
 

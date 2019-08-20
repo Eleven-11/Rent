@@ -50,6 +50,7 @@ public class WxUserInformationController {
         try {
             return wxInformationService.getSysInformation(CommonUtil.request2Json(request));
         }catch (Exception e){
+            e.printStackTrace();
             return CommonUtil.errorJson(ErrorEnum.E_405);
         }
     }
@@ -64,6 +65,7 @@ public class WxUserInformationController {
         try {
             return wxInformationService.getNewRes(CommonUtil.request2Json(request));
         }catch (Exception e){
+            e.printStackTrace();
             return CommonUtil.errorJson(ErrorEnum.E_405);
         }
     }
@@ -78,6 +80,7 @@ public class WxUserInformationController {
         try {
             return wxInformationService.getNewCom(CommonUtil.request2Json(request));
         }catch (Exception e){
+            e.printStackTrace();
             return CommonUtil.errorJson(ErrorEnum.E_405);
         }
     }

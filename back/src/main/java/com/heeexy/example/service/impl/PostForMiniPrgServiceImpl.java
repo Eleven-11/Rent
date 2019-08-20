@@ -57,7 +57,6 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             if (jsonObject.getInteger("pageNum")==1) {
                 //模块置顶帖子id列表
                 List<JSONObject> topJsonObject = navigationTopDao.getWxNavigationTopList(jsonObject);
-                System.out.println(topJsonObject);
                 //模块置顶帖子列表
                 List<JSONObject> topPostBase = new ArrayList<>();
                 if (!topJsonObject.isEmpty()) {
@@ -66,7 +65,6 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
                         topPostBase.add(navigationTop);
                     }
                 }
-                System.out.println(topPostBase);
                 for (int i = 0; i < topPostBase.size(); i++) {
                     postBaseList.add(topPostBase.get(i));
                 }
@@ -76,7 +74,6 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
             for (int i = 0; i < bottomPost.size(); i++) {
                 postBaseList.add(bottomPost.get(i));
             }
-            System.out.println(postBaseList);
             //循环帖子集合，做相应的数据处理
             for (JSONObject jo : postBaseList) {
                 //获取帖子评论列表

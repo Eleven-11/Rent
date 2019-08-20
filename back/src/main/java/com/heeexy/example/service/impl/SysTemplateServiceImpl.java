@@ -32,7 +32,6 @@ public class SysTemplateServiceImpl implements SysTemplateService {
         CommonUtil.fillPageParam(jsonObject);
         int count = sysTemplateDao.countSysTemplate(jsonObject);
         List<JSONObject> list = sysTemplateDao.getSysTemplateList(jsonObject);
-        System.out.println(list);
         return CommonUtil.successPage(jsonObject, list, count);
     }
 

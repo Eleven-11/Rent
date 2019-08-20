@@ -34,9 +34,6 @@ public class EmojiUtil extends EmojiParser {
             else
                 sbf.append(c);
         }
-        System.out.println(sbf.toString());
-//        System.out.println(EmojiUtil.getNonEmojiString(beforeStr));//获取非表情字符
-//        String unicode = EmojiUtil.getUnicode(EmojiUtil.getEmojiUnicodeString(beforeStr));//获取表情字符
 
         return sbf.toString();
     }

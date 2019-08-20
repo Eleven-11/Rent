@@ -13,11 +13,8 @@ import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -145,11 +142,9 @@ public class WxLoginController {
     @PostMapping("/login")
     public com.alibaba.fastjson.JSONObject login(HttpServletRequest request) {
         com.alibaba.fastjson.JSONObject jsonObject = CommonUtil.request2Json(request);
-        System.out.println(jsonObject);
 
         if (jsonObject.get("openId")!=null &&jsonObject.get("userId")==null) {
             //当用户已授权过但清除缓存（即无法获取userId）
-            System.out.println(wxUserService.getAuthStatus(jsonObject));
             if(wxUserService.getAuthStatus(jsonObject)!=null){
                 com.alibaba.fastjson.JSONObject authJson = wxUserService.getAuthStatus(jsonObject);
                 //认证并返回sessionId
