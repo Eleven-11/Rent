@@ -23,7 +23,7 @@ public interface PostLabelService {
      * @param jsonObject
      * @return
      */
-    JSONObject insertPostLabel(JSONObject jsonObject);
+    void insertPostLabel(JSONObject jsonObject);
 
     /**
      * 更新帖子标签

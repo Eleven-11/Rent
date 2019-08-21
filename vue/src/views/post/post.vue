@@ -22,9 +22,9 @@
                      @change="selectLabelType($event)">
             <el-option
               v-for="label in labelOptions"
-              :key="label.labelTypeId"
+              :key="label.postLabelId"
               :label="label.labelContent"
-              :value="label.labelTypeId">
+              :value="label.postLabelId">
             </el-option>
           </el-select>
           <div class="block" style="float: left">
@@ -232,7 +232,8 @@
           typeId: '',
           keyword: '',
           postId: '',
-          LabelType:''
+          postTypeId:'',
+          postLabelId:''
         },
         resQuery: {
           userId: '',
@@ -330,9 +331,7 @@
         // console.log(this.listQuery.typeId)
       },
       selectLabelType($event){
-        console.log("标签选择监听")
-        console.log($event)
-        this.listQuery.labelType=$event
+        this.listQuery.postLabelId=$event
       },
       //时间搓转化
       formatter(thistime, fmt) {
@@ -420,6 +419,7 @@
           method: "get",
           params: this.listQuery
         }).then(data => {
+
           this.listLoading = false;
           this.list = data.list;
           for (var i = 0; i < this.list.length; i++) {
@@ -457,19 +457,20 @@
           method: "get",
           params: this.allList
         }).then(data=>{
-          var list = data.list;
+          let list = data.list;
           function listToTree(postLabelId,labelParentId,list){
+
             function exists(list, parentId){
-              for(var i=0; i<list.length; i++){
+              for(let i=0; i<list.length; i++){
 
                 if (list[i].postLabelId == parentId){return true;}
               }
               return false;
             }
-            var nodes = [];
+            let nodes = [];
             // get the top level nodes
-            for(var i=0; i<list.length; i++){
-              var row = list[i];
+            for(let i=0; i<list.length; i++){
+              let row = list[i];
               if (!exists(list, row.labelParentId)){
                 nodes.push(row);
               }
@@ -497,8 +498,14 @@
             }
             return nodes;
           }
-          var list = listToTree("postLabelId","labelParentId",list);
-          this.labelOptions = list;
+          list = listToTree("postLabelId","labelParentId",list);
+          for (var i = 0; i < list.length; i++) {
+             for (var j = 0; j < list[i].children.length; j++) {
+               this.labelOptions.push(list[i].children[j])
+               console.log(this.labelOptions)
+
+             }
+          }
         })
       },
       handleSizeChange(val) {

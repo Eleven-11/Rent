@@ -44,6 +44,8 @@ public class PostBaseServiceImpl implements PostBaseService {
         CommonUtil.fillPageParam(jsonObject);
         int count = postBaseDao.countPost(jsonObject);
         List<JSONObject> list = postBaseDao.getPostBaseList(jsonObject);
+        System.out.println("获取了帖子列表");
+        System.out.println(list);
         return CommonUtil.successPage(jsonObject, list, count);
     }
 
