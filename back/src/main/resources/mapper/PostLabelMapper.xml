@@ -50,7 +50,7 @@
         </if>
     </select>
     <insert id="insertPostLabel" useGeneratedKeys="true" keyProperty="postLabelId">
-        INSERT INTO t_post_label (parent_id, content,type_img_url,fix_show)
+        INSERT INTO t_post_label (parent_id, content,type_img_url,fix_show,type)
         VALUES
         <foreach collection="contents" item="item" index="index" separator=",">
         (
@@ -65,7 +65,7 @@
                     WHERE
                         t_post_label.CONTENT = #{parentContent}
                 ) m),
-                #{item},#{labelImg},#{FIX_SHOW}
+                #{item},#{labelImg},#{FIX_SHOW},#{TYPE}
         )
         </foreach>
     </insert>
