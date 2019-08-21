@@ -23,7 +23,7 @@ public interface PostLabelDao {
      * @param jsonObject
      * @return
      */
-    int insertPostLabel(JSONObject jsonObject);
+    void insertPostLabel(JSONObject jsonObject);
 
     /**
      * 更新帖子标签

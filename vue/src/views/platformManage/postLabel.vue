@@ -12,6 +12,7 @@
             action="api/file/importLabel"
             :on-preview="handlePreview"
             :on-remove="handleRemove"
+            :on-success="messageBack"
             :file-list="fileList"
             accept=".xlsx"
             :auto-upload="false">
@@ -282,6 +283,20 @@
           handlePreview(file) {
             console.log("上传前数据处理")
             console.log(file);
+          },
+          messageBack(response, file, fileList){
+            console.log(response);
+            if(response.code==101){
+              this.$message({
+                message: response.msg,
+                type: 'success'
+              });
+            }else{
+              this.$message({
+                message: response.msg,
+                type: 'error'
+              });
+            }
           },
 
           handleSelect(key, keyPath){
