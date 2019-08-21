@@ -5,16 +5,26 @@
         <el-form-item>
           <div class="demo-input-suffix" style="float: left">
             发帖人：
-            <el-input placeholder="请输入内容" style="width: 400px;" v-model="nickname"></el-input>
+            <el-input placeholder="请输入内容" style="width: 266px;" v-model="nickname"></el-input>
           </div>
           帖子类型：
-          <el-select v-model="selector" style="width: 400px;" filterable placeholder="请选择类型"
+          <el-select v-model="selector" style="width: 266px;" filterable placeholder="请选择类型"
                      @change="selectTemp($event)">
             <el-option
               v-for="item in options"
               :key="item.postTypeId"
               :label="item.postTypeName"
               :value="item.postTypeId">
+            </el-option>
+          </el-select>
+          帖子标签：
+          <el-select v-model="labelSelector" style="width: 266px;" filterable placeholder="请选择标签类型"
+                     @change="selectLabelType($event)">
+            <el-option
+              v-for="label in labelOptions"
+              :key="label.labelTypeId"
+              :label="label.labelContent"
+              :value="label.labelTypeId">
             </el-option>
           </el-select>
           <div class="block" style="float: left">
@@ -221,7 +231,8 @@
           endTime: '',
           typeId: '',
           keyword: '',
-          postId: ''
+          postId: '',
+          LabelType:''
         },
         resQuery: {
           userId: '',
@@ -249,12 +260,22 @@
             postId: '',
             checkedNavs: '',
           },
-
+        allList:{
+          pageNum:-1
+        },
         selector: '',
+        labelSelector:'',
         options: [{
           postTypeId: '',
           postTypeName: '',
           postTypeImg: ''
+
+        }],
+        labelOptions: [{
+          postLabelId: '',
+          postTypeName: '',
+          postTypeImg: '',
+          labelTypeId:''
 
         }],
         daterange: [new Date(2018, 16, 24, 10, 10), new Date()],
@@ -288,6 +309,7 @@
     created() {
       this.getList();
       this.getPostTypeList();
+      this.getPostLabelList();
       // this.getNavigationTitle();
     },
     computed: {
@@ -300,12 +322,17 @@
        * 模版选中后触发
        */
       selectTemp($event) {
-        console.log($event)
+        console.log("触发监听")
         this.listQuery.typeId = $event
         // this.selector = $event.selector.postTypeName;
         // console.log(this.selector)
         // this.listQuery.typeId = $event.postTypeId;
         // console.log(this.listQuery.typeId)
+      },
+      selectLabelType($event){
+        console.log("标签选择监听")
+        console.log($event)
+        this.listQuery.labelType=$event
       },
       //时间搓转化
       formatter(thistime, fmt) {
@@ -353,7 +380,6 @@
           url: "/postType/getPostTypelist",
           method: "get"
         }).then(data => {
-          console.log(data)
           this.options = data.list;
           /*this.selector.key = this.options.postTypeId;
           this.selector.value = this.options.postTypeName;
@@ -368,7 +394,6 @@
           url: "/navigationTop/getNavigationTitle",
           method: "get"
         }).then(data => {
-          console.log(data)
           this.topNav.navigations = data.info;
         });
       },
@@ -397,7 +422,6 @@
         }).then(data => {
           this.listLoading = false;
           this.list = data.list;
-          console.log(this.list)
           for (var i = 0; i < this.list.length; i++) {
             if (this.list[i].minPrice == '' || this.list[i].minPrice == 'null' || this.list[i].minPrice == 0) {
               this.list[i].minPrice = '无'
@@ -425,6 +449,56 @@
             // this.list[i].content = this.list[i].content.substring(0,38)
           }
           this.totalCount = data.totalCount;
+        })
+      },
+      getPostLabelList(){
+        this.api({
+          url: "/postLabel/getPostLabelList",
+          method: "get",
+          params: this.allList
+        }).then(data=>{
+          var list = data.list;
+          function listToTree(postLabelId,labelParentId,list){
+            function exists(list, parentId){
+              for(var i=0; i<list.length; i++){
+
+                if (list[i].postLabelId == parentId){return true;}
+              }
+              return false;
+            }
+            var nodes = [];
+            // get the top level nodes
+            for(var i=0; i<list.length; i++){
+              var row = list[i];
+              if (!exists(list, row.labelParentId)){
+                nodes.push(row);
+              }
+            }
+
+            var toDo = [];
+            for(var i=0; i<nodes.length; i++){
+              toDo.push(nodes[i]);
+            }
+            while(toDo.length){
+              var node = toDo.shift();    // the parent node
+              // get the children nodes
+              for(var i=0; i<list.length; i++){
+                var row = list[i];
+                if (row.labelParentId == node.postLabelId){
+                  //var child = {id:row.id,text:row.name};
+                  if (node.children){
+                    node.children.push(row);
+                  } else {
+                    node.children = [row];
+                  }
+                  toDo.push(row);
+                }
+              }
+            }
+            return nodes;
+          }
+          var list = listToTree("postLabelId","labelParentId",list);
+          this.labelOptions = list;
         })
       },
       handleSizeChange(val) {
