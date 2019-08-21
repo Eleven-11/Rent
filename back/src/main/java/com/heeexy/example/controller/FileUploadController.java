@@ -1,5 +1,6 @@
 package com.heeexy.example.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostLabelService;
 import com.heeexy.example.util.CommonUtil;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -122,17 +124,20 @@ public class FileUploadController {
                 System.out.println(label);
                 JSONObject jo = postLabelService.getLabelByContent(label);
                 JSONObject info = (JSONObject) jo.get("info");
+                List list = (List) info.get("list");
                 Integer totalCount = (Integer) info.get("totalCount");
 
                 if(totalCount==0){
                     postLabelService.insertPostLabel(label);
                     insertCount++;
                 }else{
+                    postLabelService.updateDelPostLabel((JSONObject) list.get(0));
+                    postLabelService.insertPostLabel(label);
                     updataCount++;
                 }
 
             }
-            return CommonUtil.successJson("成功插入"+insertCount+"条个标签，"+updataCount+"个标签已存在");
+            return CommonUtil.successJson("成功插入"+insertCount+"条个标签，"+updataCount+"个标签已更新");
         }catch (Exception e){
             return CommonUtil.errorJson(ErrorEnum.E_10002);
         }
