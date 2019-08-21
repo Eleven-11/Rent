@@ -9,6 +9,12 @@
   display: none;
 }
 
+ .el-tooltip__popper {
+
+   max-width: 1200px;
+
+ }
+
 //暂时性解决diolag 问题 https://github.com/ElemeFE/element/issues/2461
 .el-dialog {
   transform: none;

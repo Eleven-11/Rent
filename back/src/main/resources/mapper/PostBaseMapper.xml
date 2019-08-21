@@ -204,6 +204,9 @@
         <if test="startTime !=null and startTime !='' and endTime !=null and endTime">
         AND m.CREATE_TIME BETWEEN DATE_FORMAT(#{startTime},'%Y-%m-%d %T') AND DATE_FORMAT(#{endTime},'%Y-%m-%d %T')
         </if>
+        <if test="postLabelId != null and postLabelId != ''">
+        AND FIND_IN_SET(#{postLabelId},m.labels)!=0
+        </if>
         <if test="isRecommend ==null">
             ORDER BY m.CREATE_TIME DESC
         </if>
@@ -240,7 +243,7 @@
         m.ACTIVE_TIME       activeTime,
         m.IS_LOWER_SHELF    isLowerShelf,
         m.IS_MALL           isMall,
-        m.IS_SUB            isSub
+        m.IS_SUB            isSubp
         FROM
         t_wx_user u,
         t_post_base m,
@@ -249,6 +252,7 @@
         m.TYPE_ID = f.ID
         AND u.USER_ID = m.USER_ID
         AND m.ID = #{postId}
+        AND m.IS_LOWER_SHELF =0
         <if test="isDel != null and isDel !=''">
             AND m.IS_DEL = #{isDel}
         </if>

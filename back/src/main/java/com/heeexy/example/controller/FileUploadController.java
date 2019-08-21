@@ -7,8 +7,9 @@ import com.heeexy.example.util.FileNameUtils;
 import com.heeexy.example.util.constants.ErrorEnum;
 import org.apache.commons.collections.map.LinkedMap;
 import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.Hyperlink;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.apache.poi.xssf.usermodel.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,7 +60,7 @@ public class FileUploadController {
                 filepath.mkdirs();
             }
             file.transferTo(dir);
-            String srcUrl = "http://192.168.1.8:8080/image/chat/" + newFileName;
+            String srcUrl = "http://192.168.1.7:8080/image/chat/" + newFileName;
             System.out.println(srcUrl);
             return srcUrl;
         }
@@ -76,7 +77,7 @@ public class FileUploadController {
                 filepath.mkdirs();
             }
             file.transferTo(dir);
-            String srcUrl = "http://192.168.1.8:8080/image/static/" + newFileName;
+            String srcUrl = "http://192.168.1.7:8080/image/static/" + newFileName;
             System.out.println(srcUrl);
             return srcUrl;
 

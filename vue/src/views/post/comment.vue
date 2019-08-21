@@ -35,10 +35,10 @@
       <el-table-column align="center" prop="receiveNickname" label="被回复人昵称" width="200"></el-table-column>
       <el-table-column align="center" prop="receiveImg" label="被回复人头像" width="150">
         <template slot-scope="scope">
-          <img :src="scope.row.receiveImg == null ? 'http://192.168.1.8:8080/image/static/1565848267.png':  scope.row.receiveImg" style="width: 60px; height: 60px;"/>
+          <img :src="scope.row.receiveImg == null ? 'http://192.168.1.7:8080/image/static/1565848267.png':  scope.row.receiveImg" style="width: 60px; height: 60px;"/>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="content" label="内容" width="200"></el-table-column>
+      <el-table-column align="center" prop="content" label="内容" show-overflow-tooltip width="200"></el-table-column>
       <el-table-column align="center" label="评论时间" prop="createTime" width="155" v-if="true"></el-table-column>
       <el-table-column align="center" width="200" label="管理" v-if="true">
         <template slot-scope="scope">
@@ -101,7 +101,7 @@
         listLoading: false,//数据加载等待动画
         listQuery: {
           pageNum: 1,//页码
-          pageRow: 50,//每页条数
+          pageRow: 10,//每页条数
 
         },
         comment:{
@@ -137,6 +137,7 @@
           method: "get",
           params: this.listQuery
         }).then(data => {
+          console.log(data)
           this.listLoading = false;
           this.list = data.list;
           for (var i =0 ;i<this.list.length; i++){
@@ -162,10 +163,7 @@
           this.getPostTypelist()
         })
       },
-      getIndex($index) {
-        //表格序号
-        return (this.listQuery.pageNum - 1) * this.listQuery.pageRow + $index + 1
-      },
+
       beforeUpload(file) {
         const isJPG = file.type === 'image/jpeg';
         const isLt2M = file.size / 1024 / 1024 < 2;
@@ -287,13 +285,13 @@
       handleCurrentChange(val) {
         //改变页码
         this.listQuery.pageNum = val
-        this.getPostTypelist();
+        this.getPostCommentList();
       },
 
       handleFilter() {
         //查询事件
         this.listQuery.pageNum = 1
-        this.getPostTypelist()
+        this.getPostCommentList()
       },
       getIndex($index) {
         //表格序号
@@ -303,7 +301,7 @@
         let _vue = this;
         _vue.list[$index].visible = false
         if(this.resEndTime==null){
-          _vue.$message.error("请输入禁言结束时间");
+          _vue.$message.error("未输入禁言结束时间!");
         }
         else {
           this.resQuery.userId = _vue.list[$index].startId;

@@ -84,74 +84,74 @@
 
     methods:{
 //周数据查询
-      getAllData(){
-        this.allMax = 1;
-        this.api({
-          url: "/statistics/userFollowAll",
-          method: "get",
-          // params:this.man
-        }).then(data => {
-          let size = data.length;
-          size = size > 10 ? 10 : size;
-          if (size > 1){
-            this.allMax = data[0].fans;
-          }
-          //补足显示
-          if (size < 10 ){
-            for (let i = size ; i < 10 ; i ++){
-              data.push({name:"暂无数据",fans:0,follower:"-1"});
-            }
-          }
-          this.allLeftList = data.slice(0,5);
-          this.allRightList = data.slice(5,10);
-        })
-      },
+//       getAllData(){
+//         this.allMax = 1;
+//         this.api({
+//           url: "/statistics/userFollowAll",
+//           method: "get",
+//           // params:this.man
+//         }).then(data => {
+//           let size = data.length;
+//           size = size > 10 ? 10 : size;
+//           if (size > 1){
+//             this.allMax = data[0].fans;
+//           }
+//           //补足显示
+//           if (size < 10 ){
+//             for (let i = size ; i < 10 ; i ++){
+//               data.push({name:"暂无数据",fans:0,follower:"-1"});
+//             }
+//           }
+//           this.allLeftList = data.slice(0,5);
+//           this.allRightList = data.slice(5,10);
+//         })
+//       },
       //周数据查询
-      getWeekData(){
-        this.weekMax = 1;
-        this.api({
-          url: "/statistics/userFollowByWeek",
-          method: "get",
-          // params:this.man
-        }).then(data => {
-          let size = data.length;
-          size = size > 10 ? 10 : size;
-          if (size > 1){
-            this.weekMax = data[0].fans;
-          }
-          //补足显示
-          if (size < 10 ){
-            for (let i = size ; i < 10 ; i ++){
-              data.push({name:"暂无数据",fans:0,follower:"-1"});
-            }
-          }
-          this.weekLeftList = data.slice(0,5);
-          this.weekRightList = data.slice(5,10);
-        })
-      },
+      // getWeekData(){
+      //   this.weekMax = 1;
+      //   this.api({
+      //     url: "/statistics/userFollowByWeek",
+      //     method: "get",
+      //     // params:this.man
+      //   }).then(data => {
+      //     let size = data.length;
+      //     size = size > 10 ? 10 : size;
+      //     if (size > 1){
+      //       this.weekMax = data[0].fans;
+      //     }
+      //     //补足显示
+      //     if (size < 10 ){
+      //       for (let i = size ; i < 10 ; i ++){
+      //         data.push({name:"暂无数据",fans:0,follower:"-1"});
+      //       }
+      //     }
+      //     this.weekLeftList = data.slice(0,5);
+      //     this.weekRightList = data.slice(5,10);
+      //   })
+      // },
       //月数据查询
-      getMonthData(){
-        this.monthMax = 1;
-        this.api({
-          url: "/statistics/userFollowByMonth",
-          method: "get",
-          // params:this.man
-        }).then(data => {
-          let size = data.length;
-          size = size > 10 ? 10 : size;
-          if (size > 1){
-            this.monthMax = data[0].fans;
-          }
-          //补足显示
-          if (size < 10 ){
-            for (let i = size ; i < 10 ; i ++){
-                data.push({name:"暂无数据",fans:0,follower:"-1"});
-            }
-          }
-          this.monthLeftList = data.slice(0,5);
-          this.monthRightList = data.slice(5,10);
-        })
-      }
+      // getMonthData(){
+      //   this.monthMax = 1;
+      //   this.api({
+      //     url: "/statistics/userFollowByMonth",
+      //     method: "get",
+      //     // params:this.man
+      //   }).then(data => {
+      //     let size = data.length;
+      //     size = size > 10 ? 10 : size;
+      //     if (size > 1){
+      //       this.monthMax = data[0].fans;
+      //     }
+      //     //补足显示
+      //     if (size < 10 ){
+      //       for (let i = size ; i < 10 ; i ++){
+      //           data.push({name:"暂无数据",fans:0,follower:"-1"});
+      //       }
+      //     }
+      //     this.monthLeftList = data.slice(0,5);
+      //     this.monthRightList = data.slice(5,10);
+      //   })
+      // }
 
     }
 

@@ -42,6 +42,7 @@
         WX_PROVINCE     wxProvince,
         WX_COUNTRY      wxCountry,
         DEV_FANS        devFans,
+        SUMMARY         summary,
         DATE_FORMAT(CREATE_TIME, '%Y-%m-%d %T')    createTime,
         DATE_FORMAT(UPDATE_TIME, '%Y-%m-%d %T')    updateTime,
         ((SELECT COUNT(0) FROM t_user_follow a WHERE a.FOLLOW_ID =wxUserId and IS_DEL =0)+DEV_FANS) fans,

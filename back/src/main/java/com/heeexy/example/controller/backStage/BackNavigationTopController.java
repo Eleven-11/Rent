@@ -72,7 +72,7 @@ public class BackNavigationTopController {
      *                 首行帖子排序时间-formerSortTime，末行帖子排序时间 - laterSortTime
      * @return
      **/
-    @RequiresPermissions("top:post:sort")
+    @RequiresPermissions("top:sort")
     @PostMapping("/sortNavigationTop")
     public JSONObject sortNavigationTop(HttpServletRequest request){
         return navigationTopService.sortNavigationTop(CommonUtil.request2Json(request));
@@ -83,7 +83,7 @@ public class BackNavigationTopController {
      * @param  request navigationId-置顶模块id，置顶帖子主键（navigationTop表主键）-topPostId
      * @return
      **/
-    @RequiresPermissions("top:post:del")
+    @RequiresPermissions("top:del")
     @PostMapping("/updateDelNav")
     public JSONObject updateDelNavigationTop(HttpServletRequest request){
         return navigationTopService.updateDelNavigationTop(CommonUtil.request2Json(request));

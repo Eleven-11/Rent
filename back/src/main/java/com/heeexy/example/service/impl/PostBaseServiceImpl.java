@@ -42,6 +42,7 @@ public class PostBaseServiceImpl implements PostBaseService {
     @Override
     public JSONObject getPostBaseList(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
+        System.out.println(jsonObject);
         int count = postBaseDao.countPost(jsonObject);
         List<JSONObject> list = postBaseDao.getPostBaseList(jsonObject);
         System.out.println("获取了帖子列表");

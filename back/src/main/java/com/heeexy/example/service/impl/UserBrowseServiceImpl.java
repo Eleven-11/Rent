@@ -60,7 +60,6 @@ public class UserBrowseServiceImpl implements UserBrowseService {
             else {
                 userBrowseDao.insertUserBrowse(jsonObject);
                 return CommonUtil.successJson("插入成功");
-
             }
     }
 

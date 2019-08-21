@@ -146,130 +146,130 @@
       this.getAnnualReportByRegion();
     },
     methods: {
-      getAnnualReportByRegion(){
-        let _this = this;
-        _this.api({
-          url: "/statistics/annualReportByRegion",
-          method: "get",
-          params:this.man
-        }).then(data => {
-          for (let i = 0 ; i < data.list.length; i++){
-            // console.log(data.list[i]);
-            // console.log(data.list[i].values.browses.split(','));
-            let obj = {
-              region:data.list[i].region,
-              values:data.list[i].values.browses.split(',')
-            }
-            _this.list.push(obj);
-          }
-          console.log(_this.list)
-        })
-      },
-      getAllData(){
-        let _this = this;
-        _this.regionTotalNameList = [];
-        _this.regionTotalValueList = [];
-        this.api({
-          url: "/statistics/postRegionAll",
-          method: "get",
-          params:this.man
-        }).then(data => {
-          for (var i = 0 ; i < data.length; i ++){
-            _this.regionTotalNameList.push(data[i].region);
-            _this.regionTotalValueList.push(data[i].browse);
-          }
-          _this.getRegionEchart('regionTotalEchart',_this.regionTotalNameList,_this.regionTotalValueList);
-         })
-      },
+      // getAnnualReportByRegion(){
+      //   let _this = this;
+      //   _this.api({
+      //     url: "/statistics/annualReportByRegion",
+      //     method: "get",
+      //     params:this.man
+      //   }).then(data => {
+      //     for (let i = 0 ; i < data.list.length; i++){
+      //       // console.log(data.list[i]);
+      //       // console.log(data.list[i].values.browses.split(','));
+      //       let obj = {
+      //         region:data.list[i].region,
+      //         values:data.list[i].values.browses.split(',')
+      //       }
+      //       _this.list.push(obj);
+      //     }
+      //     console.log(_this.list)
+      //   })
+      // },
+      // getAllData(){
+      //   let _this = this;
+      //   _this.regionTotalNameList = [];
+      //   _this.regionTotalValueList = [];
+      //   this.api({
+      //     url: "/statistics/postRegionAll",
+      //     method: "get",
+      //     params:this.man
+      //   }).then(data => {
+      //     for (var i = 0 ; i < data.length; i ++){
+      //       _this.regionTotalNameList.push(data[i].region);
+      //       _this.regionTotalValueList.push(data[i].browse);
+      //     }
+      //     _this.getRegionEchart('regionTotalEchart',_this.regionTotalNameList,_this.regionTotalValueList);
+      //    })
+      // },
 
-      getWeekData(){
-        let _this = this;
-        _this.regionWeekNameList = [];
-        _this.regionWeekValueList = [];
-        this.api({
-          url: "/statistics/postRegionByWeek",
-          method: "get",
-          params:this.man
-        }).then(data => {
-          for (var i = 0 ; i < data.length; i ++){
-            _this.regionWeekNameList.push(data[i].region);
-            _this.regionWeekValueList.push(data[i].browse);
-          }
-          _this.getRegionEchart('regionWeekEchart',_this.regionWeekNameList,_this.regionWeekValueList);
-        })
-      },
+      // getWeekData(){
+      //   let _this = this;
+      //   _this.regionWeekNameList = [];
+      //   _this.regionWeekValueList = [];
+      //   this.api({
+      //     url: "/statistics/postRegionByWeek",
+      //     method: "get",
+      //     params:this.man
+      //   }).then(data => {
+      //     for (var i = 0 ; i < data.length; i ++){
+      //       _this.regionWeekNameList.push(data[i].region);
+      //       _this.regionWeekValueList.push(data[i].browse);
+      //     }
+      //     _this.getRegionEchart('regionWeekEchart',_this.regionWeekNameList,_this.regionWeekValueList);
+      //   })
+      // },
 
-      getMonthData(){
-        let _this = this;
-        _this.regionMonthNameList = [];
-        _this.regionMonthValueList = [];
-        _this.api({
-          url: "/statistics/postRegionByMonth",
-          method: "get",
-          params:this.man
-        }).then(data => {
-          for (var i = 0 ; i < data.length; i ++){
-            _this.regionMonthNameList.push(data[i].region);
-            _this.regionMonthValueList.push(data[i].browse);
-          }
-          _this.getRegionEchart('regionMonthEchart',_this.regionMonthNameList,_this.regionMonthValueList);
-        })
-      },
-      getRegionEchart(id,names,values) {
-        let myChart = echarts.init(document.getElementById(id));
-        let option = {
-          show: true,
-          backgroundColor: '#ffffff',
-          tooltip: {
-            trigger: 'axis',
-            confine: true ,
-            axisPointer: {
-              type: 'shadow',
-              shadowStyle:{shadowOffseY: '20px'}
-            }
-          },
-          grid: {
-            show:true,
-            borderColor: '#ffffff',
-            backgroundColor: '#ffffff',
-            top: '5%',
-            left: '2%',
-            right: '6%',
-            bottom:'9%',
-            containLabel: true
-          },
-          xAxis: {
-            type: 'value',
-            axisTick:{show: false},
-            axisLine: {show: false,},
-            splitLine:{
-              lineStyle:{ type: 'dashed',}
-            },
-          },
-          yAxis: {
-            type: 'category',
-            boundaryGap: true,
-            axisTick: {interval: 0,alignWithLabel:true},
-            axisLine: {
-              show: true,
-              lineStyle:{color: "#ccc"}
-            },
-            axisLabel:{
-              show: true,
-              color:'#333'
-            },
-            data: names
-          },
-          series: [{
-            name: '发帖数',
-            type: 'bar',
-            barWidth: 26,
-            color: '#46a1ff',
-            data: values
-          }]
-        }
-        myChart.setOption(option);
-      },
+      // getMonthData(){
+      //   let _this = this;
+      //   _this.regionMonthNameList = [];
+      //   _this.regionMonthValueList = [];
+      //   _this.api({
+      //     url: "/statistics/postRegionByMonth",
+      //     method: "get",
+      //     params:this.man
+      //   }).then(data => {
+      //     for (var i = 0 ; i < data.length; i ++){
+      //       _this.regionMonthNameList.push(data[i].region);
+      //       _this.regionMonthValueList.push(data[i].browse);
+      //     }
+      //     _this.getRegionEchart('regionMonthEchart',_this.regionMonthNameList,_this.regionMonthValueList);
+      //   })
+      // },
+      // getRegionEchart(id,names,values) {
+      //   let myChart = echarts.init(document.getElementById(id));
+      //   let option = {
+      //     show: true,
+      //     backgroundColor: '#ffffff',
+      //     tooltip: {
+      //       trigger: 'axis',
+      //       confine: true ,
+      //       axisPointer: {
+      //         type: 'shadow',
+      //         shadowStyle:{shadowOffseY: '20px'}
+      //       }
+      //     },
+      //     grid: {
+      //       show:true,
+      //       borderColor: '#ffffff',
+      //       backgroundColor: '#ffffff',
+      //       top: '5%',
+      //       left: '2%',
+      //       right: '6%',
+      //       bottom:'9%',
+      //       containLabel: true
+      //     },
+      //     xAxis: {
+      //       type: 'value',
+      //       axisTick:{show: false},
+      //       axisLine: {show: false,},
+      //       splitLine:{
+      //         lineStyle:{ type: 'dashed',}
+      //       },
+      //     },
+      //     yAxis: {
+      //       type: 'category',
+      //       boundaryGap: true,
+      //       axisTick: {interval: 0,alignWithLabel:true},
+      //       axisLine: {
+      //         show: true,
+      //         lineStyle:{color: "#ccc"}
+      //       },
+      //       axisLabel:{
+      //         show: true,
+      //         color:'#333'
+      //       },
+      //       data: names
+      //     },
+      //     series: [{
+      //       name: '发帖数',
+      //       type: 'bar',
+      //       barWidth: 26,
+      //       color: '#46a1ff',
+      //       data: values
+      //     }]
+      //   }
+      //   myChart.setOption(option);
+      // },
       clickTab($event){
         let _this = this;
         let id = event.target.getAttribute('id');

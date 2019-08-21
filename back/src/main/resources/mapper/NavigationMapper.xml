@@ -20,5 +20,8 @@
             a.TITLE navigationTitle
         FROM
             t_navigation a
+        <if test="navigationId != null and navigationId !=''">
+            WHERE  a.ID = #{navigationId}
+        </if>
     </select>
 </mapper>

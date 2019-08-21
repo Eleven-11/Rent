@@ -5,10 +5,10 @@
         <el-form-item>
           <div class="demo-input-suffix" style="float: left">
             发帖人：
-            <el-input placeholder="请输入内容" style="width: 266px;" v-model="nickname"></el-input>
+            <el-input placeholder="请输入内容" style="width: 400px;" v-model="nickname"></el-input>
           </div>
           帖子类型：
-          <el-select v-model="selector" style="width: 266px;" filterable placeholder="请选择类型"
+          <el-select v-model="selector" style="width: 400px;" filterable placeholder="请选择类型"
                      @change="selectTemp($event)">
             <el-option
               v-for="item in options"
@@ -393,6 +393,7 @@
           url: "/navigationTop/getNavigationTitle",
           method: "get"
         }).then(data => {
+          console.log(data)
           this.topNav.navigations = data.info;
         });
       },
@@ -422,6 +423,7 @@
 
           this.listLoading = false;
           this.list = data.list;
+          console.log(this.list)
           for (var i = 0; i < this.list.length; i++) {
             if (this.list[i].minPrice == '' || this.list[i].minPrice == 'null' || this.list[i].minPrice == 0) {
               this.list[i].minPrice = '无'
@@ -600,20 +602,7 @@
           method: "post",
           params: this.navParams
         }).then(() => {
-          console.log(this.navParams)
-          let msg = "修改成功";
-          this.onTopDialog = false
-          // if (this.userId === this.tempPost.userId) {
-          //   msg = '修改成功,部分信息重新登录后生效'
-          // }
-          this.$message({
-            message: msg,
-            type: 'success',
-            duration: 1 * 1000,
-            onClose: () => {
-              _vue.getList();
-            }
-          })
+          this.onTopDialog = false;
         })
 
       },

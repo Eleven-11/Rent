@@ -35,6 +35,7 @@
       <el-table-column align="center" label="最近活跃时间" prop="updateTime" width="170"></el-table-column>
       <el-table-column align="center" label="用户ID" prop="wxUserId" style="width: 20px;" v-if="false"></el-table-column>
       <el-table-column align="center" label="粉丝量" prop="fans" style="width: 20px;" v-if="true"></el-table-column>
+      <el-table-column align="center" label="用户简介" prop="summary" style="width: 100px"  show-overflow-tooltip></el-table-column>
       <el-table-column align="center" label="管理" width="220" >
         <template slot-scope="scope">
           <el-popover
@@ -77,7 +78,7 @@
           </el-popover>
           <el-popover
             placement="right"
-            width="180"
+            width="220"
             trigger="click">
             <el-table :data="followData">
               <el-table-column width="80" property="followNickname" label="昵称"></el-table-column>
@@ -240,9 +241,7 @@
       /*获取用户列表*/
       getWxUserList() {
         this.listQuery.nickname = this.nickname
-        //this.startTime = this.formatter(this.daterange[0], 'yyyy-MM-dd hh:mm:ss')
         this.listQuery.startTime = this.formatter(this.daterange[0], 'yyyy-MM-dd hh:mm:ss')
-        //this.endTime = this.formatter(this.daterange[1], 'yyyy-MM-dd hh:mm:ss')
         this.listQuery.endTime = this.formatter(this.daterange[1], 'yyyy-MM-dd hh:mm:ss')
         this.api({
           url: "/bkWxUser/getWxUserlist",

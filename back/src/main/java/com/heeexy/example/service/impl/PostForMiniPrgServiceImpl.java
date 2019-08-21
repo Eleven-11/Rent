@@ -66,7 +66,9 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
                     }
                 }
                 for (int i = 0; i < topPostBase.size(); i++) {
-                    postBaseList.add(topPostBase.get(i));
+                    if (topPostBase.get(i)!=null) {
+                        postBaseList.add(topPostBase.get(i));
+                    }
                 }
             }
             //除置顶帖子以外的全部帖子列表
@@ -85,7 +87,7 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
                 //没有头像的用户设置为默认头像
                 for (int i = 0; i < postLikeList.size(); i++) {
                     if (postLikeList.get(i).get("likeImg") == null) {
-                        postLikeList.get(i).put("likeImg", "http://192.168.1.8:8080/image/static/default.png");
+                        postLikeList.get(i).put("likeImg", "http://192.168.1.7:8080/image/static/default.png");
                     }
                 }
                 jo.put("postLikeList", postLikeList);
@@ -127,7 +129,7 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
                 //没有头像的用户设置为默认头像
                 for (int i = 0; i < postLikeList.size(); i++) {
                     if (postLikeList.get(i).get("likeImg") == null) {
-                        postLikeList.get(i).put("likeImg", "http://192.168.1.8:8080/image/static/default.png");
+                        postLikeList.get(i).put("likeImg", "http://192.168.1.7:8080/image/static/default.png");
                     }
                 }
                 jo.put("postLikeList", postLikeList);

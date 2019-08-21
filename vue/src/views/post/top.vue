@@ -53,41 +53,6 @@
     </el-table-column>
   </el-table>
 
-<!--  <el-pagination
-    @size-change="handleSizeChange"
-    @current-change="handleCurrentChange"
-    :current-page="listQuery.pageNum"
-    :page-size="listQuery.pageRow"
-    :total="totalCount"
-    :page-sizes="[10, 20, 50, 100]"
-    layout="total, sizes, prev, pager, next, jumper">
-  </el-pagination>-->
-
-  <!--<el-dialog v-model="newAdvBanner" :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-    <el-form class="small-space" :model="advBanner" label-position="left" label-width="80px"
-             style='width: 300px; margin-left:50px;'>
-      <el-form-item label="广告标题">
-        <el-input type="text" v-model="newAdvBanner.advTitle">
-        </el-input>
-      </el-form-item>
-      <el-form-item label="广告图片" v-model="newAdvBanner.advImg">
-        <el-upload
-          class="avatar-uploader"
-          action="api/file/upload"
-          :show-file-list="false"
-          :before-upload="beforeUpload"
-          :on-success="handleAvatarSuccess">
-          <img :src="advImg" class="avatar">
-          <i  class="el-icon-plus avatar-uploader-icon"></i>
-        </el-upload>
-      </el-form-item>
-    </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogFormVisible = false">取 消</el-button>
-      <el-button v-if="dialogStatus=='update'" type="success" @click="updateAdvBanner">修 改</el-button>
-      <el-button v-if="dialogStatus=='create'" type="success" @click="insertAdvImg">创 建</el-button>
-    </div>
-  </el-dialog>-->
   </div>
 
 </template>
@@ -161,10 +126,7 @@
           url: "/navigationTop/getNavigationTitle",
           method: "get"
         }).then(data => {
-          console.log("1231555")
-          console.log(data)
           this.options = data.info;
-          console.log(this.options)
         })
       },
       getIndex($index) {
@@ -190,10 +152,6 @@
             method: "post",
             params: this.navigationTop
           }).then(data => {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
             this.getNavigationTopList();
           })
 

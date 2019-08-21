@@ -5,25 +5,27 @@
     <select id="countComments" resultType="java.lang.Integer">
         select count(0) from
         (SELECT
-            a.ID commentId,
-            a.CONTENT content,
-            a.CREATE_TIME createTime,
-            u1.WX_NICK_NAME startNickname,
-            a.START_ID startId,
-            a.RECEIVE_ID receiveId,
-            u1.WX_GENDER startGender,
-            u1.WX_AVATAR_URL startImg,
-            u2.WX_NICK_NAME receiveNickname,
-            u2.WX_AVATAR_URL receiveImg,
-            u2.WX_GENDER receiveGender
+        a.ID commentId,
+        a.CONTENT content,
+        a.CREATE_TIME createTime,
+        a.START_ID startId,
+        a.RECEIVE_ID receiveId,
+        u1.WX_NICK_NAME startNickname
         FROM
-            t_comment a
+        t_comment a
         LEFT JOIN t_wx_user u1 ON a.START_ID = u1.USER_ID
-        LEFT JOIN t_wx_user u2 ON a.RECEIVE_ID = u2.USER_ID
         WHERE
-            a.POST_ID = #{postId}
-        AND a.IS_DEL = '0'
-        ORDER BY a.CREATE_TIME DESC) g
+        a.IS_DEL = '0'
+        <if test="postId != null and postId != ''">
+            AND a.POST_ID = #{postId}
+        </if>
+        <if test="commentStarter != null and commentStarter != ''">
+            AND u1.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{commentStarter}),'%')
+        </if>
+        <if test="commentContent != null and commentContent != ''">
+            AND a.CONTENT LIKE CONCAT(CONCAT('%',#{commentContent}),'%')
+        </if>
+        ORDER BY a.CREATE_TIME) g
     </select>
     <select id="getPostCommentList" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
@@ -48,13 +50,16 @@
         <if test="postId != null and postId != ''">
             AND a.POST_ID = #{postId}
         </if>
-        <if test="commentStarter != null and commentStarter != null">
+        <if test="commentStarter != null and commentStarter != ''">
             AND u1.WX_NICK_NAME LIKE CONCAT(CONCAT('%',#{commentStarter}),'%')
         </if>
-        <if test="commentContent != null and commentContent != null">
+        <if test="commentContent != null and commentContent != ''">
             AND a.CONTENT LIKE CONCAT(CONCAT('%',#{commentContent}),'%')
         </if>
         ORDER BY a.CREATE_TIME
+        <if test="pageNum>0">
+            LIMIT #{offSet},#{pageRow}
+        </if>
     </select>
     <insert id="insertComment" useGeneratedKeys="true" keyProperty="commentId">
         BEGIN;

@@ -61,7 +61,7 @@ public class ShiroConfiguration {
 		filterChainDefinitionMap.put("/wxLogin/decodeUserInfo", "anon");
 		filterChainDefinitionMap.put("/wxLogin/login", "anon");
 
-		filterChainDefinitionMap.put("/**", "authc");
+//		filterChainDefinitionMap.put("/**", "authc");
 
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 		return shiroFilterFactoryBean;

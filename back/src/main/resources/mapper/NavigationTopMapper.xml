@@ -60,6 +60,9 @@
         <if test="navigationId != null and navigationId !=''">
             AND a.NAVIGATION_ID = #{navigationId}
         </if>
+        <if test="postId != null and postId !=''">
+            AND a.POST_ID = #{postId}
+        </if>
         ORDER BY a.SORT_TIME DESC
     </select>
     <select id="getWxNavigationTopList" resultType="com.alibaba.fastjson.JSONObject">

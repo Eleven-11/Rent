@@ -40,25 +40,24 @@ public class NavigationTopServiceImpl implements NavigationTopService {
     public JSONObject insertNavigationTop(JSONObject jsonObject) {
         //将传进来的导航栏id字符串分割成数组
         List<String> navigationIds = Arrays.asList(jsonObject.get("checkedNavs").toString().split(","));
-        //添加置顶后返回的主键列表
-        List<Integer> topPostId = new ArrayList<>();
+        //循环插入置顶信息
         for (int i=0;i<navigationIds.size();i++) {
             jsonObject.put("navigationId", navigationIds.get(i));
             //判断置顶帖子条数是否超出5条
+            System.out.println(jsonObject);
             if (navigationDao.getNavigationNum(jsonObject) == 5) {
                 return CommonUtil.errorJson(ErrorEnum.E_30001);
             }
             //判断要设置置顶的帖子是否已经在该模块置顶
             else if (navigationDao.getNavigationNum(jsonObject) <= 5 && !navigationTopDao.getNavigationTopList(jsonObject).isEmpty()) {
-                return CommonUtil.errorJson(ErrorEnum.WX_803);
+                return CommonUtil.errorJson("该帖子已置顶于"+navigationDao.getNavigationTitle(jsonObject).get(0).get("navigationTitle"));
             }
-            //添加置顶帖子信息并返回主键topPostId
             else {
                 navigationTopDao.insertNavigationTop(jsonObject);
                 navigationDao.updateTopNum(jsonObject);
             }
         }
-        return CommonUtil.successJson();
+        return CommonUtil.successJson("设置置顶成功");
     }
     /**
      * @description 获取模块置顶的帖子列表

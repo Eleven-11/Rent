@@ -58,6 +58,17 @@ public class CommonUtil {
 	}
 
 	/**
+	 * @description 返回具体错误信息JSON
+	 **/
+	public static JSONObject errorJson(String msg) {
+		JSONObject resultJson = new JSONObject();
+		resultJson.put("code","19999");
+		resultJson.put("msg", msg);
+		resultJson.put("info", new JSONObject());
+		return resultJson;
+	}
+
+	/**
 	 * 查询分页结果后的封装工具方法
 	 *
 	 * @param requestJson 请求参数json,此json在之前调用fillPageParam 方法时,已经将pageRow放入
