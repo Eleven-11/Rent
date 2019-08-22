@@ -3,7 +3,6 @@ package com.heeexy.example.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserFollowService;
 import com.heeexy.example.util.CommonUtil;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -48,7 +47,7 @@ public class WxUserFollowController {
      * @param request 粉丝Id-fanId，关注者Id-followId
      * @return
      **/
-    @RequiresPermissions("wx:follow:update")
+//    @RequiresPermissions("wx:follow:update")
     @PostMapping("/updateUserFollow")
     public JSONObject insertUserFollow(HttpServletRequest request) {
         return userFollowService.updateUserFollow(CommonUtil.request2Json(request));

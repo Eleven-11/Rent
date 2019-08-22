@@ -11,7 +11,7 @@
     </select>
     <update id="updateTopNum">
         UPDATE t_navigation
-        SET MAX_TOP_NUM =(SELECT COUNT(0) FROM t_navigation_top WHERE NAVIGATION_ID =#{navigationId})
+        SET MAX_TOP_NUM =(SELECT COUNT(0) FROM t_navigation_top WHERE NAVIGATION_ID =#{navigationId} AND t_navigation_top.IS_DEL=0)
         WHERE ID = #{navigationId};
     </update>
     <select id="getNavigationTitle" resultType="com.alibaba.fastjson.JSONObject">

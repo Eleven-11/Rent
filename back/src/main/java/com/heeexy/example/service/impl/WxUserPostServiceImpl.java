@@ -29,6 +29,9 @@ public class WxUserPostServiceImpl implements WxUserPostService {
     private PostImgDao postImgDao;
 
     @Autowired
+    private PostLabelDao postLabelDao;
+
+    @Autowired
     private PostCommentDao postCommentDao;
 
     @Autowired
@@ -100,6 +103,13 @@ public class WxUserPostServiceImpl implements WxUserPostService {
     public JSONObject updatePost(JSONObject jsonObject) {
         if (wxUserPostDao.getIfOnShelf(jsonObject)==1) {
             wxUserPostDao.updatePost(jsonObject);
+            if (jsonObject.get("labels") != null && !StringUtils.isEmpty(jsonObject.get("labels"))) {
+                //先将原来的帖子图片记录删除
+                postLabelDao.deleteLabel(jsonObject);
+                //插入新的帖子图片
+                jsonObject.put("labels", Arrays.asList(jsonObject.get("labels").toString().split(",")));
+                postLabelDao.insertLabel(jsonObject);
+            }
             if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
                 //先将原来的帖子图片记录删除
                 postImgDao.deletePostImg(jsonObject);

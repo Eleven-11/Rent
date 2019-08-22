@@ -96,5 +96,12 @@ public interface PostBaseDao {
      **/
     void updateDeletedPost(JSONObject jsonObject);
 
+    /**
+     * @description 获取帖子上下架状态
+     * @param jsonObject
+     * @return int
+     **/
+    int getOnShelfStatus(JSONObject jsonObject);
+
 
 }

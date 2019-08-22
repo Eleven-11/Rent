@@ -8,6 +8,9 @@ import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -93,6 +96,19 @@ public class AdvertBannerServiceImpl implements AdverBannerService {
      **/
     @Override
     public JSONObject sortAdvImgList(JSONObject jsonObject) {
+
+        SimpleDateFormat sDateFormat=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if(jsonObject.get("formerSortTime").toString() .equals(jsonObject.get("laterSortTime").toString())) {
+            try {
+                Date laterSortTime = sDateFormat.parse(jsonObject.get("laterSortTime").toString());
+                long time = 1 * 1000;
+                Date temp = new Date(laterSortTime.getTime() + time);
+                jsonObject.put("laterSortTime", temp);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
         advertBannerDao.sortAdvImgList(jsonObject);
         return CommonUtil.successJson();
 

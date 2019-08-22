@@ -48,7 +48,7 @@ public class WxRealmServiceImpl implements WxRealmService {
     public JSONObject getInfo() {
         //从session获取用户信息
         Session session = SecurityUtils.getSubject().getSession();
-        session.setTimeout(24*60*60);
+//        session.setTimeout(24*60*60);
         JSONObject userInfo = (JSONObject) session.getAttribute(Constants.SESSION_USER_INFO);
         //声明权限标签集合
         List<String> permissionList = new ArrayList<>();

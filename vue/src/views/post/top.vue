@@ -30,8 +30,8 @@
     </el-table-column>
     <el-table-column align="center" label="帖子Id" prop="postId" width="90" v-if="false"></el-table-column>
     <el-table-column align="center" label="发布时间" prop="createTime" width="220"></el-table-column>
-    <el-table-column align="center" label="地址" prop="address"  width="120"></el-table-column>
-    <el-table-column align="center" label="帖子内容" prop="content" width="200" ></el-table-column>
+    <el-table-column align="center" label="地址" show-overflow-tooltip prop="address"  width="120"></el-table-column>
+    <el-table-column align="center" label="帖子内容" show-overflow-tooltip prop="content" width="200" ></el-table-column>
     <el-table-column align="center" label="最低价" prop="minPrice" ></el-table-column>
     <el-table-column align="center" label="最高价" prop="maxPrice" ></el-table-column>
     <el-table-column align="center" label="联系方式" prop="phone" width="160"></el-table-column>
@@ -47,8 +47,8 @@
     <el-table-column  align="center" width="400" label="管理" v-if="true">
       <template slot-scope="scope">
         <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
-        <el-button type="primary" icon="up" @click="sortNavigationTop(scope.$index-1,scope.$index)" v-if="(scope.$index)!=0">↑</el-button>
-        <el-button type="primary" icon="down" @click="sortNavigationTop(scope.$index,scope.$index+1)" v-if="(scope.$index)!=list.length-1">↓</el-button>
+        <el-button type="primary" icon="up" v-show="list[scope.$index-1].navigationId === list[scope.$index].navigationId" @click="sortNavigationTop(scope.$index-1,scope.$index)" v-if="(scope.$index)!=0">↑</el-button>
+        <el-button type="primary" icon="down" v-show="list[scope.$index].navigationId === list[scope.$index+1].navigationId" @click="sortNavigationTop(scope.$index,scope.$index+1)" v-if="(scope.$index)!=list.length-1">↓</el-button>
       </template>
     </el-table-column>
   </el-table>

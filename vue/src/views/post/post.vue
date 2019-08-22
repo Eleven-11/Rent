@@ -61,7 +61,7 @@
       </el-table-column>
       <el-table-column align="center" label="帖子Id" prop="postId" width="90" v-if="false"></el-table-column>
       <el-table-column align="center" label="发布时间" prop="createTime" width="220"></el-table-column>
-      <el-table-column align="center" label="地址" prop="address" width="120"></el-table-column>
+      <el-table-column align="center" label="地址" show-overflow-tooltip prop="address" width="120"></el-table-column>
       <el-table-column align="center" label="帖子内容" show-overflow-tooltip prop="content" width="200"></el-table-column>
       <el-table-column align="center" label="最低价" prop="minPrice"></el-table-column>
       <el-table-column align="center" label="最高价" prop="maxPrice"></el-table-column>
@@ -75,10 +75,10 @@
       <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220"></el-table-column>
       <el-table-column align="center" label="上架状态" prop="isLowerShelf" width="220" v-if="false"></el-table-column>
       <el-table-column align="center" label="禁言状态" prop="ifRes" width="220" v-if="false"></el-table-column>
-      <el-table-column  align="center" label="管理" width="220">
+      <el-table-column align="center" label="管理" width="220">
         <template slot-scope="scope">
           <el-popover
-            placement="right"
+            align="right"
             width="730"
             trigger="click">
             <el-table :data="commentData">
@@ -106,27 +106,27 @@
               <el-table-column align="center" prop="content" label="内容" width="200"></el-table-column>
               <el-table-column align="center" label="评论时间" prop="createTime" width="155" v-if="true"></el-table-column>
             </el-table>
-            <el-button type="primary" @click="getPostCommentList(scope.$index)" slot="reference" size="mini" plain>评论
+            <el-button align="center" type="primary" @click="getPostCommentList(scope.$index)" slot="reference" size="mini" plain>评论
             </el-button>
           </el-popover>
-          <el-button type="info" plain icon="delete" size="mini" v-if="list[scope.$index].isLowerShelf == '上架'"
+          <el-button align="right" type="info" plain icon="delete" size="mini" v-if="list[scope.$index].isLowerShelf == '上架'"
                      @click="setOnShelf(scope.$index)">下架
           </el-button>
-          <el-button type="primary" plain icon="delete" size="mini" v-if="list[scope.$index].isLowerShelf == '下架'"
+          <el-button align="center" type="primary" plain icon="delete" size="mini" v-if="list[scope.$index].isLowerShelf == '下架'"
                      @click="setOnShelf(scope.$index)">上架
           </el-button>
-          <el-button type="primary" plain size="mini" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
-          <el-button type="danger" plain icon="delete" size="mini" v-if="list[scope.$index].isDel == '未删除'"
+          <el-button align="center" type="primary" plain size="mini" icon="edit" @click="showUpdate(scope.$index)">修改</el-button>
+          <el-button align="center" type="danger" plain icon="delete" size="mini" v-if="list[scope.$index].isDel == '未删除'"
                      @click="removePost(scope.$index)">删除
           </el-button>
-          <el-button type="success" plain size="mini" icon="delete" v-else
+          <el-button align="center" type="success" plain size="mini" icon="delete" v-else
                      @click="recoverPost(scope.$index)">恢复
           </el-button>
-          <el-button type="success" plain size="mini" icon="delete"
+          <el-button align="center" type="success" plain size="mini" v-if="list[scope.$index].isLowerShelf =='下架'" icon="delete"
                      @click="setOnTop(scope.$index)">置顶
           </el-button>
           <el-popover
-            placement="bottom"
+            align="center"
             width="300"
             v-model="list[scope.$index].fvisible"
             trigger="click">
@@ -135,12 +135,12 @@
               <el-button size="mini" type="primary" @click="list[scope.$index].fvisible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="endWxUserRes(scope.$index)">确定</el-button>
             </div>
-            <el-button slot="reference" type="success" plain v-if="list[scope.$index].ifRes == 1" icon="delete"
+            <el-button align="center" slot="reference" type="success" plain v-if="list[scope.$index].ifRes == 1" icon="delete"
                        size="mini" @click="list[scope.$index].fvisible = true">解禁
             </el-button>
           </el-popover>
           <el-popover
-            placement="bottom"
+            placement="center"
             width="300"
             v-model="list[scope.$index].visible"
             trigger="click">
@@ -154,7 +154,7 @@
               <el-button size="mini" type="primary" @click="list[scope.$index].visible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="insertWxUserRes(scope.$index)">确定</el-button>
             </div>
-            <el-button slot="reference" type="danger" plain v-if="list[scope.$index].ifRes == 0" icon="delete"
+            <el-button align="center" slot="reference" type="danger" plain v-if="list[scope.$index].ifRes == 0" icon="delete"
                        size="mini" @click="list[scope.$index].visible = true">封禁
             </el-button>
           </el-popover>

@@ -36,10 +36,6 @@
         WHERE
         m.TYPE_ID = f.ID
         AND u.USER_ID = m.USER_ID
-        <!--<if test="isMiniPro !=null and isMiniPro!=''">-->
-        <!--AND m.IS_LOWER_SHELF = '0'-->
-        <!--AND m.IS_DEL = '0'-->
-        <!--</if>-->
         <if test="isDel != null and isDel !=''">
             AND m.IS_DEL = #{isDel}
         </if>
@@ -391,6 +387,12 @@
         <if test="keyword !=null and keyword !=''">
             AND (m.CONTENT LIKE CONCAT(CONCAT('%',#{keyword}),'%') OR m.ADDRESS LIKE CONCAT(CONCAT('%',#{keyword}),'%'))
         </if>
+        <if test="labels != null and labels !=''">
+            AND m.ID IN
+            (SELECT POST_ID FROM t_label WHERE
+                 LABEL_ID in (#{label})
+            GROUP BY POST_ID HAVING COUNT(LABEL_ID) =#{labelNum})
+        </if>
         <if test="isRecommend ==null">
             ORDER BY m.CREATE_TIME DESC
         </if>
@@ -419,6 +421,11 @@
         WHERE ID = #{postId}
 
     </update>
+    <select id="getOnShelfStatus" resultType="Integer">
+        SELECT IS_LOWER_SHELF
+        FROM t_post_base
+        WHERE ID =#{postId}
+    </select>
     <update id="updateDelPost">
         BEGIN;
         UPDATE t_post_base

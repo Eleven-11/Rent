@@ -15,9 +15,7 @@
         <if test="labelParentId !=null and labelParentId !=''">
             AND a.PARENT_ID = #{labelParentId}
         </if>
-        <!--<if test="labelParentContent !=null and labelParentContent!=''">
-            AND a.PARENT_ID = (SELECT b.ID FROM t_post_label b WHERE b.content = #{labelParentContent})
-        </if>-->
+
         ORDER BY postParentId
         ) g
     </select>
@@ -69,6 +67,27 @@
         )
         </foreach>
     </insert>
+    <!--用户发布帖子时插入帖子选中的标签-->
+    <insert id="insertLabel">
+        INSERT INTO t_label (POST_ID, LABEL_ID)
+        VALUES
+        <foreach collection="labels" item="item" index="index" separator=",">
+            (#{postId},#{item})
+        </foreach>
+    </insert>
+    <!--用户更新帖子时先删除原有的帖子标签记录-->
+    <insert id="deleteLabel">
+        delete from t_label
+        where POST_ID =#{postId}
+    </insert>
+
+    <!--获取指定帖子的标签列表-->
+    <select id="getPostLabelById" resultType="com.alibaba.fastjson.JSONObject">
+        SELECT LABEL_ID label
+        FROM t_label
+        WHERE POST_ID =#{postId}
+    </select>
+
     <update id="updatePostLabel">
         UPDATE t_post_label a
         SET a.CONTENT = #{labelContent},

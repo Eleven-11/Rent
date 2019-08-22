@@ -10,13 +10,14 @@
     <!--获取帖子图片列表-->
     <select id="getPostImgList" resultType="com.alibaba.fastjson.JSONObject">
         select a.IMG_URL img from t_post_picture a where a.POST_ID =#{postId}
+        order by SORT
     </select>
     <!--添加帖子图片-->
     <insert id="insertPostImgList">
-        INSERT INTO t_post_picture (POST_ID, IMG_URL,CREATE_TIME)
+        INSERT INTO t_post_picture (POST_ID, IMG_URL,CREATE_TIME,SORT)
         VALUES
         <foreach collection="postImgList" item="item" index="index" separator=",">
-            (#{postId},#{item},now())
+            (#{postId},#{item},now(),#{index}+1)
         </foreach>
     </insert>
 </mapper>

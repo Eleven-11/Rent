@@ -1,6 +1,5 @@
 package com.heeexy.example.controller;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostLabelService;
 import com.heeexy.example.util.CommonUtil;
@@ -46,7 +45,6 @@ public class FileUploadController {
     @RequestMapping(value = "/upload")
     @ResponseBody
     public String imgUpload(String type, MultipartHttpServletRequest multiReq) throws IOException {
-        System.out.println(type);
         MultipartFile file = multiReq.getFile("file");
         String originalFileName = file.getOriginalFilename();
         if("chat".equals(type)) {

@@ -44,7 +44,7 @@
             trigger="click">
             <el-table :data="gridData">
               <el-table-column width="80" property="poster" label="发帖人"></el-table-column>
-              <el-table-column width="100" property="content" label="帖子内容"></el-table-column>
+              <el-table-column width="100" property="content" show-overflow-tooltip label="帖子内容"></el-table-column>
               <el-table-column align="center" label="图片" prop="image"  width="100">
                 <template slot-scope="scope">
                   <img :src="scope.row.image" style="width: 60px; height: 60px;"/>

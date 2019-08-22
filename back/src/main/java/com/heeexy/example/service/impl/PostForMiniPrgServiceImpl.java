@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -49,12 +50,17 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
     public JSONObject getPostInfo(JSONObject jsonObject) throws WxPageException {
         //处理分页数据
         CommonUtil.WxPageParam(jsonObject);
-
+        //对查询的labels条件进行处理
+        if (jsonObject.get("labels") != null && !StringUtils.isEmpty(jsonObject.get("labels"))) {
+            List<String> labels = Arrays.asList(jsonObject.get("labels").toString().split(","));
+            jsonObject.put("labels", labels);
+            jsonObject.put("labelNum",labels.size());
+        }
         List<JSONObject> postBaseList = new ArrayList<>();
         //加载列表时
         if (jsonObject.get("postId") == null) {
-            //当加载的帖子列表为第一页时加载模块置顶的帖子
-            if (jsonObject.getInteger("pageNum")==1) {
+            //当加载的帖子列表为模块第一页时加载模块置顶的帖子
+            if (jsonObject.getInteger("pageNum")==1 && jsonObject.get("navigationId")!=null) {
                 //模块置顶帖子id列表
                 List<JSONObject> topJsonObject = navigationTopDao.getWxNavigationTopList(jsonObject);
                 //模块置顶帖子列表

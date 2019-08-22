@@ -1,9 +1,7 @@
 package com.heeexy.example.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
-import com.heeexy.example.dao.PostBaseDao;
-import com.heeexy.example.dao.PostImgDao;
-import com.heeexy.example.dao.UserRestrictDao;
+import com.heeexy.example.dao.*;
 import com.heeexy.example.service.PostBaseService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
@@ -31,8 +29,11 @@ public class PostBaseServiceImpl implements PostBaseService {
     @Autowired
     private PostImgDao postImgDao;
     @Autowired
+    private PostLabelDao postLabelDao;
+    @Autowired
     private UserRestrictDao userRestrictDao;
-
+    @Autowired
+    private NavigationTopDao navigationTopDao;
 
     /**
      * 获取帖子基本信息列表List
@@ -87,6 +88,10 @@ public class PostBaseServiceImpl implements PostBaseService {
                     }
                 }
                 postBaseDao.insertPostBase(jsonObject);
+                if (jsonObject.get("labels") != null && !StringUtils.isEmpty(jsonObject.get("labels"))) {
+                    jsonObject.put("labels", Arrays.asList(jsonObject.get("labels").toString().split(",")));
+                    postLabelDao.insertLabel(jsonObject);
+                }
                 //判断是否有上传图片集合
                 if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
                     jsonObject.put("postImgList", Arrays.asList(jsonObject.get("postImgList").toString().split(",")));
@@ -106,6 +111,11 @@ public class PostBaseServiceImpl implements PostBaseService {
     @Override
     public JSONObject updateOnShelf(JSONObject jsonObject) {
         postBaseDao.updateOnShelf(jsonObject);
+        if (postBaseDao.getOnShelfStatus(jsonObject)==1 && navigationTopDao.getNavigationTopList(jsonObject)!=null){
+            jsonObject.put("topPostId",navigationTopDao.getNavigationTopList(jsonObject).get(0).get("topPostId"));
+            jsonObject.put("navigationId",navigationTopDao.getNavigationTopList(jsonObject).get(0).get("navigationId"));
+            navigationTopDao.updateDelNavigationTop(jsonObject);
+        }
         return CommonUtil.successJson();
     }
 

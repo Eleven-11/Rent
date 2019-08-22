@@ -5,7 +5,6 @@ import com.heeexy.example.config.exception.WxPageException;
 import com.heeexy.example.service.WxUserPostService;
 import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,7 +54,7 @@ public class WxUserPostController {
      *                图片集合 - postImgList
      * @return
      */
-    @RequiresPermissions("wx:post:update")
+//    @RequiresPermissions("wx:post:update")
     @PostMapping("/updatePost")
     public JSONObject updatePost(HttpServletRequest request){
         return wxUserPostService.updatePost(CommonUtil.request2Json(request));
@@ -66,7 +65,7 @@ public class WxUserPostController {
      * @param request 帖子id - postId
      * @return com.alibaba.fastjson.JSONObject
      **/
-    @RequiresPermissions("wx:post:info")
+//    @RequiresPermissions("wx:post:info")
     @GetMapping("/postInfo")
     public JSONObject getUpdatePostInfo(HttpServletRequest request){
         return wxUserPostService.getUpdatePostInfo(CommonUtil.request2Json(request));
@@ -77,7 +76,7 @@ public class WxUserPostController {
      * @param request 进行操作的帖子id-postId，用户id-userId，上下架状态-isLowerShelf（0上架，1下架）
      * @return
      */
-    @RequiresPermissions("wx:post:shelf")
+//    @RequiresPermissions("wx:post:shelf")
     @PostMapping("/updateOnShelf")
     public JSONObject updateOnShelf(HttpServletRequest request){
         return wxUserPostService.updateOnShelf(CommonUtil.request2Json(request));

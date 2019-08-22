@@ -70,7 +70,7 @@ public class BackPostBaseController {
     }
     /**
      * 修改帖子上下架
-     * @param request 上下架帖子id - postId，上下架状态-isLowerShelf（上架0，下架1）
+     * @param request 上下架帖子id - postId
      * @return
      */
     @RequiresPermissions("post:shelf")
