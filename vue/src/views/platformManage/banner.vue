@@ -23,7 +23,7 @@
       </template>
     </el-table-column>
     <el-table-column align="center" label="排序时间" prop="sortTime" width="100" v-if="false"></el-table-column>
-    <el-table-column align="center" width="550" label="管理" v-if="true">
+    <el-table-column align="center" width="518" label="管理" v-if="true">
       <template slot-scope="scope">
         <el-tooltip v-if="hasPerm('banner:update')" content="编辑" placement="bottom">
           <el-button type="warning" icon="el-icon-edit" @click="showUpdate(scope.$index)"></el-button>

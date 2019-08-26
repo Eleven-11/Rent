@@ -26,6 +26,7 @@
             a.CONTENT labelContent,
             a.TYPE labelTypeId,
             a.TYPE_IMG_URL labelImg,
+            a.TYPE_IMG_URL_GREY labelImgGrey,
             a.SIZE labelSize,
             a.FIX_SHOW labelShow
         FROM
@@ -48,7 +49,7 @@
         </if>
     </select>
     <insert id="insertPostLabel" useGeneratedKeys="true" keyProperty="postLabelId">
-        INSERT INTO t_post_label (parent_id, content,type_img_url,fix_show,type)
+        INSERT INTO t_post_label (parent_id, content,type_img_url,type_img_url_grey,fix_show,type)
         VALUES
         <foreach collection="contents" item="item" index="index" separator=",">
         (
@@ -63,7 +64,7 @@
                     WHERE
                         t_post_label.CONTENT = #{parentContent}
                 ) m),
-                #{item},#{labelImg},#{FIX_SHOW},#{TYPE}
+                #{item},#{labelImg},#{labelImgGrey},#{FIX_SHOW},#{TYPE}
         )
         </foreach>
     </insert>
@@ -91,8 +92,13 @@
     <update id="updatePostLabel">
         UPDATE t_post_label a
         SET a.CONTENT = #{labelContent},
-            a.FIX_SHOW = #{labelShow},
-            a.TYPE_IMG_URL = #{labelImg}
+            a.FIX_SHOW = #{labelShow}
+        <if test="labelImg != null and labelImg !=''">
+            ,a.TYPE_IMG_URL = #{labelImg}
+        </if>
+        <if test="labelImgGrey != null and labelImgGrey !=''">
+            ,a.TYPE_IMG_URL_GREY = #{labelImgGrey}
+        </if>
         WHERE a.ID = #{postLabelId}
     </update>
     <update id="updateDelPostLabel">

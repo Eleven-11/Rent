@@ -127,6 +127,7 @@
           method: "get"
         }).then(data => {
           this.options = data.info;
+          this.options[0] = ''
         })
       },
       getIndex($index) {

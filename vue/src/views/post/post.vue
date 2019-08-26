@@ -380,10 +380,7 @@
           method: "get"
         }).then(data => {
           this.options = data.list;
-          /*this.selector.key = this.options.postTypeId;
-          this.selector.value = this.options.postTypeName;
-          this.options.add("HDKSH");
-          this.options.add("DHJSKHF")*/
+          this.options[0]=''
         })
 
       },

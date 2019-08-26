@@ -135,7 +135,7 @@ public class FileUploadController {
                 }
 
             }
-            return CommonUtil.successJson("成功插入"+insertCount+"条个标签，"+updataCount+"个标签已更新");
+            return CommonUtil.successJson("新增"+insertCount+"个标签，"+updataCount+"个标签已更新");
         }catch (Exception e){
             return CommonUtil.errorJson(ErrorEnum.E_10002);
         }
