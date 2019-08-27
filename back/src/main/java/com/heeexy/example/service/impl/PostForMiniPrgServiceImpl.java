@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -51,11 +50,11 @@ public class PostForMiniPrgServiceImpl implements PostForMiniPrgService {
         //处理分页数据
         CommonUtil.WxPageParam(jsonObject);
         //对查询的labels条件进行处理
-        if (jsonObject.get("labels") != null && !StringUtils.isEmpty(jsonObject.get("labels"))) {
+        /*if (jsonObject.get("labels") != null && !StringUtils.isEmpty(jsonObject.get("labels"))) {
             List<String> labels = Arrays.asList(jsonObject.get("labels").toString().split(","));
             jsonObject.put("labels", labels);
             jsonObject.put("labelNum",labels.size());
-        }
+        }*/
         List<JSONObject> postBaseList = new ArrayList<>();
         //加载列表时
         if (jsonObject.get("postId") == null) {

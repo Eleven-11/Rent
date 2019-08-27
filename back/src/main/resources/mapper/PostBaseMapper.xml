@@ -390,8 +390,7 @@
         <if test="labels != null and labels !=''">
             AND m.ID IN
             (SELECT POST_ID FROM t_label WHERE
-                 LABEL_ID in (#{label}))
---             GROUP BY POST_ID HAVING COUNT(LABEL_ID) =#{labelNum}
+                 LABEL_ID in (#{labels}))
         </if>
         <if test="isRecommend ==null">
             ORDER BY m.CREATE_TIME DESC
@@ -402,7 +401,7 @@
         <if test="isPop != null">
             ,browse DESC
         </if>
-        LIMIT #{offSet}, #{pageRow}
+        LIMIT #{offSet},#{pageRow}
     </select>
 
     <!-- 判断用户今日发帖数量 去掉 AND a.IS_DEL = 0 -->

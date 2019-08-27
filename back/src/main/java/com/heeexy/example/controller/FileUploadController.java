@@ -49,7 +49,7 @@ public class FileUploadController {
         String originalFileName = file.getOriginalFilename();
         if("chat".equals(type)) {
             String desFilePath =
-                    "E:" + File.separator + "image"
+                    "C:" + File.separator + "image"
                             + File.separator + "rent"
                             + File.separator + "chat"
                             + "/";
@@ -60,13 +60,13 @@ public class FileUploadController {
                 filepath.mkdirs();
             }
             file.transferTo(dir);
-            String srcUrl = "http://192.168.1.7:8080/image/chat/" + newFileName;
+            String srcUrl = "http://api.since0592.com/image/chat/" + newFileName;
             System.out.println(srcUrl);
             return srcUrl;
         }
         else{
             String desFilePath =
-                    "E:" + File.separator + "image"
+                    "C:" + File.separator + "image"
                             + File.separator + "rent"
                             + File.separator + "static"
                             + "/";
@@ -77,7 +77,7 @@ public class FileUploadController {
                 filepath.mkdirs();
             }
             file.transferTo(dir);
-            String srcUrl = "http://192.168.1.7:8080/image/static/" + newFileName;
+            String srcUrl = "http://api.since0592.com/image/static/" + newFileName;
             System.out.println(srcUrl);
             return srcUrl;
 

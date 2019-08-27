@@ -88,10 +88,10 @@ public class PostBaseServiceImpl implements PostBaseService {
                     }
                 }
                 postBaseDao.insertPostBase(jsonObject);
-                /*if (jsonObject.get("labels") != null && !StringUtils.isEmpty(jsonObject.get("labels"))) {
+                if (jsonObject.get("labels") != null && !StringUtils.isEmpty(jsonObject.get("labels"))) {
                     jsonObject.put("labels", Arrays.asList(jsonObject.get("labels").toString().split(",")));
                     postLabelDao.insertLabel(jsonObject);
-                }*/
+                }
                 //判断是否有上传图片集合
                 if (jsonObject.get("postImgList") != null && !StringUtils.isEmpty(jsonObject.get("postImgList"))) {
                     jsonObject.put("postImgList", Arrays.asList(jsonObject.get("postImgList").toString().split(",")));

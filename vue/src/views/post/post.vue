@@ -99,7 +99,7 @@
               <el-table-column align="center" prop="receiveImg" label="被回复人头像" width="150">
                 <template slot-scope="scope">
                   <img
-                    :src="scope.row.receiveImg == null ? 'http://192.168.1.8:8080/image/static/1565848267.png':  scope.row.receiveImg"
+                    :src="scope.row.receiveImg == null ? 'http://api.since0592.com/image/static/1565848267.png':  scope.row.receiveImg"
                     style="width: 60px; height: 60px;"/>
                 </template>
               </el-table-column>

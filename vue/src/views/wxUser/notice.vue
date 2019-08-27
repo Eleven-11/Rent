@@ -46,7 +46,7 @@
 
       </el-table-column>
 
-      <el-table-column align="center" prop="content" label="内容"  min-width="300"></el-table-column>
+      <el-table-column align="center" prop="content" show-overflow-tooltip label="内容"  min-width="300"></el-table-column>
       <el-table-column align="center" prop="createTime" label="发送时间" width="200" ></el-table-column>
 
       <el-table-column fixed="right" align="center" width="100" label="管理">
@@ -104,7 +104,8 @@
         </el-form-item>
 
         <el-form-item label="消息内容" prop="content">
-          <el-input type="textarea" :rows="6" v-model="sysInformation.content"></el-input>
+<!--          <span style="color:red">图片大小不可超过2MB</span>-->
+          <el-input type="textarea" :rows="6" v-model="sysInformation.content" placeholder="请限制在800字以内"></el-input>
         </el-form-item>
 
       </el-form>
@@ -126,7 +127,7 @@
       return {
         rules:{
           targetNickName :[{required: true, message: '请选择发送人', trigger: 'blur'}],
-          content :[{required: true, message: '请输入模版内容', trigger: 'blur'}]
+          content :[{required: true, message: '请输入少于800字的模版内容', trigger: 'blur'}]
         },
         optionGroup: [{
           value: 1,

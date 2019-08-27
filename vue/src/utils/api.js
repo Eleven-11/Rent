@@ -9,6 +9,13 @@ const service = axios.create({
 })
 // request拦截器
 service.interceptors.request.use(config => {
+  config.headers = {
+    'Content-Type': 'application/json'
+  }
+  config.transformRequest = [function (data) {
+    data = JSON.stringify(data)
+    return data
+  }]
   return config
 }, error => {
   // Do something with request error
@@ -44,7 +51,7 @@ service.interceptors.response.use(
         duration: 3 * 1000
       })
       return Promise.resolve(res);// reject => catch resolve => then
-    }else {
+    } else {
       Message({
         message: res.msg,
         type: 'error',

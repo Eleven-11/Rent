@@ -21,7 +21,7 @@ public class MyFileConfigurer extends WebMvcConfigurerAdapter {
 //        registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         //上传的图片在E盘下的Image/rent目录下，访问路径如：http://localhost:8080/Image/d3cf0281-bb7f-40e0-ab77-406db95ccf2c.jpg
         //其中/Image/rent表示访问的前缀。"file:E:/Image/rent"是文件真实的存储路径
-        registry.addResourceHandler("/image/**").addResourceLocations("file:E:\\image\\rent\\");
+        registry.addResourceHandler("/image/**").addResourceLocations("file:C:\\image\\rent\\");
         super.addResourceHandlers(registry);
     }
 }
