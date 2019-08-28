@@ -141,7 +141,7 @@
 			AND (c.RECEIVE_ID = #{userId}
 					AND c.START_ID != c.RECEIVE_ID
 					OR (p.USER_ID = #{userId}
-						AND  ISNULL(c.RECEIVE_ID)
+						AND  c.RECEIVE_ID=''
 						AND c.START_ID != p.USER_ID))
 			AND u.USER_ID = c.START_ID
 			AND c.CREATE_TIME > DATE_FORMAT(#{flagTime}, '%Y-%m-%d %T')
