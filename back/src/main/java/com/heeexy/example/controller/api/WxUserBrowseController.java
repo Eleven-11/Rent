@@ -3,7 +3,6 @@ package com.heeexy.example.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.UserBrowseService;
 import com.heeexy.example.util.CommonUtil;
-import com.heeexy.example.util.LocalLock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,9 +49,9 @@ public class WxUserBrowseController {
      * @param request 系统用户id - userId，帖子id - postId
      * @return com.alibaba.fastjson.JSONObject
      **/
-    @LocalLock(key = "wxUserBrowse:arg[0]")
+//    @LocalLock(key = "wxUserBrowse:arg[0]")
     @PostMapping("/insertUserBrowse")
-    public JSONObject insertUserBrowse(HttpServletRequest request){
+    public JSONObject insertUserBrowse(HttpServletRequest request) {
         return userBrowseService.insertUserBrowse(CommonUtil.request2Json(request));
     }
 }

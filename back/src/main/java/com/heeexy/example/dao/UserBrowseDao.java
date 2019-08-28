@@ -1,6 +1,8 @@
 package com.heeexy.example.dao;
 
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,7 +18,8 @@ public interface UserBrowseDao {
      * @param
      * @return
      **/
-    void insertUserBrowse(JSONObject jsonObject);
+    @Transactional(readOnly = false)
+    void insertUserBrowse (JSONObject jsonObject)throws DuplicateKeyException;
 
     /**
      * @description 获取用户浏览状态

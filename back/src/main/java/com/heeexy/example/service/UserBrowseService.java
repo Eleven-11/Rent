@@ -1,6 +1,7 @@
 package com.heeexy.example.service;
 
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.dao.DuplicateKeyException;
 
 public interface UserBrowseService {
     /**
@@ -13,7 +14,7 @@ public interface UserBrowseService {
       * @param
       * @return
       **/
-     JSONObject insertUserBrowse(JSONObject jsonObject);
+     JSONObject insertUserBrowse(JSONObject jsonObject) throws DuplicateKeyException;
 
     /**
      * @description 获取浏览过指定帖子的用户列表

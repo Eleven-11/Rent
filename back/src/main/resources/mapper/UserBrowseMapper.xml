@@ -29,7 +29,7 @@
     </select>
     <update id="updateUserBrowse">
         UPDATE t_user_browse
-        SET CREATE_TIME = NOW()
+        SET CREATE_TIME = '2019-08-26 15:36:25'
         WHERE USER_ID = #{userId} AND POST_ID = #{postId};
     </update>
     <insert id="insertUserBrowse">
@@ -38,7 +38,7 @@
         USER_ID,
         POST_ID,
         CREATE_TIME
-        )VALUES (#{userId},#{postId},NOW());
+        )VALUES (#{userId},#{postId},'2019-08-26 15:36:25');
         UPDATE t_post_base
         SET TOTAL_BROWSE = (SELECT COUNT(0) FROM t_user_browse a WHERE a.POST_ID = #{postId}) WHERE ID = #{postId};
         COMMIT;
