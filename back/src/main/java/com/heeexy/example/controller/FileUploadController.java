@@ -49,8 +49,7 @@ public class FileUploadController {
         String originalFileName = file.getOriginalFilename();
         if("chat".equals(type)) {
             String desFilePath =
-                    "C:" + File.separator + "image"
-                            + File.separator + "rent"
+                    "C:" + File.separator + "images"
                             + File.separator + "chat"
                             + "/";
             String newFileName = FileNameUtils.getFileName(originalFileName);
@@ -66,8 +65,7 @@ public class FileUploadController {
         }
         else{
             String desFilePath =
-                    "C:" + File.separator + "image"
-                            + File.separator + "rent"
+                    "C:" + File.separator + "images"
                             + File.separator + "static"
                             + "/";
             String newFileName = FileNameUtils.getFileName(originalFileName);

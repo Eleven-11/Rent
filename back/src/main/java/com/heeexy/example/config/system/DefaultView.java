@@ -3,8 +3,10 @@ package com.heeexy.example.config.system;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 /**
  * @author: hxy
@@ -25,7 +27,7 @@ public class DefaultView extends WebMvcConfigurationSupport {
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/image/**").addResourceLocations("file:///E:\\image\\rent\\");
+		registry.addResourceHandler("/**").addResourceLocations("file:///C:\\images\\");
 		super.addResourceHandlers(registry);
 	}
 
