@@ -78,7 +78,7 @@
           <el-input type="text" v-model="noticeTemplate.sysTempTitle"></el-input>
         </el-form-item>
         <el-form-item label="模版内容" prop="sysTempContent">
-          <el-input type="textarea" :rows="6" v-model="noticeTemplate.sysTempContent"></el-input>
+          <el-input type="textarea" :rows="6"maxlength="800"show-word-limit v-model="noticeTemplate.sysTempContent"></el-input>
         </el-form-item>
       </el-form>
 

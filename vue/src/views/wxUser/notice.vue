@@ -105,7 +105,7 @@
 
         <el-form-item label="消息内容" prop="content">
 <!--          <span style="color:red">图片大小不可超过2MB</span>-->
-          <el-input type="textarea" :rows="6" v-model="sysInformation.content" placeholder="请限制在800字以内"></el-input>
+          <el-input type="textarea" :rows="6" maxlength="800"show-word-limit v-model="sysInformation.content" placeholder="请限制在800字以内"></el-input>
         </el-form-item>
 
       </el-form>
