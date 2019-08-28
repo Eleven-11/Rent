@@ -149,7 +149,8 @@
             },
             listQuery: {
               pageNum: 1,//页码
-              pageRow: 50,//每页条数
+              pageRow: 20,//每页条数
+              labelParentId:''
             },
             listAll:{
               pageNum:-1,
@@ -301,14 +302,16 @@
 
           handleSelect(key, keyPath){
             console.log("菜单监听启动");
-            this.ParentId.labelParentId=key;
-            console.log(this.ParentId.labelParentId);
+            this.listQuery.pageNum = 1
+            this.listQuery.pageRow =10
+            this.listQuery.labelParentId=key;
+            console.log(this.listQuery.labelParentId);
             this.api({
               url:"/postLabel/getPostLabelList",
               method:"get",
-              params:this.ParentId
+              params:this.listQuery
             }).then(data => {
-              console.log("获取了数据");
+              console.log(this.listQuery);
               console.log(data)
               this.listLoading = false;
               this.tableData = data.list;
@@ -350,7 +353,7 @@
           handleFilter() {
             //查询事件
             this.listQuery.pageNum = 1
-            this.getList()
+            this.getPostTypeList()
           },
           getIndex($index) {
             //表格序号

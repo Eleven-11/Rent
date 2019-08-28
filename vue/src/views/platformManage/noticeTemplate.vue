@@ -32,7 +32,7 @@
       </el-table-column>
       <el-table-column align="center" label="id" prop="sysTempId" v-if="false"></el-table-column>
       <el-table-column align="center" prop="sysTempTitle" label="模版名称" width="150"></el-table-column>
-      <el-table-column align="center" prop="sysTempContent" label="模版内容"  min-width="300"></el-table-column>
+      <el-table-column align="center" prop="sysTempContent" show-overflow-tooltip label="模版内容"  min-width="300"></el-table-column>
       <el-table-column align="center" prop="isGuide" label="模版类型" width="150" >
         <template slot-scope="scope">
           <el-tag type="success" v-if="scope.row.isGuide===1">引导语模版</el-tag>

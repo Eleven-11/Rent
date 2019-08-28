@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,14 +54,23 @@ public class UserBrowseServiceImpl implements UserBrowseService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public synchronized JSONObject insertUserBrowse(JSONObject jsonObject) {
-            if(userBrowseDao.getBrowseStatus(jsonObject) != null){
+        try {
+            if (userBrowseDao.getBrowseStatus(jsonObject) != null) {
                 userBrowseDao.updateUserBrowse(jsonObject);
                 return CommonUtil.successJson();
-            }
-            else {
+            } else {
                 userBrowseDao.insertUserBrowse(jsonObject);
                 return CommonUtil.successJson("插入成功");
             }
+        }catch ( Exception e) {
+            if (e instanceof SQLIntegrityConstraintViolationException){
+                return CommonUtil.successJson();
+            }
+            else {
+                e.printStackTrace();
+                return CommonUtil.errorJson("请求失败");
+            }
+        }
     }
 
     @Override

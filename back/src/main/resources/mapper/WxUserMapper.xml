@@ -106,7 +106,8 @@
         <if test="myUserId != null and myUserId != ''">
         (SELECT IFNULL((SELECT id FROM t_user_follow u WHERE u.FAN_ID = #{myUserId} AND u.FOLLOW_ID=#{userId} AND u.IS_DEL = 0),'0')) isFollow,
         </if>
-        (SELECT COUNT(0) FROM t_post_base WHERE USER_ID =#{userId} AND IS_DEL =0) releaseNum
+        (SELECT COUNT(0) FROM t_post_base WHERE USER_ID =#{userId} AND IS_DEL =0) releaseNum,
+        (SELECT SUM(a.TOTAL_BROWSE+a.DEV_BROWSE) FROM t_post_base a WHERE a.USER_ID = #{userId} AND a.IS_DEL = 0) pop
         FROM
         t_wx_user
         <where>
