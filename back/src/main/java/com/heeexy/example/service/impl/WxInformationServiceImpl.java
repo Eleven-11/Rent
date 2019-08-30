@@ -35,6 +35,12 @@ public class WxInformationServiceImpl implements WxInformationService {
     @Autowired
     private UserResonateDao userResonateDao;
 
+    @Autowired
+    private PostBaseDao postBaseDao;
+
+    @Autowired
+    private PostImgDao postImgDao;
+
     /**
      * 获取用户最新未读消息
      * userId   用户ID
@@ -72,6 +78,14 @@ public class WxInformationServiceImpl implements WxInformationService {
         }*/
         CommonUtil.fillPageParam(jsonObject);
         List<JSONObject> joList = userResonateDao.getNewResonateListByUserIdFlagTime(jsonObject);
+        for (JSONObject jo:joList){
+            String content = postBaseDao.getPostContent(jo);
+            List<JSONObject> postImgList = postImgDao.getPostImgList(jo);
+            jo.put("content",content);
+            if (postImgList !=null) {
+                jo.put("postImgList", postImgList);
+            }
+        }
         return CommonUtil.successPage(joList);
     }
 
@@ -82,6 +96,14 @@ public class WxInformationServiceImpl implements WxInformationService {
             jsonObject.put("pageSize",10);
         }*/
         List<JSONObject> joList = postCommentDao.getNewCommentListByUserIdFlagTime(jsonObject);
+        for (JSONObject jo:joList){
+            String content = postBaseDao.getPostContent(jo);
+            List<JSONObject> postImgList = postImgDao.getPostImgList(jo);
+            jo.put("content",content);
+            if (postImgList !=null) {
+                jo.put("postImgList", postImgList);
+            }
+        }
         return CommonUtil.successPage(joList);
     }
 }

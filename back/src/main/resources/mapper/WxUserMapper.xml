@@ -134,7 +134,7 @@
             ((SELECT COUNT(0) FROM t_user_follow a WHERE a.FOLLOW_ID =b.USER_ID)+DEV_FANS) fans,
             (SELECT COUNT(0) FROM t_post_base WHERE USER_ID =b.USER_ID AND IS_DEL =0) releaseNum
         FROM t_wx_user b
-        WHERE b.OPEN_ID = #{openId}
+        WHERE b.UNION_ID = #{unionId}
     </select>
 
     <!-- 校验用户是否存在 -->

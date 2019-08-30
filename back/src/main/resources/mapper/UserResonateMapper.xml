@@ -70,7 +70,6 @@
 
     <!-- 点赞更新 -->
     <update id="updateDelPostLike">
-        BEGIN;
         UPDATE t_user_resonate
         SET IS_DEL =
         IF (
@@ -80,12 +79,6 @@
         )
         WHERE
             t_user_resonate.USER_ID =#{userId} AND t_user_resonate.TARGET_ID=#{postId};
-        UPDATE t_post_base
-        SET
-            ACTIVE_TIME = NOW()
-        WHERE
-            ID = #{postId};
-        COMMIT;
     </update>
 
     <!-- 获取用户点赞的帖子 -->
@@ -137,6 +130,7 @@
              t_wx_user u
         WHERE r.IS_DEL = 0
             AND p.ID = r.TARGET_ID
+            AND P.IS_DEL =0
             AND p.USER_ID = #{userId}
             AND u.USER_ID = r.USER_ID
             AND r.CREATE_TIME > DATE_FORMAT(#{flagTime}, '%Y-%m-%d %T')

@@ -6,7 +6,6 @@ import com.heeexy.example.service.WxRealmService;
 import com.heeexy.example.service.WxUserService;
 import com.heeexy.example.util.AesCbcUtil;
 import com.heeexy.example.util.CommonUtil;
-import com.heeexy.example.util.UUIDUtils;
 import com.heeexy.example.util.WxConfig;
 import com.heeexy.example.util.constants.ErrorEnum;
 import net.sf.json.JSONObject;
@@ -91,6 +90,7 @@ public class WxLoginController {
             //用户的唯一标识（openid）
             String openid = (String) json.get("openid");
         }
+        System.out.println(str);
         //////////////// 2、对encryptedData加密数据进行AES解密 ////////////////
         try {
             com.alibaba.fastjson.JSONObject userInfoJSON = AesCbcUtil.decrypt(encryptedData, session_key, iv);
@@ -108,9 +108,6 @@ public class WxLoginController {
 
                 userInfo.put("unionId", userInfoJSON.get("unionId"));
                 //测试用代码
-                if (userInfo.get("unionId") == null){
-                    userInfo.put("unionId", UUIDUtils.getUUID());
-                }
                 map.put("userInfo", userInfo);
                 return map;
             }
@@ -143,7 +140,7 @@ public class WxLoginController {
     public com.alibaba.fastjson.JSONObject login(HttpServletRequest request) {
         com.alibaba.fastjson.JSONObject jsonObject = CommonUtil.request2Json(request);
 
-        if (jsonObject.get("openId")!=null &&jsonObject.get("userId")==null) {
+        if (jsonObject.get("unionId")!=null &&jsonObject.get("userId")==null) {
             //当用户已授权过但清除缓存（即无法获取userId）
             if(wxUserService.getAuthStatus(jsonObject)!=null){
                 com.alibaba.fastjson.JSONObject authJson = wxUserService.getAuthStatus(jsonObject);
@@ -158,23 +155,26 @@ public class WxLoginController {
                 authJson.put("userId",userId);
                 //认证并返回sessionId
                 authJson.put("sessionId", wxRealmService.wxLogin(userId));
+
                 return authJson;
             }
-        } else if(jsonObject.get("openId")==null &&jsonObject.get("userId")==null){
+        } else if(jsonObject.get("unionId")==null &&jsonObject.get("userId")==null){
             //首次登录未授权，执行插入游客信息操作
             String visitorId = visitorService.insertVisitor(jsonObject);
             com.alibaba.fastjson.JSONObject visitorJson = new com.alibaba.fastjson.JSONObject();
             visitorJson.put("userId",visitorId);
             //认证并返回sessionId
             visitorJson.put("sessionId", wxRealmService.wxLogin(visitorId));
+
             return visitorJson;
-        } else if(jsonObject.get("openId")!=null&&jsonObject.get("userId")!=null){
+        } else if(jsonObject.get("unionId")!=null&&jsonObject.get("userId")!=null){
             //首次登录未授权，获取游客信息userId，之后登录授权，此时执行插入微信用户信息操作
             wxUserService.insertWxUser(jsonObject);
             //认证并返回sessionId
             jsonObject.put("seesionId",wxRealmService.wxLogin(jsonObject.getString("userId")));
+
             return CommonUtil.successJson(jsonObject);
-        } else if(jsonObject.get("openId")==null&&jsonObject.get("userId")!=null){
+        } else if(jsonObject.get("unionId")==null&&jsonObject.get("userId")!=null){
             //TODO 以游客身份登录?
         } else {
             return CommonUtil.errorJson(ErrorEnum.E_400);

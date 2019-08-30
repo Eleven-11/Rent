@@ -215,6 +215,13 @@
         LIMIT #{offSet}, #{pageRow}
     </select>
 
+    <select id="getPostContent" resultType="java.lang.String">
+        SELECT CONTENT content
+        FROM t_post_base a
+        WHERE a.ID=#{postId}
+        AND a.IS_DEL = 0
+    </select>
+
     <select id="getTopPostBase" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
         u.WX_NICK_NAME      poster,

@@ -68,7 +68,7 @@ public class WxUserPostServiceImpl implements WxUserPostService {
             //没有头像的用户设置为默认头像
             for (int i=0;i<postLikeList.size();i++){
                 if (postLikeList.get(i).get("likeImg")==null){
-                    postLikeList.get(i).put("likeImg","http://192.168.1.7:8080/image/static/default.png");
+                    postLikeList.get(i).put("likeImg","http://img.since0592.com/static/default.png");
                 }
             }
 

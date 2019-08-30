@@ -121,6 +121,7 @@
             t_post_label a
         WHERE
             a.CONTENT like CONCAT('%',#{labelContent},'%')
+            AND a.IS_DEL=0
         </if>
         <if test="realContent != null and realContent !=''">
             SELECT

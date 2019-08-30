@@ -44,7 +44,7 @@ public interface WxUserService {
     JSONObject getWxUserInfo(JSONObject jsonObject);
     /**
      * @description 小程序：查看用户是否授权过
-     * @param jsonObject openId
+     * @param jsonObject unionId
      * @return
      **/
     JSONObject getAuthStatus(JSONObject jsonObject);

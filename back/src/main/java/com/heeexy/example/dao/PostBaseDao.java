@@ -104,4 +104,12 @@ public interface PostBaseDao {
     int getOnShelfStatus(JSONObject jsonObject);
 
 
+    /**
+     * @description 获取帖子内容
+     * @param
+     * @return com.alibaba.fastjson.JSONObject
+     **/
+    String getPostContent(JSONObject jsonObject);
+
+
 }

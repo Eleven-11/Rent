@@ -47,7 +47,7 @@ public class UserResonateServiceImpl implements UserResonateService {
             List<JSONObject> list = userResonateDao.getPostLikeList(jsonObject);
             for (int i=0;i<list.size();i++){
                 if (list.get(i).get("likeImg")==null){
-                    list.get(i).put("likeImg","http://192.168.1.7:8080/image/static/default.png");
+                    list.get(i).put("likeImg","http://img.since0592.com/static/default.png");
                 }
             }
 
@@ -58,7 +58,7 @@ public class UserResonateServiceImpl implements UserResonateService {
             List<JSONObject> list = userResonateDao.getPostLikeList(jsonObject);
             for (int i=0;i<list.size();i++){
                 if (list.get(i).get("likeImg")==null){
-                    list.get(i).put("likeImg","http://192.168.1.7:8080/image/static/default.png");
+                    list.get(i).put("likeImg","http://img.since0592.com/static/default.png");
                 }
             }
             return CommonUtil.successPage(jsonObject, list, count);
@@ -71,7 +71,6 @@ public class UserResonateServiceImpl implements UserResonateService {
      * @return
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public JSONObject updatePostLike(JSONObject jsonObject) {
         //用户处于禁言状态无法点赞
         if (userRestrictDao.getResStatus(jsonObject) == 1) {
