@@ -51,7 +51,9 @@
 
       <el-table-column fixed="right" align="center" width="100" label="管理">
         <template slot-scope="scope">
+          <el-tooltip content="删除" placement="bottom">
           <el-button v-if="hasPerm('notice:del')" type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
 

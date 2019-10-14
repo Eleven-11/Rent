@@ -70,6 +70,7 @@
 
     <!-- 点赞更新 -->
     <update id="updateDelPostLike">
+        BEGIN;
         UPDATE t_user_resonate
         SET IS_DEL =
         IF (
@@ -79,6 +80,10 @@
         )
         WHERE
             t_user_resonate.USER_ID =#{userId} AND t_user_resonate.TARGET_ID=#{postId};
+        UPDATE t_post_base
+        SET ACTIVE_TIME =NOW(),TOTAL_RESONATE = (SELECT COUNT(0) FROM t_user_resonate WHERE TARGET_ID =#{postId} AND IS_DEL = 0)
+        WHERE ID = #{postId};
+        COMMIT;
     </update>
 
     <!-- 获取用户点赞的帖子 -->

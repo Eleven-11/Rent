@@ -3,32 +3,39 @@
     <div class="filter-container">
       <el-form>
         <el-form-item>
-          <div class="demo-input-suffix" style="float: left">
-            发帖人：
-            <el-input placeholder="请输入内容" style="width: 400px;" v-model="nickname"></el-input>
-          </div>
-          帖子类型：
-          <el-select v-model="selector" style="width: 400px;" filterable placeholder="请选择类型"
-                     @change="selectTemp($event)">
-            <el-option
-              v-for="item in options"
-              :key="item.postTypeId"
-              :label="item.postTypeName"
-              :value="item.postTypeId">
-            </el-option>
-          </el-select>
-          帖子标签：
-          <el-select v-model="labelSelector" style="width: 266px;" filterable placeholder="请选择标签类型"
-                     @change="selectLabelType($event)">
-            <el-option
-              v-for="label in labelOptions"
-              :key="label.postLabelId"
-              :label="label.labelContent"
-              :value="label.postLabelId">
-            </el-option>
-          </el-select>
-          <div class="block" style="float: left">
-            活跃时间：
+            <div style="display: flex;padding: 0 0 15px 0;">
+              <div class="demo-input-suffix" style="float: left;display: flex">
+                发帖人：
+                <el-input placeholder="请输入内容" style="width: 380px" v-model="nickname"></el-input>
+              </div>
+              <span style="margin-left: 10px">帖子类型：</span>
+              <el-select v-model="selector" style="width: 400px;" filterable placeholder="请选择类型"
+                         @change="selectTemp($event)">
+                <el-option
+                  v-for="item in options"
+                  :key="item.postTypeId"
+                  :label="item.postTypeName"
+                  :value="item.postTypeId">
+                </el-option>
+              </el-select>
+              <span style="margin-left: 10px">帖子标签：</span>
+              <el-select v-model="labelSelector" style="width: 266px;" filterable placeholder="请选择标签类型"
+                         @change="selectLabelType($event)">
+                <el-option
+                  v-for="label in labelOptions"
+                  :key="label.postLabelId"
+                  :label="label.labelContent"
+                  :value="label.postLabelId">
+                </el-option>
+              </el-select>
+            </div>
+          <div class="block" style="display: flex">
+
+            <div class="demo-input-suffix" style="float: left">
+              关键词：
+              <el-input placeholder="请输入查询关键词" style="width: 380px;" v-model="keyword"></el-input>
+            </div>
+            <span style="margin-left: 10px">活跃时间：</span>
             <el-date-picker
               v-model="daterange"
               type="daterange"
@@ -37,11 +44,9 @@
               style="width: 400px;"
               :default-time="['00:00:00', '23:59:59']">
             </el-date-picker>
-            <div class="demo-input-suffix" style="float: left">
-              关键词：
-              <el-input placeholder="请输入查询关键词" style="width: 400px;" v-model="keyword"></el-input>
-            </div>
+            <span style="margin-left: 10px">
             <el-button type="primary" icon="plus" v-if="true" @click="getList">查询</el-button>
+            </span>
           </div>
         </el-form-item>
       </el-form>
@@ -99,7 +104,7 @@
               <el-table-column align="center" prop="receiveImg" label="被回复人头像" width="150">
                 <template slot-scope="scope">
                   <img
-                    :src="scope.row.receiveImg == null ? 'http://api.since0592.com/image/static/1565848267.png':  scope.row.receiveImg"
+                    :src="scope.row.receiveImg == null ? 'http://img.since0592.com/static/1565848267.png':  scope.row.receiveImg"
                     style="width: 60px; height: 60px;"/>
                 </template>
               </el-table-column>
@@ -380,7 +385,7 @@
           method: "get"
         }).then(data => {
           this.options = data.list;
-          this.options[0]=''
+          this.options[data.list.length]=''
         })
 
       },

@@ -165,17 +165,17 @@ public class WxLoginController {
             visitorJson.put("userId",visitorId);
             //认证并返回sessionId
             visitorJson.put("sessionId", wxRealmService.wxLogin(visitorId));
-
             return visitorJson;
         } else if(jsonObject.get("unionId")!=null&&jsonObject.get("userId")!=null){
             //首次登录未授权，获取游客信息userId，之后登录授权，此时执行插入微信用户信息操作
             wxUserService.insertWxUser(jsonObject);
             //认证并返回sessionId
             jsonObject.put("seesionId",wxRealmService.wxLogin(jsonObject.getString("userId")));
-
             return CommonUtil.successJson(jsonObject);
         } else if(jsonObject.get("unionId")==null&&jsonObject.get("userId")!=null){
-            //TODO 以游客身份登录?
+            //以游客身份登录
+            com.alibaba.fastjson.JSONObject visitorJson = new com.alibaba.fastjson.JSONObject();
+            visitorJson.put("sessionId", wxRealmService.wxLogin(jsonObject.getString("userId")));
         } else {
             return CommonUtil.errorJson(ErrorEnum.E_400);
         }

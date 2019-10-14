@@ -66,16 +66,10 @@
         INSERT INTO t_comment(POST_ID,START_ID,RECEIVE_ID,CONTENT,CREATE_TIME)
         VALUES(#{postId},#{startId},#{receiveId},#{content},NOW());
         UPDATE t_post_base
-        SET TOTAL_COMMENTS =(
-            SELECT
-                COUNT(1)
-            FROM
-                t_comment a
-            WHERE
-                a.POST_ID = #{postId}
-                AND IS_DEL=0
-        ), ACTIVE_TIME = NOW() WHERE ID = #{postId};
+        SET ACTIVE_TIME = NOW(),TOTAL_COMMENTS = (SELECT COUNT(0) FROM t_comment WHERE POST_ID =#{postId} AND IS_DEL = 0)
+        WHERE ID =#{postId};
         COMMIT;
+
     </insert>
 
     <select id="getCommentStatus" resultType="java.lang.Integer">

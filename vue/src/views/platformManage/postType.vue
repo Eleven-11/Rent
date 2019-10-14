@@ -28,10 +28,15 @@
           <el-tooltip content="编辑" placement="bottom">
             <el-button type="warning" icon="el-icon-edit" @click="showUpdate(scope.$index)"></el-button>
           </el-tooltip>
-
+          <el-tooltip content="删除" placement="bottom">
           <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
+          </el-tooltip>
+          <el-tooltip content="上移" placement="bottom">
           <el-button type="primary" icon="up" @click="sortPostType(scope.$index-1,scope.$index)"  v-if="(scope.$index)!=0">↑</el-button>
+          </el-tooltip>
+          <el-tooltip content="下移" placement="bottom">
           <el-button type="primary" icon="down" @click="sortPostType(scope.$index,scope.$index+1)" v-if="(scope.$index)!=list.length-1">↓</el-button>
+          </el-tooltip>
         </template>
       </el-table-column>
     </el-table>

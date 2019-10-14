@@ -35,14 +35,17 @@
       <el-table-column align="center" prop="receiveNickname" label="被回复人昵称" width="200"></el-table-column>
       <el-table-column align="center" prop="receiveImg" label="被回复人头像" width="150">
         <template slot-scope="scope">
-          <img :src="scope.row.receiveImg == null ? 'http://api.since0592.com/image/static/1565848267.png':  scope.row.receiveImg" style="width: 60px; height: 60px;"/>
+          <img :src="scope.row.receiveImg == null ? 'http://img.since0592.com/static/1565848267.png':  scope.row.receiveImg" style="width: 60px; height: 60px;"/>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="content" label="内容" show-overflow-tooltip width="200"></el-table-column>
       <el-table-column align="center" label="评论时间" prop="createTime" width="155" v-if="true"></el-table-column>
       <el-table-column align="center" width="200" label="管理" v-if="true">
         <template slot-scope="scope">
+          <el-tooltip content="删除" placement="bottom">
           <el-button type="danger" icon="el-icon-delete" plain @click="showDelete(scope.$index)"></el-button>
+          </el-tooltip>
+          <el-tooltip content="解禁" placement="bottom">
           <el-popover
             placement="bottom"
             width="300"
@@ -53,8 +56,10 @@
               <el-button size="mini" type="primary" @click="list[scope.$index].fvisible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="endWxUserRes(scope.$index)">确定</el-button>
             </div>
-            <el-button  slot="reference" type="success" v-if="list[scope.$index].ifRes == 1" icon="el-icon-microphone" plain @click="list[scope.$index].fvisible = true"></el-button>
+            <el-button  slot="reference" type="success" v-if="list[scope.$index].ifRes == 1" icon="el-icon-circle-check-outline" plain @click="list[scope.$index].fvisible = true"></el-button>
           </el-popover>
+          </el-tooltip>
+          <el-tooltip content="禁言" placement="bottom">
           <el-popover
             placement="bottom"
             width="300"
@@ -70,8 +75,9 @@
               <el-button size="mini" type="primary" @click="list[scope.$index].visible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="insertWxUserRes(scope.$index)">确定</el-button>
             </div>
-            <el-button slot="reference" type="danger" icon="el-icon-turn-off-microphone" plain v-if="list[scope.$index].ifRes == 0" @click="list[scope.$index].visible = true"></el-button>
+            <el-button slot="reference" type="danger" icon="el-icon-circle-close-outline" plain v-if="list[scope.$index].ifRes == 0" @click="list[scope.$index].visible = true"></el-button>
           </el-popover>
+          </el-tooltip>
         </template>
       </el-table-column>
 

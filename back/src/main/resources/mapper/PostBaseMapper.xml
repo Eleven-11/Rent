@@ -399,11 +399,11 @@
             (SELECT POST_ID FROM t_label WHERE
                  LABEL_ID in (#{labels}))
         </if>
-        <if test="isRecommend ==null">
-            ORDER BY m.CREATE_TIME DESC
+        <if test="isRecommend == null or isRecommend ==''">
+            ORDER BY likes DESC,comments DESC
         </if>
-        <if test="isRecommend != null">
-            ORDER BY activeTime DESC
+        <if test="isRecommend != null and isRecommend !=''">
+            ORDER BY m.CREATE_TIME DESC
         </if>
         <if test="isPop != null">
             ,browse DESC

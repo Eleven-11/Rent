@@ -11,7 +11,6 @@ import com.heeexy.example.util.CommonUtil;
 import com.heeexy.example.util.constants.ErrorEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -80,6 +79,8 @@ public class UserResonateServiceImpl implements UserResonateService {
             if (userResonateDao.getIfLiked(jsonObject) != null) {
                 userResonateDao.updateDelPostLike(jsonObject);
                 JSONObject jo = new JSONObject();
+                List<JSONObject> postLikeList = userResonateDao.getPostLikeList(jsonObject);
+                jo.put("postLikeList",postLikeList);
                 jo.put("likeStatus",userResonateDao.getLikeStatus(jsonObject)==0?1:0);
                 return CommonUtil.successJson(jo);
             } else {
@@ -87,6 +88,8 @@ public class UserResonateServiceImpl implements UserResonateService {
                 //FIXME 如果是第一次点赞，发送推送给用户,未测试
                 send(jsonObject);
                 JSONObject jo = new JSONObject();
+                List<JSONObject> postLikeList = userResonateDao.getPostLikeList(jsonObject);
+                jo.put("postLikeList",postLikeList);
                 jo.put("likeStatus",userResonateDao.getLikeStatus(jsonObject)==0?1:0);
                 return CommonUtil.successJson(jo);
             }

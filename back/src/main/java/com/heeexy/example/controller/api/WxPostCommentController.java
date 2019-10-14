@@ -3,6 +3,7 @@ package com.heeexy.example.controller.api;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.service.PostCommentService;
 import com.heeexy.example.util.CommonUtil;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,7 +50,7 @@ public class WxPostCommentController {
      * @param request 评论id-commentId
      * @return com.alibaba.fastjson.JSONObject
      **/
-//    @RequiresPermissions("wx:comment:del")
+     @RequiresPermissions("wx:comment:del")
     @PostMapping("/updateDelCommentById")
     public JSONObject updateDelCommentById(HttpServletRequest request) {
         return postCommentService.updateDelCommentById(CommonUtil.request2Json(request));
@@ -60,7 +61,7 @@ public class WxPostCommentController {
      * @param request 系统用户id-userId
      * @return
      **/
-//    @RequiresPermissions("wx:comment:list")
+    @RequiresPermissions("wx:comment:list")
     @GetMapping("/getUserComment")
     public JSONObject getUserComment(HttpServletRequest request){
         return postCommentService.getUserComment(CommonUtil.request2Json(request));
@@ -72,7 +73,7 @@ public class WxPostCommentController {
      *        评论内容-content，评论创建时间（后端service层获取当前时间）
      * @return 评论id（主键）-commentId
      **/
-//    @RequiresPermissions("wx:comment:add")
+@RequiresPermissions("wx:comment:add")
     @PostMapping("/insertComment")
     public JSONObject insertComment(HttpServletRequest request) {
         JSONObject jsonObject = CommonUtil.request2Json(request);

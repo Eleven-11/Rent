@@ -3,55 +3,68 @@
     <div class="filter-container">
       <el-form>
         <el-form-item>
-      请选择模块：
-      <el-select v-model="selector" style="width: 400px;" filterable placeholder="请选择模块" @change="selectTemp($event)">
-        <el-option
-          v-for="item in options"
-          :key="item.navigationId"
-          :label="item.navigationTitle"
-          :value="item.navigationId">
-        </el-option>
-      </el-select>
+          请选择模块：
+          <el-select v-model="selector" style="width: 400px;" filterable placeholder="请选择模块"
+                     @change="selectTemp($event)">
+            <el-option
+              v-for="item in options"
+              :key="item.navigationId"
+              :label="item.navigationTitle"
+              :value="item.navigationId">
+            </el-option>
+          </el-select>
         </el-form-item>
       </el-form>
     </div>
-  <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
-            highlight-current-row>
-    <el-table-column align="center" label="序号" width="60">
-      <template slot-scope="scope">
-        <span v-text="getIndex(scope.$index)"> </span>
-      </template>
-    </el-table-column>
-    <el-table-column align="center" label="发帖人" prop="poster" width="100"></el-table-column>
-    <el-table-column align="center" label="发帖人头像" prop="posterAvatar"  width="100">
-      <template slot-scope="scope">
-        <img :src="scope.row.posterAvatar" style="width: 60px; height: 60px;"/>
-      </template>
-    </el-table-column>
-    <el-table-column align="center" label="帖子Id" prop="postId" width="90" v-if="false"></el-table-column>
-    <el-table-column align="center" label="发布时间" prop="createTime" width="220"></el-table-column>
-    <el-table-column align="center" label="地址" show-overflow-tooltip prop="address"  width="120"></el-table-column>
-    <el-table-column align="center" label="帖子内容" show-overflow-tooltip prop="content" width="200" ></el-table-column>
-    <el-table-column align="center" label="最低价" prop="minPrice" ></el-table-column>
-    <el-table-column align="center" label="最高价" prop="maxPrice" ></el-table-column>
-    <el-table-column align="center" label="联系方式" prop="phone" width="160"></el-table-column>
-    <el-table-column align="center" label="浏览量" prop="browse" ></el-table-column>
-    <el-table-column align="center" label="评论数量" prop="comments" ></el-table-column>
-    <el-table-column align="center" label="点赞数量" prop="likes" ></el-table-column>
-    <el-table-column align="center" label="中介费" prop="fee" ></el-table-column>
-    <el-table-column align="center" label="发帖人id" prop="userId" v-if="false"></el-table-column>
-    <el-table-column align="center" label="置顶模块id" prop="navigationId" v-if="false"></el-table-column>
-    <el-table-column align="center" label="置顶模块" prop="navigationTitle"></el-table-column>
-    <el-table-column align="center" label="主键" prop="topPostId" v-if="false"></el-table-column>
-    <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220" ></el-table-column>
-    <el-table-column  align="center" width="400" label="管理" v-if="true">
-      <template slot-scope="scope">
-        <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
-        <el-button type="primary" icon="up" v-show="list[scope.$index-1].navigationId === list[scope.$index].navigationId" @click="sortNavigationTop(scope.$index-1,scope.$index)" v-if="(scope.$index)!=0">↑</el-button>
-        <el-button type="primary" icon="down" v-show="list[scope.$index].navigationId === list[scope.$index+1].navigationId" @click="sortNavigationTop(scope.$index,scope.$index+1)" v-if="(scope.$index)!=list.length-1">↓</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+    <el-table :data="list" v-loading.body="listLoading" element-loading-text="拼命加载中" border fit
+              highlight-current-row>
+      <el-table-column align="center" label="序号" width="60">
+        <template slot-scope="scope">
+          <span v-text="getIndex(scope.$index)"> </span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="发帖人" prop="poster" width="100"></el-table-column>
+      <el-table-column align="center" label="发帖人头像" prop="posterAvatar" width="100">
+        <template slot-scope="scope">
+          <img :src="scope.row.posterAvatar" style="width: 60px; height: 60px;"/>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="帖子Id" prop="postId" width="90" v-if="false"></el-table-column>
+      <el-table-column align="center" label="发布时间" prop="createTime" width="220"></el-table-column>
+      <el-table-column align="center" label="地址" show-overflow-tooltip prop="address" width="120"></el-table-column>
+      <el-table-column align="center" label="帖子内容" show-overflow-tooltip prop="content" width="200"></el-table-column>
+      <el-table-column align="center" label="最低价" prop="minPrice"></el-table-column>
+      <el-table-column align="center" label="最高价" prop="maxPrice"></el-table-column>
+      <el-table-column align="center" label="联系方式" prop="phone" width="160"></el-table-column>
+      <el-table-column align="center" label="浏览量" prop="browse"></el-table-column>
+      <el-table-column align="center" label="评论数量" prop="comments"></el-table-column>
+      <el-table-column align="center" label="点赞数量" prop="likes"></el-table-column>
+      <el-table-column align="center" label="中介费" prop="fee"></el-table-column>
+      <el-table-column align="center" label="发帖人id" prop="userId" v-if="false"></el-table-column>
+      <el-table-column align="center" label="置顶模块id" prop="navigationId" v-if="false"></el-table-column>
+      <el-table-column align="center" label="置顶模块" prop="navigationTitle"></el-table-column>
+      <el-table-column align="center" label="主键" prop="topPostId" v-if="false"></el-table-column>
+      <el-table-column align="center" label="近期活跃时间" prop="activeTime" width="220"></el-table-column>
+      <el-table-column align="center" width="400" label="管理" v-if="true">
+        <template slot-scope="scope">
+          <el-tooltip content="删除" placement="bottom">
+            <el-button type="danger" icon="el-icon-delete" @click="showDelete(scope.$index)"></el-button>
+          </el-tooltip>
+          <el-tooltip content="上移" placement="bottom">
+            <el-button type="primary" icon="up"
+                       v-show="list[scope.$index-1].navigationId === list[scope.$index].navigationId"
+                       @click="sortNavigationTop(scope.$index-1,scope.$index)" v-if="(scope.$index)!=0">↑
+            </el-button>
+          </el-tooltip>
+          <el-tooltip content="下移" placement="bottom">
+            <el-button type="primary" icon="down"
+                       v-show="list[scope.$index].navigationId === list[scope.$index+1].navigationId"
+                       @click="sortNavigationTop(scope.$index,scope.$index+1)" v-if="(scope.$index)!=list.length-1">↓
+            </el-button>
+          </el-tooltip>
+        </template>
+      </el-table-column>
+    </el-table>
 
   </div>
 
@@ -59,6 +72,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
+
   export default {
     name: "banner",
     data() {
@@ -70,9 +84,9 @@
           update: '编辑',
           create: '新建'
         },
-        navigationTop:{
-          topPostId:'',//navigationTop表主键
-          navigationId:''//模块id
+        navigationTop: {
+          topPostId: '',//navigationTop表主键
+          navigationId: ''//模块id
         },
         listQuery: {
           pageNum: 1,//页码
@@ -80,10 +94,10 @@
         },
         dialogFormVisible: false,
         dialogStatus: 'create',
-        selector:'',
-        options:[{
-          navigationId:'',
-          navigationTitle:''
+        selector: '',
+        options: [{
+          navigationId: '',
+          navigationTitle: ''
         }],
 
       }
@@ -98,7 +112,7 @@
       ])
     },
     methods: {
-      selectTemp($event){
+      selectTemp($event) {
         console.log($event)
         this.listQuery.navigationId = $event
         this.getNavigationTopList()
@@ -113,9 +127,9 @@
           console.log(data)
           this.listLoading = false;
           this.list = data;
-          for (var i =0 ;i<this.list.length; i++){
-            this.list[i].createTime = this.formatter(this.list[i].createTime,'yyyy-MM-dd hh:mm:ss')
-            this.list[i].activeTime = this.formatter(this.list[i].activeTime,'yyyy-MM-dd hh:mm:ss')
+          for (var i = 0; i < this.list.length; i++) {
+            this.list[i].createTime = this.formatter(this.list[i].createTime, 'yyyy-MM-dd hh:mm:ss')
+            this.list[i].activeTime = this.formatter(this.list[i].activeTime, 'yyyy-MM-dd hh:mm:ss')
           }
           this.totalCount = data.totalCount;
           this.listQuery.title = "";
@@ -127,7 +141,7 @@
           method: "get"
         }).then(data => {
           this.options = data.info;
-          this.options[0] = ''
+          this.options[data.info.length] = ''
         })
       },
       getIndex($index) {
@@ -192,7 +206,7 @@
           method: "post",
           params: {
             formerNavId: formerNav.topPostId,
-            laterNavId:laterNav.topPostId,
+            laterNavId: laterNav.topPostId,
             formerSortTime: this.formatter(formerNav.sortTime, 'yyyy-MM-dd hh:mm:ss'),
             laterSortTime: this.formatter(laterNav.sortTime, 'yyyy-MM-dd hh:mm:ss')
           }

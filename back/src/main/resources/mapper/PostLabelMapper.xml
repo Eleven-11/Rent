@@ -15,7 +15,6 @@
         <if test="labelParentId !=null and labelParentId !=''">
             AND a.PARENT_ID = #{labelParentId}
         </if>
-
         ORDER BY postParentId
         ) g
     </select>
@@ -28,7 +27,8 @@
             a.TYPE_IMG_URL labelImg,
             a.TYPE_IMG_URL_GREY labelImgGrey,
             a.SIZE labelSize,
-            a.FIX_SHOW labelShow
+            a.FIX_SHOW labelShow,
+            a.ENGLISH  english
         FROM
             t_post_label a
         WHERE
@@ -49,7 +49,7 @@
         </if>
     </select>
     <insert id="insertPostLabel" useGeneratedKeys="true" keyProperty="postLabelId">
-        INSERT INTO t_post_label (parent_id, content,type_img_url,type_img_url_grey,fix_show,type)
+        INSERT INTO t_post_label (parent_id, content,type_img_url,type_img_url_grey,fix_show,type,ENGLISH)
         VALUES
         <foreach collection="contents" item="item" index="index" separator=",">
         (
@@ -64,7 +64,7 @@
                     WHERE
                         t_post_label.CONTENT = #{parentContent}
                 ) m),
-                #{item},#{labelImg},#{labelImgGrey},#{FIX_SHOW},#{TYPE}
+                #{item},#{labelImg},#{labelImgGrey},#{FIX_SHOW},#{TYPE},#{ENGLISH}
         )
         </foreach>
     </insert>
@@ -98,6 +98,9 @@
         </if>
         <if test="labelImgGrey != null and labelImgGrey !=''">
             ,a.TYPE_IMG_URL_GREY = #{labelImgGrey}
+        </if>
+        <if test="english != null and english !=''">
+            ,a.ENGLISH = #{english}
         </if>
         WHERE a.ID = #{postLabelId}
     </update>
