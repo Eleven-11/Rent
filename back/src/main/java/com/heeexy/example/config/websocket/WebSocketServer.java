@@ -57,15 +57,17 @@ public class WebSocketServer {
     @OnOpen
     public void onOpen(@PathParam("username") String username, Session session) throws IOException {
 
-        this.username = username;
-        this.session = session;
-        if (clients.get(username) == null){
+            this.username = username;
+            this.session = session;
+            if(clients.get(username)!=null){
+                onClose(username);
+            }
+            if (clients.get(username) == null){
             addOnlineCount();
+            System.out.println(onlineCount);
             this.isHeart = true;
-
-        }else {
-            onClose(username);
         }
+//        addOnlineCount();
         clients.put(username, this);
         //启动心跳
         if (!openHeart){
@@ -80,6 +82,10 @@ public class WebSocketServer {
      */
     @OnClose
     public void onClose() throws IOException {
+        WebSocketServer server = clients.get(username);
+        if(server.session.isOpen()){
+            server.session.close();
+        }
         clients.remove(username);
         subOnlineCount();
     }
@@ -90,10 +96,8 @@ public class WebSocketServer {
      */
     public void onClose(String username) throws IOException {
         WebSocketServer server = clients.get(username);
-        if (server.session.isOpen()) {
             server.session.close();
-        }else {
-        }
+
     }
 
     /**
