@@ -7,6 +7,7 @@
     <!-- 查询用户收到的最新消息集合 -->
     <select id="getNewInformationByUserIdFlagTime" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
+          i.ID                  infoId,
           u.WX_AVATAR_URL       startAvatarUrl,
           u.WX_NICK_NAME        startNickName,
           u.WX_GENDER           startGender,
@@ -17,14 +18,14 @@
              t_wx_user u
         WHERE i.IS_DEL = 0
           AND i.RECEIVE_ID = #{userId}
-          AND i.CREATE_TIME > #{flagTime}
+          AND i.IS_READ = 0
           AND u.USER_ID = i.START_ID
         ORDER BY i.CREATE_TIME DESC
     </select>
 
 
     <!-- 创建消息条目 -->
-    <insert id="insertInformation">
+    <insert id="insertInformation" useGeneratedKeys="true" keyProperty="infoId">
         insert into t_user_information (
                 START_ID,
                 RECEIVE_ID,
@@ -37,5 +38,9 @@
                 #{createTime}
               );
     </insert>
+
+    <update id="updateAlreadReadMessage">
+        update t_user_information SET IS_READ = 1 WHERE ID = #{infoId};
+    </update>
 
 </mapper>

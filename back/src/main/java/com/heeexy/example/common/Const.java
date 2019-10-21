@@ -18,6 +18,10 @@ public class Const {
      */
     public final static String SEND_MESSAGE = "send_message";
     /**
+     * websocket推送类型 - 用户消息
+     */
+    public final static String SEND_ALREADY_READ = "send_already_read";
+    /**
      * websocket推送类型 - 系统消息
      */
     public final static String SEND_SYS_MESSAGE = "send_sys_message";

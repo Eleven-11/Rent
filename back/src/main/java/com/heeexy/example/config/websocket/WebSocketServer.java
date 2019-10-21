@@ -1,5 +1,6 @@
 package com.heeexy.example.config.websocket;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.heeexy.example.common.Const;
 import com.heeexy.example.config.SpringUtil;
@@ -135,12 +136,21 @@ public class WebSocketServer {
                                 //保存消息
                                 jsonObject.put("createTime", new Date());
                                 wxUserInformationDao.insertInformation(jsonObject);
-                                //封装返回的消息数据
+                                //封装返回的消息
                                 jsonObject.put("startAvatar", user.getString("wxAvatar"));
                                 jsonObject.put("startNickName", user.getString("wxNickname"));
                                 sendMessage(jsonObject, jsonObject.getString("receiveId"), Const.SEND_MESSAGE);
                             }
                         }
+                    }else if (info.getString("sendType").equals(Const.SEND_ALREADY_READ)){
+                        //获取确认已读消息的实体列表
+                        JSONObject entry= (JSONObject) info.get("entry");
+                        JSONArray idArray = entry.getJSONArray("id");
+                        for (int i = 0 ; i<idArray.size() ; i++){
+                            Integer infoId = (Integer) idArray.get(i);
+                            wxUserInformationDao.updateAlreadReadMessage(infoId);
+                        }
+
                     }
                 }
              }
@@ -184,11 +194,11 @@ public class WebSocketServer {
      * @param jsonObject
      * @throws IOException
      */
-    public static void sendMessageAll(JSONObject jsonObject, String type) throws IOException {
-        for (WebSocketServer item : clients.values()) {
-            item.session.getAsyncRemote().sendText(
-                    CommonUtil.sendParam(type, jsonObject).toJSONString());
-        }
+        public static void sendMessageAll(JSONObject jsonObject, String type) throws IOException {
+            for (WebSocketServer item : clients.values()) {
+                item.session.getAsyncRemote().sendText(
+                        CommonUtil.sendParam(type, jsonObject).toJSONString());
+            }
     }
 
     /**
@@ -267,7 +277,7 @@ public class WebSocketServer {
             heartJson.put("content", "heart_check");
             while (true) {
                 try {
-//                    logger.debug("发送心跳包当前人数为:"+getUserOnlineNum());
+                    System.out.println("发送心跳包当前人数为:"+getOnlineCount());
                     sendPing(CommonUtil.sendParam(Const.SEND_HEART_CHECK, heartJson).toJSONString());
                     Thread.sleep(10000);
                 } catch (InterruptedException e) {

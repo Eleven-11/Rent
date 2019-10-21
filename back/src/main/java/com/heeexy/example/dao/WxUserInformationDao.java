@@ -35,4 +35,11 @@ public interface WxUserInformationDao {
      * @return
      */
     Integer insertInformation(JSONObject jsonObject);
+
+    /**
+     * 更新消息已读状态
+     * @param infoId
+     * @return
+     */
+    void updateAlreadReadMessage(Integer infoId);
 }

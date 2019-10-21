@@ -33,11 +33,8 @@ public class WxUserInformationController {
      */
     @PostMapping("/message")
     public JSONObject getNewInformation(HttpServletRequest request) {
-        try {
-            return wxInformationService.getNewInfomation(CommonUtil.request2Json(request));
-        }catch (Exception e){
-            return CommonUtil.errorJson(ErrorEnum.E_405);
-        }
+
+        return wxInformationService.getNewInfomation(CommonUtil.request2Json(request));
     }
 
     /**
