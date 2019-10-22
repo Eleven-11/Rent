@@ -268,7 +268,16 @@
           method: "post",
           params: this.newAdvBanner
         }).then(() => {
-          console.log("修改成功")
+          this.$message({
+            type: 'success',
+            message: '修改成功!',
+          }).catch(() => {
+          this.$message({
+            type: 'danger',
+            message: '修改失败'
+          });
+        });
+          this.getAdvImgList();
         })
       },
       /*广告栏图片排序*/
