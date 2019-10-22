@@ -23,7 +23,6 @@
         ORDER BY i.CREATE_TIME DESC
     </select>
 
-
     <!-- 创建消息条目 -->
     <insert id="insertInformation" useGeneratedKeys="true" keyProperty="infoId">
         insert into t_user_information (

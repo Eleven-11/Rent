@@ -174,7 +174,7 @@
         if (!isLt2M) {
           this.$message.error('上传头像图片大小不能超过 2MB!');
         }
-        return isJPG & isLt2M;
+        return isLt2M;
       },
       handleAvatarSuccess(res, file) {
         this.advImg = URL.createObjectURL(file.raw);
@@ -198,7 +198,7 @@
           if (valid) {
             this.listLoading = true;
             this.api({
-              url: "/advBanner/updateDelAdvImg",
+              url: "/advBanner/updateAdvImg",
               method: "post",
               params: this.advBanner
             }).then(() => {

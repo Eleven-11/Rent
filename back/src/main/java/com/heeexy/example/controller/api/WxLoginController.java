@@ -176,10 +176,10 @@ public class WxLoginController {
             //以游客身份登录
             com.alibaba.fastjson.JSONObject visitorJson = new com.alibaba.fastjson.JSONObject();
             visitorJson.put("sessionId", wxRealmService.wxLogin(jsonObject.getString("userId")));
+            return visitorJson;
         } else {
             return CommonUtil.errorJson(ErrorEnum.E_400);
         }
-        return null;
     }
 
     /**
