@@ -192,33 +192,33 @@
         this.dialogStatus = "create";
         this.dialogFormVisible = true;
       },
-      updateAdvBanner(formName) {
-
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.listLoading = true;
-            this.api({
-              url: "/advBanner/updateAdvImg",
-              method: "post",
-              params: this.advBanner
-            }).then(() => {
-              let msg = "修改成功";
-              //隐藏面板
-              this.dialogFormVisible = false;
-              this.$message({
-                message: msg, type: 'success', duration: 1 * 1000,
-                onClose: () => {
-                  //刷新列表
-                  this.getAdvImgList();
-                }
-              })
-            })
-          } else {
-            let msg = "请填写必填项";
-            this.$message({message: msg, type: 'warning', duration: 1 * 1000})
-          }
-        })
-      },
+      // updateAdvBanner(formName) {
+      //
+      //   this.$refs[formName].validate((valid) => {
+      //     if (valid) {
+      //       this.listLoading = true;
+      //       this.api({
+      //         url: "/advBanner/updateAdvImg",
+      //         method: "post",
+      //         params: this.advBanner
+      //       }).then(() => {
+      //         let msg = "修改成功";
+      //         //隐藏面板
+      //         this.dialogFormVisible = false;
+      //         this.$message({
+      //           message: msg, type: 'success', duration: 1 * 1000,
+      //           onClose: () => {
+      //             //刷新列表
+      //             this.getAdvImgList();
+      //           }
+      //         })
+      //       })
+      //     } else {
+      //       let msg = "请填写必填项";
+      //       this.$message({message: msg, type: 'warning', duration: 1 * 1000})
+      //     }
+      //   })
+      // },
       /**
        * 删除条目
        */
