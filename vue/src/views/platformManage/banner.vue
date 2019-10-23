@@ -271,14 +271,15 @@
           this.$message({
             type: 'success',
             message: '修改成功!',
-          }).catch(() => {
+          });
+          this.dialogFormVisible = false;
+          this.getAdvImgList();
+        }).catch(() => {
           this.$message({
             type: 'danger',
             message: '修改失败'
           });
         });
-          this.getAdvImgList();
-        })
       },
       /*广告栏图片排序*/
       sortAdvImg($formerIndex, $laterIndex) {
