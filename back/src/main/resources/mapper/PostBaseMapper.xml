@@ -425,9 +425,8 @@
         UPDATE t_post_base
         SET IS_LOWER_SHELF=IF(IS_LOWER_SHELF=1,0,1)
         WHERE ID = #{postId}
-
     </update>
-    <select id="getOnShelfStatus" resultType="Integer">
+    <select id="getOnShelfStatus" resultType="java.lang.Integer">
         SELECT IS_LOWER_SHELF
         FROM t_post_base
         WHERE ID =#{postId}

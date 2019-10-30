@@ -31,7 +31,7 @@ module.exports = {
     devtool:'source-map',
     proxyTable : {
       '/api': {
-        target: 'http://127.0.0.1:8080',
+        target: 'http://api.since0592.com',
         pathRewrite: {
           '^/api': '/'
         }

@@ -127,7 +127,7 @@
           <el-button align="center" type="success" plain size="mini" icon="delete" v-else
                      @click="recoverPost(scope.$index)">恢复
           </el-button>
-          <el-button align="center" type="success" plain size="mini" v-if="list[scope.$index].isLowerShelf =='下架'" icon="delete"
+          <el-button align="center" type="success" plain size="mini" v-if="list[scope.$index].isLowerShelf =='上架'" icon="delete"
                      @click="setOnTop(scope.$index)">置顶
           </el-button>
           <el-popover
@@ -443,7 +443,7 @@
             } else {
               this.list[i].isDel = '已删除'
             }
-            if (this.list[i].isLowerShelf == '0') {
+            if (this.list[i].isLowerShelf == '1') {
               this.list[i].isLowerShelf = '下架'
             } else {
               this.list[i].isLowerShelf = '上架'

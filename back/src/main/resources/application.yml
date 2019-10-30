@@ -8,8 +8,8 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
       location: C:/file/temp
-server:
-  port: 8083
+#server:
+#  port: 8083
 mybatis:
    mapperLocations: classpath:/mapper/*.xml
 #http配置服务

@@ -11,11 +11,11 @@ public class WxConfig {
     /**
      * 微信APPID
      */
-    public static final String  WX_APP_ID="wx21ada25dcb46cf67";
+    public static final String  WX_APP_ID="wx496d13b03d0397f3";
 
     /**
-     * 微信appSecret
+     *微信appSecret
      */
-    public static final String WX_APP_SECRET="8cf1327adc98f5decb23c4b0147fcb90";
+    public static final String WX_APP_SECRET="b7033127ad43e754ad24c99aed7a2609";
 
 }

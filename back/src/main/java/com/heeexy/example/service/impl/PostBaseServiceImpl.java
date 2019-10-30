@@ -111,7 +111,7 @@ public class PostBaseServiceImpl implements PostBaseService {
     @Override
     public JSONObject updateOnShelf(JSONObject jsonObject) {
         postBaseDao.updateOnShelf(jsonObject);
-        if (postBaseDao.getOnShelfStatus(jsonObject)==1 && navigationTopDao.getNavigationTopList(jsonObject)!=null){
+        if (postBaseDao.getOnShelfStatus(jsonObject)==1 && (navigationTopDao.getNavigationTopList(jsonObject).size()!=0)){
             jsonObject.put("topPostId",navigationTopDao.getNavigationTopList(jsonObject).get(0).get("topPostId"));
             jsonObject.put("navigationId",navigationTopDao.getNavigationTopList(jsonObject).get(0).get("navigationId"));
             navigationTopDao.updateDelNavigationTop(jsonObject);
