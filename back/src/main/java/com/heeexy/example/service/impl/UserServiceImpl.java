@@ -101,7 +101,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional(rollbackFor = Exception.class)
 	@SuppressWarnings("unchecked")
 	@Override
-	public JSONObject addRole(JSONObject jsonObject) {
+	public JSONObject addRole(JSONObject jsonObject)  {
 		userDao.insertRole(jsonObject);
 		userDao.insertRolePermission(jsonObject.getString("roleId"), (List<Integer>) jsonObject.get("permissions"));
 		return CommonUtil.successJson();

@@ -53,6 +53,7 @@
               <el-table-column width="155" property="collTime" label="收藏时间"></el-table-column>
               <el-table-column width="155" property="sortTime" label="排序时间" v-if="false"></el-table-column>
               <el-table-column align="center" label="帖子ID" prop="postId" style="width: 20px;" v-if="false"></el-table-column>
+              <el-table-column align="center" label="索引" prop="outIndex" style="width: 20px;" v-if="true"></el-table-column>
               <el-table-column align="center" label="管理" width="250" >
                 <template slot-scope="scope">
                   <el-button type="primary" icon="up" @click="updateUserColl(scope.$index-1,scope.$index)" size="mini" v-if="(scope.$index)!=0">上移</el-button>
@@ -205,7 +206,8 @@
           sortTime: '',
           follows: '',
           fans: '',
-          postId: ''
+          postId: '',
+          outIndex:''
         }],
         fanquery:{
           wxUserId:''
@@ -271,7 +273,11 @@
         }).then(data => {
           console.log(user.wxUserId)
           this.listLoading = false;
+
           this.gridData = data.list;
+          for (var i = 0;i<data.list.length;i++){
+            this.gridData[i].outIndex = $index
+          }
           this.totalCount = data.totalCount
           console.log(this.gridData)
 
@@ -291,7 +297,7 @@
             laterSortTime: this.formatter(laterPost.sortTime, 'yyyy-MM-dd hh:mm:ss')
           }
         }).then(() => {
-          this.getWxUserList();
+          this.getUserCollList(this.gridData[$formerIndex].outIndex);
           console.log("hello")
 
         })

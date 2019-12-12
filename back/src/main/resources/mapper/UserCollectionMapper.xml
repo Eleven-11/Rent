@@ -77,8 +77,8 @@
     <!-- 收藏帖子排序 -->
     <update id="sortUserColl" >
         START TRANSACTION;
-        UPDATE t_user_collection SET t_user_collection.sort_time =#{laterSortTime,jdbcType = DATE} WHERE t_user_collection.post_id = #{formerPostId,jdbcType = VARCHAR};
-        UPDATE t_user_collection SET t_user_collection.sort_time =#{formerSortTime,jdbcType = DATE} WHERE t_user_collection.post_id = #{laterPostId,jdbcType = VARCHAR};
+        UPDATE t_user_collection SET t_user_collection.sort_time =DATE_FORMAT(#{laterSortTime},'%Y-%m-%d %T') WHERE t_user_collection.post_id = #{formerPostId,jdbcType = VARCHAR};
+        UPDATE t_user_collection SET t_user_collection.sort_time =DATE_FORMAT(#{formerSortTime},'%Y-%m-%d %T') WHERE t_user_collection.post_id = #{laterPostId,jdbcType = VARCHAR};
         COMMIT;
     </update>
 

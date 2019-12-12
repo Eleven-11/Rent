@@ -47,7 +47,7 @@ public class UserCollectionServiceImpl implements UserCollectionService {
     public JSONObject sortUserColl(JSONObject jsonObject) {
         CommonUtil.fillPageParam(jsonObject);
         userCollectionDao.sortUserColl(jsonObject);
-        return CommonUtil.successJson("收藏成功");
+        return CommonUtil.successJson("排序成功");
     }
 
     /**
